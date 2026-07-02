@@ -1,294 +1,305 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SNK Indian Food & Grocery - Premium Online Shop</title>
-    <style>
-        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }
-        body { background-color: #fcf8f2; color: #2c3e50; padding-bottom: 80px; }
-        header { background-color: #1b4d3e; color: white; padding: 30px 20px; text-align: center; border-bottom: 5px solid #d4af37; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        header h1 { font-size: 26px; letter-spacing: 1px; color: #f3e5ab; font-weight: bold; }
-        header p { font-size: 15px; font-style: italic; margin-top: 5px; color: #e2e8f0; }
-        .banner { background-color: #fff9e6; text-align: center; padding: 12px 15px; font-weight: bold; font-size: 14px; border-bottom: 1px solid #f3e5ab; color: #b38f4f; }
-        .container { max-width: 1050px; margin: 20px auto; padding: 0 20px; }
-        .category-title { font-size: 22px; color: #1b4d3e; border-left: 6px solid #d4af37; padding-left: 12px; margin: 35px 0 20px 0; text-transform: uppercase; font-weight: bold; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
-        .product-card { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 15px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.04); display: flex; flex-direction: column; justify-content: space-between; }
-        .product-card:hover { transform: translateY(-3px); border-color: #d4af37; box-shadow: 0 6px 18px rgba(212,175,55,0.15); transition: all 0.2s ease; }
-        .product-name { font-weight: bold; font-size: 16px; margin-bottom: 6px; color: #1b4d3e; min-height: 44px; display: flex; align-items: center; justify-content: center; }
-        .product-price { color: #e74c3c; font-weight: bold; font-size: 15px; margin-bottom: 15px; background: #fff5f5; padding: 4px 10px; border-radius: 20px; display: inline-block; }
-        .action-container { min-height: 40px; display: flex; justify-content: center; align-items: center; width: 100%; }
-        .btn-add-to-list { background-color: #27ae60; color: white; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 13px; width: 100%; text-transform: uppercase; letter-spacing: 0.5px; display: block; }
-        .quantity-controls { display: none; align-items: center; justify-content: center; gap: 12px; width: 100%; }
-        .btn-qty { background-color: #1b4d3e; color: white; border: none; font-size: 20px; font-weight: bold; width: 36px; height: 36px; cursor: pointer; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
-        .qty-display { width: 40px; text-align: center; font-weight: bold; font-size: 18px; color: #1b4d3e; }
-        .checkout-box { background: white; border: 2px solid #d4af37; border-radius: 16px; padding: 30px; margin-top: 50px; box-shadow: 0 6px 20px rgba(0,0,0,0.06); }
-        .checkout-title { font-size: 22px; color: #1b4d3e; margin-bottom: 20px; font-weight: bold; border-bottom: 2px solid #f3e5ab; padding-bottom: 12px; }
-        .order-summary { background: #f8fafc; padding: 20px; border-radius: 8px; margin-bottom: 25px; border: 1px solid #e2e8f0; }
-        .summary-item { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 15px; color: #475569; padding-bottom: 6px; border-bottom: 1px dashed #e2e8f0; }
-        .summary-total { display: flex; justify-content: space-between; font-weight: bold; font-size: 20px; color: #1b4d3e; border-top: 3px solid #d4af37; padding-top: 15px; margin-top: 15px; }
-        .form-grid { display: grid; grid-template-columns: 1fr; gap: 18px; margin-bottom: 25px; }
-        @media (min-width: 768px) { .form-grid { grid-template-columns: 1fr 1fr; } .full-width { grid-column: span 2; } }
-        .form-group { display: flex; flex-direction: column; }
-        .form-group label { font-size: 14px; font-weight: bold; color: #34495e; margin-bottom: 6px; text-transform: uppercase; }
-        .form-group input, .form-group textarea { width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 15px; outline: none; }
-        .btn-whatsapp { background-color: #27ae60; color: white; border: none; padding: 16px 25px; border-radius: 10px; cursor: pointer; font-weight: bold; width: 100%; font-size: 18px; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 4px 12px rgba(39,174,96,0.3); }
-        footer { background-color: #1b4d3e; color: #cbd5e1; text-align: center; padding: 25px; margin-top: 50px; font-size: 14px; border-top: 4px solid #d4af37; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SNK Foods — Indian Grocery & Admin</title>
+<style>
+  :root {
+    --turmeric: #C8860D; --leaf: #3C5A3E; --vermilion: #A63A2E; 
+    --rice: #FBF4E4; --rice-2: #F3E9D2; --charcoal: #241C15; --paper: #FFFDF7;
+  }
+  * { box-sizing: border-box; font-family: sans-serif; margin: 0; padding: 0; }
+  body { background: var(--rice); color: var(--charcoal); padding-bottom: 90px; }
+  header { background: var(--charcoal); color: var(--rice); padding: 15px; text-align: center; font-weight: bold; position: sticky; top: 0; z-index: 10; font-size: 20px; display: flex; justify-content: space-between; align-items: center; }
+  header button { background: var(--turmeric); color: white; border: none; padding: 5px 10px; border-radius: 4px; font-size: 12px; cursor: pointer; }
+  .view-section { display: none; }
+  .view-section.active { display: block; }
+  .hero { text-align: center; padding: 25px 15px; background: var(--rice-2); }
+  .hero h2 { color: var(--vermilion); font-size: 22px; }
+  .hero p { font-size: 13px; margin-top: 5px; opacity: 0.8; font-weight: bold; }
+  .cat-title { background: var(--turmeric); color: white; padding: 10px 15px; font-size: 16px; font-weight: bold; margin-top: 15px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; padding: 10px; }
+  .card { background: var(--paper); border: 1px solid var(--rice-2); border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+  .pimg { width: 100%; height: 100px; object-fit: cover; border-radius: 6px; background: #eee; }
+  .pname { font-weight: bold; font-size: 14px; min-height: 36px; line-height: 1.3; color: var(--charcoal); }
+  .punit { font-size: 12px; color: #666; }
+  .prow { display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
+  .price { font-weight: bold; color: var(--vermilion); font-size: 15px; }
+  .stepper { display: flex; align-items: center; border: 1px solid var(--turmeric); border-radius: 4px; overflow: hidden; background: white; }
+  .stepper button { width: 26px; height: 26px; border: none; background: var(--rice-2); font-weight: bold; font-size: 16px; cursor: pointer; }
+  .stepper .qty { width: 26px; text-align: center; font-size: 13px; font-weight: bold; }
+  
+  /* Admin Styles */
+  .admin-box { max-width: 500px; margin: 30px auto; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+  .admin-box h3 { margin-bottom: 15px; color: var(--vermilion); }
+  .admin-box input, .admin-box select { width: 100%; padding: 10px; margin-bottom: 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
+  .btn { width: 100%; padding: 12px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; color: white; }
+  .btn-primary { background: var(--leaf); font-size: 15px; }
+  .btn-danger { background: var(--vermilion); margin-top: 5px; }
+  .admin-item-row { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; background: white; margin-bottom: 5px; border-radius: 4px; }
+
+  /* Floating Cart & Drawer */
+  .float-cart { position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); background: var(--charcoal); color: var(--rice); padding: 12px 20px; border-radius: 30px; display: none; align-items: center; gap: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 20; font-weight: bold; cursor: pointer; width: 92%; max-width: 350px; justify-content: space-between; }
+  .float-cart .badge { background: var(--vermilion); padding: 4px 10px; border-radius: 12px; font-size: 12px; }
+  .drawer { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 30; display: none; justify-content: flex-end; }
+  .drawer.open { display: flex; }
+  .drawer-content { background: var(--paper); width: 100%; max-width: 360px; height: 100%; display: flex; flex-direction: column; padding: 15px; }
+  .drawer-head { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--rice-2); padding-bottom: 10px; margin-bottom: 10px; }
+  .ledger { flex: 1; overflow-y: auto; }
+  .lrow { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed var(--rice-2); font-size: 14px; }
+  .ltotal { font-weight: bold; font-size: 16px; padding: 15px 0; display: flex; justify-content: space-between; border-top: 2px solid var(--turmeric); }
+  .drawer-form { display: flex; flex-direction: column; gap: 10px; background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-top: 10px; }
+</style>
 </head>
 <body>
-    <header>
-        <h1>SNK INDIAN FOOD & GROCERY</h1>
-        <p>Premium Quality Direct From India To Your Home</p>
-    </header>
-    <div class="banner">
-        Special Offer: Shop for EUR 20 or more & get FREE HOME DELIVERY in Den Haag, Rotterdam, Delft & Leiden!
+
+<header>
+  <span onclick="switchView('shop')" style="cursor:pointer;">🛒 SNK Foods</span>
+  <button id="navBtn" onclick="toggleAdminNav()">Admin Login</button>
+</header>
+
+<div id="shopView" class="view-section active">
+  <section class="hero">
+    <h2>Fresh Indian Groceries</h2>
+    <p>📍 Den Haag • Rotterdam • Delft • Leiden</p>
+  </section>
+  <main id="catalog"></main>
+</div>
+
+<div id="loginView" class="view-section">
+  <div class="admin-box">
+    <h3>Admin Login</h3>
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+    <button class="btn btn-primary" onclick="login()">Login</button>
+  </div>
+</div>
+
+<div id="adminView" class="view-section">
+  <div class="admin-box">
+    <h3>Add / Update Product</h3>
+    <select id="pCat">
+      <option value="veg">🍅 Fresh Vegetables</option>
+      <option value="rice">🌾 Rice & Flour</option>
+      <option value="dal">🥣 Dals & Pulses</option>
+    </select>
+    <input type="text" id="pName" placeholder="Product Name (e.g. Onion)">
+    <input type="text" id="pUnit" placeholder="Unit (e.g. 1kg)">
+    <input type="number" step="0.01" id="pPrice" placeholder="Price in € (e.g. 1.99)">
+    <input type="text" id="pImg" placeholder="Image URL (Optional)">
+    <button class="btn btn-primary" onclick="saveProduct()">Save Product</button>
+  </div>
+  
+  <div class="admin-box" style="max-width:600px;">
+    <h3>Manage Current Products</h3>
+    <div id="adminProductList"></div>
+  </div>
+</div>
+
+<div class="float-cart" id="floatCart" onclick="openCart()">
+  <span>View Order Chit 🧾</span>
+  <span class="badge" id="floatBadge">0 items - €0.00</span>
+</div>
+
+<div class="drawer" id="drawer" onclick="closeCart(event)">
+  <div class="drawer-content" onclick="event.stopPropagation()">
+    <div class="drawer-head"><h3>Your Order Chit</h3><button onclick="closeCart(null)" style="font-size:24px; background:none; border:none; cursor:pointer;">×</button></div>
+    <div class="ledger" id="ledger"></div>
+    <div class="drawer-form">
+      <input id="cname" placeholder="Your Full Name" style="padding:10px; border:1px solid #ccc; border-radius:4px;">
+      <select id="area" style="padding:10px; border:1px solid #ccc; border-radius:4px;"><option>Den Haag</option><option>Rotterdam</option><option>Delft</option><option>Leiden</option></select>
+      <input id="caddr" placeholder="Delivery Address" style="padding:10px; border:1px solid #ccc; border-radius:4px;">
+      <button class="btn btn-primary" onclick="sendOrder()">📲 Send via WhatsApp</button>
     </div>
-    <div class="container">
+  </div>
+</div>
 
-        <!-- CATEGORY: VEGETABLES -->
-        <div class="category-title">Fresh Vegetables</div>
-        <div class="grid" id="veg-grid"></div>
+<script>
+const WA_NUMBER = "31685259659";
+let isAdmin = false;
 
-        <!-- CATEGORY: RICE & FLOUR -->
-        <div class="category-title">Rice & Flour</div>
-        <div class="grid" id="rice-grid"></div>
+const defaultCatalog = {
+  veg: [
+    { name: "Onion (வெங்காயம்)", unit: "1kg", price: 1.99, img: "https://images.unsplash.com/photo-1580145692334-7065658633b7?w=300&auto=format&fit=crop&q=80" },
+    { name: "Tomato (தக்காளி)", unit: "1kg", price: 2.49, img: "https://images.unsplash.com/photo-1595855759920-86582396756a?w=300&auto=format&fit=crop&q=80" },
+    { name: "Potato (உருளைக்கிழங்கு)", unit: "1kg", price: 1.79, img: "https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=300&auto=format&fit=crop&q=80" },
+    { name: "Green Chilli (பச்சை மிளகாய்)", unit: "250g", price: 1.49, img: "https://images.unsplash.com/photo-1565599837634-134bc3aadce8?w=300&auto=format&fit=crop&q=80" }
+  ],
+  rice: [
+    { name: "Idli Rice (இட்லி அரிசி)", unit: "5kg", price: 9.99, img: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300&auto=format&fit=crop&q=80" },
+    { name: "Ponni Rice (பொன்னி அரிசி)", unit: "5kg", price: 11.49, img: "https://images.unsplash.com/photo-1536304997881-a372c179924b?w=300&auto=format&fit=crop&q=80" }
+  ],
+  dal: [
+    { name: "Toor Dal (துவரம் பருப்பு)", unit: "1kg", price: 3.49, img: "https://images.unsplash.com/photo-1547058881-aa0edd92aab3?w=300&auto=format&fit=crop&q=80" },
+    { name: "Moong Dal (பாசிப் பருப்பு)", unit: "1kg", price: 3.29, img: "https://images.unsplash.com/photo-1600180758890-6b945f9a2ba6?w=300&auto=format&fit=crop&q=80" }
+  ]
+};
 
-        <!-- CATEGORY: DAL / PULSES -->
-        <div class="category-title">Dal / Pulses</div>
-        <div class="grid" id="dal-grid"></div>
+let db = JSON.parse(localStorage.getItem('snk_db')) || defaultCatalog;
+let cart = {};
 
-        <!-- CATEGORY: MASALA / SPICES -->
-        <div class="category-title">Masala / Spices</div>
-        <div class="grid" id="masala-grid"></div>
+function saveDB() { localStorage.setItem('snk_db', JSON.stringify(db)); }
 
-        <!-- CATEGORY: OIL / ESSENTIALS -->
-        <div class="category-title">Oil / Essentials</div>
-        <div class="grid" id="oil-grid"></div>
+function switchView(view) {
+  document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+  if(view === 'shop') document.getElementById('shopView').classList.add('active');
+  if(view === 'login') document.getElementById('loginView').classList.add('active');
+  if(view === 'admin') document.getElementById('adminView').classList.add('active');
+}
 
-        <!-- CATEGORY: SNACKS -->
-        <div class="category-title">Snacks</div>
-        <div class="grid" id="snacks-grid"></div>
+function toggleAdminNav() {
+  if(isAdmin) {
+    isAdmin = false;
+    document.getElementById('navBtn').textContent = "Admin Login";
+    switchView('shop');
+  } else {
+    switchView('login');
+  }
+}
 
-        <!-- CATEGORY: FROZEN -->
-        <div class="category-title">Frozen Foods</div>
-        <div class="grid" id="frozen-grid"></div>
+function login() {
+  const u = document.getElementById('username').value;
+  const p = document.getElementById('password').value;
+  if(u === 'admin' && p === 'snk123') {
+    isAdmin = true;
+    document.getElementById('navBtn').textContent = "Logout Admin";
+    switchView('admin');
+    renderAdminProducts();
+  } else {
+    alert("Wrong Login Details!");
+  }
+}
 
-        <!-- CATEGORY: DAIRY -->
-        <div class="category-title">Dairy</div>
-        <div class="grid" id="dairy-grid"></div>
-
-        <!-- CATEGORY: DRINKS -->
-        <div class="category-title">Drinks</div>
-        <div class="grid" id="drinks-grid"></div>
-
-        <!-- CATEGORY: SWEETS / BAKERY -->
-        <div class="category-title">Sweets / Bakery</div>
-        <div class="grid" id="sweets-grid"></div>
-
-        <!-- CHECKOUT BOX -->
-        <div class="checkout-box">
-            <div class="checkout-title">Your Order Summary & Delivery Details</div>
-            <div class="order-summary" id="summary-list">
-                <p style="color: #7f8c8d; text-align: center; font-style: italic;">Your list is empty. Click "Add to List" on products above!</p>
-            </div>
-            <div class="form-grid">
-                <div class="form-group"><label>Full Name *</label><input type="text" id="cust-name" placeholder="Enter your full name" required></div>
-                <div class="form-group"><label>Preferred Delivery Day *</label><input type="text" id="cust-day" placeholder="e.g., Thursday or Friday" required></div>
-                <div class="form-group full-width"><label>Delivery Address *</label><textarea id="cust-address" rows="3" placeholder="Street Name, House Number, City, Postal Code" required></textarea></div>
-            </div>
-            <button class="btn-whatsapp" id="send-order-btn">Order via WhatsApp</button>
+function renderCatalog() {
+  const mainEl = document.getElementById('catalog');
+  const catNames = { veg: "🍅 Fresh Vegetables", rice: "🌾 Rice & Flour", dal: "🥣 Dals & Pulses" };
+  let html = '';
+  
+  for (let cat in db) {
+    if(db[cat].length === 0) continue;
+    html += `<div class="cat-title">${catNames[cat]}</div><div class="grid">`;
+    db[cat].forEach((item, index) => {
+      const id = `${cat}-${index}`;
+      const fallbackImg = "https://images.unsplash.com/photo-1542838132-92c53300491e?w=300";
+      html += `<div class="card">
+        <img class="pimg" src="${item.img || fallbackImg}" alt="${item.name}" loading="lazy">
+        <div class="pname">${item.name}</div>
+        <div class="punit">${item.unit}</div>
+        <div class="prow">
+          <div class="price">€${parseFloat(item.price).toFixed(2)}</div>
+          <div class="stepper">
+            <button onclick="updateQty('${id}','${item.name}',${item.price},-1)">−</button>
+            <div class="qty" id="qty-${id}">${cart[id] ? cart[id].qty : 0}</div>
+            <button onclick="updateQty('${id}','${item.name}',${item.price},1)">+</button>
+          </div>
         </div>
-    </div>
-    <footer><p>© 2026 SNK Indian Food & Grocery. All Rights Reserved. | Den Haag</p></footer>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+  mainEl.innerHTML = html;
+}
 
-    <script>
-        const productsData = {
-            "veg": [
-                {id:"onion", name:"Onion", price:1.50, unit:"1kg"},
-                {id:"shallots", name:"Small Onion (Shallots)", price:2.10, unit:"250g"},
-                {id:"tomato", name:"Tomato", price:1.50, unit:"1kg"},
-                {id:"potato", name:"Potato", price:1.20, unit:"1kg"},
-                {id:"drumstick", name:"Drumstick", price:1.25, unit:"1pc"},
-                {id:"curry_leaves", name:"Curry Leaves", price:1.25, unit:"1pkt"},
-                {id:"coriander", name:"Coriander", price:0.95, unit:"1bunch"},
-                {id:"mint", name:"Mint", price:0.99, unit:"1bunch"},
-                {id:"green_chilli", name:"Green Chilli", price:2.00, unit:"250g"},
-                {id:"brinjal", name:"Brinjal", price:2.50, unit:"500g"},
-                {id:"okra", name:"Okra (Ladies Finger)", price:2.38, unit:"250g"},
-                {id:"bitter_gourd", name:"Bitter Gourd", price:2.38, unit:"250g"},
-                {id:"ridge_gourd", name:"Ridge Gourd", price:4.25, unit:"500g"},
-                {id:"raw_banana", name:"Raw Banana", price:1.99, unit:"500g"},
-                {id:"mango_raw", name:"Mango (Raw)", price:2.49, unit:"1pc"}
-            ],
-            "rice": [
-                {id:"idli_rice", name:"Premium Idli Rice", price:3.40, unit:"1kg"},
-                {id:"ponni_rice", name:"Ponni Rice", price:3.49, unit:"1kg"},
-                {id:"sona_masoori", name:"Sona Masoori", price:3.65, unit:"1kg"},
-                {id:"basmati_rice", name:"Basmati Rice", price:3.99, unit:"1kg"},
-                {id:"atta_flour", name:"Atta Flour", price:5.49, unit:"2kg"},
-                {id:"maida", name:"Maida", price:2.49, unit:"1kg"},
-                {id:"ragi_flour", name:"Ragi Flour", price:2.75, unit:"1kg"},
-                {id:"rice_flour", name:"Rice Flour", price:2.99, unit:"1kg"}
-            ],
-            "dal": [
-                {id:"toor_dal", name:"Toor Dal", price:3.85, unit:"1kg"},
-                {id:"urad_dal", name:"Urad Dal", price:3.99, unit:"1kg"},
-                {id:"moong_dal", name:"Moong Dal", price:3.75, unit:"1kg"},
-                {id:"chana_dal", name:"Chana Dal", price:3.20, unit:"1kg"},
-                {id:"kabuli_chana", name:"Kabuli Chana", price:3.40, unit:"1kg"},
-                {id:"rajma", name:"Rajma", price:3.50, unit:"1kg"}
-            ],
-            "masala": [
-                {id:"turmeric", name:"Turmeric Powder", price:1.75, unit:"200g"},
-                {id:"chilli_powder", name:"Chilli Powder", price:1.99, unit:"200g"},
-                {id:"coriander_powder", name:"Coriander Powder", price:1.85, unit:"200g"},
-                {id:"garam_masala", name:"Garam Masala", price:1.95, unit:"100g"},
-                {id:"pepper", name:"Pepper", price:2.25, unit:"100g"},
-                {id:"jeera", name:"Jeera", price:2.50, unit:"100g"},
-                {id:"mustard", name:"Mustard", price:1.20, unit:"100g"},
-                {id:"fenugreek", name:"Fenugreek", price:1.25, unit:"100g"},
-                {id:"hing", name:"Hing", price:2.10, unit:"50g"}
-            ],
-            "oil": [
-                {id:"sunflower_oil", name:"Sunflower Oil", price:2.99, unit:"1L"},
-                {id:"coconut_oil", name:"Coconut Oil", price:9.49, unit:"650ml"},
-                {id:"ghee", name:"Ghee", price:13.99, unit:"500g"},
-                {id:"jaggery", name:"Jaggery", price:2.49, unit:"500g"},
-                {id:"salt", name:"Salt", price:1.10, unit:"1kg"},
-                {id:"sugar", name:"Sugar", price:1.89, unit:"1kg"}
-            ],
-            "snacks": [
-                {id:"murukku", name:"Murukku", price:2.49, unit:"1pkt"},
-                {id:"mixture", name:"Mixture", price:2.49, unit:"1pkt"},
-                {id:"chips", name:"Chips", price:2.49, unit:"1pkt"},
-                {id:"banana_chips", name:"Banana Chips", price:2.49, unit:"1pkt"},
-                {id:"biscuits", name:"Biscuits", price:1.50, unit:"1pkt"},
-                {id:"mi_goreng", name:"Mi Goreng", price:0.85, unit:"1pkt"},
-                {id:"instant_noodles", name:"Instant Noodles", price:0.85, unit:"1pkt"}
-            ],
-            "frozen": [
-                {id:"parotta", name:"Parotta", price:2.99, unit:"1pkt"},
-                {id:"idiyappam", name:"Idiyappam", price:3.25, unit:"1pkt"},
-                {id:"chapati", name:"Chapati", price:2.80, unit:"1pkt"},
-                {id:"frozen_fish", name:"Frozen Fish", price:6.50, unit:"1kg"},
-                {id:"frozen_prawns", name:"Frozen Prawns", price:7.99, unit:"500g"}
-            ],
-            "dairy": [
-                {id:"paneer", name:"Paneer", price:10.99, unit:"1kg"},
-                {id:"curd", name:"Curd", price:2.20, unit:"500g"},
-                {id:"butter", name:"Butter", price:2.50, unit:"250g"},
-                {id:"milk", name:"Milk", price:1.45, unit:"1L"}
-            ],
-            "drinks": [
-                {id:"tea", name:"Tea Powder", price:3.50, unit:"250g"},
-                {id:"coffee", name:"Coffee Powder", price:3.99, unit:"200g"},
-                {id:"boost", name:"Boost", price:6.99, unit:"500g"},
-                {id:"horlicks", name:"Horlicks", price:6.99, unit:"500g"}
-            ],
-            "sweets": [
-                {id:"mysore_pak", name:"Mysore Pak", price:4.50, unit:"250g"},
-                {id:"laddu", name:"Laddu", price:4.50, unit:"250g"},
-                {id:"rusk", name:"Rusk", price:1.99, unit:"1pkt"},
-                {id:"bread", name:"Bread", price:1.80, unit:"1pkt"}
-            ]
-        };
+function updateQty(id, name, price, delta) {
+  if (!cart[id]) cart[id] = { name, price, qty: 0 };
+  cart[id].qty += delta;
+  if (cart[id].qty <= 0) delete cart[id];
+  
+  const qtyEl = document.getElementById(`qty-${id}`);
+  if (qtyEl) qtyEl.textContent = cart[id] ? cart[id].qty : 0;
+  updateCartUI();
+}
 
-        const cart = {};
+function updateCartUI() {
+  let count = 0, total = 0;
+  Object.values(cart).forEach(item => { count += item.qty; total += item.qty * item.price; });
+  const fc = document.getElementById('floatCart');
+  const fb = document.getElementById('floatBadge');
+  if (count > 0) { fb.textContent = `${count} items - €${total.toFixed(2)}`; fc.style.display = 'flex'; }
+  else { fc.style.display = 'none'; }
+}
 
-        function renderProducts() {
-            for (const category in productsData) {
-                const grid = document.getElementById(`${category}-grid`);
-                productsData[category].forEach(p => {
-                    const card = document.createElement('div');
-                    card.className = 'product-card';
-                    card.innerHTML = `
-                        <div>
-                            <div class="product-name">${p.name}</div>
-                            <div class="product-price">EUR ${p.price.toFixed(2)} / ${p.unit}</div>
-                        </div>
-                        <div class="action-container">
-                            <button class="btn-add-to-list" id="add-${p.id}">Add to List</button>
-                            <div class="quantity-controls" id="ctrl-${p.id}">
-                                <button class="btn-qty" id="minus-${p.id}">-</button>
-                                <span class="qty-display" id="qty-${p.id}">1</span>
-                                <button class="btn-qty" id="plus-${p.id}">+</button>
-                            </div>
-                        </div>
-                    `;
-                    grid.appendChild(card);
+function openCart() { document.getElementById('drawer').classList.add('open'); renderLedger(); }
+function closeCart(e) { document.getElementById('drawer').classList.remove('open'); }
 
-                    const addBtn = card.querySelector(`#add-${p.id}`);
-                    const ctrl = card.querySelector(`#ctrl-${p.id}`);
-                    const qtyDisp = card.querySelector(`#qty-${p.id}`);
-                    const plusBtn = card.querySelector(`#plus-${p.id}`);
-                    const minusBtn = card.querySelector(`#minus-${p.id}`);
+function renderLedger() {
+  const ledgerEl = document.getElementById('ledger');
+  let html = '', total = 0;
+  Object.values(cart).forEach(item => {
+    total += item.qty * item.price;
+    html += `<div class="lrow"><span>${item.name} (x${item.qty})</span><span>€${(item.qty * item.price).toFixed(2)}</span></div>`;
+  });
+  html += `<div class="ltotal"><span>Total Amount</span><span>€${total.toFixed(2)}</span></div>`;
+  ledgerEl.innerHTML = html;
+}
 
-                    addBtn.addEventListener('click', () => {
-                        cart[p.id] = { name: p.name, price: p.price, unit: p.unit, qty: 1 };
-                        addBtn.style.display = 'none';
-                        ctrl.style.display = 'flex';
-                        qtyDisp.innerText = 1;
-                        updateSummary();
-                    });
+function sendOrder() {
+  const name = document.getElementById('cname').value;
+  const area = document.getElementById('area').value;
+  const addr = document.getElementById('caddr').value;
+  if(!name || !addr) { alert("Please fill Name and Address"); return; }
+  let msg = `*New Order from SNK Foods*\n\n*Name:* ${name}\n*Area:* ${area}\n*Address:* ${addr}\n\n*Items:*\n`;
+  let total = 0;
+  Object.values(cart).forEach(item => {
+    msg += `- ${item.name} x ${item.qty} (€${(item.qty * item.price).toFixed(2)})\n`;
+    total += item.qty * item.price;
+  });
+  msg += `\n*Total Bill:* €${total.toFixed(2)}`;
+  window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
+}
 
-                    plusBtn.addEventListener('click', () => {
-                        if(cart[p.id]) {
-                            cart[p.id].qty += 1;
-                            qtyDisp.innerText = cart[p.id].qty;
-                            updateSummary();
-                        }
-                    });
+function saveProduct() {
+  const cat = document.getElementById('pCat').value;
+  const name = document.getElementById('pName').value;
+  const unit = document.getElementById('pUnit').value;
+  const price = parseFloat(document.getElementById('pPrice').value);
+  const img = document.getElementById('pImg').value;
+  
+  if(!name || !unit || isNaN(price)) { alert("Please fill all details!"); return; }
+  
+  const existingIdx = db[cat].findIndex(i => i.name.toLowerCase() === name.toLowerCase());
+  if(existingIdx > -1) {
+    db[cat][existingIdx] = { name, unit, price, img };
+  } else {
+    db[cat].push({ name, unit, price, img });
+  }
+  
+  saveDB();
+  renderAdminProducts();
+  renderCatalog();
+  alert("Product Saved Successfully!");
+  
+  document.getElementById('pName').value = '';
+  document.getElementById('pUnit').value = '';
+  document.getElementById('pPrice').value = '';
+  document.getElementById('pImg').value = '';
+}
 
-                    minusBtn.addEventListener('click', () => {
-                        if(cart[p.id]) {
-                            cart[p.id].qty -= 1;
-                            if(cart[p.id].qty <= 0) {
-                                delete cart[p.id];
-                                ctrl.style.display = 'none';
-                                addBtn.style.display = 'block';
-                            } else {
-                                qtyDisp.innerText = cart[p.id].qty;
-                            }
-                            updateSummary();
-                        }
-                    });
-                });
-            }
-        }
+function deleteProduct(cat, idx) {
+  if(confirm("Are you sure you want to delete this item?")) {
+    db[cat].splice(idx, 1);
+    saveDB();
+    renderAdminProducts();
+    renderCatalog();
+  }
+}
 
-        function updateSummary() {
-            const summaryContainer = document.getElementById('summary-list');
-            summaryContainer.innerHTML = '';
-            let total = 0; let hasItems = false;
-            for (const id in cart) {
-                hasItems = true; const item = cart[id]; const itemTotal = item.price * item.qty; total += itemTotal;
-                const row = document.createElement('div'); row.className = 'summary-item';
-                row.innerHTML = `<span>${item.name} (${item.unit}) <b>x ${item.qty}</b></span><span>EUR ${itemTotal.toFixed(2)}</span>`;
-                summaryContainer.appendChild(row);
-            }
-            if (!hasItems) { summaryContainer.innerHTML = '<p style="color: #7f8c8d; text-align: center; font-style: italic;">Your list is empty. Click "Add to List" on products above!</p>'; return; }
-            const totalRow = document.createElement('div'); totalRow.className = 'summary-total';
-            totalRow.innerHTML = `<span>Total Amount:</span><span>EUR ${total.toFixed(2)}</span>`; summaryContainer.appendChild(totalRow);
-        }
+function renderAdminProducts() {
+  const listEl = document.getElementById('adminProductList');
+  let html = '';
+  for(let cat in db) {
+    db[cat].forEach((item, idx) => {
+      html += `<div class="admin-item-row">
+        <div><strong>${item.name}</strong> (${item.unit}) - €${item.price}</div>
+        <button class="btn btn-danger" style="width:auto; padding:5px 10px; font-size:12px;" onclick="deleteProduct('${cat}', ${idx})">Delete</button>
+      </div>`;
+    });
+  }
+  listEl.innerHTML = html;
+}
 
-        document.getElementById('send-order-btn').addEventListener('click', () => {
-            const name = document.getElementById('cust-name').value.trim();
-            const address = document.getElementById('cust-address').value.trim();
-            const deliveryDay = document.getElementById('cust-day').value.trim();
-            if (!name || !address || !deliveryDay) { alert('Please fill out all the fields!'); return; }
-            let itemText = ''; let grandTotal = 0; let hasItems = false;
-            for (const id in cart) {
-                hasItems = true; const item = cart[id]; const itemTotal = item.price * item.qty; grandTotal += itemTotal;
-                itemText += `- ${item.name} (${item.unit}) x ${item.qty} = EUR ${itemTotal.toFixed(2)}\n`;
-            }
-            if (!hasItems) { alert('Your list is empty! Please click "Add to List" first.'); return; }
-            let message = `*📦 NEW ORDER - SNK GROCERY*\n\n*👤 CUSTOMER DETAILS:*\n• *Name:* ${name}\n• *Address:* ${address}\n• *Delivery Day:* ${deliveryDay}\n\n*🛒 ORDERED ITEMS:*\n${itemText}\n*💰 GRAND TOTAL:* EUR ${grandTotal.toFixed(2)}\n\nPlease confirm my order. Thank you!`;
-            window.open(`https://api.whatsapp.com/send?phone=31685259659&text=${encodeURIComponent(message)}`, '_blank');
-        });
-
-        renderProducts();
-    </script>
+renderCatalog();
+</script>
 </body>
 </html>
