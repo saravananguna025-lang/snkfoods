@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SNK Foods — Indian Grocery, Delivered</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,600&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --turmeric:#C8860D; --turmeric-dark:#9C6708;
+    --leaf:#3C5A3E; --leaf-dark:#2A3F2C;
+    --vermilion:#A63A2E; --rice:#FBF4E4; --rice-2:#F3E9D2;
+    --charcoal:#241C15; --brass:#B8863B; --paper:#FFFDF7;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--rice);color:var(--charcoal);font-family:'Work Sans',sans-serif;}
+  h1,h2,h3{font-family:'Fraunces',serif;margin:0;}
+  header{position:sticky;top:0;z-index:40;background:var(--charcoal);color:var(--rice);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 10px rgba(0,0,0,.15);}
+  .logo{display:flex;align-items:center;gap:10px;}
+  .logo-mark{width:38px;height:38px;border-radius:8px;background:linear-gradient(135deg,var(--turmeric),var(--vermilion));display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:900;color:var(--rice);font-size:16px;}
+  .logo-text h1{font-size:20px;letter-spacing:.5px;color:var(--rice);}
+  .logo-text span{font-size:11px;opacity:.75;display:block;letter-spacing:1px;text-transform:uppercase;}
+  .wa-quick{background:var(--leaf);color:#fff;border:none;padding:9px 14px;border-radius:20px;font-size:13px;font-weight:600;text-decoration:none;display:flex;align-items:center;gap:6px;}
+  .hero{padding:56px 20px 40px;text-align:center;background: radial-gradient(circle at 15% 20%, rgba(200,134,13,.12), transparent 40%), radial-gradient(circle at 85% 80%, rgba(166,58,46,.10), transparent 40%);}
+  .hero h2{font-size:clamp(28px,6vw,46px);line-height:1.1;font-weight:900;color:var(--charcoal);}
+  .hero h2 em{color:var(--turmeric-dark);font-style:normal;}
+  .hero p{max-width:520px;margin:16px auto 0;font-size:15px;line-height:1.6;opacity:.85;}
+  .pills{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:20px;}
+  .pill{background:var(--paper);border:1px solid var(--brass);color:var(--leaf-dark);padding:6px 14px;border-radius:20px;font-size:13px;font-weight:600;}
+  .hero-cta{margin-top:26px;display:inline-block;background:var(--vermilion);color:#fff;padding:14px 28px;border-radius:8px;font-weight:700;text-decoration:none;font-size:15px;box-shadow:0 6px 0 var(--turmeric-dark);}
+  .catnav{position:sticky;top:66px;z-index:30;background:var(--rice);border-bottom:1px solid var(--rice-2);overflow-x:auto;white-space:nowrap;padding:10px 16px;display:flex;gap:8px;}
+  .catnav a{flex-shrink:0;background:var(--paper);border:1px solid var(--rice-2);padding:7px 14px;border-radius:16px;font-size:13px;font-weight:600;color:var(--charcoal);text-decoration:none;}
+  main{max-width:920px;margin:0 auto;padding:20px 16px 120px;}
+  .cat-section{margin-top:44px;}
+  .cat-head h3{font-size:24px;font-weight:700;}
+  .cat-rule{height:2px;background:repeating-linear-gradient(90deg,var(--brass) 0 8px,transparent 8px 14px);margin:10px 0 18px;}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;}
+  .card{background:var(--paper);border:1px solid var(--rice-2);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:8px;}
+  .card .pname{font-weight:600;font-size:14.5px;line-height:1.3;}
+  .card .punit{font-size:12px;opacity:.6;}
+  .card .prow{display:flex;align-items:center;justify-content:space-between;margin-top:auto;}
+  .card .price{font-family:'IBM Plex Mono',monospace;font-weight:600;color:var(--vermilion);font-size:15px;}
+  .stepper{display:flex;align-items:center;border:1px solid var(--rice-2);border-radius:6px;overflow:hidden;}
+  .stepper button{width:26px;height:26px;border:none;background:var(--rice-2);font-size:16px;cursor:pointer;font-weight:600;}
+  .stepper .qty{width:26px;text-align:center;font-size:13px;font-family:'IBM Plex Mono',monospace;}
+  .addbtn{background:var(--leaf);color:#fff;border:none;padding:8px 0;border-radius:6px;font-weight:600;font-size:13px;cursor:pointer;width:100%;}
+  .addbtn.added{background:var(--turmeric-dark);}
+  .float-cart{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--charcoal);color:var(--rice);padding:12px 22px;border-radius:30px;display:none;align-items:center;gap:10px;box-shadow:0 6px 20px rgba(0,0,0,.3);z-index:50;cursor:pointer;font-weight:600;font-size:14px;}
+  .float-cart .badge{background:var(--vermilion);border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:12px;}
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:60;display:none;}
+  .overlay.show{display:block;}
+  .drawer{position:fixed;top:0;right:0;bottom:0;width:min(400px,92vw);background:var(--paper);z-index:61;transform:translateX(100%);transition:transform .25s ease;display:flex;flex-direction:column;}
+  .drawer.open{transform:translateX(0);}
+  .drawer-head{background:var(--charcoal);color:var(--rice);padding:16px 18px;display:flex;justify-content:space-between;align-items:center;}
+  .drawer-head h3{font-size:17px;color:var(--rice);}
+  .drawer-head .close{background:none;border:none;color:var(--rice);font-size:22px;cursor:pointer;}
+  .ledger{flex:1;overflow-y:auto;padding:16px 18px;background:repeating-linear-gradient(var(--paper) 0 33px, var(--rice-2) 33px 34px);}
+  .lrow{display:flex;justify-content:space-between;align-items:center;padding:5px 0;font-size:13.5px;}
+  .lrow .lname{flex:1;}
+  .lrow .lqty{width:50px;text-align:center;}
+  .lrow .lprice{width:70px;text-align:right;font-weight:600;}
+  .lrow .lremove{background:none;border:none;color:var(--vermilion);font-size:16px;cursor:pointer;margin-left:6px;}
+  .ltotal{border-top:2px dashed var(--brass);margin-top:10px;padding-top:10px;display:flex;justify-content:space-between;font-weight:700;font-size:16px;}
+  .drawer-form{padding:14px 18px;border-top:1px solid var(--rice-2);display:flex;flex-direction:column;gap:8px;}
+  .drawer-form label{font-size:11px;text-transform:uppercase;font-weight:600;opacity:.7;}
+  .drawer-form select,.drawer-form input{padding:9px 10px;border:1px solid var(--rice-2);border-radius:6px;font-size:14px;}
+  .send-btn{background:var(--leaf);color:#fff;border:none;padding:13px;border-radius:8px;font-weight:700;font-size:14.5px;cursor:pointer;}
+  .send-btn:disabled{opacity:.4;}
+  footer{background:var(--charcoal);color:var(--rice);padding:36px 20px 26px;text-align:center;}
+  footer h4{font-family:'Fraunces',serif;font-size:20px;margin-bottom:10px;}
+  .admin-link{background:none;border:none;color:rgba(255,255,255,.3);font-size:11px;margin-top:18px;cursor:pointer;text-decoration:underline;}
+  .admin-overlay{position:fixed;inset:0;background:var(--rice);z-index:80;display:none;flex-direction:column;}
+  .admin-overlay.show{display:flex;}
+  .admin-head{background:var(--charcoal);color:var(--rice);padding:14px 20px;display:flex;justify-content:space-between;align-items:center;}
+  .admin-head h3{color:var(--rice);}
+  .admin-head button{background:none;border:none;color:var(--rice);font-size:22px;cursor:pointer;}
+  .admin-tabs{display:flex;gap:8px;padding:12px 20px;background:var(--paper);border-bottom:1px solid var(--rice-2);}
+  .admin-tabs button{background:var(--rice-2);border:none;padding:8px 16px;border-radius:16px;font-weight:600;cursor:pointer;}
+  .admin-tabs button.active{background:var(--leaf);color:#fff;}
+  .admin-body{flex:1;overflow-y:auto;padding:18px 20px;}
+  .admin-cat{background:var(--paper);border:1px solid var(--rice-2);border-radius:10px;padding:14px;margin-bottom:14px;}
+  .admin-item-row{display:grid;grid-template-columns:1fr 70px 80px 30px;gap:6px;margin-bottom:6px;align-items:center;}
+  .admin-item-row input{padding:6px 8px;border:1px solid var(--rice-2);border-radius:6px;}
+  .admin-item-row button{background:var(--vermilion);color:#fff;border:none;border-radius:6px;cursor:pointer;}
+  .admin-btn-row{display:flex;gap:8px;margin-top:8px;}
+  .admin-btn-row button{background:var(--leaf);color:#fff;border:none;padding:7px 12px;border-radius:6px;font-weight:600;cursor:pointer;}
+  .save-bar{position:sticky;bottom:0;background:var(--paper);border-top:1px solid var(--rice-2);padding:12px 20px;display:flex;justify-content:center;}
+  .save-bar button{background:var(--turmeric-dark);color:#fff;border:none;padding:11px 22px;border-radius:8px;font-weight:700;cursor:pointer;}
+  .status-msg{font-size:12px;text-align:center;padding:6px;opacity:.7;}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;display:none;align-items:center;justify-content:center;padding:20px;}
+  .modal-overlay.show{display:flex;}
+  .modal-box{background:var(--paper);border-radius:12px;padding:20px;width:min(320px,100%);}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">
+    <div class="logo-mark">SNK</div>
+    <div class="logo-text"><h1>SNK Foods</h1><span>Indian Grocery · Delivered</span></div>
+  </div>
+  <a class="wa-quick" href="https://wa.me/31685259659" target="_blank">💬 WhatsApp</a>
+</header>
+<section class="hero">
+  <h2>Fresh Indian groceries,<br><em>delivered to your door.</em></h2>
+  <p>Rice, dals, spices, snacks &amp; pooja items — order on WhatsApp and we deliver straight to your home.</p>
+  <div class="pills"><span class="pill">📍 Den Haag</span><span class="pill">📍 Rotterdam</span><span class="pill">📍 Delft</span><span class="pill">📍 Leiden</span></div>
+  <br><a class="hero-cta" href="#catalog">Start Your Order ↓</a>
+</section>
+<nav class="catnav" id="catnav"></nav>
+<main id="catalog"></main>
+<div class="float-cart" id="floatCart" onclick="openCart()">🛒 <span id="floatText">0 items</span> <span class="badge" id="floatBadge">0</span></div>
+<div class="overlay" id="overlay" onclick="closeCart()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-head"><h3>Your Order Chit 🧾</h3><button class="close" onclick="closeCart()">×</button></div>
+  <div class="ledger" id="ledger"></div>
+  <div class="drawer-form">
+    <label>Delivery Area</label>
+    <select id="area"><option>Den Haag</option><option>Rotterdam</option><option>Delft</option><option>Leiden</option></select>
+    <label>Your Name</label><input id="cname" placeholder="Full name">
+    <label>Delivery Address</label><input id="caddr" placeholder="Street, house no., postcode">
+    <button class="send-btn" id="sendBtn" onclick="sendOrder()">📲 Send Order via WhatsApp</button>
+  </div>
+</div>
+<footer>
+  <h4>SNK Foods</h4>
+  <p style="font-size:13px;">Order anytime on WhatsApp: +31 6 85259659</p>
+  <button class="admin-link" onclick="adminLogin()">Admin</button>
+</footer>
+<div class="admin-overlay" id="adminOverlay">
+  <div class="admin-head"><h3>SNK Foods — Admin</h3><button onclick="closeAdmin()">×</button></div>
+  <div class="admin-tabs"><button id="tabOrdersBtn" class="active" onclick="showAdminTab('orders')">Orders</button><button id="tabProductsBtn" onclick="showAdminTab('products')">Products</button></div>
+  <div class="admin-body" id="adminBody"></div>
+  <div class="save-bar" id="saveBar" style="display:none;"><button onclick="saveCatalog()">Save Product Changes</button></div>
+  <div class="status-msg" id="adminStatus"></div>
+</div>
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <div id="modalTitle" style="font-weight:700;margin-bottom:10px;"></div>
+    <input id="modalInput" style="width:100%;padding:9px 10px;border:1px solid var(--rice-2);border-radius:6px;margin-bottom:12px;">
+    <div style="display:flex;gap:8px;justify-content:flex-end;">
+      <button id="modalCancel" style="background:var(--rice-2);border:none;padding:9px 16px;border-radius:6px;cursor:pointer;">Cancel</button>
+      <button id="modalOk" style="background:var(--leaf);color:#fff;border:none;padding:9px 16px;border-radius:6px;cursor:pointer;">OK</button>
+    </div>
+  </div>
+</div>
+<script>
+const WA_NUMBER = "31685259659"; const ADMIN_PASSCODE = "snk2026";
+const defaultCatalog = [
+  { id:"veg", name:"Fresh Vegetables", items:[["Onion", "1kg", 1.99], ["Tomato", "1kg", 2.49], ["Potato", "1kg", 1.79], ["Green Chilli", "250g", 1.49]]},
+  { id:"rice", name:"Rice & Flour", items:[["Idli Rice", "5kg", 9.99], ["Ponni Rice", "5kg", 11.49]]},
+  { id:"dal", name:"Dals & Pulses", items:[["Toor Dal", "1kg", 3.49], ["Moong Dal", "1kg", 3.29]]}
+];
+let catalog = []; let cart = {};
+function loadCatalog(){
+  const local = localStorage.getItem('snk_catalog');
+  catalog = local ? JSON.parse(local) : JSON.parse(JSON.stringify(defaultCatalog));
+  renderCatalog();
+}
+function renderCatalog(){
+  const navEl = document.getElementById('catnav'); const mainEl = document.getElementById('catalog');
+  if(!navEl || !mainEl) return; navEl.innerHTML = ''; mainEl.innerHTML = '';
+  catalog.forEach(cat=>{
+    navEl.innerHTML += `<a href="#cat-${cat.id}">${cat.name}</a>`;
+    let cardsHtml = '';
+    cat.items.forEach(([name,unit,price])=>{
+      const key = `${cat.id}||${name}||${unit}`; const ck = cssKey(key); const cleanName = escapeStr(name);
+      cardsHtml += `<div class="card"><div class="pname">${name}</div><div class="punit">${unit}</div><div class="prow"><div class="price">€${Number(price).toFixed(2)}</div><div class="stepper"><button onclick="changeQty('${key}',-1)">−</button><div class="qty" id="qty-${ck}">0</div><button onclick="changeQty('${key}',1)">+</button></div></div><button class="addbtn" id="btn-${ck}" onclick="addFromCard('${key}','${cleanName}','${unit}',${price})">Add to order</button></div>`;
+    });
+    mainEl.innerHTML += `<div class="cat-section" id="cat-${cat.id}"><div class="cat-head"><h3>${cat.name}</h3></div><div class="cat-rule"></div><div class="grid">${cardsHtml}</div></div>`;
+  });
+}
+function cssKey(key){ return key.replace(/[^a-zA-Z0-9]/g,'_'); }
+function escapeStr(s){ return s.replace(/\\/g, '\\\\').replace(/'/g,"\\'"); }
+function addFromCard(key,name,unit,price){ if(!cart[key]) cart[key] = {name,unit,price:Number(price),qty:0}; cart[key].qty += 1; syncUI(key); }
+function changeQty(key,delta){ if(!cart[key]) return; cart[key].qty += delta; if(cart[key].qty <= 0) delete cart[key]; syncUI(key); }
+function syncUI(key){
+  const ck = cssKey(key); const qtyEl = document.getElementById('qty-'+ck); const btnEl = document.getElementById('btn-'+ck); const qty = cart[key] ? cart[key].qty : 0;
+  if(qtyEl) qtyEl.textContent = qty; if(btnEl){ btnEl.textContent = qty>0 ? 'Added ✓' : 'Add to order'; btnEl.classList.toggle('added', qty>0); }
+  updateFloatCart(); renderLedger();
+}
+function updateFloatCart(){
+  const count = Object.values(cart).reduce((s,i)=>s+i.qty,0); const fc = document.getElementById('floatCart'); if(!fc) return;
+  document.getElementById('floatText').textContent = count+" item"+(count!==1?'s':''); document.getElementById('floatBadge').textContent = count; fc.style.display = count>0 ? 'flex' : 'none';
+}
+function renderLedger(){
+  const ledgerEl = document.getElementById('ledger'); if(!ledgerEl) return; const items = Object.entries(cart);
+  if(items.length===0){ ledgerEl.innerHTML = `<div class="empty-note">Your chit is empty.</div>`; document.getElementById('sendBtn').disabled = true; return; }
+  document.getElementById('sendBtn').disabled = false; let total = 0, rows = '';
+  items.forEach(([key,item])=>{ total += item.qty*item.price; rows += `<div class="lrow"><div class="lname">${item.name}</div><div class="lqty">×${item.qty}</div><div class="lprice">€${(item.qty*item.price).toFixed(2)}</div><button class="lremove" onclick="removeItem('${key}')">×</button></div>`; });
+  ledgerEl.innerHTML = rows + `<div class="ltotal"><span>Total</span><span>€${total.toFixed(2)}</span></div>`;
+}
+function removeItem(key){ delete cart[key]; syncUI(key); }
+function openCart(){ document.getElementById('drawer').classList.add('open'); document.getElementById('overlay').classList.add('show'); }
+function closeCart(){ document.getElementById('drawer').classList.remove('open'); document.getElementById('overlay').classList.remove('show'); }
+function sendOrder(){
+  const items = Object.values(cart); if(items.length===0) return;
+  const area = document.getElementById('area').value; const name = document.getElementById('cname').value; const addr = document.getElementById('caddr').value;
+  let text = `New Order from SNK Foods:\n`; items.forEach(it=> text+=`- ${it.name} x${it.qty}\n`);
+  window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`,'_blank');
+}
+let modalResolve = null;
+function askModal(title, {isPassword=false} = {}){
+  return new Promise(resolve=>{
+    modalResolve = resolve; document.getElementById('modalTitle').textContent = title;
+    const inputEl = document.getElementById('modalInput'); inputEl.type = isPassword ? 'password' : 'text'; inputEl.value = '';
+    document.getElementById('modalOverlay').classList.add('show');
+  });
+}
+document.getElementById('modalOk').onclick = ()=>{ document.getElementById('modalOverlay').classList.remove('show'); if(modalResolve) modalResolve(document.getElementById('modalInput').value); };
+document.getElementById('modalCancel').onclick = ()=>{ document.getElementById('modalOverlay').classList.remove('show'); if(modalResolve) modalResolve(null); };
+async function adminLogin(){
+  const pass = await askModal("Enter admin passcode", {isPassword:true});
+  if(pass === ADMIN_PASSCODE){ document.getElementById('adminOverlay').classList.add('show'); showAdminTab('orders'); }
+}
+function closeAdmin(){ document.getElementById('adminOverlay').classList.remove('show'); }
+function showAdminTab(tab){
+  document.getElementById('tabOrdersBtn').classList.toggle('active', tab==='orders');
+  document.getElementById('tabProductsBtn').classList.toggle('active', tab==='products');
+  document.getElementById('adminBody').innerHTML = tab==='orders' ? '<div class="loading-note">No orders yet.</div>' : '<div class="loading-note">Products management active.</div>';
+}
+loadCatalog();
+</script>
+</body>
+</html>
