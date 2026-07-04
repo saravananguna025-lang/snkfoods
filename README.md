@@ -56,11 +56,10 @@
   .cat-head h3 { font-size: 22px; font-weight: 700; color: var(--charcoal); }
   .cat-rule { height: 2px; background: repeating-linear-gradient(90deg,var(--brass) 0 8px,transparent 8px 14px); margin: 8px 0 12px; }
   
-  /* PERFECT SCANNABLE TABLE LAYOUT (ROW & COLUMN) */
   .table-container { background: var(--paper); border: 1px solid var(--rice-2); border-radius: 8px; padding: 0 12px; overflow: hidden; }
   .table-header {
     display: grid;
-    grid-template-columns: 1fr 65px 65px 95px;
+    grid-template-columns: 1fr 100px 75px 95px;
     padding: 10px 0;
     border-bottom: 2px solid var(--turmeric);
     font-size: 11px;
@@ -72,7 +71,7 @@
   }
   .item-row { 
     display: grid; 
-    grid-template-columns: 1fr 65px 65px 95px; 
+    grid-template-columns: 1fr 100px 75px 95px; 
     align-items: center; 
     padding: 12px 0; 
     border-bottom: 1px solid var(--rice-2);
@@ -81,15 +80,13 @@
   .item-row:last-child { border-bottom: none; }
   
   .item-row .pname { font-weight: 600; font-size: 14px; line-height: 1.3; color: var(--charcoal); }
-  .item-row .punit { font-size: 12px; color: #666; text-align: center; font-family: 'IBM Plex Mono', monospace; }
+  .item-row .punit-select { padding: 4px; border: 1px solid var(--rice-2); border-radius: 4px; font-size: 12.5px; font-family: 'Work Sans', sans-serif; background: #fff; width: 100%; }
   .item-row .price { font-family: 'IBM Plex Mono',monospace; font-weight: 600; color: var(--vermilion); font-size: 14.5px; text-align: right; padding-right: 4px; }
   
-  /* STEPPER AND ACTION SYSTEM */
   .stepper { display: flex; align-items: center; border: 1px solid var(--turmeric); border-radius: 4px; overflow: hidden; background: white; justify-content: space-between; height: 30px; }
   .stepper button { width: 28px; height: 100%; border: none; background: var(--rice-2); font-size: 16px; cursor: pointer; font-weight: 700; color: var(--charcoal); }
   .stepper .qty { width: 30px; text-align: center; font-size: 13px; font-family: 'IBM Plex Mono',monospace; font-weight: 700; }
   .addbtn { background: var(--leaf); color: #fff; border: none; height: 30px; border-radius: 4px; font-weight: 600; font-size: 12.5px; cursor: pointer; width: 100%; text-align: center; }
-  .addbtn.added { background: var(--turmeric-dark); }
 
   .float-cart{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--charcoal);color:var(--rice);padding:12px 22px;border-radius:30px;display:none;align-items:center;gap:10px;box-shadow:0 6px 20px rgba(0,0,0,.3);z-index:50;cursor:pointer;font-weight:600;font-size:14px;width:90%;max-width:340px;justify-content:space-between;}
   .float-cart .badge{background:var(--vermilion);border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:12px;font-family:'IBM Plex Mono',monospace;}
@@ -137,7 +134,7 @@
   .order-card select{padding:6px 10px;border-radius:6px;border:1px solid var(--rice-2);font-size:12.5px;}
   .admin-cat{background:var(--paper);border:1px solid var(--rice-2);border-radius:10px;padding:14px;margin-bottom:14px;}
   .admin-cat h4{font-size:16px;margin-bottom:10px;}
-  .admin-item-row{display:grid;grid-template-columns:1fr 70px 80px 30px;gap:6px;margin-bottom:6px;align-items:center;}
+  .admin-item-row{display:grid;grid-template-columns:1fr 100px 100px 30px;gap:6px;margin-bottom:6px;align-items:center;}
   .admin-item-row input{padding:6px 8px;border:1px solid var(--rice-2);border-radius:6px;font-size:12.5px;}
   .admin-item-row button{background:var(--vermilion);color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:14px;}
   .admin-btn-row{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;}
@@ -168,9 +165,8 @@
 <section class="hero">
   <div class="hero-kicker">SNK Foods — Fresh from home, delivered</div>
   <div class="hero-inner">
-    <div class="eyebrow">Welcome</div>
     <h2>Fresh Indian groceries,<br><em>delivered to your door.</em></h2>
-    <p>Rice, dals, spices, snacks &amp; pooja items — order on WhatsApp and we deliver straight to your home. No shop visit needed.</p>
+    <p>Rice, dals, spices, snacks &amp; pooja items — order on WhatsApp and we deliver straight to your home.</p>
     <div class="pills">
       <span class="pill">📍 Den Haag</span>
       <span class="pill">📍 Rotterdam</span>
@@ -184,7 +180,6 @@
 </section>
 
 <nav class="catnav" id="catnav"></nav>
-
 <main id="catalog"><div class="loading-note">Loading products…</div></main>
 
 <div class="float-cart" id="floatCart" onclick="openCart()">
@@ -212,16 +207,11 @@
     <label>Delivery Address</label>
     <input id="caddr" placeholder="Street, house no., postcode">
     <button class="send-btn" id="sendBtn" onclick="sendOrder()">📲 Send Order via WhatsApp</button>
-    <div class="send-note">Order also gets saved so SNK Foods can track it.</div>
   </div>
 </div>
 
 <footer>
   <h4>SNK Foods</h4>
-  <p style="opacity:.8;font-size:13px;">Your home-style Indian grocery, delivered.</p>
-  <div class="fpills">
-    <span>Den Haag</span><span>Rotterdam</span><span>Delft</span><span>Leiden</span>
-  </div>
   <p style="font-size:13px;">Order anytime on WhatsApp: <a class="fwa" href="https://wa.me/31685259659" target="_blank">+31 6 85259659</a></p>
   <button class="admin-link" onclick="adminLogin()">Admin</button>
 </footer>
@@ -260,30 +250,26 @@
 const WA_NUMBER = "31685259659";
 const ADMIN_PASSCODE = "snk2026"; 
 
+// MULTI-VARIANT SUPPORT: Units & Prices separated by commas
 const defaultCatalog = [
-  { id:"veg", name:"Fresh Vegetables", items:[
-    ["Onion", "1kg", 1.99], ["Tomato", "1kg", 2.49], ["Potato", "1kg", 1.79], ["Green Chilli", "250g", 1.49], ["Curry Leaves", "bunch", 1.29], ["Coriander Leaves", "bunch", 1.29], ["Ginger", "250g", 1.99], ["Garlic", "250g", 1.99], ["Drumstick (Murungakkai)", "500g", 3.49], ["Brinjal", "500g", 2.29], ["Ladies Finger (Okra)", "500g", 2.49], ["Coconut (whole)", "1pc", 1.99]
+  { id:"spice", name:"Spices & Masala", items:[
+    ["Coriander Powder", "250g, 500g, 1kg", "1.99, 3.49, 6.49"],
+    ["Sambar Powder", "200g, 500g", "2.99, 5.99"],
+    ["Chilli Powder", "200g, 500g, 1kg", "2.49, 4.49, 8.49"],
+    ["Turmeric Powder", "200g", "1.99"],
+    ["Mustard Seeds", "200g, 500g", "1.49, 2.99"]
   ]},
   { id:"rice", name:"Rice & Flour", items:[
-    ["Idli Rice", "5kg", 9.99], ["Ponni Boiled Rice", "5kg", 11.49], ["Basmati Rice", "5kg", 13.99], ["Chakki Fresh Atta (Wheat Flour)", "5kg", 7.49], ["Rice Flour", "1kg", 2.99], ["Rava / Sooji", "1kg", 2.49]
+    ["Idli Rice", "5kg, 10kg", "9.99, 18.99"],
+    ["Ponni Boiled Rice", "5kg, 10kg", "11.49, 21.99"],
+    ["Basmati Rice", "5kg", "13.99"],
+    ["Chakki Fresh Atta", "5kg, 10kg", "7.49, 13.99"]
   ]},
-  { id:"dal", name:"Dals & Pulses", items:[
-    ["Toor Dal", "1kg", 3.49], ["Moong Dal", "1kg", 3.29], ["Urad Dal", "1kg", 3.99], ["Chana Dal", "1kg", 3.29], ["Masoor Dal", "1kg", 2.99]
-  ]},
-  { id:"spice", name:"Spices & Masala", items:[
-    ["Sambar Powder", "200g", 2.99], ["Rasam Powder", "200g", 2.99], ["Turmeric Powder", "200g", 1.99], ["Chilli Powder", "200g", 2.49], ["Garam Masala", "100g", 2.29], ["Mustard Seeds", "200g", 1.49]
-  ]},
-  { id:"snack", name:"Snacks & Namkeen", items:[
-    ["Mixture", "200g", 2.99], ["Murukku", "200g", 2.99], ["Banana Chips", "200g", 2.49], ["Cashew Nuts", "200g", 4.99]
-  ]},
-  { id:"pickle", name:"Pappad & Pickles", items:[
-    ["Appalam Papad", "200g", 2.49], ["Mango Pickle", "300g", 3.49], ["Lemon Pickle", "300g", 3.49], ["Garlic Pickle", "300g", 3.99]
-  ]},
-  { id:"tea", name:"Tea, Coffee & Beverages", items:[
-    ["Tata Tea Gold", "250g", 3.49], ["Bru Coffee", "200g", 3.99], ["Bournvita", "500g", 4.49]
-  ]},
-  { id:"pooja", name:"Pooja Items", items:[
-    ["Agarbathi (Incense)", "pack", 1.99], ["Camphor", "50g", 1.49], ["Kumkum & Turmeric Set", "set", 1.99], ["Cotton Wicks", "pack", 1.49]
+  { id:"veg", name:"Fresh Vegetables", items:[
+    ["Onion", "1kg, 5kg", "1.99, 8.49"],
+    ["Tomato", "1kg", "2.49"],
+    ["Potato", "1kg, 3kg", "1.79, 4.49"],
+    ["Green Chilli", "250g", "1.49"]
   ]}
 ];
 
@@ -310,35 +296,51 @@ async function loadCatalog(){
   renderCatalog();
 }
 
+function parseVariants(unitStr, priceStr) {
+  const units = unitStr.split(',').map(s => s.trim());
+  const prices = priceStr.split(',').map(s => parseFloat(s.trim()) || 0);
+  return units.map((u, i) => ({ unit: u, price: prices[i] || prices[0] || 0 }));
+}
+
 function renderCatalog(){
   const navEl = document.getElementById('catnav');
   const mainEl = document.getElementById('catalog');
-  navEl.innerHTML = '';
-  mainEl.innerHTML = '';
+  navEl.innerHTML = ''; mainEl.innerHTML = '';
   
   catalog.forEach(cat=>{
     navEl.innerHTML += `<a href="#cat-${cat.id}">${cat.name}</a>`;
     let rowsHtml = '';
     
-    cat.items.forEach(([name,unit,price])=>{
-      const key = `${cat.id}||${name}||${unit}`;
-      const ck = cssKey(key);
-      const inCart = cart[key] && cart[key].qty > 0;
+    cat.items.forEach(([name, unitStr, priceStr], itemIdx)=>{
+      const variants = parseVariants(unitStr, priceStr);
+      const itemRowId = `row-${cat.id}-${itemIdx}`;
       
+      // Default selection is the first variant
+      const defaultUnit = variants[0].unit;
+      const defaultPrice = variants[0].price;
+      const initialKey = `${cat.id}||${name}||${defaultUnit}`;
+      const inCart = cart[initialKey] && cart[initialKey].qty > 0;
+      
+      let optionsHtml = variants.map((v, idx) => `<option value="${idx}">${v.unit}</option>`).join('');
+
       rowsHtml += `
-        <div class="item-row">
+        <div class="item-row" id="${itemRowId}">
           <div class="pname">${name}</div>
-          <div class="punit">${unit}</div>
-          <div class="price">€${Number(price).toFixed(2)}</div>
-          <div id="action-${ck}">
+          <div>
+            <select class="punit-select" onchange="onUnitChange('${cat.id}', ${itemIdx}, '${escapeStr(name)}', this.value)">
+              ${optionsHtml}
+            </select>
+          </div>
+          <div class="price" id="price-${cat.id}-${itemIdx}">€${defaultPrice.toFixed(2)}</div>
+          <div class="action-cell" id="action-${cat.id}-${itemIdx}">
             ${inCart ? `
               <div class="stepper">
-                <button onclick="changeQty('${key}',-1)">−</button>
-                <div class="qty">${cart[key].qty}</div>
-                <button onclick="changeQty('${key}',1)">+</button>
+                <button onclick="changeQtyViaUI('${cat.id}', ${itemIdx}, '${escapeStr(name)}', -1)">−</button>
+                <div class="qty">${cart[initialKey].qty}</div>
+                <button onclick="changeQtyViaUI('${cat.id}', ${itemIdx}, '${escapeStr(name)}', 1)">+</button>
               </div>
             ` : `
-              <button class="addbtn" onclick="addFromCard('${key}','${escapeStr(name)}','${unit}',${price})">Add</button>
+              <button class="addbtn" onclick="addViaUI('${cat.id}', ${itemIdx}, '${escapeStr(name)}')">Add</button>
             `}
           </div>
         </div>`;
@@ -351,75 +353,70 @@ function renderCatalog(){
         <div class="table-container">
           <div class="table-header">
             <div>Item Name</div>
-            <div style="text-align:center;">Unit</div>
+            <div>Select Unit</div>
             <div style="text-align:right; padding-right:4px;">Price</div>
             <div style="text-align:center;">Action</div>
           </div>
           ${rowsHtml}
         </div>
       </div>`;
-
-    if(cat.id === 'veg'){
-      mainEl.innerHTML += `
-      <div class="image-band" style="background-image:url('https://images.unsplash.com/photo-1757627550652-30788bfce978?auto=format&fit=crop&w=1400&q=75');">
-        <div class="band-text">
-          <div class="band-kicker">Picked fresh</div>
-          <h3>Crates fresh off the delivery van</h3>
-          <p>Onions, tomatoes, curry leaves, drumstick — the everyday basics, always in stock.</p>
-        </div>
-      </div>`;
-    }
-    if(cat.id === 'spice'){
-      mainEl.innerHTML += `
-      <div class="image-band" style="background-image:url('https://images.unsplash.com/photo-1759003103614-11427d946af0?auto=format&fit=crop&w=1400&q=75');">
-        <div class="band-text">
-          <div class="band-kicker">Everyday pantry</div>
-          <h3>Your kitchen, stocked without the shop trip</h3>
-          <p>Message us your list on WhatsApp — we'll have it packed and on the way.</p>
-        </div>
-      </div>`;
-    }
   });
 }
 
-function cssKey(key){ return key.replace(/[^a-zA-Z0-9]/g,'_'); }
-function escapeStr(s){ return s.replace(/'/g,"\\'"); }
-
-function addFromCard(key,name,unit,price){
-  if(!cart[key]) cart[key] = {name,unit,price:Number(price),qty:0};
-  cart[key].qty = 1;
-  syncItemUI(key);
+function getSelectedVariant(catId, itemIdx) {
+  const cat = catalog.find(c => c.id === catId);
+  const item = cat.items[itemIdx];
+  const variants = parseVariants(item[1], item[2]);
+  const rowEl = document.getElementById(`row-${catId}-${itemIdx}`);
+  const selectEl = rowEl.querySelector('.punit-select');
+  const selectedIdx = parseInt(selectEl.value) || 0;
+  return variants[selectedIdx];
 }
 
-function changeQty(key,delta){
-  if(!cart[key]) return;
-  cart[key].qty += delta;
-  if(cart[key].qty <= 0) delete cart[key];
-  syncItemUI(key);
+function onUnitChange(catId, itemIdx, name, selectValue) {
+  const variant = getSelectedVariant(catId, itemIdx);
+  document.getElementById(`price-${catId}-${itemIdx}`).textContent = `€${variant.price.toFixed(2)}`;
+  updateActionCell(catId, itemIdx, name);
 }
 
-function syncItemUI(key){
-  const ck = cssKey(key);
-  const actionContainer = document.getElementById(`action-${ck}`);
+function updateActionCell(catId, itemIdx, name) {
+  const variant = getSelectedVariant(catId, itemIdx);
+  const key = `${catId}||${name}||${variant.unit}`;
+  const cell = document.getElementById(`action-${catId}-${itemIdx}`);
   
-  if(actionContainer){
-    if(cart[key] && cart[key].qty > 0){
-      actionContainer.innerHTML = `
-        <div class="stepper">
-          <button onclick="changeQty('${key}',-1)">−</button>
-          <div class="qty">${cart[key].qty}</div>
-          <button onclick="changeQty('${key}',1)">+</button>
-        </div>`;
-    } else {
-      const name = key.split('||')[1];
-      const unit = key.split('||')[2];
-      const price = cart[key] ? cart[key].price : 0; 
-      actionContainer.innerHTML = `<button class="addbtn" onclick="addFromCard('${key}','${escapeStr(name)}','${unit}',${price})">Add</button>`;
-    }
+  if (cart[key] && cart[key].qty > 0) {
+    cell.innerHTML = `
+      <div class="stepper">
+        <button onclick="changeQtyViaUI('${catId}', ${itemIdx}, '${escapeStr(name)}', -1)">−</button>
+        <div class="qty">${cart[key].qty}</div>
+        <button onclick="changeQtyViaUI('${catId}', ${itemIdx}, '${escapeStr(name)}', 1)">+</button>
+      </div>`;
+  } else {
+    cell.innerHTML = `<button class="addbtn" onclick="addViaUI('${catId}', ${itemIdx}, '${escapeStr(name)}')">Add</button>`;
   }
+}
+
+function addViaUI(catId, itemIdx, name) {
+  const variant = getSelectedVariant(catId, itemIdx);
+  const key = `${catId}||${name}||${variant.unit}`;
+  cart[key] = { name, unit: variant.unit, price: variant.price, qty: 1 };
+  updateActionCell(catId, itemIdx, name);
   updateFloatCart();
   renderLedger();
 }
+
+function changeQtyViaUI(catId, itemIdx, name, delta) {
+  const variant = getSelectedVariant(catId, itemIdx);
+  const key = `${catId}||${name}||${variant.unit}`;
+  if (!cart[key]) return;
+  cart[key].qty += delta;
+  if (cart[key].qty <= 0) delete cart[key];
+  updateActionCell(catId, itemIdx, name);
+  updateFloatCart();
+  renderLedger();
+}
+
+function escapeStr(s){ return s.replace(/'/g,"\\'"); }
 
 function updateFloatCart(){
   const items = Object.values(cart);
@@ -439,7 +436,7 @@ function renderLedger(){
   const ledgerEl = document.getElementById('ledger');
   const items = Object.entries(cart);
   if(items.length===0){
-    ledgerEl.innerHTML = `<div class="empty-note">Your chit is empty.<br>Add items from the catalog.</div>`;
+    ledgerEl.innerHTML = `<div class="empty-note">Your chit is empty.</div>`;
     document.getElementById('sendBtn').disabled = true;
     return;
   }
@@ -453,13 +450,24 @@ function renderLedger(){
         <div class="lname">${item.name} <span style="opacity:.5">(${item.unit})</span></div>
         <div class="lqty">×${item.qty}</div>
         <div class="lprice">€${lineTotal.toFixed(2)}</div>
-        <button class="lremove" onclick="removeItem('${key}')">×</button>
+        <button class="lremove" onclick="removeLedgerItem('${key}')">×</button>
       </div>`;
   });
   ledgerEl.innerHTML = rows + `<div class="ltotal"><span>Total</span><span>€${total.toFixed(2)}</span></div>`;
 }
 
-function removeItem(key){ delete cart[key]; syncItemUI(key); }
+function removeLedgerItem(key) {
+  delete cart[key];
+  renderLedger();
+  updateFloatCart();
+  // Refresh standard catalog view to match state
+  catalog.forEach((cat) => {
+    cat.items.forEach((item, itemIdx) => {
+      updateActionCell(cat.id, itemIdx, item[0]);
+    });
+  });
+}
+
 function openCart(){ document.getElementById('drawer').classList.add('open'); document.getElementById('overlay').classList.add('show'); }
 function closeCart(){ document.getElementById('drawer').classList.remove('open'); document.getElementById('overlay').classList.remove('show'); }
 
@@ -490,18 +498,16 @@ function sendOrder(){
 function saveOrderInBackground(orderObj){
   if(typeof window.storage === 'undefined') return;
   const key = 'order_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);
-  withTimeout(window.storage.set(key, JSON.stringify(orderObj), true))
-    .catch(e=> console.error('Order backup save failed:', e));
+  withTimeout(window.storage.set(key, JSON.stringify(orderObj), true)).catch(()=>{});
 }
 
 let modalResolve = null;
-function askModal(title, {isPassword=false, showInput=true, okLabel="OK", cancelLabel="Cancel"}={}){
+function askModal(title, {showInput=true, okLabel="OK", cancelLabel="Cancel"}={}){
   return new Promise(resolve=>{
     modalResolve = resolve;
     document.getElementById('modalTitle').textContent = title;
     const inputEl = document.getElementById('modalInput');
     inputEl.style.display = showInput ? 'block' : 'none';
-    inputEl.type = isPassword ? 'password' : 'text';
     inputEl.value = '';
     document.getElementById('modalOk').textContent = okLabel;
     document.getElementById('modalCancel').textContent = cancelLabel;
@@ -519,25 +525,18 @@ document.getElementById('modalOk').onclick = ()=>{
   const inputEl = document.getElementById('modalInput');
   closeModalWith(inputEl.style.display==='none' ? true : (inputEl.value || ''));
 };
-document.getElementById('modalCancel').onclick = ()=> {
-  closeModalWith(document.getElementById('modalInput').style.display==='none' ? false : null);
-};
-document.getElementById('modalInput').addEventListener('keydown', e=>{
-  if(e.key==='Enter') document.getElementById('modalOk').click();
-});
+document.getElementById('modalCancel').onclick = ()=> closeModalWith(null);
+
 async function customPrompt(title){ return await askModal(title, {showInput:true}); }
 async function customConfirm(title){ return await askModal(title, {showInput:false, okLabel:"Yes", cancelLabel:"Cancel"}); }
 async function customAlert(title){ await askModal(title, {showInput:false, okLabel:"OK", cancelLabel:""}); }
 
-let adminUnlocked = false;
 async function adminLogin(){
   const pass = await customPrompt("Enter admin passcode");
-  if(pass === null || pass === '') return;
   if(pass === ADMIN_PASSCODE){
-    adminUnlocked = true;
     document.getElementById('adminOverlay').classList.add('show');
     showAdminTab('orders');
-  } else {
+  } else if(pass !== null) {
     await customAlert("Wrong passcode.");
   }
 }
@@ -564,7 +563,7 @@ async function loadOrdersTab(){
       }catch(e){}
     }
     orders.sort((a,b)=> b.timestamp - a.timestamp);
-  }catch(e){ orders = []; }
+  }catch(e){}
 
   if(orders.length===0){
     body.innerHTML = `<div class="loading-note">No orders yet.</div>`;
@@ -586,13 +585,14 @@ async function loadOrdersTab(){
       </div>`;
   }).join('');
 }
+
 async function updateOrderStatus(key, status){
   try{
     const r = await window.storage.get(key, true);
     const obj = JSON.parse(r.value);
     obj.status = status;
     await window.storage.set(key, JSON.stringify(obj), true);
-  }catch(e){ console.error(e); }
+  }catch(e){}
 }
 
 function loadProductsTab(){
@@ -600,8 +600,16 @@ function loadProductsTab(){
   body.innerHTML = catalog.map((cat,ci)=>`
     <div class="admin-cat">
       <h4>${cat.name}</h4>
+      <p style="font-size:11px; color:#666; margin:-6px 0 10px;">Note: Units and prices must be separated by commas (e.g., 250g, 500g)</p>
       <div id="cat-items-${ci}">
-        ${cat.items.map((item,ii)=>adminItemRow(ci,ii,item)).join('')}
+        ${cat.items.map((item,ii)=>`
+          <div class="admin-item-row" id="row-${ci}-${ii}">
+            <input value="${item[0].replace(/"/g,'&quot;')}" onchange="editItem(${ci},${ii},0,this.value)" placeholder="Product name">
+            <input value="${item[1]}" onchange="editItem(${ci},${ii},1,this.value)" placeholder="Units (e.g. 250g, 500g)">
+            <input value="${item[2]}" onchange="editItem(${ci},${ii},2,this.value)" placeholder="Prices (e.g. 1.99, 3.49)">
+            <button onclick="removeItemRow(${ci},${ii})">×</button>
+          </div>
+        `).join('')}
       </div>
       <div class="admin-btn-row">
         <button onclick="addItemRow(${ci})">+ Add product</button>
@@ -613,19 +621,9 @@ function loadProductsTab(){
       <button onclick="addCategory()">+ Add category</button>
     </div>`;
 }
-function adminItemRow(ci,ii,item){
-  return `<div class="admin-item-row" id="row-${ci}-${ii}">
-    <input value="${item[0].replace(/"/g,'&quot;')}" onchange="editItem(${ci},${ii},0,this.value)" placeholder="Product name">
-    <input value="${item[1]}" onchange="editItem(${ci},${ii},1,this.value)" placeholder="Unit">
-    <input type="number" step="0.01" value="${item[2]}" onchange="editItem(${ci},${ii},2,this.value)" placeholder="Price">
-    <button onclick="removeItemRow(${ci},${ii})">×</button>
-  </div>`;
-}
-function editItem(ci,ii,field,val){ catalog[ci].items[ii][field] = field===2 ? parseFloat(val)||0 : val; }
-function addItemRow(ci){
-  catalog[ci].items.push(["New product","1kg",0]);
-  loadProductsTab();
-}
+
+function editItem(ci,ii,field,val){ catalog[ci].items[ii][field] = val; }
+function addItemRow(ci){ catalog[ci].items.push(["New product","250g, 500g","1.99, 3.49"]); loadProductsTab(); }
 function removeItemRow(ci,ii){ catalog[ci].items.splice(ii,1); loadProductsTab(); }
 async function addCategory(){
   const name = await customPrompt("New category name");
@@ -634,11 +632,8 @@ async function addCategory(){
   loadProductsTab();
 }
 async function removeCategory(ci){
-  const ok = await customConfirm(`Delete category "${catalog[ci].name}" and all its products?`);
-  if(ok){
-    catalog.splice(ci,1);
-    loadProductsTab();
-  }
+  const ok = await customConfirm(`Delete category "${catalog[ci].name}"?`);
+  if(ok){ catalog.splice(ci,1); loadProductsTab(); }
 }
 async function saveCatalog(){
   const statusEl = document.getElementById('adminStatus');
@@ -647,18 +642,15 @@ async function saveCatalog(){
     await window.storage.set('catalog', JSON.stringify(catalog), true);
     statusEl.textContent = "Saved ✓ — live on the site now.";
     renderCatalog();
-  }catch(e){
-    statusEl.textContent = "Save failed, try again.";
-  }
+  }catch(e){ statusEl.textContent = "Save failed, try again."; }
   setTimeout(()=>statusEl.textContent='', 3000);
 }
 async function resetCatalog(){
-  const ok = await customConfirm("Reset all products to the original default list? This discards your edits.");
+  const ok = await customConfirm("Reset all products to original list?");
   if(!ok) return;
   catalog = JSON.parse(JSON.stringify(defaultCatalog));
   try{ await window.storage.set('catalog', JSON.stringify(catalog), true); }catch(e){}
-  loadProductsTab();
-  renderCatalog();
+  loadProductsTab(); renderCatalog();
 }
 
 loadCatalog();
