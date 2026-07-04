@@ -1,4 +1,4 @@
-
+<snkfoodsnl>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -21,7 +21,7 @@
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
   body { background: var(--bg-light); color: var(--text-dark); padding-bottom: 100px; -webkit-tap-highlight-color: transparent; }
   
-  /* Header like Anu Foods */
+  /* Header */
   header { position: sticky; top: 0; z-index: 100; background: var(--primary); color: #fff; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
   .logo { display: flex; align-items: center; gap: 12px; }
   .logo-mark { width: 42px; height: 42px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-weight: 900; color: var(--primary); font-size: 18px; }
@@ -43,17 +43,16 @@
   .catnav a { flex-shrink: 0; background: var(--bg-light); border: 1px solid #E2E8F0; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; color: var(--text-dark); text-decoration: none; transition: all 0.2s; }
   .catnav a.active, .catnav a:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
 
-  /* Anu Foods Style Product Grid Layout */
+  /* Product Grid Layout */
   main { max-width: 1100px; margin: 0 auto; padding: 20px 16px; }
   .cat-section { margin-bottom: 40px; scroll-margin-top: 140px; }
   .cat-head { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
   .cat-head h3 { font-family: 'Playfair Display', serif; font-size: 24px; color: var(--primary); font-weight: 700; }
   .cat-line { flex: 1; height: 2px; background: #E2E8F0; }
   
-  /* Responsive Cards Grid */
   .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 16px; }
   @media (max-width: 400px) {
-    .products-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; } /* 2 Items per row on small mobiles */
+    .products-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
   }
 
   /* Product Card */
@@ -71,15 +70,14 @@
   .price-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
   .price { font-size: 16px; font-weight: 800; color: var(--primary); }
 
-  /* FIXED ACTION BUTTONS & STEPPER (NO MORE CUTOUTS) */
+  /* BUTTONS & STEPPER DESIGN */
   .action-container { width: 100%; min-height: 36px; display: flex; align-items: center; }
   .addbtn { width: 100%; background: var(--primary); color: #fff; border: none; height: 36px; border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; transition: background 0.2s; box-shadow: 0 2px 6px rgba(11,70,36,0.15); }
   .addbtn:hover { background: #073018; }
   
-  /* Ultra-visible, spaced-out Mobile Stepper */
   .stepper { width: 100%; display: flex; align-items: center; justify-content: space-between; border: 2px solid var(--primary); border-radius: 8px; background: #fff; overflow: hidden; height: 36px; }
   .stepper button { width: 36px; height: 100%; border: none; background: var(--primary); color: #fff; font-size: 18px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
-  .stepper button.minus { background: #E2E8F0; color: var(--text-dark); } /* Distinct color for Minus */
+  .stepper button.minus { background: #E2E8F0; color: var(--text-dark); }
   .stepper button.minus:hover { background: #CBD5E1; }
   .stepper button.plus { background: var(--primary); color: #fff; }
   .stepper button.plus:hover { background: #073018; }
@@ -89,7 +87,7 @@
   .float-cart { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--primary); color: #fff; padding: 14px 24px; border-radius: 30px; display: none; align-items: center; gap: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.25); z-index: 110; cursor: pointer; font-weight: 700; font-size: 15px; width: 90%; max-width: 400px; justify-content: space-between; border: 1px solid rgba(255,255,255,0.2); }
   .float-cart .badge { background: var(--accent); color: var(--primary); border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; }
 
-  /* Sliding Cart Drawer */
+  /* Cart Drawer */
   .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; display: none; backdrop-filter: blur(2px); }
   .overlay.show { display: block; }
   .drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(450px, 100vw); background: #fff; z-index: 201; transform: translateX(100%); transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1); display: flex; flex-direction: column; box-shadow: -10px 0 30px rgba(0,0,0,0.15); }
@@ -97,7 +95,6 @@
   .drawer-head { background: var(--primary); color: #fff; padding: 18px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--accent); }
   .drawer-head h3 { font-family: 'Playfair Display', serif; font-size: 20px; color: #fff; }
   .drawer-head .close { background: none; border: none; color: #fff; font-size: 28px; cursor: pointer; opacity: 0.8; }
-  .drawer-head .close:hover { opacity: 1; }
   
   .ledger { flex: 1; overflow-y: auto; padding: 20px; background: #F8FAFC; }
   .lrow { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #E2E8F0; font-size: 14px; }
@@ -112,9 +109,8 @@
   .drawer-form { padding: 20px; border-top: 1px solid #E2E8F0; background: #fff; display: flex; flex-direction: column; gap: 10px; }
   .drawer-form label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-light); font-weight: 700; }
   .drawer-form select, .drawer-form input { padding: 10px 12px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 14px; background: #fff; outline: none; width: 100%; }
-  .drawer-form select:focus, .drawer-form input:focus { border-color: var(--primary); }
-  .send-btn { background: #25D366; color: #fff; border: none; padding: 14px; border-radius: 8px; font-weight: 700; font-size: 15px; cursor: pointer; margin-top: 6px; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 12px rgba(37,211,102,0.2); }
-  .send-btn:hover { background: #1EA952; }
+  
+  .send-btn { background: #25D366; color: #fff; border: none; padding: 14px; border-radius: 8px; font-weight: 700; font-size: 15px; cursor: pointer; margin-top: 6px; display: flex; align-items: center; justify-content: center; gap: 8px; }
   
   footer { background: #073018; color: #fff; padding: 40px 20px; text-align: center; border-top: 4px solid var(--accent); }
   footer h4 { font-family: 'Playfair Display', serif; font-size: 22px; margin-bottom: 12px; color: var(--accent); }
@@ -132,10 +128,9 @@
   .admin-tabs button.active { background: var(--primary); color: #fff; }
   
   .admin-body { flex: 1; overflow-y: auto; padding: 20px; max-width: 900px; margin: 0 auto; width: 100%; }
-  .admin-cat { background: #fff; border: 1px solid #E2E8F0; border-radius: 12px; padding: 16px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+  .admin-cat { background: #fff; border: 1px solid #E2E8F0; border-radius: 12px; padding: 16px; margin-bottom: 20px; }
   .admin-cat h4 { font-size: 16px; margin-bottom: 12px; color: var(--primary); font-weight: 700; }
   
-  /* Admin Editor Row Layout Update */
   .admin-item-row { display: grid; grid-template-columns: 2fr 1.2fr 1.2fr 1.5fr 40px; gap: 8px; margin-bottom: 10px; align-items: center; background: var(--bg-light); padding: 8px; border-radius: 6px; }
   .admin-item-row input { padding: 8px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 13px; width: 100%; }
   .admin-item-row button { background: var(--danger); color: #fff; border: none; border-radius: 6px; cursor: pointer; height: 34px; font-size: 16px; font-weight: 700; }
@@ -145,11 +140,11 @@
   .admin-btn-row button.secondary { background: #E2E8F0; color: var(--text-dark); }
   
   .save-bar { position: sticky; bottom: 0; background: #fff; border-top: 1px solid #E2E8F0; padding: 15px 20px; display: flex; justify-content: center; gap: 12px; z-index: 10; }
-  .save-bar button { background: var(--primary); color: #fff; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 14px; box-shadow: 0 4px 10px rgba(11,70,36,0.2); }
-  .save-bar button.reset { background: #E2E8F0; color: var(--text-dark); box-shadow: none; }
+  .save-bar button { background: var(--primary); color: #fff; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 14px; }
+  .save-bar button.reset { background: #E2E8F0; color: var(--text-dark); }
   .status-msg { font-size: 13px; text-align: center; padding: 8px; font-weight: 600; color: var(--primary); }
 
-  /* CUSTOM ALERT/PROMPT MODAL */
+  /* DIALOG MODALS */
   .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 400; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(2px); }
   .modal-overlay.show { display: flex; }
   .modal-box { background: #fff; border-radius: 12px; padding: 20px; width: min(360px, 100%); box-shadow: 0 15px 40px rgba(0,0,0,0.3); border-top: 4px solid var(--primary); }
@@ -215,7 +210,7 @@
 </div>
 
 <footer>
-  <h4>SNK Foods Neherlands</h4>
+  <h4>SNK Foods Netherlands</h4>
   <p>Fresh groceries delivered straight to your doorstep.</p>
   <button class="admin-link" onclick="adminLogin()">Store Admin Portal</button>
 </footer>
@@ -238,7 +233,7 @@
   <div class="status-msg" id="adminStatus"></div>
 </div>
 
-<!-- COMPACT POPUP MODALS -->
+<!-- POPUP MODALS -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal-box">
     <div id="modalTitle" style="font-weight:700; font-size:15px; margin-bottom:12px; color: var(--text-dark);"></div>
@@ -254,7 +249,6 @@
 const WA_NUMBER = "31685259659";
 const ADMIN_PASSCODE = "snk2026";
 
-// Default setup with image links included
 const defaultCatalog = [
   { id:"spice", name:"Spices & Masala Powder", items:[
     ["Coriander Powder", "250g, 500g, 1kg", "1.99, 3.49, 6.49", "https://images.unsplash.com/photo-1613946069897-49a7326c37f1?auto=format&fit=crop&w=300&q=80"],
@@ -304,7 +298,6 @@ function renderCatalog(){
   navEl.innerHTML = ''; mainEl.innerHTML = '';
   
   catalog.forEach((cat, cIdx)=>{
-    // Nav bar setup
     const navLink = document.createElement('a');
     navLink.href = `#cat-${cat.id}`;
     navLink.textContent = cat.name;
@@ -328,7 +321,6 @@ function renderCatalog(){
       
       let optionsHtml = variants.map((v, idx) => `<option value="${idx}">${v.unit}</option>`).join('');
       
-      // Dynamic Placeholder Image if none exists
       const fallbackImg = `https://dummyimage.com/300x300/f1f5f9/0b4624.png&text=${encodeURIComponent(name)}`;
       const finalImgSrc = imgUrl && imgUrl.trim() !== "" ? imgUrl : fallbackImg;
 
@@ -390,7 +382,7 @@ function getActiveVariantDetails(catId, itemIdx) {
 
 function onVariantChange(catId, itemIdx, name, val) {
   const variant = getActiveVariantDetails(catId, itemIdx);
-  document.getElementById::(`price-${catId}-${itemIdx}`).textContent = `€${variant.price.toFixed(2)}`;
+  document.getElementById(`price-${catId}-${itemIdx}`).textContent = `€${variant.price.toFixed(2)}`;
   refreshCardActionArea(catId, itemIdx, name);
 }
 
@@ -510,7 +502,6 @@ function sendOrder(){
   window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`,'_blank');
 }
 
-// CUSTOM DIALOG WINDOW LOGIC
 let modalPromiseResolver = null;
 function askModal(title, {showInput=true, okLabel="OK", cancelLabel="Cancel"}={}){
   return new Promise(resolve=>{
@@ -560,7 +551,6 @@ function showAdminTab(tab){
 
 async function loadOrdersTab(){
   const body = document.getElementById('adminBody');
-  body.innerHTML = `<div style="text-align:center;padding:30px;">Checking incoming orders...</div>`;
   body.innerHTML = `<div style="text-align:center;padding:30px;color:var(--text-light);">Orders list synced from device memory storage.</div>`;
 }
 
