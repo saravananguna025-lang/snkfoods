@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -40,13 +40,6 @@
   .hero-cta{margin-top:26px;display:inline-block;background:var(--vermilion);color:#fff;padding:14px 28px;border-radius:8px;font-weight:700;text-decoration:none;font-size:15px;box-shadow:0 6px 0 var(--turmeric-dark);}
   .delivery-note{margin-top:12px;font-size:12px;font-weight:600;color:var(--rice);opacity:.9;letter-spacing:.3px;}
 
-  .image-band{position:relative;height:240px;background-size:cover;background-position:center;display:flex;align-items:flex-end;margin:30px 0;border-radius:12px;overflow:hidden;}
-  .image-band::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg, rgba(36,28,21,0) 35%, rgba(36,28,21,.88) 100%);}
-  .band-text{position:relative;z-index:1;padding:20px;color:var(--rice);}
-  .band-kicker{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--turmeric);margin-bottom:4px;}
-  .band-text h3{font-size:22px;color:var(--rice);}
-  .band-text p{font-size:13px;opacity:.9;margin-top:4px;}
-
   .catnav{position:sticky;top:66px;z-index:30;background:var(--rice);border-bottom:1px solid var(--rice-2);overflow-x:auto;white-space:nowrap;padding:10px 16px;display:flex;gap:8px;scroll-behavior:smooth;}
   .catnav a{flex-shrink:0;background:var(--paper);border:1px solid var(--rice-2);padding:7px 14px;border-radius:16px;font-size:13px;font-weight:600;color:var(--charcoal);text-decoration:none;}
   .catnav a:hover{border-color:var(--turmeric);}
@@ -56,37 +49,43 @@
   .cat-head h3 { font-size: 22px; font-weight: 700; color: var(--charcoal); }
   .cat-rule { height: 2px; background: repeating-linear-gradient(90deg,var(--brass) 0 8px,transparent 8px 14px); margin: 8px 0 12px; }
   
-  .table-container { background: var(--paper); border: 1px solid var(--rice-2); border-radius: 8px; padding: 0 12px; overflow: hidden; }
+  .table-container { background: var(--paper); border: 1px solid var(--rice-2); border-radius: 8px; padding: 0 8px; overflow: hidden; }
+  
+  /* FIXED WIDTH FOR STABILITY AND ACCESSIBILITY */
   .table-header {
     display: grid;
-    grid-template-columns: 1fr 100px 75px 95px;
+    grid-template-columns: 1fr 85px 65px 105px;
     padding: 10px 0;
     border-bottom: 2px solid var(--turmeric);
     font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
     color: #666;
-    gap: 6px;
+    gap: 4px;
     align-items: center;
   }
   .item-row { 
     display: grid; 
-    grid-template-columns: 1fr 100px 75px 95px; 
+    grid-template-columns: 1fr 85px 65px 105px; 
     align-items: center; 
     padding: 12px 0; 
     border-bottom: 1px solid var(--rice-2);
-    gap: 6px;
+    gap: 4px;
   }
   .item-row:last-child { border-bottom: none; }
   
-  .item-row .pname { font-weight: 600; font-size: 14px; line-height: 1.3; color: var(--charcoal); }
-  .item-row .punit-select { padding: 4px; border: 1px solid var(--rice-2); border-radius: 4px; font-size: 12.5px; font-family: 'Work Sans', sans-serif; background: #fff; width: 100%; }
-  .item-row .price { font-family: 'IBM Plex Mono',monospace; font-weight: 600; color: var(--vermilion); font-size: 14.5px; text-align: right; padding-right: 4px; }
+  .item-row .pname { font-weight: 600; font-size: 13.5px; line-height: 1.3; color: var(--charcoal); word-break: break-word; }
+  .item-row .punit-select { padding: 4px 2px; border: 1px solid var(--rice-2); border-radius: 4px; font-size: 12px; font-family: 'Work Sans', sans-serif; background: #fff; width: 100%; text-align: center; }
+  .item-row .price { font-family: 'IBM Plex Mono',monospace; font-weight: 600; color: var(--vermilion); font-size: 13.5px; text-align: right; padding-right: 2px; }
   
-  .stepper { display: flex; align-items: center; border: 1px solid var(--turmeric); border-radius: 4px; overflow: hidden; background: white; justify-content: space-between; height: 30px; }
-  .stepper button { width: 28px; height: 100%; border: none; background: var(--rice-2); font-size: 16px; cursor: pointer; font-weight: 700; color: var(--charcoal); }
-  .stepper .qty { width: 30px; text-align: center; font-size: 13px; font-family: 'IBM Plex Mono',monospace; font-weight: 700; }
-  .addbtn { background: var(--leaf); color: #fff; border: none; height: 30px; border-radius: 4px; font-weight: 600; font-size: 12.5px; cursor: pointer; width: 100%; text-align: center; }
+  /* FIXED STEPPER CUTOUT ISSUE */
+  .stepper { display: flex; align-items: center; border: 1px solid var(--leaf); border-radius: 4px; overflow: hidden; background: white; justify-content: space-between; height: 32px; width: 100%; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+  .stepper button { width: 32px; height: 100%; border: none; background: var(--leaf); font-size: 16px; cursor: pointer; font-weight: 700; color: #ffffff; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+  .stepper button:active { background: var(--leaf-dark); }
+  .stepper .qty { flex: 1; text-align: center; font-size: 13px; font-family: 'IBM Plex Mono',monospace; font-weight: 700; color: var(--charcoal); }
+  
+  .addbtn { background: var(--leaf); color: #fff; border: none; height: 32px; border-radius: 4px; font-weight: 600; font-size: 12.5px; cursor: pointer; width: 100%; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+  .addbtn:active { background: var(--leaf-dark); }
 
   .float-cart{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--charcoal);color:var(--rice);padding:12px 22px;border-radius:30px;display:none;align-items:center;gap:10px;box-shadow:0 6px 20px rgba(0,0,0,.3);z-index:50;cursor:pointer;font-weight:600;font-size:14px;width:90%;max-width:340px;justify-content:space-between;}
   .float-cart .badge{background:var(--vermilion);border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:12px;font-family:'IBM Plex Mono',monospace;}
@@ -250,7 +249,6 @@
 const WA_NUMBER = "31685259659";
 const ADMIN_PASSCODE = "snk2026"; 
 
-// MULTI-VARIANT SUPPORT: Units & Prices separated by commas
 const defaultCatalog = [
   { id:"spice", name:"Spices & Masala", items:[
     ["Coriander Powder", "250g, 500g, 1kg", "1.99, 3.49, 6.49"],
@@ -315,7 +313,6 @@ function renderCatalog(){
       const variants = parseVariants(unitStr, priceStr);
       const itemRowId = `row-${cat.id}-${itemIdx}`;
       
-      // Default selection is the first variant
       const defaultUnit = variants[0].unit;
       const defaultPrice = variants[0].price;
       const initialKey = `${cat.id}||${name}||${defaultUnit}`;
@@ -353,8 +350,8 @@ function renderCatalog(){
         <div class="table-container">
           <div class="table-header">
             <div>Item Name</div>
-            <div>Select Unit</div>
-            <div style="text-align:right; padding-right:4px;">Price</div>
+            <div>Unit</div>
+            <div style="text-align:right; padding-right:2px;">Price</div>
             <div style="text-align:center;">Action</div>
           </div>
           ${rowsHtml}
@@ -460,7 +457,6 @@ function removeLedgerItem(key) {
   delete cart[key];
   renderLedger();
   updateFloatCart();
-  // Refresh standard catalog view to match state
   catalog.forEach((cat) => {
     cat.items.forEach((item, itemIdx) => {
       updateActionCell(cat.id, itemIdx, item[0]);
