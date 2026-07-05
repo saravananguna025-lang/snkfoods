@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -21,7 +21,7 @@
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
   body { background: var(--bg-light); color: var(--text-dark); padding-bottom: 100px; -webkit-tap-highlight-color: transparent; }
   
-  header { position: sticky; top: 0; z-index: 1000; background: var(--primary); color: #fff; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+  header { position: sticky; top: 0; z-index: 1001; background: var(--primary); color: #fff; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
   .header-left { display: flex; align-items: center; gap: 12px; }
   .menu-toggle { background: none; border: none; color: #fff; font-size: 26px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; }
   .logo { display: flex; align-items: center; gap: 12px; }
@@ -37,7 +37,8 @@
   .pills { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
   .pill { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 4px 12px; border-radius: 15px; font-size: 12px; font-weight: 600; }
 
-  .catnav { position: sticky; top: 72px; z-index: 900; background: #fff; border-bottom: 1px solid #E2E8F0; overflow-x: auto; white-space: nowrap; padding: 12px 16px; display: flex; gap: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.03); scroll-behavior: smooth; }
+  /* இப்போ இந்த கேட்டகிரி பார் எப்பவும் ஸ்க்ரீன்ல நிக்கும் */
+  .catnav { position: sticky; top: 72px; z-index: 1000; background: #fff; border-bottom: 1px solid #E2E8F0; overflow-x: auto; white-space: nowrap; padding: 12px 16px; display: flex; gap: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); scroll-behavior: smooth; }
   .catnav::-webkit-scrollbar { display: none; }
   .catnav a { flex-shrink: 0; background: var(--bg-light); border: 1px solid #E2E8F0; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; color: var(--text-dark); text-decoration: none; transition: all 0.2s; }
   .catnav a.active, .catnav a:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
@@ -95,12 +96,13 @@
   .drawer-head h3 { font-family: 'Playfair Display', serif; font-size: 20px; color: #fff; }
   .drawer-head .close { background: none; border: none; color: #fff; font-size: 28px; cursor: pointer; opacity: 0.8; }
   
-  .menu-drawer { position: fixed; top: 0; left: 0; bottom: 0; width: min(300px, 85vw); background: #fff; z-index: 2500; transform: translateX(-100%); transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1); display: flex; flex-direction: column; box-shadow: 10px 0 30px rgba(0,0,0,0.15); }
+  /* இப்போ இந்த மெனு டிராயர் தனியா ஸ்மூத்தா ஸ்க்ரோல் ஆகும் */
+  .menu-drawer { position: fixed; top: 0; left: 0; bottom: 0; width: min(300px, 85vw); background: #fff; z-index: 2500; transform: translateX(-100%); transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1); display: flex; flex-direction: column; box-shadow: 10px 0 30px rgba(0,0,0,0.15); overflow: hidden; }
   .menu-drawer.open { transform: translateX(0); }
-  .menu-drawer-head { background: var(--primary); color: #fff; padding: 18px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--accent); }
+  .menu-drawer-head { background: var(--primary); color: #fff; padding: 18px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--accent); flex-shrink: 0; }
   .menu-drawer-head h3 { font-family: 'Playfair Display', serif; font-size: 20px; color: #fff; }
   .menu-drawer-head .close { background: none; border: none; color: #fff; font-size: 28px; cursor: pointer; opacity: 0.8; }
-  .menu-drawer-body { flex: 1; overflow-y: auto; padding: 10px 0; background: #fff; }
+  .menu-drawer-body { flex: 1; overflow-y: auto; padding: 10px 0; background: #fff; -webkit-overflow-scrolling: touch; }
   .menu-cat-link { display: block; padding: 14px 20px; color: var(--text-dark); text-decoration: none; font-weight: 600; font-size: 14px; border-bottom: 1px solid #F1F5F9; transition: background 0.2s; }
   .menu-cat-link:hover { background: var(--bg-light); color: var(--primary); }
 
@@ -114,7 +116,7 @@
   .empty-note { text-align: center; color: var(--text-light); padding: 50px 0; font-size: 14px; }
   .ltotal { border-top: 2px dashed #CBD5E1; margin-top: 15px; padding-top: 15px; display: flex; justify-content: space-between; font-weight: 800; font-size: 18px; color: var(--primary); }
   
-  .drawer-form { padding: 20px; border-top: 1px solid #E2E8F0; background: #fff; display: flex; flex-direction: column; gap: 10px; }
+  .drawer-form { padding: 20px; border-top: 1px solid #E2E8F0; background: #fff; display: flex; flex-direction: column; gap: 10px; flex-shrink: 0; }
   .drawer-form label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-light); font-weight: 700; }
   .drawer-form select, .drawer-form input { padding: 10px 12px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 14px; background: #fff; outline: none; width: 100%; }
   
@@ -271,15 +273,16 @@
 const WA_NUMBER = "31685259659";
 const ADMIN_PASSCODE = "snk2026";
 
+// காய்கறிகள் இப்போ கிளீனா இங்கிலீஷ்ல மட்டும் இருக்கு அண்ணே!
 const defaultCatalog = [
   { id:"vegetables", name:"Fresh Vegetables 🥕", items:[
-    ["Onion (வெங்காயம்)", "1kg, 5kg", "1.49, 5.99", "", false],
-    ["Tomato (தக்காளி)", "1kg", "1.99", "", false],
-    ["Potato (உருளைக்கிழங்கு)", "1kg, 2.5kg", "1.29, 2.99", "", false],
-    ["Green Chillies (பச்சை மிளகாய்)", "200g", "1.49", "", false],
-    ["Ginger (இஞ்சி)", "250g", "1.89", "", false],
-    ["Garlic (பூண்டு)", "500g", "2.29", "", false],
-    ["Coriander Leaves (கொத்தமல்லி)", "1 Bunch", "0.79", "", false]
+    ["Onion", "1kg, 5kg", "1.49, 5.99", "", false],
+    ["Tomato", "1kg", "1.99", "", false],
+    ["Potato", "1kg, 2.5kg", "1.29, 2.99", "", false],
+    ["Green Chillies", "200g", "1.49", "", false],
+    ["Ginger", "250g", "1.89", "", false],
+    ["Garlic", "500g", "2.29", "", false],
+    ["Coriander Leaves", "1 Bunch", "0.79", "", false]
   ]},
   { id:"rice", name:"Rice & Atta", items:[
     ["Idli Rice", "5kg, 10kg", "9.99, 18.99", "", false],
@@ -605,8 +608,16 @@ function removeBasketItem(key) {
 
 function openCart(){ document.getElementById('drawer').classList.add('open'); document.getElementById('overlay').classList.add('show'); }
 function closeCart(){ document.getElementById('drawer').classList.remove('open'); document.getElementById('overlay').classList.remove('show'); }
-function openMenuDrawer(){ document.getElementById('menuDrawer').classList.add('open'); document.getElementById('overlay').classList.add('show'); }
-function closeMenuDrawer(){ document.getElementById('menuDrawer').classList.remove('open'); document.getElementById('overlay').classList.remove('show'); }
+
+// மெனு ஓபன் ஆகும்போது மெயின் பேஜ் ஸ்க்ரோலிங் லாக் ஆகாமல் தடுக்க திருத்தப்பட்டுள்ளது
+function openMenuDrawer(){ 
+  document.getElementById('menuDrawer').classList.add('open'); 
+  document.getElementById('overlay').classList.add('show'); 
+}
+function closeMenuDrawer(){ 
+  document.getElementById('menuDrawer').classList.remove('open'); 
+  document.getElementById('overlay').classList.remove('show'); 
+}
 function closeAllDrawers(){ closeCart(); closeMenuDrawer(); }
 
 function sendOrder(){
