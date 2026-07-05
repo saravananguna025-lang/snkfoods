@@ -135,8 +135,14 @@
   .admin-tabs button.active { background: var(--primary); color: #fff; }
   
   .admin-body { flex: 1; overflow-y: auto; padding: 20px; max-width: 1000px; margin: 0 auto; width: 100%; }
+  
+  .admin-cat-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 2px solid var(--bg-light); padding-bottom: 6px; }
+  .admin-cat-nav-btns { display: flex; gap: 5px; }
+  .admin-cat-nav-btns button { background: #E2E8F0; border: none; font-size: 12px; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-weight: 700; }
+  .admin-cat-nav-btns button:hover { background: #CBD5E1; }
+
   .admin-cat { background: #fff; border: 1px solid #E2E8F0; border-radius: 12px; padding: 16px; margin-bottom: 20px; }
-  .admin-cat h4 { font-size: 16px; margin-bottom: 12px; color: var(--primary); font-weight: 700; }
+  .admin-cat h4 { font-size: 16px; color: var(--primary); font-weight: 700; }
   
   .admin-item-row { display: grid; grid-template-columns: 2fr 1.2fr 1.2fr 1.5fr 80px 40px; gap: 8px; margin-bottom: 10px; align-items: center; background: var(--bg-light); padding: 8px; border-radius: 6px; }
   .admin-item-row input { padding: 8px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 13px; width: 100%; }
@@ -266,6 +272,15 @@ const WA_NUMBER = "31685259659";
 const ADMIN_PASSCODE = "snk2026";
 
 const defaultCatalog = [
+  { id:"vegetables", name:"Fresh Vegetables 🥕", items:[
+    ["Onion (வெங்காயம்)", "1kg, 5kg", "1.49, 5.99", "", false],
+    ["Tomato (தக்காளி)", "1kg", "1.99", "", false],
+    ["Potato (உருளைக்கிழங்கு)", "1kg, 2.5kg", "1.29, 2.99", "", false],
+    ["Green Chillies (பச்சை மிளகாய்)", "200g", "1.49", "", false],
+    ["Ginger (இஞ்சி)", "250g", "1.89", "", false],
+    ["Garlic (பூண்டு)", "500g", "2.29", "", false],
+    ["Coriander Leaves (கொத்தமல்லி)", "1 Bunch", "0.79", "", false]
+  ]},
   { id:"rice", name:"Rice & Atta", items:[
     ["Idli Rice", "5kg, 10kg", "9.99, 18.99", "", false],
     ["Ponni Boiled Rice", "5kg, 10kg", "11.49, 21.99", "", false],
@@ -348,7 +363,6 @@ function withTimeout(promise, ms=3000){
 }
 
 async function loadCatalog(){
-  // Local storage பிழையை தவிர்க்கும் வகையில் பாதுகாப்பான செக்
   try {
     if(window.storage && typeof window.storage.get === 'function'){
       const res = await withTimeout(window.storage.get('catalog', true));
@@ -673,7 +687,13 @@ function loadProductsTab(){
   const body = document.getElementById('adminBody');
   body.innerHTML = catalog.map((cat, ci)=>`
     <div class="admin-cat">
-      <h4>Category: ${cat.name}</h4>
+      <div class="admin-cat-header-row">
+        <h4>Category: ${cat.name}</h4>
+        <div class="admin-cat-nav-btns">
+          <button onclick="moveCategoryOrder(${ci}, -1)">▲ Up</button>
+          <button onclick="moveCategoryOrder(${ci}, 1)">▼ Down</button>
+        </div>
+      </div>
       <div id="cat-items-${ci}">
         ${cat.items.map((item, ii)=>`
           <div class="admin-item-row" id="arow-${ci}-${ii}">
@@ -700,8 +720,18 @@ function loadProductsTab(){
     </div>`;
 }
 
+function moveCategoryOrder(index, direction) {
+  const targetIndex = index + direction;
+  if (targetIndex >= 0 && targetIndex < catalog.length) {
+    const temp = catalog[index];
+    catalog[index] = catalog[targetIndex];
+    catalog[targetIndex] = temp;
+    loadProductsTab();
+  }
+}
+
 function editItem(ci,ii,field,val){ catalog[ci].items[ii][field] = val; }
-function addItemRow(ci){ catalog[ci].items.push(["New Grocery Item","250g, 500g","1.99, 3.49","", false]); loadProductsTab(); }
+function addItemRow(ci){ catalog[ci].items.push(["New Grocery Item","1kg","1.99","", false]); loadProductsTab(); }
 function removeItemRow(ci,ii){ catalog[ci].items.splice(ii,1); loadProductsTab(); }
 
 async function addCategory(){
@@ -733,7 +763,6 @@ async function resetCatalog(){
   loadProductsTab(); renderCatalog();
 }
 
-// செக்யூராக லோட் செய்யும் ஃபங்க்ஷன்
 loadCatalog();
 </script>
 </body>
