@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -37,17 +37,12 @@
   .pills { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
   .pill { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 4px 12px; border-radius: 15px; font-size: 12px; font-weight: 600; }
 
-  /* கேட்டகிரி பார் ஸ்டிக்கி வடிவமைப்பு */
   .catnav { position: sticky; top: 72px; z-index: 1000; background: #fff; border-bottom: 1px solid #E2E8F0; overflow-x: auto; white-space: nowrap; padding: 12px 16px; display: flex; gap: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); scroll-behavior: smooth; }
   .catnav::-webkit-scrollbar { display: none; }
   .catnav a { flex-shrink: 0; background: var(--bg-light); border: 1px solid #E2E8F0; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; color: var(--text-dark); text-decoration: none; transition: all 0.2s; }
-  
-  /* ஆக்டிவ் மெனுவிற்கான பிரத்யேக கலர் */
   .catnav a.active, .catnav a:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
 
   main { max-width: 1100px; margin: 0 auto; padding: 20px 16px; }
-  
-  /* ஸ்க்ரோல் ஆகும்போது ஹெடருக்கு கீழே சரியாக வந்து நிற்க அலைன்மென்ட் */
   .cat-section { margin-bottom: 40px; scroll-margin-top: 145px; }
   .cat-head { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
   .cat-head h3 { font-family: 'Playfair Display', serif; font-size: 24px; color: var(--primary); font-weight: 700; }
@@ -58,7 +53,8 @@
     .products-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
   }
 
-  .product-card { background: var(--card-bg); border: 1px solid #E2E8F0; border-radius: 12px; padding: 12px; display: flex; flex-direction: column; justify-content: space-between; position: relative; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 2px 8 rgba(0,0,0,0.02); }
+  /* பிக்ஸ் செய்யப்பட்டுள்ள லைன் 21 சிஎஸ்எஸ் எரர் (8px box-shadow) */
+  .product-card { background: var(--card-bg); border: 1px solid #E2E8F0; border-radius: 12px; padding: 12px; display: flex; flex-direction: column; justify-content: space-between; position: relative; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
   .product-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.06); }
   
   .img-slot { width: 100%; aspect-ratio: 1; background: #F1F5F9; border-radius: 8px; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: var(--text-light); overflow: hidden; position: relative; }
@@ -195,7 +191,6 @@
   </div>
 </section>
 
-<!-- ஒட்டரி இருக்கும் மேல் பகுதி வரிகள் -->
 <nav class="catnav" id="catnav"></nav>
 
 <main id="catalog">
@@ -277,6 +272,7 @@
 const WA_NUMBER = "31685259659";
 const ADMIN_PASSCODE = "snk2026";
 
+// முற்றிலும் ஆங்கிலத்தில் மட்டுமே மாற்றப்பட்ட பொருட்கள்
 const defaultCatalog = [
   { id:"vegetables", name:"Fresh Vegetables 🥕", items:[
     ["Onion", "1kg, 5kg", "1.49, 5.99", "", false],
@@ -363,7 +359,7 @@ const defaultCatalog = [
 
 let catalog = [];
 let cart = {};
-let isManualScrolling = false; // கிளிக் செய்யும்போது ஆட்டோ ஸ்க்ரோல் குழப்பாமல் இருக்க
+let isManualScrolling = false;
 
 function withTimeout(promise, ms=3000){
   return Promise.race([promise, new Promise((_, reject)=> setTimeout(()=> reject(new Error('timeout')), ms))]);
@@ -411,7 +407,6 @@ function renderCatalog(){
     navLink.setAttribute('data-id', cat.id);
     if(cIdx === 0) navLink.classList.add('active');
     
-    // மேல் பார் கிளிக் செய்யும்போது ஸ்மூத் அனிமேஷனுடன் அங்கே போகும் வசதி
     navLink.onclick = (e) => {
       e.preventDefault();
       isManualScrolling = true;
@@ -519,17 +514,16 @@ function renderCatalog(){
   });
 }
 
-// ஆட்டோமேட்டிக்கா ஸ்க்ரோல் ஆவதை ட்ராக் செய்யும் செட்டப்
 function setupScrollSpy() {
   window.addEventListener('scroll', () => {
-    if (isManualScrolling) return; // பட்டன் கிளிக் செய்யும்போது இது தானா வேலை செய்யாது
+    if (isManualScrolling) return;
     
     const sections = document.querySelectorAll('.cat-section');
     const navLinks = document.querySelectorAll('.catnav a');
     let currentId = '';
     
     sections.forEach(sec => {
-      const top = sec.offsetTop - 160; // ஹெடர் உயரத்திற்கு ஏற்ப சரிசெய்தல்
+      const top = sec.offsetTop - 160;
       const height = sec.offsetHeight;
       if (window.scrollY >= top && window.scrollY < top + height) {
         currentId = sec.id.replace('cat-', '');
@@ -541,7 +535,6 @@ function setupScrollSpy() {
         if (a.getAttribute('data-id') === currentId) {
           if (!a.classList.contains('active')) {
             a.classList.add('active');
-            // டாப் பார் தானாகவே இடது வலது பக்கமாக நகர்ந்து ஆக்டிவ் லிங்க்-ஐ ஸ்க்ரீனில் காட்டும்
             a.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
           }
         } else {
