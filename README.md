@@ -1,4 +1,4 @@
-<snkfoodsdenhaag>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -21,9 +21,9 @@
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
   body { background: var(--bg-light); color: var(--text-dark); padding-bottom: 100px; -webkit-tap-highlight-color: transparent; }
   
-  header { position: sticky; top: 0; z-index: 100; background: var(--primary); color: #fff; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+  header { position: sticky; top: 0; z-index: 1000; background: var(--primary); color: #fff; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
   .header-left { display: flex; align-items: center; gap: 12px; }
-  .menu-toggle { background: none; border: none; color: #fff; font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; }
+  .menu-toggle { background: none; border: none; color: #fff; font-size: 26px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; }
   .logo { display: flex; align-items: center; gap: 12px; }
   .logo-mark { width: 42px; height: 42px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-weight: 900; color: var(--primary); font-size: 18px; }
   .logo-text h1 { font-family: 'Playfair Display', serif; font-size: 22px; color: #fff; line-height: 1; }
@@ -37,7 +37,7 @@
   .pills { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
   .pill { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 4px 12px; border-radius: 15px; font-size: 12px; font-weight: 600; }
 
-  .catnav { position: sticky; top: 72px; z-index: 90; background: #fff; border-bottom: 1px solid #E2E8F0; overflow-x: auto; white-space: nowrap; padding: 12px 16px; display: flex; gap: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.03); scroll-behavior: smooth; }
+  .catnav { position: sticky; top: 72px; z-index: 900; background: #fff; border-bottom: 1px solid #E2E8F0; overflow-x: auto; white-space: nowrap; padding: 12px 16px; display: flex; gap: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.03); scroll-behavior: smooth; }
   .catnav::-webkit-scrollbar { display: none; }
   .catnav a { flex-shrink: 0; background: var(--bg-light); border: 1px solid #E2E8F0; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; color: var(--text-dark); text-decoration: none; transition: all 0.2s; }
   .catnav a.active, .catnav a:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
@@ -83,19 +83,19 @@
   .stepper button.plus:hover { background: #073018; }
   .stepper .qty { font-size: 14px; font-weight: 800; color: var(--text-dark); flex: 1; text-align: center; }
 
-  .float-cart { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--primary); color: #fff; padding: 14px 24px; border-radius: 30px; display: none; align-items: center; gap: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.25); z-index: 110; cursor: pointer; font-weight: 700; font-size: 15px; width: 90%; max-width: 400px; justify-content: space-between; border: 1px solid rgba(255,255,255,0.2); }
+  .float-cart { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--primary); color: #fff; padding: 14px 24px; border-radius: 30px; display: none; align-items: center; gap: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.25); z-index: 1100; cursor: pointer; font-weight: 700; font-size: 15px; width: 90%; max-width: 400px; justify-content: space-between; border: 1px solid rgba(255,255,255,0.2); }
   .float-cart .badge { background: var(--accent); color: var(--primary); border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; }
 
-  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; display: none; backdrop-filter: blur(2px); }
+  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1900; display: none; backdrop-filter: blur(2px); }
   .overlay.show { display: block; }
   
-  .drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(450px, 100vw); background: #fff; z-index: 201; transform: translateX(100%); transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1); display: flex; flex-direction: column; box-shadow: -10px 0 30px rgba(0,0,0,0.15); }
+  .drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(450px, 100vw); background: #fff; z-index: 2000; transform: translateX(100%); transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1); display: flex; flex-direction: column; box-shadow: -10px 0 30px rgba(0,0,0,0.15); }
   .drawer.open { transform: translateX(0); }
   .drawer-head { background: var(--primary); color: #fff; padding: 18px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--accent); }
   .drawer-head h3 { font-family: 'Playfair Display', serif; font-size: 20px; color: #fff; }
   .drawer-head .close { background: none; border: none; color: #fff; font-size: 28px; cursor: pointer; opacity: 0.8; }
   
-  .menu-drawer { position: fixed; top: 0; left: 0; bottom: 0; width: min(300px, 85vw); background: #fff; z-index: 205; transform: translateX(-100%); transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1); display: flex; flex-direction: column; box-shadow: 10px 0 30px rgba(0,0,0,0.15); }
+  .menu-drawer { position: fixed; top: 0; left: 0; bottom: 0; width: min(300px, 85vw); background: #fff; z-index: 2500; transform: translateX(-100%); transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1); display: flex; flex-direction: column; box-shadow: 10px 0 30px rgba(0,0,0,0.15); }
   .menu-drawer.open { transform: translateX(0); }
   .menu-drawer-head { background: var(--primary); color: #fff; padding: 18px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--accent); }
   .menu-drawer-head h3 { font-family: 'Playfair Display', serif; font-size: 20px; color: #fff; }
@@ -125,7 +125,7 @@
   footer p { font-size: 14px; opacity: 0.8; margin-bottom: 15px; }
   .admin-link { background: none; border: none; color: rgba(255,255,255,0.3); font-size: 12px; cursor: pointer; text-decoration: underline; margin-top: 10px; }
 
-  .admin-overlay { position: fixed; inset: 0; background: #fff; z-index: 300; display: none; flex-direction: column; }
+  .admin-overlay { position: fixed; inset: 0; background: #fff; z-index: 3000; display: none; flex-direction: column; }
   .admin-overlay.show { display: flex; }
   .admin-head { background: var(--primary); color: #fff; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; }
   .admin-head h3 { color: #fff; font-family: 'Playfair Display', serif; }
@@ -152,7 +152,7 @@
   .save-bar button.reset { background: #E2E8F0; color: var(--text-dark); }
   .status-msg { font-size: 13px; text-align: center; padding: 8px; font-weight: 600; color: var(--primary); }
 
-  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 400; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(2px); }
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 4000; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(2px); }
   .modal-overlay.show { display: flex; }
   .modal-box { background: #fff; border-radius: 12px; padding: 20px; width: min(360px, 100%); box-shadow: 0 15px 40px rgba(0,0,0,0.3); border-top: 4px solid var(--primary); }
 </style>
@@ -343,23 +343,26 @@ const defaultCatalog = [
 let catalog = [];
 let cart = {};
 
-function withTimeout(promise, ms=5000){
+function withTimeout(promise, ms=3000){
   return Promise.race([promise, new Promise((_, reject)=> setTimeout(()=> reject(new Error('timeout')), ms))]);
 }
 
 async function loadCatalog(){
-  if(typeof window.storage === 'undefined'){
-    catalog = JSON.parse(JSON.stringify(defaultCatalog));
-    renderCatalog();
-    return;
+  // Local storage பிழையை தவிர்க்கும் வகையில் பாதுகாப்பான செக்
+  try {
+    if(window.storage && typeof window.storage.get === 'function'){
+      const res = await withTimeout(window.storage.get('catalog', true));
+      if (res && res.value) {
+        catalog = JSON.parse(res.value);
+        renderCatalog();
+        return;
+      }
+    }
+  } catch(e) {
+    console.log("Storage fallbacked safely.");
   }
-  try{
-    const res = await withTimeout(window.storage.get('catalog', true));
-    catalog = JSON.parse(res.value);
-  }catch(e){
-    catalog = JSON.parse(JSON.stringify(defaultCatalog));
-    withTimeout(window.storage.set('catalog', JSON.stringify(catalog), true)).catch(()=>{});
-  }
+  
+  catalog = JSON.parse(JSON.stringify(defaultCatalog));
   renderCatalog();
 }
 
@@ -373,6 +376,8 @@ function renderCatalog(){
   const navEl = document.getElementById('catnav');
   const mainEl = document.getElementById('catalog');
   const menuBodyEl = document.getElementById('menuDrawerBody');
+  
+  if(!navEl || !mainEl || !menuBodyEl) return;
   
   navEl.innerHTML = ''; mainEl.innerHTML = ''; menuBodyEl.innerHTML = '';
   
@@ -419,6 +424,7 @@ function renderCatalog(){
       
       const fallbackImg = `https://dummyimage.com/300x300/f1f5f9/0b4624.png&text=${encodeURIComponent(name)}`;
       const finalImgSrc = imgUrl && imgUrl.trim() !== "" ? imgUrl : fallbackImg;
+      const cleanName = escapeStr(name);
 
       cardsHtml += `
         <div class="product-card ${isOos ? 'oos-card' : ''}" id="card-${cat.id}-${itemIdx}">
@@ -432,7 +438,7 @@ function renderCatalog(){
           
           <div>
             <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('${cat.id}', ${itemIdx}, '${escapeStr(name)}', this.value)">
+              <select class="punit-select" onchange="onVariantChange('${cat.id}', ${itemIdx}, '${cleanName}', this.value)">
                 ${optionsHtml}
               </select>
             </div>
@@ -446,12 +452,12 @@ function renderCatalog(){
                 <button class="addbtn" disabled>Out of Stock</button>
               ` : hasQty ? `
                 <div class="stepper">
-                  <button class="minus" onclick="handleQtyChange('${cat.id}', ${itemIdx}, '${escapeStr(name)}', -1)">−</button>
+                  <button class="minus" onclick="handleQtyChange('${cat.id}', ${itemIdx}, '${cleanName}', -1)">−</button>
                   <span class="qty">${currentQty}</span>
-                  <button class="plus" onclick="handleQtyChange('${cat.id}', ${itemIdx}, '${escapeStr(name)}', 1)">+</button>
+                  <button class="plus" onclick="handleQtyChange('${cat.id}', ${itemIdx}, '${cleanName}', 1)">+</button>
                 </div>
               ` : `
-                <button class="addbtn" onclick="handleInitialAdd('${cat.id}', ${itemIdx}, '${escapeStr(name)}')">Add to Cart</button>
+                <button class="addbtn" onclick="handleInitialAdd('${cat.id}', ${itemIdx}, '${cleanName}')">Add to Cart</button>
               `}
             </div>
           </div>
@@ -492,18 +498,19 @@ function refreshCardActionArea(catId, itemIdx, name) {
   const variant = getActiveVariantDetails(catId, itemIdx);
   const key = `${catId}||${name}||${variant.unit}`;
   const actionContainer = document.getElementById(`action-${catId}-${itemIdx}`);
+  const cleanName = escapeStr(name);
   
   if (isOos) {
     actionContainer.innerHTML = `<button class="addbtn" disabled>Out of Stock</button>`;
   } else if (cart[key] && cart[key].qty > 0) {
     actionContainer.innerHTML = `
       <div class="stepper">
-        <button class="minus" onclick="handleQtyChange('${catId}', ${itemIdx}, '${escapeStr(name)}', -1)">−</button>
+        <button class="minus" onclick="handleQtyChange('${catId}', ${itemIdx}, '${cleanName}', -1)">−</button>
         <span class="qty">${cart[key].qty}</span>
-        <button class="plus" onclick="handleQtyChange('${catId}', ${itemIdx}, '${escapeStr(name)}', 1)">+</button>
+        <button class="plus" onclick="handleQtyChange('${catId}', ${itemIdx}, '${cleanName}', 1)">+</button>
       </div>`;
   } else {
-    actionContainer.innerHTML = `<button class="addbtn" onclick="handleInitialAdd('${catId}', ${itemIdx}, '${escapeStr(name)}')">Add to Cart</button>`;
+    actionContainer.innerHTML = `<button class="addbtn" onclick="handleInitialAdd('${catId}', ${itemIdx}, '${cleanName}')">Add to Cart</button>`;
   }
 }
 
@@ -528,7 +535,7 @@ function handleQtyChange(catId, itemIdx, name, delta) {
   syncCartTotals();
 }
 
-function escapeStr(s){ return s.replace(/'/g,"\\'"); }
+function escapeStr(s){ return s.replace(/'/g, "\\'"); }
 
 function syncCartTotals(){
   const items = Object.values(cart);
@@ -560,12 +567,13 @@ function renderLedger(){
   items.forEach(([key, item])=>{
     const lineTotal = item.qty * item.price;
     runningTotal += lineTotal;
+    const escapedKey = escapeStr(key);
     html += `
       <div class="lrow">
         <div class="lname">${item.name} <span style="color:var(--text-light); font-size:12px;">(${item.unit})</span></div>
         <div class="lqty">×${item.qty}</div>
         <div class="lprice">€${lineTotal.toFixed(2)}</div>
-        <button class="lremove" onclick="removeBasketItem('${key}')">×</button>
+        <button class="lremove" onclick="removeBasketItem('${escapedKey}')">×</button>
       </div>`;
   });
   ledgerEl.innerHTML = html + `<div class="ltotal"><span>Subtotal</span><span>€${runningTotal.toFixed(2)}</span></div>`;
@@ -710,7 +718,7 @@ async function saveCatalog(){
   const statusEl = document.getElementById('adminStatus');
   statusEl.textContent = "Publishing live...";
   try{
-    if(typeof window.storage !== 'undefined') {
+    if(window.storage && typeof window.storage.set === 'function') {
       await window.storage.set('catalog', JSON.stringify(catalog), true);
     }
     statusEl.textContent = "Catalog successfully updated! ✓";
@@ -725,6 +733,7 @@ async function resetCatalog(){
   loadProductsTab(); renderCatalog();
 }
 
+// செக்யூராக லோட் செய்யும் ஃபங்க்ஷன்
 loadCatalog();
 </script>
 </body>
