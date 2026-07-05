@@ -1,4 +1,4 @@
-<snkfoodsnl>
+<snkfoodsdenhaag>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -8,8 +8,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;900&display=swap" rel="stylesheet">
 <style>
   :root {
-    --primary: #0B4624; /* Anu Foods Deep Green */
-    --accent: #D4AF37; /* Premium Gold */
+    --primary: #0B4624;
+    --accent: #D4AF37;
     --accent-dark: #AA841C;
     --text-dark: #1E293B;
     --text-light: #64748B;
@@ -21,15 +21,15 @@
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
   body { background: var(--bg-light); color: var(--text-dark); padding-bottom: 100px; -webkit-tap-highlight-color: transparent; }
   
-  /* Header */
   header { position: sticky; top: 0; z-index: 100; background: var(--primary); color: #fff; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+  .header-left { display: flex; align-items: center; gap: 12px; }
+  .menu-toggle { background: none; border: none; color: #fff; font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; }
   .logo { display: flex; align-items: center; gap: 12px; }
   .logo-mark { width: 42px; height: 42px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-weight: 900; color: var(--primary); font-size: 18px; }
   .logo-text h1 { font-family: 'Playfair Display', serif; font-size: 22px; color: #fff; line-height: 1; }
   .logo-text span { font-size: 11px; color: var(--accent); letter-spacing: 1px; text-transform: uppercase; font-weight: 600; }
   .wa-quick { background: #25D366; color: #fff; border: none; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 10px rgba(37,211,102,0.3); }
 
-  /* Hero Banner */
   .hero { background: linear-gradient(135deg, #073018 0%, #0B4624 100%); color: #fff; padding: 40px 20px; text-align: center; border-bottom: 4px solid var(--accent); }
   .hero h2 { font-family: 'Playfair Display', serif; font-size: 32px; margin-bottom: 10px; color: #fff; }
   .hero h2 em { color: var(--accent); font-style: normal; }
@@ -37,13 +37,11 @@
   .pills { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
   .pill { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 4px 12px; border-radius: 15px; font-size: 12px; font-weight: 600; }
 
-  /* Sticky Category Navigation Bar */
   .catnav { position: sticky; top: 72px; z-index: 90; background: #fff; border-bottom: 1px solid #E2E8F0; overflow-x: auto; white-space: nowrap; padding: 12px 16px; display: flex; gap: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.03); scroll-behavior: smooth; }
   .catnav::-webkit-scrollbar { display: none; }
   .catnav a { flex-shrink: 0; background: var(--bg-light); border: 1px solid #E2E8F0; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; color: var(--text-dark); text-decoration: none; transition: all 0.2s; }
   .catnav a.active, .catnav a:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
 
-  /* Product Grid Layout */
   main { max-width: 1100px; margin: 0 auto; padding: 20px 16px; }
   .cat-section { margin-bottom: 40px; scroll-margin-top: 140px; }
   .cat-head { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
@@ -55,12 +53,14 @@
     .products-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
   }
 
-  /* Product Card */
   .product-card { background: var(--card-bg); border: 1px solid #E2E8F0; border-radius: 12px; padding: 12px; display: flex; flex-direction: column; justify-content: space-between; position: relative; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
   .product-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.06); }
   
   .img-slot { width: 100%; aspect-ratio: 1; background: #F1F5F9; border-radius: 8px; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: var(--text-light); overflow: hidden; position: relative; }
   .img-slot img { width: 100%; height: 100%; object-fit: cover; }
+  
+  .oos-badge { position: absolute; top: 8px; left: 8px; background: var(--danger); color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; z-index: 2; }
+  .oos-card { opacity: 0.6; }
 
   .pname { font-size: 14px; font-weight: 700; color: var(--text-dark); margin-bottom: 6px; line-height: 1.3; min-height: 36px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   
@@ -70,10 +70,10 @@
   .price-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
   .price { font-size: 16px; font-weight: 800; color: var(--primary); }
 
-  /* BUTTONS & STEPPER DESIGN */
   .action-container { width: 100%; min-height: 36px; display: flex; align-items: center; }
   .addbtn { width: 100%; background: var(--primary); color: #fff; border: none; height: 36px; border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; transition: background 0.2s; box-shadow: 0 2px 6px rgba(11,70,36,0.15); }
   .addbtn:hover { background: #073018; }
+  .addbtn:disabled { background: #CBD5E1; color: #94A3B8; cursor: not-allowed; box-shadow: none; }
   
   .stepper { width: 100%; display: flex; align-items: center; justify-content: space-between; border: 2px solid var(--primary); border-radius: 8px; background: #fff; overflow: hidden; height: 36px; }
   .stepper button { width: 36px; height: 100%; border: none; background: var(--primary); color: #fff; font-size: 18px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
@@ -83,25 +83,33 @@
   .stepper button.plus:hover { background: #073018; }
   .stepper .qty { font-size: 14px; font-weight: 800; color: var(--text-dark); flex: 1; text-align: center; }
 
-  /* Floating Cart Panel */
   .float-cart { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--primary); color: #fff; padding: 14px 24px; border-radius: 30px; display: none; align-items: center; gap: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.25); z-index: 110; cursor: pointer; font-weight: 700; font-size: 15px; width: 90%; max-width: 400px; justify-content: space-between; border: 1px solid rgba(255,255,255,0.2); }
   .float-cart .badge { background: var(--accent); color: var(--primary); border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; }
 
-  /* Cart Drawer */
   .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; display: none; backdrop-filter: blur(2px); }
   .overlay.show { display: block; }
+  
   .drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(450px, 100vw); background: #fff; z-index: 201; transform: translateX(100%); transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1); display: flex; flex-direction: column; box-shadow: -10px 0 30px rgba(0,0,0,0.15); }
   .drawer.open { transform: translateX(0); }
   .drawer-head { background: var(--primary); color: #fff; padding: 18px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--accent); }
   .drawer-head h3 { font-family: 'Playfair Display', serif; font-size: 20px; color: #fff; }
   .drawer-head .close { background: none; border: none; color: #fff; font-size: 28px; cursor: pointer; opacity: 0.8; }
   
+  .menu-drawer { position: fixed; top: 0; left: 0; bottom: 0; width: min(300px, 85vw); background: #fff; z-index: 205; transform: translateX(-100%); transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1); display: flex; flex-direction: column; box-shadow: 10px 0 30px rgba(0,0,0,0.15); }
+  .menu-drawer.open { transform: translateX(0); }
+  .menu-drawer-head { background: var(--primary); color: #fff; padding: 18px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--accent); }
+  .menu-drawer-head h3 { font-family: 'Playfair Display', serif; font-size: 20px; color: #fff; }
+  .menu-drawer-head .close { background: none; border: none; color: #fff; font-size: 28px; cursor: pointer; opacity: 0.8; }
+  .menu-drawer-body { flex: 1; overflow-y: auto; padding: 10px 0; background: #fff; }
+  .menu-cat-link { display: block; padding: 14px 20px; color: var(--text-dark); text-decoration: none; font-weight: 600; font-size: 14px; border-bottom: 1px solid #F1F5F9; transition: background 0.2s; }
+  .menu-cat-link:hover { background: var(--bg-light); color: var(--primary); }
+
   .ledger { flex: 1; overflow-y: auto; padding: 20px; background: #F8FAFC; }
   .lrow { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #E2E8F0; font-size: 14px; }
   .lrow .lname { flex: 1; padding-right: 10px; font-weight: 600; }
   .lrow .lqty { width: 50px; text-align: center; font-weight: 700; color: var(--primary); }
   .lrow .lprice { width: 70px; text-align: right; font-weight: 700; }
-  .lrow .lremove { background: none; border: none; color: var(--danger); font-size: 18px; cursor: pointer; margin-left: 10px; padding: 0 4px; }
+  .lremove { background: none; border: none; color: var(--danger); font-size: 18px; cursor: pointer; margin-left: 10px; padding: 0 4px; }
   
   .empty-note { text-align: center; color: var(--text-light); padding: 50px 0; font-size: 14px; }
   .ltotal { border-top: 2px dashed #CBD5E1; margin-top: 15px; padding-top: 15px; display: flex; justify-content: space-between; font-weight: 800; font-size: 18px; color: var(--primary); }
@@ -117,7 +125,6 @@
   footer p { font-size: 14px; opacity: 0.8; margin-bottom: 15px; }
   .admin-link { background: none; border: none; color: rgba(255,255,255,0.3); font-size: 12px; cursor: pointer; text-decoration: underline; margin-top: 10px; }
 
-  /* ADMIN SCREEN */
   .admin-overlay { position: fixed; inset: 0; background: #fff; z-index: 300; display: none; flex-direction: column; }
   .admin-overlay.show { display: flex; }
   .admin-head { background: var(--primary); color: #fff; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; }
@@ -127,12 +134,13 @@
   .admin-tabs button { background: #E2E8F0; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 13px; cursor: pointer; color: var(--text-dark); }
   .admin-tabs button.active { background: var(--primary); color: #fff; }
   
-  .admin-body { flex: 1; overflow-y: auto; padding: 20px; max-width: 900px; margin: 0 auto; width: 100%; }
+  .admin-body { flex: 1; overflow-y: auto; padding: 20px; max-width: 1000px; margin: 0 auto; width: 100%; }
   .admin-cat { background: #fff; border: 1px solid #E2E8F0; border-radius: 12px; padding: 16px; margin-bottom: 20px; }
   .admin-cat h4 { font-size: 16px; margin-bottom: 12px; color: var(--primary); font-weight: 700; }
   
-  .admin-item-row { display: grid; grid-template-columns: 2fr 1.2fr 1.2fr 1.5fr 40px; gap: 8px; margin-bottom: 10px; align-items: center; background: var(--bg-light); padding: 8px; border-radius: 6px; }
+  .admin-item-row { display: grid; grid-template-columns: 2fr 1.2fr 1.2fr 1.5fr 80px 40px; gap: 8px; margin-bottom: 10px; align-items: center; background: var(--bg-light); padding: 8px; border-radius: 6px; }
   .admin-item-row input { padding: 8px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 13px; width: 100%; }
+  .admin-item-row label { display: flex; flex-direction: column; align-items: center; font-size: 10px; font-weight: 700; color: var(--danger); cursor: pointer; }
   .admin-item-row button { background: var(--danger); color: #fff; border: none; border-radius: 6px; cursor: pointer; height: 34px; font-size: 16px; font-weight: 700; }
   
   .admin-btn-row { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
@@ -144,7 +152,6 @@
   .save-bar button.reset { background: #E2E8F0; color: var(--text-dark); }
   .status-msg { font-size: 13px; text-align: center; padding: 8px; font-weight: 600; color: var(--primary); }
 
-  /* DIALOG MODALS */
   .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 400; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(2px); }
   .modal-overlay.show { display: flex; }
   .modal-box { background: #fff; border-radius: 12px; padding: 20px; width: min(360px, 100%); box-shadow: 0 15px 40px rgba(0,0,0,0.3); border-top: 4px solid var(--primary); }
@@ -153,11 +160,14 @@
 <body>
 
 <header>
-  <div class="logo">
-    <div class="logo-mark">SNK</div>
-    <div class="logo-text">
-      <h1>SNK Foods</h1>
-      <span>Premium Grocery</span>
+  <div class="header-left">
+    <button class="menu-toggle" onclick="openMenuDrawer()">☰</button>
+    <div class="logo">
+      <div class="logo-mark">SNK</div>
+      <div class="logo-text">
+        <h1>SNK Foods</h1>
+        <span>Premium Grocery</span>
+      </div>
     </div>
   </div>
   <a class="wa-quick" href="https://wa.me/31685259659" target="_blank">📲 WhatsApp</a>
@@ -165,7 +175,7 @@
 
 <section class="hero">
   <h2>Authentic Indian Taste, <br><em>Delivered Fresh.</em></h2>
-  <p>Premium quality rice, fresh spices, lentils, and daily essentials inspired by Anu Foods model.</p>
+  <p>Premium quality rice, fresh spices, lentils, and daily essentials curated for your kitchen.</p>
   <div class="pills">
     <span class="pill">📍 Den Haag</span>
     <span class="pill">📍 Rotterdam</span>
@@ -185,7 +195,15 @@
   <span class="badge" id="floatBadge">0</span>
 </div>
 
-<div class="overlay" id="overlay" onclick="closeCart()"></div>
+<div class="overlay" id="overlay" onclick="closeAllDrawers()"></div>
+
+<div class="menu-drawer" id="menuDrawer">
+  <div class="menu-drawer-head">
+    <h3>Categories Menu 📂</h3>
+    <button class="close" onclick="closeMenuDrawer()">×</button>
+  </div>
+  <div class="menu-drawer-body" id="menuDrawerBody"></div>
+</div>
 
 <div class="drawer" id="drawer">
   <div class="drawer-head">
@@ -215,7 +233,6 @@
   <button class="admin-link" onclick="adminLogin()">Store Admin Portal</button>
 </footer>
 
-<!-- ADMIN INTERFACE -->
 <div class="admin-overlay" id="adminOverlay">
   <div class="admin-head">
     <h3>SNK Operations Control</h3>
@@ -233,7 +250,6 @@
   <div class="status-msg" id="adminStatus"></div>
 </div>
 
-<!-- POPUP MODALS -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal-box">
     <div id="modalTitle" style="font-weight:700; font-size:15px; margin-bottom:12px; color: var(--text-dark);"></div>
@@ -250,16 +266,77 @@ const WA_NUMBER = "31685259659";
 const ADMIN_PASSCODE = "snk2026";
 
 const defaultCatalog = [
-  { id:"spice", name:"Spices & Masala Powder", items:[
-    ["Coriander Powder", "250g, 500g, 1kg", "1.99, 3.49, 6.49", "https://images.unsplash.com/photo-1613946069897-49a7326c37f1?auto=format&fit=crop&w=300&q=80"],
-    ["Sambar Powder", "200g, 500g", "2.99, 5.99", ""],
-    ["Chilli Powder", "200g, 500g, 1kg", "2.49, 4.49, 8.49", ""],
-    ["Turmeric Powder", "200g", "1.99", ""]
+  { id:"rice", name:"Rice & Atta", items:[
+    ["Idli Rice", "5kg, 10kg", "9.99, 18.99", "", false],
+    ["Ponni Boiled Rice", "5kg, 10kg", "11.49, 21.99", "", false],
+    ["Sona Masoori Rice", "5kg, 10kg", "10.99, 19.99", "", false],
+    ["Basmati Rice", "1kg, 5kg", "2.99, 12.49", "", false],
+    ["Chakki Fresh Atta", "5kg, 10kg", "7.49, 13.99", "", false]
   ]},
-  { id:"rice", name:"Premium Rice Varieties", items:[
-    ["Idli Rice", "5kg, 10kg", "9.99, 18.99", "https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=300&q=80"],
-    ["Ponni Boiled Rice", "5kg, 10kg", "11.49, 21.99", ""],
-    ["Chakki Fresh Atta", "5kg, 10kg", "7.49, 13.99", ""]
+  { id:"dals", name:"Dals & Pulses", items:[
+    ["Toor Dal", "1kg", "2.99", "", false],
+    ["Urad Dal (Whole)", "1kg", "3.49", "", false],
+    ["Chana Dal", "1kg", "2.49", "", false],
+    ["Moong Dal", "1kg", "2.89", "", false],
+    ["Mustard Seeds", "200g", "1.19", "", false],
+    ["Cumin Seeds", "200g", "1.89", "", false]
+  ]},
+  { id:"spices", name:"Masala Powders", items:[
+    ["Sambar Powder", "200g, 500g", "2.49, 5.49", "", false],
+    ["Chilli Powder", "200g, 500g", "1.99, 4.49", "", false],
+    ["Coriander Powder", "250g, 500g", "1.89, 3.49", "", false],
+    ["Turmeric Powder", "200g", "1.49", "", false],
+    ["Garam Masala", "100g", "1.29", "", false],
+    ["Chicken Masala", "100g", "1.39", "", false]
+  ]},
+  { id:"oil", name:"Oils & Ghee", items:[
+    ["Gingelly Oil (Sesame)", "1L", "6.99", "", false],
+    ["Premium Sunflower Oil", "1L, 5L", "2.49, 11.99", "", false],
+    ["Coconut Oil", "500ml, 1L", "3.49, 5.99", "", false],
+    ["Pure Cow Ghee", "200ml, 500ml", "4.29, 8.99", "", false]
+  ]},
+  { id:"dairy", name:"Dairy & Fresh", items:[
+    ["Fresh Paneer", "200g, 500g", "2.19, 4.99", "", false],
+    ["Fresh Thick Yogurt", "500g, 1kg", "1.49, 2.79", "", false]
+  ]},
+  { id:"idli-batter", name:"Idli & Dosa Batter", items:[
+    ["Fresh Idli Dosa Batter", "1kg", "2.99", "", false]
+  ]},
+  { id:"snacks", name:"Snacks & Savouries", items:[
+    ["Madras Mixture", "200g", "1.99", "", false],
+    ["Kara Boondi", "200g", "1.89", "", false],
+    ["Murukku", "200g", "1.99", "", false],
+    ["Banana Chips", "200g", "2.49", "", false]
+  ]},
+  { id:"sweets", name:"Sweets & Desserts", items:[
+    ["Gulab Jamun (Ready)", "1kg Tin", "4.99", "", false],
+    ["Soan Papdi", "250g", "1.89", "", false]
+  ]},
+  { id:"beverages", name:"Tea & Coffee", items:[
+    ["Premium Filter Coffee", "200g", "3.99", "", false],
+    ["Premium Tea Powder", "500g", "5.49", "", false],
+    ["Instant Coffee", "100g", "2.99", "", false]
+  ]},
+  { id:"pickles", name:"Pickles & Thokku", items:[
+    ["Mango Pickle", "300g", "2.19", "", false],
+    ["Lime Pickle", "300g", "2.19", "", false],
+    ["Garlic Pickle", "300g", "2.49", "", false]
+  ]},
+  { id:"papads", name:"Appalam & Vathal", items:[
+    ["Traditional Appalam", "100g", "0.99", "", false],
+    ["Rice Vathal", "200g", "1.79", "", false]
+  ]},
+  { id:"pooja", name:"Pooja Essentials", items:[
+    ["Camphor (Karpooram)", "1 Pack", "1.29", "", false],
+    ["Agarbatti (Incense Sticks)", "1 Pack", "1.19", "", false]
+  ]},
+  { id:"instant", name:"Instant Mixes", items:[
+    ["Instant Idli Mix", "500g", "2.49", "", false],
+    ["Vermicelli (Semiya)", "400g", "1.29", "", false]
+  ]},
+  { id:"health", name:"Health Drinks", items:[
+    ["Premium Health Malt", "500g", "5.99", "", false],
+    ["Chocolate Energy Drink", "500g", "5.99", "", false]
   ]}
 ];
 
@@ -295,7 +372,9 @@ function parseVariants(unitStr, priceStr) {
 function renderCatalog(){
   const navEl = document.getElementById('catnav');
   const mainEl = document.getElementById('catalog');
-  navEl.innerHTML = ''; mainEl.innerHTML = '';
+  const menuBodyEl = document.getElementById('menuDrawerBody');
+  
+  navEl.innerHTML = ''; mainEl.innerHTML = ''; menuBodyEl.innerHTML = '';
   
   catalog.forEach((cat, cIdx)=>{
     const navLink = document.createElement('a');
@@ -308,9 +387,26 @@ function renderCatalog(){
     };
     navEl.appendChild(navLink);
 
+    const menuLink = document.createElement('a');
+    menuLink.href = `#cat-${cat.id}`;
+    menuLink.className = 'menu-cat-link';
+    menuLink.textContent = cat.name;
+    menuLink.onclick = () => {
+      closeMenuDrawer();
+      document.querySelectorAll('.catnav a').forEach(a => {
+        if(a.getAttribute('href') === `#cat-${cat.id}`) {
+          a.classList.add('active');
+          a.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        } else {
+          a.classList.remove('active');
+        }
+      });
+    };
+    menuBodyEl.appendChild(menuLink);
+
     let cardsHtml = '';
     
-    cat.items.forEach(([name, unitStr, priceStr, imgUrl], itemIdx)=>{
+    cat.items.forEach(([name, unitStr, priceStr, imgUrl, isOos], itemIdx)=>{
       const variants = parseVariants(unitStr, priceStr);
       const defaultPrice = variants[0].price;
       const defaultUnit = variants[0].unit;
@@ -325,7 +421,8 @@ function renderCatalog(){
       const finalImgSrc = imgUrl && imgUrl.trim() !== "" ? imgUrl : fallbackImg;
 
       cardsHtml += `
-        <div class="product-card" id="card-${cat.id}-${itemIdx}">
+        <div class="product-card ${isOos ? 'oos-card' : ''}" id="card-${cat.id}-${itemIdx}">
+          ${isOos ? `<div class="oos-badge">Out Of Stock</div>` : ''}
           <div>
             <div class="img-slot">
               <img src="${finalImgSrc}" alt="${name}" loading="lazy">
@@ -345,7 +442,9 @@ function renderCatalog(){
             </div>
             
             <div class="action-container" id="action-${cat.id}-${itemIdx}">
-              ${hasQty ? `
+              ${isOos ? `
+                <button class="addbtn" disabled>Out of Stock</button>
+              ` : hasQty ? `
                 <div class="stepper">
                   <button class="minus" onclick="handleQtyChange('${cat.id}', ${itemIdx}, '${escapeStr(name)}', -1)">−</button>
                   <span class="qty">${currentQty}</span>
@@ -387,11 +486,16 @@ function onVariantChange(catId, itemIdx, name, val) {
 }
 
 function refreshCardActionArea(catId, itemIdx, name) {
+  const cat = catalog.find(c => c.id === catId);
+  const item = cat.items[itemIdx];
+  const isOos = item[4];
   const variant = getActiveVariantDetails(catId, itemIdx);
   const key = `${catId}||${name}||${variant.unit}`;
   const actionContainer = document.getElementById(`action-${catId}-${itemIdx}`);
   
-  if (cart[key] && cart[key].qty > 0) {
+  if (isOos) {
+    actionContainer.innerHTML = `<button class="addbtn" disabled>Out of Stock</button>`;
+  } else if (cart[key] && cart[key].qty > 0) {
     actionContainer.innerHTML = `
       <div class="stepper">
         <button class="minus" onclick="handleQtyChange('${catId}', ${itemIdx}, '${escapeStr(name)}', -1)">−</button>
@@ -479,6 +583,9 @@ function removeBasketItem(key) {
 
 function openCart(){ document.getElementById('drawer').classList.add('open'); document.getElementById('overlay').classList.add('show'); }
 function closeCart(){ document.getElementById('drawer').classList.remove('open'); document.getElementById('overlay').classList.remove('show'); }
+function openMenuDrawer(){ document.getElementById('menuDrawer').classList.add('open'); document.getElementById('overlay').classList.add('show'); }
+function closeMenuDrawer(){ document.getElementById('menuDrawer').classList.remove('open'); document.getElementById('overlay').classList.remove('show'); }
+function closeAllDrawers(){ closeCart(); closeMenuDrawer(); }
 
 function sendOrder(){
   const items = Object.values(cart);
@@ -563,9 +670,13 @@ function loadProductsTab(){
         ${cat.items.map((item, ii)=>`
           <div class="admin-item-row" id="arow-${ci}-${ii}">
             <input value="${item[0].replace(/"/g,'&quot;')}" onchange="editItem(${ci},${ii},0,this.value)" placeholder="Name">
-            <input value="${item[1]}" onchange="editItem(${ci},${ii},1,this.value)" placeholder="Variants (e.g. 250g, 500g)">
-            <input value="${item[2]}" onchange="editItem(${ci},${ii},2,this.value)" placeholder="Prices (e.g. 1.99, 3.49)">
-            <input value="${item[3] || ''}" onchange="editItem(${ci},${ii},3,this.value)" placeholder="Image URL (optional)">
+            <input value="${item[1]}" onchange="editItem(${ci},${ii},1,this.value)" placeholder="Variants">
+            <input value="${item[2]}" onchange="editItem(${ci},${ii},2,this.value)" placeholder="Prices">
+            <input value="${item[3] || ''}" onchange="editItem(${ci},${ii},3,this.value)" placeholder="Image URL">
+            <label>
+              <input type="checkbox" ${item[4] ? 'checked' : ''} onchange="editItem(${ci},${ii},4,this.checked)">
+              OOS
+            </label>
             <button onclick="removeItemRow(${ci},${ii})">×</button>
           </div>
         `).join('')}
@@ -582,7 +693,7 @@ function loadProductsTab(){
 }
 
 function editItem(ci,ii,field,val){ catalog[ci].items[ii][field] = val; }
-function addItemRow(ci){ catalog[ci].items.push(["New Grocery Item","250g, 500g","1.99, 3.49",""]); loadProductsTab(); }
+function addItemRow(ci){ catalog[ci].items.push(["New Grocery Item","250g, 500g","1.99, 3.49","", false]); loadProductsTab(); }
 function removeItemRow(ci,ii){ catalog[ci].items.splice(ii,1); loadProductsTab(); }
 
 async function addCategory(){
