@@ -218,67 +218,7 @@
 const WA_NUMBER = "31685259659";
 const ADMIN_PASSCODE = "snk2026";
 
-const storeDatabase = {
-  categories: [
-    { id:"vegetables", name:"Fresh Vegetables", items:[
-      ["Onion", "1kg, 5kg", "1.49, 5.99", "https://i.postimg.cc/yx2TwCSX/IMG-1455.png", false],
-      ["Tomato", "1kg", "1.99", "", false],
-      ["Potato", "1kg", "1.29", "", false]
-    ]},
-    { id:"fruits", name:"Fresh Fruits", items:[
-      ["Banana", "1kg", "1.99", "", false],
-      ["Mango", "1box", "8.99", "", false]
-    ]},
-    { id:"rice", name:"Rice & Atta Flour", items:[
-      ["Idli Rice", "5kg", "9.99", "", false],
-      ["Chakki Atta", "5kg", "7.49", "", false]
-    ]},
-    { id:"dals", name:"Dals & Lentils", items:[
-      ["Toor Dal", "1kg", "2.99", "", false],
-      ["Urad Dal", "1kg", "3.49", "", false]
-    ]},
-    { id:"spices", name:"Spices & Herbs", items:[
-      ["Cumin Seeds", "200g", "1.89", "", false],
-      ["Mustard Seeds", "200g", "1.19", "", false]
-    ]},
-    { id:"masalas", name:"Masala Powders", items:[
-      ["Sambar Powder", "200g", "2.49", "", false],
-      ["Chilli Powder", "200g", "1.99", "", false]
-    ]},
-    { id:"oils", name:"Oils & Ghee", items:[
-      ["Ghee", "500ml", "7.99", "", false],
-      ["Gingelly Oil", "1L", "5.49", "", false]
-    ]},
-    { id:"dairy", name:"Dairy & Paneer", items:[
-      ["Fresh Paneer", "200g", "2.49", "", false],
-      ["Yogurt", "1kg", "1.99", "", false]
-    ]},
-    { id:"snacks", name:"Snacks & Sweets", items:[
-      ["Murukku", "200g", "1.79", "", false],
-      ["Mixture", "200g", "1.79", "", false]
-    ]},
-    { id:"beverages", name:"Beverages & Tea", items:[
-      ["Filter Coffee Powder", "250g", "3.49", "", false],
-      ["Assam Tea", "250g", "2.99", "", false]
-    ]},
-    { id:"pickles", name:"Pickles & Papads", items:[
-      ["Mango Pickle", "300g", "2.29", "", false],
-      ["Appalam Papad", "1packet", "0.99", "", false]
-    ]},
-    { id:"instant", name:"Instant Mixes", items:[
-      ["Idli Dosa Batter", "1kg", "2.99", "", false],
-      ["Gulab Jamun Mix", "200g", "1.49", "", false]
-    ]},
-    { id:"frozen", name:"Frozen Foods", items:[
-      ["Parotta", "5pcs", "2.49", "", false],
-      ["Frozen Okra", "400g", "1.99", "", false]
-    ]},
-    { id:"pooja", name:"Pooja Essentials", items:[
-      ["Camphor", "1pack", "1.29", "", false],
-      ["Incense Sticks", "1pack", "1.49", "", false]
-    ]}
-  ]
-};
+const storeDatabase = {"categories":[{"id":"vegetables","name":"Fresh Vegetables","items":[["Onion","1kg, 5kg","1.49, 5.99","https://i.postimg.cc/yx2TwCSX/IMG-1455.png",false],["Tomato","1kg","1.99","",false],["Potato","1kg","1.29","",false]]},{"id":"fruits","name":"Fresh Fruits","items":[["Banana","1kg","1.99","",false],["Mango","1box","8.99","",false]]},{"id":"rice","name":"Rice & Atta Flour","items":[["Idli Rice","5kg","9.99","",false],["Chakki Atta","5kg","7.49","",false]]},{"id":"dals","name":"Dals & Lentils","items":[["Toor Dal","1kg","2.99","",false],["Urad Dal","1kg","3.49","",false]]},{"id":"spices","name":"Spices & Herbs","items":[["Cumin Seeds","200g","1.89","",false],["Mustard Seeds","200g","1.19","",false]]},{"id":"masalas","name":"Masala Powders","items":[["Sambar Powder","200g","2.49","",false],["Chilli Powder","200g","1.99","",false]]},{"id":"oils","name":"Oils & Ghee","items":[["Ghee","500ml","7.99","",false],["Gingelly Oil","1L","5.49","",false]]},{"id":"dairy","name":"Dairy & Paneer","items":[["Fresh Paneer","200g","2.49","",false],["Yogurt","1kg","1.99","",false]]},{"id":"snacks","name":"Snacks & Sweets","items":[["Murukku","200g","1.79","",false],["Mixture","200g","1.79","",false]]},{"id":"beverages","name":"Beverages & Tea","items":[["Filter Coffee Powder","250g","3.49","",false],["Assam Tea","250g","2.99","",false]]},{"id":"pickles","name":"Pickles & Papads","items":[["Mango Pickle","300g","2.29","",false],["Appalam Papad","1packet","0.99","",false]]},{"id":"instant","name":"Instant Mixes","items":[["Idli Dosa Batter","1kg","2.99","",false],["Gulab Jamun Mix","200g","1.49","",false]]},{"id":"frozen","name":"Frozen Foods","items":[["Parotta","5pcs","2.49","",false],["Frozen Okra","400g","1.99","",false]]},{"id":"pooja","name":"Pooja Essentials","items":[["Camphor","1pack","1.29","",false],["Incense Sticks","1pack","1.49","",false]]}]};
 
 let catalog = storeDatabase.categories;
 let cart = {};
@@ -501,7 +441,7 @@ function copyExportCode() {
   const textarea = document.getElementById('exportTextarea');
   textarea.select();
   document.execCommand('copy');
-  alert("Done! Data copied successfully! 📋\n\nGo to GitHub index.html file, select all text, delete it, paste this new clean code, and click 'Commit changes'. Now the admin portal will require passcode correctly next time!");
+  alert("Done! Data copied successfully! 📋\n\nGo to GitHub index.html file, select all text, delete it, paste this new clean code, and click 'Commit changes'.");
 }
 
 renderCatalog();
