@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -21,6 +21,9 @@
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
   body { background: var(--bg-light); color: var(--text-dark); padding-bottom: 100px; -webkit-tap-highlight-color: transparent; }
   
+  /* மெனு திறந்திருக்கும் போது மெயின் பேஜ் ஸ்க்ரோல் ஆகாமல் தடுக்க */
+  body.menu-open { overflow: hidden; }
+
   header { position: sticky; top: 0; z-index: 1001; background: var(--primary); color: #fff; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
   .header-left { display: flex; align-items: center; gap: 12px; }
   .menu-toggle { background: none; border: none; color: #fff; font-size: 26px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; }
@@ -89,7 +92,8 @@
   .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1900; display: none; backdrop-filter: blur(2px); }
   .overlay.show { display: block; }
   
-  .drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(450px, 100vw); background: #fff; z-index: 2000; transform: translateX(100%); transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1); display: flex; flex-direction: column; box-shadow: -10px 0 30px rgba(0,0,0,0.15); }
+  /* டிராயர்கள் திறக்கும்போது உள்ளே தனி ஸ்க்ரோலிங் வசதி */
+  .drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(450px, 100vw); background: #fff; z-index: 2000; transform: translateX(100%); transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1); display: flex; flex-direction: column; box-shadow: -10px 0 30px rgba(0,0,0,0.15); overflow: hidden; }
   .drawer.open { transform: translateX(0); }
   .drawer-head { background: var(--primary); color: #fff; padding: 18px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--accent); }
   .drawer-head h3 { font-family: 'Playfair Display', serif; font-size: 20px; color: #fff; }
@@ -104,11 +108,12 @@
   .menu-cat-link { display: block; padding: 14px 20px; color: var(--text-dark); text-decoration: none; font-weight: 600; font-size: 14px; border-bottom: 1px solid #F1F5F9; transition: background 0.2s; }
   .menu-cat-link:hover { background: var(--bg-light); color: var(--primary); }
 
-  .menu-contact-box { background: var(--bg-light); padding: 16px 20px; border-top: 2px dashed #CBD5E1; margin-top: 15px; }
+  /* மெனுவில் காண்டாக்ட் பாக்ஸ் */
+  .menu-contact-box { background: var(--bg-light); padding: 16px 20px; border-top: 2px dashed #CBD5E1; margin-top: 15px; flex-shrink: 0; }
   .menu-contact-box h4 { font-size: 13px; font-weight: 800; color: var(--primary); text-transform: uppercase; margin-bottom: 10px; letter-spacing: 0.5px; }
-  .menu-contact-box p { font-size: 13px; color: var(--text-dark); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; font-weight: 500; }
+  .menu-contact-box p { font-size: 13px; color: var(--text-dark); margin-bottom: 8px; font-weight: 500; display: flex; align-items: center; gap: 6px; }
 
-  .ledger { flex: 1; overflow-y: auto; padding: 20px; background: #F8FAFC; }
+  .ledger { flex: 1; overflow-y: auto; padding: 20px; background: #F8FAFC; -webkit-overflow-scrolling: touch; }
   .lrow { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #E2E8F0; font-size: 14px; }
   .lrow .lname { flex: 1; padding-right: 10px; font-weight: 600; }
   .lrow .lqty { width: 50px; text-align: center; font-weight: 700; color: var(--primary); }
@@ -214,11 +219,13 @@
     <button class="close" onclick="closeMenuDrawer()">×</button>
   </div>
   <div class="menu-drawer-body" id="menuDrawerBody"></div>
+  
+  <!-- மெனுவின் உள்ளே உங்க காண்டாக்ட் பாக்ஸ் மட்டும் எக்ஸ்ட்ரா சேர்த்தாச்சு -->
   <div class="menu-contact-box">
     <h4>Contact Us 📞</h4>
     <p>📞 Phone: +31 6 85259659</p>
-    <p>📍 Areas: Den Haag, Rotterdam, Delft, Leiden</p>
-    <p>⏰ Hours: 09:00 AM - 08:00 PM</p>
+    <p>📍 Delivery Areas: Den Haag, Rotterdam, Delft, Leiden</p>
+    <p>⏰ Open Hours: 09:00 AM - 08:00 PM</p>
   </div>
 </div>
 
@@ -241,8 +248,9 @@
     <label>Complete Address</label>
     <input id="caddr" placeholder="Street name, house number, postcode">
     
+    <!-- கஸ்டமர் ரிவியூ / கமெண்ட்ஸ் போடுறதுக்கான பாக்ஸ் மட்டும் எக்ஸ்ட்ரா சேர்த்தாச்சு -->
     <label>Review / Special Comments</label>
-    <textarea id="ccomments" placeholder="Add items details notes, custom weights, or delivery notes..."></textarea>
+    <textarea id="ccomments" placeholder="Add custom item requests, instructions, or reviews..."></textarea>
     
     <button class="send-btn" id="sendBtn" onclick="sendOrder()">📲 Send Order to WhatsApp</button>
   </div>
@@ -581,10 +589,27 @@ function removeBasketItem(key) {
   });
 }
 
-function openCart(){ document.getElementById('drawer').classList.add('open'); document.getElementById('overlay').classList.add('show'); }
-function closeCart(){ document.getElementById('drawer').classList.remove('open'); document.getElementById('overlay').classList.remove('show'); }
-function openMenuDrawer(){ document.getElementById('menuDrawer').classList.add('open'); document.getElementById('overlay').classList.add('show'); }
-function closeMenuDrawer(){ document.getElementById('menuDrawer').classList.remove('open'); document.getElementById('overlay').classList.remove('show'); }
+// டிராயர் திறக்கும்போது மெயின் பேஜ் ஸ்க்ரோல் லாக் ஆக சேர்க்கப்பட்ட லாஜிக்
+function openCart(){ 
+  document.getElementById('drawer').classList.add('open'); 
+  document.getElementById('overlay').classList.add('show');
+  document.body.classList.add('menu-open'); 
+}
+function closeCart(){ 
+  document.getElementById('drawer').classList.remove('open'); 
+  document.getElementById('overlay').classList.remove('show');
+  document.body.classList.remove('menu-open'); 
+}
+function openMenuDrawer(){ 
+  document.getElementById('menuDrawer').classList.add('open'); 
+  document.getElementById('overlay').classList.add('show');
+  document.body.classList.add('menu-open'); 
+}
+function closeMenuDrawer(){ 
+  document.getElementById('menuDrawer').classList.remove('open'); 
+  document.getElementById('overlay').classList.remove('show');
+  document.body.classList.remove('menu-open'); 
+}
 function closeAllDrawers(){ closeCart(); closeMenuDrawer(); }
 
 function sendOrder(){
@@ -602,6 +627,7 @@ function sendOrder(){
   
   let msg = `Hello SNK Foods!\nOrder Request:\n\n${lines}\n\nTotal: €${total.toFixed(2)}\n\nDelivery to: ${area}\nName: ${name}\nAddress: ${addr}`;
   
+  // கஸ்டமர் கமெண்ட்ஸ் இருந்தால் அதுவும் வாட்ஸ்அப் மெசேஜில் சேர்ந்துவிடும்
   if(comments) {
     msg += `\n\nComments / Review: ${comments}`;
   }
