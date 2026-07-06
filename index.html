@@ -177,17 +177,17 @@
 <div class="overlay" id="overlay" onclick="closeAllDrawers()"></div>
 
 <div class="menu-drawer" id="menuDrawer">
-  <div class="menu-drawer-head"><h3>Categories Menu 📂</h3><button class="close" onclick="closeMenuDrawer()">×</button></div>
+  <div class="menu-drawer-head"><h3>Categories Menu</h3><button class="close" onclick="closeMenuDrawer()">×</button></div>
   <div class="menu-drawer-body" id="menuDrawerBody"></div>
   <div class="menu-contact-box">
-    <h4>Contact Us 📞</h4>
-    <p>📞 Phone: +31 6 85259659</p>
-    <p>⏰ Open Hours: 09:00 AM - 08:00 PM</p>
+    <h4>Contact Us</h4>
+    <p>Phone: +31 6 85259659</p>
+    <p>Open Hours: 09:00 AM - 08:00 PM</p>
   </div>
 </div>
 
 <div class="drawer" id="drawer">
-  <div class="drawer-head"><h3>Your Basket Chit 🧾</h3><button class="close" onclick="closeCart()">×</button></div>
+  <div class="drawer-head"><h3>Your Basket Chit</h3><button class="close" onclick="closeCart()">×</button></div>
   <div class="ledger" id="ledger"></div>
   <div class="drawer-form">
     <label>Delivery Destination</label>
@@ -208,11 +208,11 @@
   <div class="admin-head"><h3>SNK Operations Control</h3><button onclick="closeAdmin()">×</button></div>
   <div class="admin-body" id="adminBody"></div>
   <div class="save-bar">
-    <button onclick="saveCatalogAndExport()">1. Save & Generate Update Code 💾</button>
+    <button onclick="saveCatalogAndExport()">1. Save & Generate Update Code</button>
     <div class="export-box" id="exportBox">
-      <p style="font-size:12px; color:var(--danger); font-weight:700; text-align:center;">கீழே இருக்கும் இந்த மொத்த கோடையும் அப்படியே ஒரே கிளிக்கில் காப்பி செய்து கிட்ஹப்பில் போடுங்கள் அண்ணே!</p>
+      <p style="font-size:12px; color:var(--danger); font-weight:700; text-align:center;">Copy the code below and paste it completely inside GitHub index.html file!</p>
       <textarea id="exportTextarea" readonly onclick="this.select()"></textarea>
-      <button style="background:#007BFF;" onclick="copyExportCode()">2. Copy Code (கோடை காப்பி செய்) 📋</button>
+      <button style="background:#007BFF;" onclick="copyExportCode()">2. Copy Code to Clipboard</button>
     </div>
     <div id="adminStatus" style="font-weight:700; color:var(--primary); font-size:13px; margin-top:5px;"></div>
   </div>
@@ -233,39 +233,64 @@
 const WA_NUMBER = "31685259659";
 const ADMIN_PASSCODE = "snk2026";
 
-// வெங்காயம் இமேஜ் லிங்க் 'https://' என்று சிறிய எழுத்தில் பக்காவாக திருத்தியாச்சு அண்ணே!
+// Here are your 14 categories with clean English titles and template items. Onion has your link ready!
 const defaultCatalog = [
-  { id:"vegetables", name:"Fresh Vegetables 🥕", items:[
+  { id:"vegetables", name:"Fresh Vegetables", items:[
     ["Onion", "1kg, 5kg", "1.49, 5.99", "https://i.postimg.cc/yx2TwCSX/IMG-1455.png", false],
     ["Tomato", "1kg", "1.99", "", false],
-    ["Potato", "1kg, 2.5kg", "1.29, 2.99", "", false],
-    ["Green Chillies", "200g", "1.49", "", false],
-    ["Ginger", "250g", "1.89", "", false],
-    ["Garlic", "500g", "2.29", "", false],
-    ["Coriander Leaves", "1 Bunch", "0.79", "", false]
+    ["Potato", "1kg", "1.29", "", false]
   ]},
-  { id:"rice", name:"Rice & Atta", items:[
-    ["Idli Rice", "5kg, 10kg", "9.99, 18.99", "", false],
-    ["Ponni Boiled Rice", "5kg, 10kg", "11.49, 21.99", "", false],
-    ["Sona Masoori Rice", "5kg, 10kg", "10.99, 19.99", "", false],
-    ["Basmati Rice", "1kg, 5kg", "2.99, 12.49", "", false],
-    ["Chakki Fresh Atta", "5kg, 10kg", "7.49, 13.99", "", false]
+  { id:"fruits", name:"Fresh Fruits", items:[
+    ["Banana", "1kg", "1.99", "", false],
+    ["Mango", "1box", "8.99", "", false]
   ]},
-  { id:"dals", name:"Dals & Pulses", items:[
+  { id:"rice", name:"Rice & Atta Flour", items:[
+    ["Idli Rice", "5kg", "9.99", "", false],
+    ["Chakki Atta", "5kg", "7.49", "", false]
+  ]},
+  { id:"dals", name:"Dals & Lentils", items:[
     ["Toor Dal", "1kg", "2.99", "", false],
-    ["Urad Dal (Whole)", "1kg", "3.49", "", false],
-    ["Chana Dal", "1kg", "2.49", "", false],
-    ["Moong Dal", "1kg", "2.89", "", false],
-    ["Mustard Seeds", "200g", "1.19", "", false],
-    ["Cumin Seeds", "200g", "1.89", "", false]
+    ["Urad Dal", "1kg", "3.49", "", false]
   ]},
-  { id:"spices", name:"Masala Powders", items:[
-    ["Sambar Powder", "200g, 500g", "2.49, 5.49", "", false],
-    ["Chilli Powder", "200g, 500g", "1.99, 4.49", "", false],
-    ["Coriander Powder", "250g, 500g", "1.89, 3.49", "", false],
-    ["Turmeric Powder", "200g", "1.49", "", false],
-    ["Garam Masala", "100g", "1.29", "", false],
-    ["Chicken Masala", "100g", "1.39", "", false]
+  { id:"spices", name:"Spices & Herbs", items:[
+    ["Cumin Seeds", "200g", "1.89", "", false],
+    ["Mustard Seeds", "200g", "1.19", "", false]
+  ]},
+  { id:"masalas", name:"Masala Powders", items:[
+    ["Sambar Powder", "200g", "2.49", "", false],
+    ["Chilli Powder", "200g", "1.99", "", false]
+  ]},
+  { id:"oils", name:"Oils & Ghee", items:[
+    ["Ghee", "500ml", "7.99", "", false],
+    ["Gingelly Oil", "1L", "5.49", "", false]
+  ]},
+  { id:"dairy", name:"Dairy & Paneer", items:[
+    ["Fresh Paneer", "200g", "2.49", "", false],
+    ["Yogurt", "1kg", "1.99", "", false]
+  ]},
+  { id:"snacks", name:"Snacks & Sweets", items:[
+    ["Murukku", "200g", "1.79", "", false],
+    ["Mixture", "200g", "1.79", "", false]
+  ]},
+  { id:"beverages", name:"Beverages & Tea", items:[
+    ["Filter Coffee Powder", "250g", "3.49", "", false],
+    ["Assam Tea", "250g", "2.99", "", false]
+  ]},
+  { id:"pickles", name:"Pickles & Papads", items:[
+    ["Mango Pickle", "300g", "2.29", "", false],
+    ["Appalam Papad", "1packet", "0.99", "", false]
+  ]},
+  { id:"instant", name:"Instant Mixes", items:[
+    ["Idli Dosa Batter", "1kg", "2.99", "", false],
+    ["Gulab Jamun Mix", "200g", "1.49", "", false]
+  ]},
+  { id:"frozen", name:"Frozen Foods", items:[
+    ["Parotta", "5pcs", "2.49", "", false],
+    ["Frozen Okra", "400g", "1.99", "", false]
+  ]},
+  { id:"pooja", name:"Pooja Essentials", items:[
+    ["Camphor", "1pack", "1.29", "", false],
+    ["Incense Sticks", "1pack", "1.49", "", false]
   ]}
 ];
 
@@ -273,7 +298,6 @@ let catalog = [];
 let cart = {};
 
 function loadCatalog(){
-  // எந்தப் பழைய குழப்பமும் இல்லாம நேரடியா defaultCatalog-ஐ எடுக்கும்படி செய்தாச்சு
   catalog = JSON.parse(JSON.stringify(defaultCatalog));
   renderCatalog();
 }
@@ -319,7 +343,6 @@ function renderCatalog(){
       const defaultPrice = variants[0].price;
       const fallbackImg = `https://dummyimage.com/300x300/f1f5f9/0b4624.png&text=${encodeURIComponent(name)}`;
       
-      // கேப்பிட்டல் H-ஆக இருந்தால் ஸ்மால் h-ஆக மாற்றி சரிசெய்யும் அம்சம்
       let cleanImgUrl = imgUrl ? imgUrl.trim() : "";
       if(cleanImgUrl.toLowerCase().startsWith("http")) {
         cleanImgUrl = "https" + cleanImgUrl.substring(4);
@@ -473,11 +496,8 @@ function loadProductsTab(){
   `).join('');
 }
 
-// அண்ணே! நீங்க ஆசைப்பட்ட அந்த மேஜிக் அப்டேட் சிஸ்டம் இதுதான்!
 function saveCatalogAndExport(){
   renderCatalog(); 
-  
-  // இப்போதைய முழு HTML பக்கத்தையும் அப்படியே டெக்ஸ்டாக மாற்றும் ஃபங்ஷன்
   const currentFullCode = document.documentElement.outerHTML;
   const finalCodeToSend = "<!DOCTYPE html>\n" + currentFullCode;
   
@@ -490,7 +510,7 @@ function copyExportCode() {
   const textarea = document.getElementById('exportTextarea');
   textarea.select();
   document.execCommand('copy');
-  alert("அண்ணே! உங்க கடையோட மொத்த டேட்டாவும் இப்போ காப்பி ஆயிடுச்சு! 📋\n\nஇப்போ நேரா கிட்ஹப் (GitHub) 'index.html' பக்கத்துக்கு போயி, அங்க இருக்கிற பழைய கோடை முழுசா அழிச்சிட்டு, இதை அப்படியே பேஸ்ட் பண்ணி 'Commit changes' கொடுத்துடுங்க அண்ணே! வேலை முடிஞ்சது, கஸ்டமர்களுக்கும் உடனே தெரிஞ்சிடும்!");
+  alert("Done! Data copied successfully! 📋\n\nGo to your GitHub index.html file, select all existing text, delete it, and paste this new code. Then click 'Commit changes'. Your store is instantly live for all customers!");
 }
 
 loadCatalog();
