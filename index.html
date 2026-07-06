@@ -139,10 +139,6 @@
   .save-bar button { background: var(--primary); color: #fff; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 14px; width: 100%; max-width: 400px; }
   .export-box { width: 100%; max-width: 600px; display: none; flex-direction: column; gap: 8px; margin-top: 10px; }
   .export-box textarea { width: 100%; height: 100px; padding: 10px; font-family: monospace; font-size: 11px; }
-
-  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 4000; display: none; align-items: center; justify-content: center; padding: 20px; }
-  .modal-overlay.show { display: flex; }
-  .modal-box { background: #fff; border-radius: 12px; padding: 20px; width: min(360px, 100%); border-top: 4px solid var(--primary); }
 </style>
 </head>
 <body>
@@ -222,7 +218,6 @@
 const WA_NUMBER = "31685259659";
 const ADMIN_PASSCODE = "snk2026";
 
-// உங்களுக்கான புதிய டேட்டாபேஸ் சிஸ்டம் - இமேஜை சர்வருக்கு ஏத்த இதுதான் வழி அண்ணே!
 const storeDatabase = {
   categories: [
     { id:"vegetables", name:"Fresh Vegetables", items:[
@@ -330,8 +325,10 @@ function renderCatalog(){
       const fallbackImg = `https://dummyimage.com/300x300/f1f5f9/0b4624.png&text=${encodeURIComponent(name)}`;
       
       let cleanImgUrl = imgUrl ? imgUrl.trim() : "";
-      if(cleanImgUrl.toLowerCase().startsWith("http")) {
-        cleanImgUrl = "https" + cleanImgUrl.substring(4);
+      if(cleanImgUrl.toLowerCase().startsWith("http://")) {
+        cleanImgUrl = "https://" + cleanImgUrl.substring(7);
+      } else if(cleanImgUrl.toLowerCase().startsWith("http") && !cleanImgUrl.toLowerCase().startsWith("https://")) {
+        cleanImgUrl = "https://" + cleanImgUrl.substring(cleanImgUrl.indexOf("//") + 2);
       }
       const finalImgSrc = cleanImgUrl !== "" ? cleanImgUrl : fallbackImg;
 
@@ -486,7 +483,6 @@ function saveCatalogAndExport(){
   closeAdmin();
   renderCatalog();
   
-  // இந்த புது ஃபங்க்ஷன் உங்க அட்மின் பேஜை சேவ் பண்ணிய உடனே, நார்மல் கஸ்டமர் மோடுக்கு மாத்திட்டு கோடை ஜெனரேட் பண்ணும்!
   const databaseString = JSON.stringify({ categories: catalog });
   const scriptRegex = /const storeDatabase = [\s\S]*?};/;
   
