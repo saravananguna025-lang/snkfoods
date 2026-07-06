@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SNK Foods — Premium Indian Grocery</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=400;500;600;700;800&family=Playfair+Display:wght=600;700;900&display=swap" rel="stylesheet">
 <style>
   :root {
     --primary: #0B4624;
@@ -53,11 +53,10 @@
     .products-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
   }
 
-  /* பிக்ஸ் செய்யப்பட்டுள்ள லைன் 21 சிஎஸ்எஸ் எரர் (8px box-shadow) */
-  .product-card { background: var(--card-bg); border: 1px solid #E2E8F0; border-radius: 12px; padding: 12px; display: flex; flex-direction: column; justify-content: space-between; position: relative; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+  .product-card { background: var(--card-bg); border: 1px solid #E2E8F0; border-radius: 12px; padding: 12px; display: flex; flex-direction: column; justify-content: space-between; position: relative; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.02); will-change: transform; }
   .product-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.06); }
   
-  .img-slot { width: 100%; aspect-ratio: 1; background: #F1F5F9; border-radius: 8px; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: var(--text-light); overflow: hidden; position: relative; }
+  .img-slot { width: 100%; aspect-ratio: 1/1; background: #F1F5F9; border-radius: 8px; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: var(--text-light); overflow: hidden; position: relative; }
   .img-slot img { width: 100%; height: 100%; object-fit: cover; }
   
   .oos-badge { position: absolute; top: 8px; left: 8px; background: var(--danger); color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; z-index: 2; }
@@ -105,6 +104,10 @@
   .menu-cat-link { display: block; padding: 14px 20px; color: var(--text-dark); text-decoration: none; font-weight: 600; font-size: 14px; border-bottom: 1px solid #F1F5F9; transition: background 0.2s; }
   .menu-cat-link:hover { background: var(--bg-light); color: var(--primary); }
 
+  .menu-contact-box { background: var(--bg-light); padding: 16px 20px; border-top: 2px dashed #CBD5E1; margin-top: 15px; }
+  .menu-contact-box h4 { font-size: 13px; font-weight: 800; color: var(--primary); text-transform: uppercase; margin-bottom: 10px; letter-spacing: 0.5px; }
+  .menu-contact-box p { font-size: 13px; color: var(--text-dark); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; font-weight: 500; }
+
   .ledger { flex: 1; overflow-y: auto; padding: 20px; background: #F8FAFC; }
   .lrow { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #E2E8F0; font-size: 14px; }
   .lrow .lname { flex: 1; padding-right: 10px; font-weight: 600; }
@@ -115,11 +118,12 @@
   .empty-note { text-align: center; color: var(--text-light); padding: 50px 0; font-size: 14px; }
   .ltotal { border-top: 2px dashed #CBD5E1; margin-top: 15px; padding-top: 15px; display: flex; justify-content: space-between; font-weight: 800; font-size: 18px; color: var(--primary); }
   
-  .drawer-form { padding: 20px; border-top: 1px solid #E2E8F0; background: #fff; display: flex; flex-direction: column; gap: 10px; flex-shrink: 0; }
-  .drawer-form label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-light); font-weight: 700; }
-  .drawer-form select, .drawer-form input { padding: 10px 12px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 14px; background: #fff; outline: none; width: 100%; }
+  .drawer-form { padding: 15px 20px; border-top: 1px solid #E2E8F0; background: #fff; display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; max-height: 55vh; overflow-y: auto; }
+  .drawer-form label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-light); font-weight: 700; margin-top: 4px; }
+  .drawer-form select, .drawer-form input, .drawer-form textarea { padding: 9px 12px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 13px; background: #fff; outline: none; width: 100%; font-family: inherit; }
+  .drawer-form textarea { resize: none; min-height: 60px; }
   
-  .send-btn { background: #25D366; color: #fff; border: none; padding: 14px; border-radius: 8px; font-weight: 700; font-size: 15px; cursor: pointer; margin-top: 6px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .send-btn { background: #25D366; color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: 700; font-size: 14px; cursor: pointer; margin-top: 8px; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 10px rgba(37,211,102,0.25); }
   
   footer { background: #073018; color: #fff; padding: 40px 20px; text-align: center; border-top: 4px solid var(--accent); }
   footer h4 { font-family: 'Playfair Display', serif; font-size: 22px; margin-bottom: 12px; color: var(--accent); }
@@ -210,6 +214,12 @@
     <button class="close" onclick="closeMenuDrawer()">×</button>
   </div>
   <div class="menu-drawer-body" id="menuDrawerBody"></div>
+  <div class="menu-contact-box">
+    <h4>Contact Us 📞</h4>
+    <p>📞 Phone: +31 6 85259659</p>
+    <p>📍 Areas: Den Haag, Rotterdam, Delft, Leiden</p>
+    <p>⏰ Hours: 09:00 AM - 08:00 PM</p>
+  </div>
 </div>
 
 <div class="drawer" id="drawer">
@@ -230,6 +240,10 @@
     <input id="cname" placeholder="Enter your name">
     <label>Complete Address</label>
     <input id="caddr" placeholder="Street name, house number, postcode">
+    
+    <label>Review / Special Comments</label>
+    <textarea id="ccomments" placeholder="Add items details notes, custom weights, or delivery notes..."></textarea>
+    
     <button class="send-btn" id="sendBtn" onclick="sendOrder()">📲 Send Order to WhatsApp</button>
   </div>
 </div>
@@ -272,7 +286,6 @@
 const WA_NUMBER = "31685259659";
 const ADMIN_PASSCODE = "snk2026";
 
-// முற்றிலும் ஆங்கிலத்தில் மட்டுமே மாற்றப்பட்ட பொருட்கள்
 const defaultCatalog = [
   { id:"vegetables", name:"Fresh Vegetables 🥕", items:[
     ["Onion", "1kg, 5kg", "1.49, 5.99", "", false],
@@ -305,55 +318,6 @@ const defaultCatalog = [
     ["Turmeric Powder", "200g", "1.49", "", false],
     ["Garam Masala", "100g", "1.29", "", false],
     ["Chicken Masala", "100g", "1.39", "", false]
-  ]},
-  { id:"oil", name:"Oils & Ghee", items:[
-    ["Gingelly Oil (Sesame)", "1L", "6.99", "", false],
-    ["Premium Sunflower Oil", "1L, 5L", "2.49, 11.99", "", false],
-    ["Coconut Oil", "500ml, 1L", "3.49, 5.99", "", false],
-    ["Pure Cow Ghee", "200ml, 500ml", "4.29, 8.99", "", false]
-  ]},
-  { id:"dairy", name:"Dairy & Fresh", items:[
-    ["Fresh Paneer", "200g, 500g", "2.19, 4.99", "", false],
-    ["Fresh Thick Yogurt", "500g, 1kg", "1.49, 2.79", "", false]
-  ]},
-  { id:"idli-batter", name:"Idli & Dosa Batter", items:[
-    ["Fresh Idli Dosa Batter", "1kg", "2.99", "", false]
-  ]},
-  { id:"snacks", name:"Snacks & Savouries", items:[
-    ["Madras Mixture", "200g", "1.99", "", false],
-    ["Kara Boondi", "200g", "1.89", "", false],
-    ["Murukku", "200g", "1.99", "", false],
-    ["Banana Chips", "200g", "2.49", "", false]
-  ]},
-  { id:"sweets", name:"Sweets & Desserts", items:[
-    ["Gulab Jamun (Ready)", "1kg Tin", "4.99", "", false],
-    ["Soan Papdi", "250g", "1.89", "", false]
-  ]},
-  { id:"beverages", name:"Tea & Coffee", items:[
-    ["Premium Filter Coffee", "200g", "3.99", "", false],
-    ["Premium Tea Powder", "500g", "5.49", "", false],
-    ["Instant Coffee", "100g", "2.99", "", false]
-  ]},
-  { id:"pickles", name:"Pickles & Thokku", items:[
-    ["Mango Pickle", "300g", "2.19", "", false],
-    ["Lime Pickle", "300g", "2.19", "", false],
-    ["Garlic Pickle", "300g", "2.49", "", false]
-  ]},
-  { id:"papads", name:"Appalam & Vathal", items:[
-    ["Traditional Appalam", "100g", "0.99", "", false],
-    ["Rice Vathal", "200g", "1.79", "", false]
-  ]},
-  { id:"pooja", name:"Pooja Essentials", items:[
-    ["Camphor (Karpooram)", "1 Pack", "1.29", "", false],
-    ["Agarbatti (Incense Sticks)", "1 Pack", "1.19", "", false]
-  ]},
-  { id:"instant", name:"Instant Mixes", items:[
-    ["Instant Idli Mix", "500g", "2.49", "", false],
-    ["Vermicelli (Semiya)", "400g", "1.29", "", false]
-  ]},
-  { id:"health", name:"Health Drinks", items:[
-    ["Premium Health Malt", "500g", "5.99", "", false],
-    ["Chocolate Energy Drink", "500g", "5.99", "", false]
   ]}
 ];
 
@@ -361,23 +325,17 @@ let catalog = [];
 let cart = {};
 let isManualScrolling = false;
 
-function withTimeout(promise, ms=3000){
-  return Promise.race([promise, new Promise((_, reject)=> setTimeout(()=> reject(new Error('timeout')), ms))]);
-}
-
-async function loadCatalog(){
+function loadCatalog(){
   try {
-    if(window.storage && typeof window.storage.get === 'function'){
-      const res = await withTimeout(window.storage.get('catalog', true));
-      if (res && res.value) {
-        catalog = JSON.parse(res.value);
-        renderCatalog();
-        setupScrollSpy();
-        return;
-      }
+    const saved = localStorage.getItem('snk_catalog');
+    if (saved) {
+      catalog = JSON.parse(saved);
+      renderCatalog();
+      setupScrollSpy();
+      return;
     }
   } catch(e) {
-    console.log("Storage fallback.");
+    console.log("Storage access error.");
   }
   
   catalog = JSON.parse(JSON.stringify(defaultCatalog));
@@ -410,15 +368,10 @@ function renderCatalog(){
     navLink.onclick = (e) => {
       e.preventDefault();
       isManualScrolling = true;
-      
       document.querySelectorAll('.catnav a').forEach(a => a.classList.remove('active'));
       navLink.classList.add('active');
-      
       const targetSec = document.getElementById(`cat-${cat.id}`);
-      if(targetSec) {
-        targetSec.scrollIntoView({ behavior: 'smooth' });
-      }
-      
+      if(targetSec) targetSec.scrollIntoView({ behavior: 'smooth' });
       setTimeout(() => { isManualScrolling = false; }, 800);
     };
     navEl.appendChild(navLink);
@@ -431,10 +384,8 @@ function renderCatalog(){
       e.preventDefault();
       closeMenuDrawer();
       isManualScrolling = true;
-      
       const targetSec = document.getElementById(`cat-${cat.id}`);
       if(targetSec) targetSec.scrollIntoView({ behavior: 'smooth' });
-      
       document.querySelectorAll('.catnav a').forEach(a => {
         if(a.getAttribute('data-id') === cat.id) {
           a.classList.add('active');
@@ -443,7 +394,6 @@ function renderCatalog(){
           a.classList.remove('active');
         }
       });
-      
       setTimeout(() => { isManualScrolling = false; }, 800);
     };
     menuBodyEl.appendChild(menuLink);
@@ -453,16 +403,12 @@ function renderCatalog(){
     cat.items.forEach(([name, unitStr, priceStr, imgUrl, isOos], itemIdx)=>{
       const variants = parseVariants(unitStr, priceStr);
       const defaultPrice = variants[0].price;
-      const defaultUnit = variants[0].unit;
-      const initialKey = `${cat.id}||${name}||${defaultUnit}`;
-      
-      const hasQty = cart[initialKey] && cart[initialKey].qty > 0;
-      const currentQty = hasQty ? cart[initialKey].qty : 0;
+      const initialKey = `${cat.id}||${name}||${variants[0].unit}`;
+      const currentQty = cart[initialKey] ? cart[initialKey].qty : 0;
       
       let optionsHtml = variants.map((v, idx) => `<option value="${idx}">${v.unit}</option>`).join('');
-      
       const fallbackImg = `https://dummyimage.com/300x300/f1f5f9/0b4624.png&text=${encodeURIComponent(name)}`;
-      const finalImgSrc = imgUrl && imgUrl.trim() !== "" ? imgUrl : fallbackImg;
+      const finalImgSrc = imgUrl && imgUrl.trim() !== "" ? imgUrl.trim() : fallbackImg;
       const cleanName = escapeStr(name);
 
       cardsHtml += `
@@ -474,30 +420,23 @@ function renderCatalog(){
             </div>
             <div class="pname">${name}</div>
           </div>
-          
           <div>
             <div class="variant-wrapper">
               <select class="punit-select" onchange="onVariantChange('${cat.id}', ${itemIdx}, '${cleanName}', this.value)">
                 ${optionsHtml}
               </select>
             </div>
-            
             <div class="price-row">
               <span class="price" id="price-${cat.id}-${itemIdx}">€${defaultPrice.toFixed(2)}</span>
             </div>
-            
             <div class="action-container" id="action-${cat.id}-${itemIdx}">
-              ${isOos ? `
-                <button class="addbtn" disabled>Out of Stock</button>
-              ` : hasQty ? `
+              ${isOos ? `<button class="addbtn" disabled>Out of Stock</button>` : currentQty > 0 ? `
                 <div class="stepper">
                   <button class="minus" onclick="handleQtyChange('${cat.id}', ${itemIdx}, '${cleanName}', -1)">−</button>
                   <span class="qty">${currentQty}</span>
                   <button class="plus" onclick="handleQtyChange('${cat.id}', ${itemIdx}, '${cleanName}', 1)">+</button>
                 </div>
-              ` : `
-                <button class="addbtn" onclick="handleInitialAdd('${cat.id}', ${itemIdx}, '${cleanName}')">Add to Cart</button>
-              `}
+              ` : `<button class="addbtn" onclick="handleInitialAdd('${cat.id}', ${itemIdx}, '${cleanName}')">Add to Cart</button>`}
             </div>
           </div>
         </div>`;
@@ -517,19 +456,13 @@ function renderCatalog(){
 function setupScrollSpy() {
   window.addEventListener('scroll', () => {
     if (isManualScrolling) return;
-    
     const sections = document.querySelectorAll('.cat-section');
     const navLinks = document.querySelectorAll('.catnav a');
     let currentId = '';
-    
     sections.forEach(sec => {
       const top = sec.offsetTop - 160;
-      const height = sec.offsetHeight;
-      if (window.scrollY >= top && window.scrollY < top + height) {
-        currentId = sec.id.replace('cat-', '');
-      }
+      if (window.scrollY >= top) currentId = sec.id.replace('cat-', '');
     });
-    
     if (currentId) {
       navLinks.forEach(a => {
         if (a.getAttribute('data-id') === currentId) {
@@ -551,8 +484,7 @@ function getActiveVariantDetails(catId, itemIdx) {
   const variants = parseVariants(item[1], item[2]);
   const cardEl = document.getElementById(`card-${catId}-${itemIdx}`);
   const selectEl = cardEl.querySelector('.punit-select');
-  const selectedIndex = parseInt(selectEl.value) || 0;
-  return variants[selectedIndex];
+  return variants[parseInt(selectEl.value) || 0];
 }
 
 function onVariantChange(catId, itemIdx, name, val) {
@@ -563,8 +495,7 @@ function onVariantChange(catId, itemIdx, name, val) {
 
 function refreshCardActionArea(catId, itemIdx, name) {
   const cat = catalog.find(c => c.id === catId);
-  const item = cat.items[itemIdx];
-  const isOos = item[4];
+  const isOos = cat.items[itemIdx][4];
   const variant = getActiveVariantDetails(catId, itemIdx);
   const key = `${catId}||${name}||${variant.unit}`;
   const actionContainer = document.getElementById(`action-${catId}-${itemIdx}`);
@@ -596,11 +527,8 @@ function handleQtyChange(catId, itemIdx, name, delta) {
   const variant = getActiveVariantDetails(catId, itemIdx);
   const key = `${catId}||${name}||${variant.unit}`;
   if (!cart[key]) return;
-  
   cart[key].qty += delta;
-  if (cart[key].qty <= 0) {
-    delete cart[key];
-  }
+  if (cart[key].qty <= 0) delete cart[key];
   refreshCardActionArea(catId, itemIdx, name);
   syncCartTotals();
 }
@@ -612,7 +540,6 @@ function syncCartTotals(){
   const totalCount = items.reduce((sum, i)=> sum + i.qty, 0);
   const totalPrice = items.reduce((sum, i)=> sum + (i.qty * i.price), 0);
   const floatCart = document.getElementById('floatCart');
-  
   if(totalCount > 0){
     document.getElementById('floatText').textContent = `${totalCount} item${totalCount!==1?'s':''} - €${totalPrice.toFixed(2)}`;
     document.getElementById('floatBadge').textContent = totalCount;
@@ -633,17 +560,14 @@ function renderLedger(){
   }
   document.getElementById('sendBtn').disabled = false;
   let runningTotal = 0, html = '';
-  
   items.forEach(([key, item])=>{
-    const lineTotal = item.qty * item.price;
-    runningTotal += lineTotal;
-    const escapedKey = escapeStr(key);
+    runningTotal += item.qty * item.price;
     html += `
       <div class="lrow">
         <div class="lname">${item.name} <span style="color:var(--text-light); font-size:12px;">(${item.unit})</span></div>
         <div class="lqty">×${item.qty}</div>
-        <div class="lprice">€${lineTotal.toFixed(2)}</div>
-        <button class="lremove" onclick="removeBasketItem('${escapedKey}')">×</button>
+        <div class="lprice">€${(item.qty * item.price).toFixed(2)}</div>
+        <button class="lremove" onclick="removeBasketItem('${escapeStr(key)}')">×</button>
       </div>`;
   });
   ledgerEl.innerHTML = html + `<div class="ltotal"><span>Subtotal</span><span>€${runningTotal.toFixed(2)}</span></div>`;
@@ -653,23 +577,14 @@ function removeBasketItem(key) {
   delete cart[key];
   syncCartTotals();
   catalog.forEach((cat) => {
-    cat.items.forEach((item, itemIdx) => {
-      refreshCardActionArea(cat.id, itemIdx, item[0]);
-    });
+    cat.items.forEach((item, itemIdx) => { refreshCardActionArea(cat.id, itemIdx, item[0]); });
   });
 }
 
 function openCart(){ document.getElementById('drawer').classList.add('open'); document.getElementById('overlay').classList.add('show'); }
 function closeCart(){ document.getElementById('drawer').classList.remove('open'); document.getElementById('overlay').classList.remove('show'); }
-
-function openMenuDrawer(){ 
-  document.getElementById('menuDrawer').classList.add('open'); 
-  document.getElementById('overlay').classList.add('show'); 
-}
-function closeMenuDrawer(){ 
-  document.getElementById('menuDrawer').classList.remove('open'); 
-  document.getElementById('overlay').classList.remove('show'); 
-}
+function openMenuDrawer(){ document.getElementById('menuDrawer').classList.add('open'); document.getElementById('overlay').classList.add('show'); }
+function closeMenuDrawer(){ document.getElementById('menuDrawer').classList.remove('open'); document.getElementById('overlay').classList.remove('show'); }
 function closeAllDrawers(){ closeCart(); closeMenuDrawer(); }
 
 function sendOrder(){
@@ -678,19 +593,19 @@ function sendOrder(){
   const area = document.getElementById('area').value;
   const name = document.getElementById('cname').value.trim();
   const addr = document.getElementById('caddr').value.trim();
+  const comments = document.getElementById('ccomments').value.trim();
   
-  if(!name || !addr) {
-    customAlert("Please fill in your Name and complete Address before ordering.");
-    return;
-  }
+  if(!name || !addr) { customAlert("Please fill in your Name and complete Address."); return; }
   
   let total = 0;
-  let lines = items.map((it, i)=>{
-    total += it.qty * it.price;
-    return `${i+1}. ${it.name} (${it.unit}) x${it.qty} - €${(it.qty*it.price).toFixed(2)}`;
-  }).join('\n');
+  let lines = items.map((it, i)=>{ total += it.qty * it.price; return `${i+1}. ${it.name} (${it.unit}) x${it.qty} - €${(it.qty*it.price).toFixed(2)}`; }).join('\n');
   
-  let msg = `Hello SNK Foods!\nI'd like to place an order:\n\n${lines}\n\nTotal: €${total.toFixed(2)}\n\nDelivery Location: ${area}\nName: ${name}\nAddress: ${addr}`;
+  let msg = `Hello SNK Foods!\nOrder Request:\n\n${lines}\n\nTotal: €${total.toFixed(2)}\n\nDelivery to: ${area}\nName: ${name}\nAddress: ${addr}`;
+  
+  if(comments) {
+    msg += `\n\nComments / Review: ${comments}`;
+  }
+  
   window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`,'_blank');
 }
 
@@ -725,12 +640,8 @@ async function customAlert(t){ await askModal(t, {showInput:false, okLabel:"OK",
 
 async function adminLogin(){
   const pass = await customPrompt("Enter admin passcode");
-  if(pass === ADMIN_PASSCODE){
-    document.getElementById('adminOverlay').classList.add('show');
-    showAdminTab('orders');
-  } else if(pass !== null) {
-    await customAlert("Access Denied. Incorrect Code.");
-  }
+  if(pass === ADMIN_PASSCODE){ document.getElementById('adminOverlay').classList.add('show'); showAdminTab('orders'); }
+  else if(pass !== null) { await customAlert("Access Denied."); }
 }
 function closeAdmin(){ document.getElementById('adminOverlay').classList.remove('show'); }
 
@@ -742,8 +653,7 @@ function showAdminTab(tab){
 }
 
 async function loadOrdersTab(){
-  const body = document.getElementById('adminBody');
-  body.innerHTML = `<div style="text-align:center;padding:30px;color:var(--text-light);">Orders list synced from device memory storage.</div>`;
+  document.getElementById('adminBody').innerHTML = `<div style="text-align:center;padding:30px;color:var(--text-light);">Orders list synced from local storage memory.</div>`;
 }
 
 function loadProductsTab(){
@@ -764,10 +674,7 @@ function loadProductsTab(){
             <input value="${item[1]}" onchange="editItem(${ci},${ii},1,this.value)" placeholder="Variants">
             <input value="${item[2]}" onchange="editItem(${ci},${ii},2,this.value)" placeholder="Prices">
             <input value="${item[3] || ''}" onchange="editItem(${ci},${ii},3,this.value)" placeholder="Image URL">
-            <label>
-              <input type="checkbox" ${item[4] ? 'checked' : ''} onchange="editItem(${ci},${ii},4,this.checked)">
-              OOS
-            </label>
+            <label><input type="checkbox" ${item[4] ? 'checked' : ''} onchange="editItem(${ci},${ii},4,this.checked)"> OOS</label>
             <button onclick="removeItemRow(${ci},${ii})">×</button>
           </div>
         `).join('')}
@@ -786,9 +693,7 @@ function loadProductsTab(){
 function moveCategoryOrder(index, direction) {
   const targetIndex = index + direction;
   if (targetIndex >= 0 && targetIndex < catalog.length) {
-    const temp = catalog[index];
-    catalog[index] = catalog[targetIndex];
-    catalog[targetIndex] = temp;
+    const temp = catalog[index]; catalog[index] = catalog[targetIndex]; catalog[targetIndex] = temp;
     loadProductsTab();
   }
 }
@@ -807,22 +712,23 @@ async function removeCategory(ci){
   const ok = await customConfirm(`Are you sure you want to delete "${catalog[ci].name}"?`);
   if(ok){ catalog.splice(ci,1); loadProductsTab(); }
 }
-async function saveCatalog(){
+
+function saveCatalog(){
   const statusEl = document.getElementById('adminStatus');
   statusEl.textContent = "Publishing live...";
   try{
-    if(window.storage && typeof window.storage.set === 'function') {
-      await window.storage.set('catalog', JSON.stringify(catalog), true);
-    }
+    localStorage.setItem('snk_catalog', JSON.stringify(catalog));
     statusEl.textContent = "Catalog successfully updated! ✓";
     renderCatalog();
     setupScrollSpy();
-  }catch(e){ statusEl.textContent = "Error saving changes."; }
+  }catch(e){ 
+    statusEl.textContent = "Error saving changes."; 
+  }
   setTimeout(()=>statusEl.textContent='', 3000);
 }
-async function resetCatalog(){
-  const ok = await customConfirm("Reset everything back to example items?");
-  if(!ok) return;
+
+function resetCatalog(){
+  localStorage.removeItem('snk_catalog');
   catalog = JSON.parse(JSON.stringify(defaultCatalog));
   loadProductsTab(); renderCatalog(); setupScrollSpy();
 }
