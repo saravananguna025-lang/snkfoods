@@ -21,7 +21,7 @@
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
   body { background: var(--bg-light); color: var(--text-dark); padding-bottom: 100px; -webkit-tap-highlight-color: transparent; }
   
-  /* பேக்-சைடு ஸ்க்ரோலிங்கை லாக் செய்ய இந்த கிளாஸ் உதவும் அண்ணே */
+  /* Lock background scrolling when menu or cart is open */
   body.menu-open { overflow: hidden; height: 100vh; position: fixed; width: 100%; }
 
   header { position: sticky; top: 0; z-index: 1001; background: var(--primary); color: #fff; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
@@ -161,9 +161,7 @@
 <section class="hero">
   <h2>Authentic Indian Taste, <br><em>Delivered Fresh.</em></h2>
   <p>Premium quality grocery essentials curated for your kitchen.</p>
-  <div class="pills">
-    <span class="pill">📍 Den Haag</span><span class="pill">📍 Rotterdam</span><span class="pill">📍 Delft</span><span class="pill">📍 Leiden</span>
-  </div>
+  <div class="pills" id="hero-pills"></div>
 </section>
 
 <nav class="catnav" id="catnav"></nav>
@@ -191,7 +189,7 @@
   <div class="ledger" id="ledger"></div>
   <div class="drawer-form">
     <label>Delivery Destination</label>
-    <select id="area"><option>Den Haag</option><option>Rotterdam</option><option>Delft</option><option>Leiden</option></select>
+    <select id="area"></select>
     <label>Your Full Name</label><input id="cname" placeholder="Enter your name">
     <label>Complete Address</label><input id="caddr" placeholder="Street name, house number, postcode">
     <label>Review / Special Comments</label><textarea id="ccomments" placeholder="Custom requests..."></textarea>
@@ -222,15 +220,27 @@
 const WA_NUMBER = "31685259659";
 const ADMIN_PASSCODE = "snk2026";
 
-const storeDatabase = {"categories":[{"id":"vegetables","name":"Fresh Vegetables","items":[["Onion","1kg, 5kg","1.49, 5.99","https://i.postimg.cc/yx2TwCSX/IMG-1455.png",false],["Tomato","1kg","1.99","",false],["Potato","1kg","1.29","",false]]},{"id":"fruits","name":"Fresh Fruits","items":[["Banana","1kg","1.99","",false],["Mango","1box","8.99","",false]]},{"id":"rice","name":"Rice & Atta Flour","items":[["Idli Rice","5kg","9.99","",false],["Chakki Atta","5kg","7.49","",false]]},{"id":"dals","name":"Dals & Lentils","items":[["Toor Dal","1kg","2.99","",false],["Urad Dal","1kg","3.49","",false]]},{"id":"spices","name":"Spices & Herbs","items":[["Cumin Seeds","200g","1.89","",false],["Mustard Seeds","200g","1.19","",false]]},{"id":"masalas","name":"Masala Powders","items":[["Sambar Powder","200g","2.49","",false],["Chilli Powder","200g","1.99","",false]]},{"id":"oils","name":"Oils & Ghee","items":[["Ghee","500ml","7.99","",false],["Gingelly Oil","1L","5.49","",false]]},{"id":"dairy","name":"Dairy & Paneer","items":[["Fresh Paneer","200g","2.49","",false],["Yogurt","1kg","1.99","",false]]},{"id":"snacks","name":"Snacks & Sweets","items":[["Murukku","200g","1.79","",false],["Mixture","200g","1.79","",false]]},{"id":"beverages","name":"Beverages & Tea","items":[["Filter Coffee Powder","250g","3.49","",false],["Assam Tea","250g","2.99","",false]]},{"id":"pickles","name":"Pickles & Papads","items":[["Mango Pickle","300g","2.29","",false],["Appalam Papad","1packet","0.99","",false]]},{"id":"instant","name":"Instant Mixes","items":[["Idli Dosa Batter","1kg","2.99","",false],["Gulab Jamun Mix","200g","1.49","",false]]},{"id":"frozen","name":"Frozen Foods","items":[["Parotta","5pcs","2.49","",false],["Frozen Okra","400g","1.99","",false]]},{"id":"pooja","name":"Pooja Essentials","items":[["Camphor","1pack","1.29","",false],["Incense Sticks","1pack","1.49","",false]]}]};
+const storeDatabase = {"categories":[{"id":"vegetables","name":"Fresh Vegetables","items":[["Onion","1kg, 5kg","1.49, 5.99","https://i.postimg.cc/yx2TwCSX/IMG-1455.png",false],["Tomato","1kg","1.99","",false],["Potato","1kg","1.29","",false]]},{"id":"fruits","name":"Fresh Fruits","items":[["Banana","1kg","1.99","",false],["Mango","1box","8.99","",false]]},{"id":"rice","name":"Rice & Atta Flour","items":[["Idli Rice","5kg","9.99","",false],["Chakki Atta","5kg","7.49","",false]]},{"id":"dals","name":"Dals & Lentils","items":[["Toor Dal","1kg","2.99","",false],["Urad Dal","1kg","3.49","",false]]},{"id":"spices","name":"Spices & Herbs","items":[["Cumin Seeds","200g","1.89","",false],["Mustard Seeds","200g","1.19","",false]]},{"id":"masalas","name":"Masala Powders","items":[["Sambar Powder","200g","2.49","",false],["Chilli Powder","200g","1.99","",false]]},{"id":"oils","name":"Oils & Ghee","items":[["Ghee","500ml","7.99","",false],["Gingelly Oil","1L","5.49","",false]]},{"id":"dairy","name":"Dairy & Paneer","items":[["Fresh Paneer","200g","2.49","",false],["Yogurt","1kg","1.99","",false]]},{"id":"snacks","name":"Snacks & Sweets","items":[["Murukku","200g","1.79","",false],["Mixture","200g","1.79","",false]]},{"id":"beverages","name":"Beverages & Tea","items":[["Filter Coffee Powder","250g","3.49","",false],["Assam Tea","250g","2.99","",false]]},{"id":"pickles","name":"Pickles & Papads","items":[["Mango Pickle","300g","2.29","",false],["Appalam Papad","1packet","0.99","",false]]},{"id":"instant","name":"Instant Mixes","items":[["Idli Dosa Batter","1kg","2.99","",false],["Gulab Jamun Mix","200g","1.49","",false]]},{"id":"frozen","name":"Frozen Foods","items":[["Parotta","5pcs","2.49","",false],["Frozen Okra","400g","1.99","",false]]},{"id":"pooja","name":"Pooja Essentials","items":[["Camphor","1pack","1.29","",false],["Incense Sticks","1pack","1.49","",false]]}],"locations":["Den Haag","Rotterdam","Delft","Leiden"]};
 
 let catalog = storeDatabase.categories;
+let locations = storeDatabase.locations || ["Den Haag", "Rotterdam", "Delft", "Leiden"];
 let cart = {};
 
 function parseVariants(unitStr, priceStr) {
   const units = unitStr.split(',').map(s => s.trim());
   const prices = priceStr.split(',').map(s => parseFloat(s.trim()) || 0);
   return units.map((u, i) => ({ unit: u, price: prices[i] || prices[0] || 0 }));
+}
+
+function renderLocations() {
+  const pillsEl = document.getElementById('hero-pills');
+  const selectEl = document.getElementById('area');
+  if(pillsEl) {
+    pillsEl.innerHTML = locations.map(loc => `<span class="pill">📍 ${loc}</span>`).join('');
+  }
+  if(selectEl) {
+    selectEl.innerHTML = locations.map(loc => `<option value="${loc}">${loc}</option>`).join('');
+  }
 }
 
 function renderCatalog(){
@@ -379,7 +389,6 @@ function renderLedger(){
   ledgerEl.innerHTML = html + `<div class="ltotal"><span>Subtotal</span><span>€${runningTotal.toFixed(2)}</span></div>`;
 }
 
-/* பேக்-சைடு லாக் செய்ய ஃபங்க்ஷன்கள் அப்டேட் செய்யப்பட்டுள்ளது அண்ணே */
 function openCart(){ document.getElementById('drawer').classList.add('open'); document.getElementById('overlay').classList.add('show'); document.body.classList.add('menu-open'); }
 function closeCart(){ document.getElementById('drawer').classList.remove('open'); document.getElementById('overlay').classList.remove('show'); document.body.classList.remove('menu-open'); }
 function openMenuDrawer(){ document.getElementById('menuDrawer').classList.add('open'); document.getElementById('overlay').classList.add('show'); document.body.classList.add('menu-open'); }
@@ -408,7 +417,26 @@ function closeAdmin(){ document.getElementById('adminOverlay').classList.remove(
 function loadProductsTab(){
   const body = document.getElementById('adminBody');
   
-  let html = catalog.map((cat, ci)=>`
+  let html = `
+    <div class="admin-cat" style="border: 2px solid var(--accent);">
+      <div class="admin-cat-header">
+        <span style="font-size: 16px; font-weight: 700; color: var(--primary);">📍 Manage Delivery Locations</span>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px;">
+        ${locations.map((loc, li) => `
+          <div style="display: flex; align-items: center; background: var(--bg-light); padding: 6px 10px; border-radius: 6px; border: 1px solid #CBD5E1; gap: 8px;">
+            <span style="font-size: 13px; font-weight: 600; color: var(--text-dark);">${loc}</span>
+            <button onclick="if(confirm('Delete location ${loc}?')){locations.splice(${li},1); loadProductsTab();}" style="background: none; border: none; color: var(--danger); font-weight: bold; cursor: pointer; font-size: 16px; padding: 0 2px;">×</button>
+          </div>
+        `).join('')}
+      </div>
+      <div class="admin-btn-row" style="margin-top: 12px;">
+        <button onclick="addLocationPrompt()" style="background: var(--accent); color: var(--primary);">+ Add New Location</button>
+      </div>
+    </div>
+  `;
+  
+  html += catalog.map((cat, ci)=>`
     <div class="admin-cat">
       <div class="admin-cat-header">
         <input value="${cat.name}" onchange="catalog[${ci}].name=this.value; catalog[${ci}].id=this.value.toLowerCase().replace(/[^a-z0-9]/g,'')" placeholder="Category Name">
@@ -432,15 +460,23 @@ function loadProductsTab(){
 
   html += `
     <div style="text-align:center; margin: 25px 0;">
-      <button onclick="addNewCategoryPrompt()" style="background:#007BFF; color:#fff; border:none; padding:12px 24px; border-radius:8px; font-weight:700; cursor:pointer; font-size:14px;">➕ Add New Category (புது கேட்டகிரி சேர்க்க)</button>
+      <button onclick="addNewCategoryPrompt()" style="background:#007BFF; color:#fff; border:none; padding:12px 24px; border-radius:8px; font-weight:700; cursor:pointer; font-size:14px;">➕ Add New Category</button>
     </div>
   `;
   
   body.innerHTML = html;
 }
 
+function addLocationPrompt() {
+  const name = prompt("Enter New Delivery Location Name:");
+  if(name && name.trim() !== "") {
+    locations.push(name.trim());
+    loadProductsTab();
+  }
+}
+
 function addNewCategoryPrompt() {
-  const name = prompt("Enter New Category Name (புது கேட்டகிரி பெயர் டைப் பண்ணுங்க):");
+  const name = prompt("Enter New Category Name:");
   if(name && name.trim() !== "") {
     const id = name.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
     catalog.push({
@@ -455,8 +491,9 @@ function addNewCategoryPrompt() {
 function saveCatalogAndExport(){
   closeAdmin();
   renderCatalog();
+  renderLocations();
   
-  const databaseString = JSON.stringify({ categories: catalog });
+  const databaseString = JSON.stringify({ categories: catalog, locations: locations });
   const scriptRegex = /const storeDatabase = [\s\S]*?};/;
   
   let entirePageCode = document.documentElement.outerHTML;
@@ -467,7 +504,7 @@ function saveCatalogAndExport(){
   document.getElementById('exportTextarea').value = finalCleanCode;
   document.getElementById('adminOverlay').classList.add('show');
   document.getElementById('exportBox').style.display = 'flex';
-  document.getElementById('adminStatus').textContent = "Clean Catalog Code Generated with New Categories! Copy and update in GitHub.";
+  document.getElementById('adminStatus').textContent = "Clean Catalog Code Generated with New Categories & Locations! Copy and update in GitHub.";
 }
 
 function copyExportCode() {
@@ -478,6 +515,7 @@ function copyExportCode() {
 }
 
 renderCatalog();
+renderLocations();
 </script>
 </body>
 </html>
