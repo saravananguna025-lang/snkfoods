@@ -39,6 +39,11 @@
   .pills { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
   .pill { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 4px 12px; border-radius: 15px; font-size: 12px; font-weight: 600; }
 
+  /* சர்ச் பார் ஸ்டைல் */
+  .search-section { max-width: 500px; margin: -22px auto 20px; padding: 0 16px; position: relative; z-index: 10; }
+  .search-box { width: 100%; padding: 14px 20px 14px 46px; border: none; border-radius: 30px; font-size: 14px; font-weight: 600; box-shadow: 0 8px 25px rgba(0,0,0,0.08); outline: none; background: #fff; color: var(--text-dark); border: 1px solid #E2E8F0; }
+  .search-section::before { content: "🔍"; position: absolute; left: 32px; top: 13px; font-size: 16px; opacity: 0.6; }
+
   /* வட்ட வடிவ முகப்பு மெனு ஸ்டைல்ஸ் */
   .front-greet-section { background: #fff; padding: 24px 16px; border-bottom: 1px solid #E2E8F0; text-align: center; }
   .front-greet-section h4 { font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--primary); margin-bottom: 16px; }
@@ -106,7 +111,7 @@
   .menu-drawer-body { flex: 1; overflow-y: auto; padding: 10px 0; }
   .menu-cat-link { display: block; padding: 14px 20px; color: var(--text-dark); text-decoration: none; font-weight: 600; font-size: 14px; border-bottom: 1px solid #F1F5F9; }
 
-  /* சைடு மெனுவில் அட்மின் பட்டன் ஸ்டைல் */
+  /* சைடு மெனு அட்மின் பட்டன் ஸ்டைல் */
   .menu-admin-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: calc(100% - 32px); margin: 12px 16px; padding: 12px; background: #F1F5F9; border: 1px solid #CBD5E1; border-radius: 8px; color: var(--primary); font-weight: 700; font-size: 13px; cursor: pointer; transition: background 0.2s; }
   .menu-admin-btn:hover { background: #E2E8F0; }
 
@@ -119,15 +124,17 @@
   .lrow .lname { flex: 1; font-weight: 600; }
   .lrow .lqty { width: 50px; text-align: center; font-weight: 700; color: var(--primary); }
   .lrow .lprice { width: 70px; text-align: right; font-weight: 700; }
-  .lremove { background: none; border: none; color: var(--danger); font-size: 18px; cursor: pointer; margin-left: 10px; }
   
   .empty-note { text-align: center; color: var(--text-light); padding: 50px 0; }
-  .ltotal { border-top: 2px dashed #CBD5E1; margin-top: 15px; padding-top: 15px; display: flex; justify-content: space-between; font-weight: 800; font-size: 18px; color: var(--primary); }
+  .ltotal-box { border-top: 2px dashed #CBD5E1; margin-top: 10px; padding-top: 10px; }
+  .subrow { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-light); margin-bottom: 4px; }
+  .ltotal { display: flex; justify-content: space-between; font-weight: 800; font-size: 18px; color: var(--primary); margin-top: 6px; }
   
-  .drawer-form { padding: 15px 20px; border-top: 1px solid #E2E8F0; background: #fff; display: flex; flex-direction: column; gap: 8px; max-height: 55vh; overflow-y: auto; }
+  .drawer-form { padding: 15px 20px; border-top: 1px solid #E2E8F0; background: #fff; display: flex; flex-direction: column; gap: 8px; max-height: 48vh; overflow-y: auto; }
   .drawer-form label { font-size: 11px; text-transform: uppercase; color: var(--text-light); font-weight: 700; }
   .drawer-form select, .drawer-form input, .drawer-form textarea { padding: 9px 12px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 13px; background: #fff; width: 100%; outline: none; }
   
+  .print-btn { background: #007BFF; color: #fff; border: none; padding: 10px; border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; text-align: center; }
   .send-btn { background: #25D366; color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: 700; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
   
   footer { background: #073018; color: #fff; padding: 40px 20px; text-align: center; border-top: 4px solid var(--accent); }
@@ -155,6 +162,26 @@
   .save-bar button { background: var(--primary); color: #fff; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 14px; width: 100%; max-width: 400px; }
   .export-box { width: 100%; max-width: 600px; display: none; flex-direction: column; gap: 8px; margin-top: 10px; }
   .export-box textarea { width: 100%; height: 100px; padding: 10px; font-family: monospace; font-size: 11px; }
+
+  /* பிரிண்டிங் செய்யும் போது A4 ஷீட் வடிவில் மாற்றுவதற்கான பிரிண்ட் மீடியா குறியீடு */
+  #a4InvoicePrintout { display: none; }
+  @media print {
+    body * { display: none !important; }
+    #a4InvoicePrintout, #a4InvoicePrintout * { display: block !important; }
+    #a4InvoicePrintout { position: absolute; left: 0; top: 0; width: 100%; padding: 40px; font-family: Arial, sans-serif; color: #000; background: #fff; }
+    .inv-header { display: flex; justify-content: space-between; border-bottom: 3px solid #0B4624; padding-bottom: 15px; margin-bottom: 25px; }
+    .inv-title { font-size: 28px; font-weight: bold; color: #0B4624; }
+    .inv-meta { text-align: right; font-size: 12px; line-height: 1.5; }
+    .inv-bill-to { margin-bottom: 25px; font-size: 13px; }
+    .inv-bill-to h5 { font-size: 14px; margin-bottom: 5px; text-transform: uppercase; color: #555; }
+    .inv-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+    .inv-table th { background: #0B4624; color: #fff; padding: 10px; font-size: 13px; text-align: left; }
+    .inv-table td { padding: 10px; border-bottom: 1px solid #ddd; font-size: 13px; }
+    .inv-summary { margin-left: auto; width: 250px; font-size: 14px; }
+    .inv-sum-row { display: flex; justify-content: space-between; padding: 6px 0; }
+    .inv-total-row { display: flex; justify-content: space-between; padding: 10px 0; font-weight: bold; border-top: 2px solid #0B4624; font-size: 18px; color: #0B4624; }
+    .inv-footer { text-align: center; margin-top: 60px; font-size: 12px; border-top: 1px dashed #ccc; padding-top: 15px; }
+  }
 </style>
 </head>
 <body>
@@ -176,7 +203,12 @@
   <div class="pills" id="hero-pills"></div>
 </section>
 
-<!-- முகப்பு பக்க வட்ட வடிவ கேட்டகிரி செக்ஷன் -->
+<!-- சர்ச் பார் பகுதி -->
+<div class="search-section">
+  <input type="text" id="searchBar" oninput="filterProducts()" placeholder="Search products (e.g., Onion, Rice, Ghee)..." class="search-box">
+</div>
+
+<!-- வட்ட வடிவ முகப்பு மெனு செக்ஷன் -->
 <section class="front-greet-section">
   <h4>Explore Our Categories</h4>
   <div class="circle-grid" id="greetCircles"></div>
@@ -196,7 +228,7 @@
   <div class="menu-drawer-head"><h3>Categories Menu</h3><button class="close" onclick="closeMenuDrawer()">×</button></div>
   <div class="menu-drawer-body" id="menuDrawerBody"></div>
   
-  <!-- சைடு மெனுவிற்குள் கொண்டுவரப்பட்ட நேரடி அட்மின் பட்டன் -->
+  <!-- சைடு மெனுவில் நேரடி அட்மின் பட்டன் லிங்க் -->
   <button class="menu-admin-btn" onclick="closeMenuDrawer(); adminLogin();">🛠️ Open Admin Portal</button>
   
   <div class="menu-contact-box">
@@ -215,9 +247,15 @@
     <label>Your Full Name</label><input id="cname" placeholder="Enter your name">
     <label>Complete Address</label><input id="caddr" placeholder="Street name, house number, postcode">
     <label>Review / Special Comments</label><textarea id="ccomments" placeholder="Custom requests..."></textarea>
+    
+    <!-- ஏ4 இன்வாய்ஸ் பில் பிரிண்ட் பட்டன் -->
+    <button class="print-btn" onclick="printA4Invoice()">🖨️ View & Print A4 Invoice</button>
     <button class="send-btn" id="sendBtn" onclick="sendOrder()">📲 Send Order to WhatsApp</button>
   </div>
 </div>
+
+<!-- பிரிண்ட் எடுக்கும் போது மட்டும் தோன்றும் ரகசிய ஏ4 பில் ஸ்ட்ரக்சர் -->
+<div id="a4InvoicePrintout"></div>
 
 <footer>
   <h4>SNK Foods Netherlands</h4>
@@ -248,7 +286,6 @@ let catalog = storeDatabase.categories;
 let locations = storeDatabase.locations || ["Den Haag", "Rotterdam", "Delft", "Leiden"];
 let cart = {};
 
-// கேட்டகிரிக்கு தகுந்தபடி தானாக எமோஜிகளை செட் செய்யும் ஃபங்க்ஷன்
 function getCategoryEmoji(id) {
   const maps = {
     vegetables: "🥦", fruits: "🍎", rice: "🌾", dals: "🫘", spices: "🌶️",
@@ -275,6 +312,36 @@ function renderLocations() {
   }
 }
 
+// சர்ச் பார் மூலமாக பொருட்களை உடனுக்குடன் ஃபில்டர் செய்யும் லாஜிக்
+function filterProducts() {
+  const query = document.getElementById('searchBar').value.toLowerCase().trim();
+  
+  catalog.forEach(cat => {
+    let categoryHasMatches = false;
+    
+    cat.items.forEach(([name], itemIdx) => {
+      const cardEl = document.getElementById(`card-${cat.id}-${itemIdx}`);
+      if(cardEl) {
+        if(name.toLowerCase().includes(query)) {
+          cardEl.style.display = 'flex';
+          categoryHasMatches = true;
+        } else {
+          cardEl.style.display = 'none';
+        }
+      }
+    });
+    
+    const sectionEl = document.getElementById(`cat-${cat.id}`);
+    if(sectionEl) {
+      if(categoryHasMatches || query === "") {
+        sectionEl.style.display = 'block';
+      } else {
+        sectionEl.style.display = 'none';
+      }
+    }
+  });
+}
+
 function renderCatalog(){
   const navEl = document.getElementById('catnav');
   const mainEl = document.getElementById('catalog');
@@ -291,7 +358,6 @@ function renderCatalog(){
   }
 
   catalog.forEach((cat, cIdx)=>{
-    // முகப்புப்பக்க வட்ட வடிவ கார்டுகள் உருவாக்குதல்
     const circleCard = document.createElement('div');
     circleCard.className = 'circle-card';
     circleCard.innerHTML = `
@@ -307,7 +373,6 @@ function renderCatalog(){
     };
     circlesEl.appendChild(circleCard);
 
-    // மேல் பகுதி நேவிகேஷன் பில்ஸ்
     const navLink = document.createElement('a');
     navLink.href = `#cat-${cat.id}`;
     navLink.textContent = cat.name;
@@ -321,7 +386,6 @@ function renderCatalog(){
     };
     navEl.appendChild(navLink);
 
-    // சைடு மெனு லிங்க்குகள்
     const menuLink = document.createElement('a');
     menuLink.href = `#cat-${cat.id}`;
     menuLink.className = 'menu-cat-link';
@@ -329,7 +393,6 @@ function renderCatalog(){
     menuLink.onclick = (e) => { e.preventDefault(); closeMenuDrawer(); document.getElementById(`cat-${cat.id}`).scrollIntoView({ behavior: 'smooth' }); };
     menuBodyEl.appendChild(menuLink);
 
-    // பொருட்கள் கிரிட்
     let cardsHtml = '';
     cat.items.forEach(([name, unitStr, priceStr, imgUrl, isOos], itemIdx)=>{
       const variants = parseVariants(unitStr, priceStr);
@@ -413,10 +476,13 @@ function handleQtyChange(catId, itemIdx, name, delta) {
 function syncCartTotals(){
   const items = Object.values(cart);
   const totalCount = items.reduce((sum, i)=> sum + i.qty, 0);
-  const totalPrice = items.reduce((sum, i)=> sum + (i.qty * i.price), 0);
+  const subTotal = items.reduce((sum, i)=> sum + (i.qty * i.price), 0);
+  const taxAmount = subTotal * 0.09; // 9% Groceries Tax Calculation
+  const grandTotal = subTotal + taxAmount;
+  
   const floatCart = document.getElementById('floatCart');
   if(totalCount > 0){
-    document.getElementById('floatText').textContent = `${totalCount} item${totalCount!==1?'s':''} - €${totalPrice.toFixed(2)}`;
+    document.getElementById('floatText').textContent = `${totalCount} item${totalCount!==1?'s':''} - €${grandTotal.toFixed(2)}`;
     document.getElementById('floatBadge').textContent = totalCount;
     floatCart.style.display = 'flex';
   } else {
@@ -434,12 +500,109 @@ function renderLedger(){
     return;
   }
   document.getElementById('sendBtn').disabled = false;
-  let runningTotal = 0, html = '';
+  let subTotal = 0, html = '';
   items.forEach((item)=>{
-    runningTotal += item.qty * item.price;
+    subTotal += item.qty * item.price;
     html += `<div class="lrow"><div class="lname">${item.name} (${item.unit})</div><div class="lqty">×${item.qty}</div><div class="lprice">€${(item.qty * item.price).toFixed(2)}</div></div>`;
   });
-  ledgerEl.innerHTML = html + `<div class="ltotal"><span>Subtotal</span><span>€${runningTotal.toFixed(2)}</span></div>`;
+  
+  let taxAmount = subTotal * 0.09;
+  let grandTotal = subTotal + taxAmount;
+
+  html += `
+    <div class="ltotal-box">
+      <div class="subrow"><span>Subtotal</span><span>€${subTotal.toFixed(2)}</span></div>
+      <div class="subrow"><span>BTW / Tax (9%)</span><span>€${taxAmount.toFixed(2)}</span></div>
+      <div class="ltotal"><span>Total Amount</span><span>€${grandTotal.toFixed(2)}</span></div>
+    </div>`;
+    
+  ledgerEl.innerHTML = html;
+}
+
+// அழகான A4 ஷீட் பார்மட்டில் இன்வாய்ஸை உருவாக்கி பிரிண்ட் எடுக்கும் லாஜிக்
+function printA4Invoice() {
+  const items = Object.values(cart);
+  if(items.length === 0) { alert("Basket is empty!"); return; }
+  
+  const area = document.getElementById('area').value;
+  const name = document.getElementById('cname').value.trim() || "Valued Customer";
+  const addr = document.getElementById('caddr').value.trim() || "Not Specified";
+  const comments = document.getElementById('ccomments').value.trim() || "None";
+  
+  let subTotal = 0;
+  let tableRows = items.map((it, idx) => {
+    let itemCost = it.qty * it.price;
+    subTotal += itemCost;
+    return `
+      <tr>
+        <td>${idx + 1}</td>
+        <td><b>${it.name}</b></td>
+        <td>${it.unit}</td>
+        <td>${it.qty}</td>
+        <td>€${it.price.toFixed(2)}</td>
+        <td>€${itemCost.toFixed(2)}</td>
+      </tr>`;
+  }).join('');
+  
+  let taxAmount = subTotal * 0.09;
+  let grandTotal = subTotal + taxAmount;
+  let today = new Date().toLocaleDateString('nl-NL');
+
+  const invoiceHtml = `
+    <div class="inv-header">
+      <div>
+        <div class="inv-title">SNK FOODS</div>
+        <p>Premium Indian Grocery Essentials</p>
+        <p>Netherlands</p>
+      </div>
+      <div class="inv-meta">
+        <p><b>INVOICE CHIT</b></p>
+        <p>Date: ${today}</p>
+        <p>Status: Pending via WhatsApp</p>
+      </div>
+    </div>
+    
+    <div class="inv-bill-to">
+      <h5>Delivery Address & Info</h5>
+      <p><b>Name:</b> ${name}</p>
+      <p><b>Address:</b> ${addr}</p>
+      <p><b>Region:</b> ${area}</p>
+      <p><b>Notes:</b> ${comments}</p>
+    </div>
+    
+    <table class="inv-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Product Name</th>
+          <th>Unit</th>
+          <th>Qty</th>
+          <th>Rate</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${tableRows}
+      </tbody>
+    </table>
+    
+    <div class="inv-summary">
+      <div class="inv-sum-row"><span>Subtotal:</span><span>€${subTotal.toFixed(2)}</span></div>
+      <div class="inv-sum-row"><span>BTW / Tax (9%):</span><span>€${taxAmount.toFixed(2)}</span></div>
+      <div class="inv-total-row"><span>Total:</span><span>€${grandTotal.toFixed(2)}</span></div>
+    </div>
+    
+    <div class="inv-footer">
+      <p>Thank you for shopping with SNK Foods!</p>
+      <p>For support, contact +31 6 85259659</p>
+    </div>
+  `;
+  
+  const printContainer = document.getElementById('a4InvoicePrintout');
+  printContainer.innerHTML = invoiceHtml;
+  
+  // சிஸ்டம் பிரிண்ட் விண்டோவை ஓபன் செய்யும் கட்டளை
+  window.print();
 }
 
 function openCart(){ document.getElementById('drawer').classList.add('open'); document.getElementById('overlay').classList.add('show'); document.body.classList.add('menu-open'); }
@@ -454,9 +617,11 @@ function sendOrder(){
   const name = document.getElementById('cname').value.trim();
   const addr = document.getElementById('caddr').value.trim();
   if(!name || !addr) { alert("Please enter Name and Address."); return; }
-  let total = 0;
-  let lines = items.map((it, i)=>{ total += it.qty * it.price; return `${i+1}. ${it.name} (${it.unit}) x${it.qty} - €${(it.qty*it.price).toFixed(2)}`; }).join('\n');
-  let msg = `Hello SNK Foods!\nNew Order:\n\n${lines}\n\nTotal: €${total.toFixed(2)}\n\nDelivery to: ${area}\nName: ${name}\nAddress: ${addr}`;
+  let subTotal = 0;
+  let lines = items.map((it, i)=>{ subTotal += it.qty * it.price; return `${i+1}. ${it.name} (${it.unit}) x${it.qty} - €${(it.qty*it.price).toFixed(2)}`; }).join('\n');
+  let taxAmount = subTotal * 0.09;
+  let grandTotal = subTotal + taxAmount;
+  let msg = `Hello SNK Foods!\nNew Order:\n\n${lines}\n\nSubtotal: €${subTotal.toFixed(2)}\nBTW (9%): €${taxAmount.toFixed(2)}\nTotal Amount: €${grandTotal.toFixed(2)}\n\nDelivery to: ${area}\nName: ${name}\nAddress: ${addr}`;
   window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`,'_blank');
 }
 
