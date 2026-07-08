@@ -1,1038 +1,321 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>SNK Foods — Premium Indian Grocery</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=400;500;600;700;800&family=Playfair+Display:wght=600;700;900&display=swap" rel="stylesheet">
-
-<!-- ========================================== -->
-<!-- 1. FRONT-END : CSS DESIGN STYLES           -->
-<!-- ========================================== -->
-<style>
-  :root {
-    --primary: #0B4624;
-    --accent: #D4AF37;
-    --accent-dark: #AA841C;
-    --text-dark: #1E293B;
-    --text-light: #64748B;
-    --bg-light: #F8FAFC;
-    --card-bg: #FFFFFF;
-    --danger: #EF4444;
-  }
-  
-  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
-  body { background: var(--bg-light); color: var(--text-dark); padding-bottom: 90px; -webkit-tap-highlight-color: transparent; }
-  body.menu-open { overflow: hidden; height: 100vh; position: fixed; width: 100%; }
-
-  header { position: sticky; top: 0; z-index: 1001; background: var(--primary); color: #fff; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
-  .header-left { display: flex; align-items: center; gap: 12px; }
-  .menu-toggle { background: none; border: none; color: #fff; font-size: 26px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; }
-  .logo { display: flex; align-items: center; gap: 12px; }
-  .logo-mark { width: 42px; height: 42px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-weight: 900; color: var(--primary); font-size: 18px; }
-  .logo-text h1 { font-family: 'Playfair Display', serif; font-size: 22px; color: #fff; line-height: 1; }
-  .logo-text span { font-size: 11px; color: var(--accent); letter-spacing: 1px; text-transform: uppercase; font-weight: 600; }
-  .wa-quick { background: #25D366; color: #fff; border: none; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 10px rgba(37,211,102,0.3); }
-
-  /* Bottom Navigation Bar Styles */
-  .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 70px; background: #ffffff; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #E2E8F0; box-shadow: 0 -4px 15px rgba(0,0,0,0.06); z-index: 1500; }
-  .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; background: none; border: none; color: var(--text-light); font-size: 11px; font-weight: 700; cursor: pointer; width: 20%; height: 100%; gap: 4px; text-decoration: none; transition: color 0.2s; }
-  .nav-item .icon { font-size: 22px; }
-  .nav-item.active { color: var(--primary); }
-  .nav-item.active .icon { color: var(--primary); }
-  .nav-badge-container { position: relative; display: inline-block; }
-  .nav-badge { position: absolute; top: -6px; right: -12px; background: var(--danger); color: white; border-radius: 50%; font-size: 10px; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-weight: 800; }
-
-  /* View Management */
-  .app-view { display: none; }
-  .app-view.active-view { display: block; }
-
-  .hero { background: linear-gradient(135deg, #073018 0%, #0B4624 100%); color: #fff; padding: 40px 20px; text-align: center; border-bottom: 4px solid var(--accent); }
-  .hero h2 { font-family: 'Playfair Display', serif; font-size: 32px; margin-bottom: 10px; color: #fff; }
-  .hero h2 em { color: var(--accent); font-style: normal; }
-  .hero p { font-size: 14px; color: #E2E8F0; max-width: 500px; margin: 0 auto 15px; opacity: 0.9; }
-  .pills { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
-  .pill { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 4px 12px; border-radius: 15px; font-size: 12px; font-weight: 600; }
-
-  .search-section { max-width: 500px; margin: -22px auto 20px; padding: 0 16px; position: relative; z-index: 10; }
-  .search-box { width: 100%; padding: 14px 20px 14px 46px; border: none; border-radius: 30px; font-size: 14px; font-weight: 600; box-shadow: 0 8px 25px rgba(0,0,0,0.08); outline: none; background: #fff; color: var(--text-dark); border: 1px solid #E2E8F0; }
-  .search-section::before { content: "🔍"; position: absolute; left: 32px; top: 13px; font-size: 16px; opacity: 0.6; }
-
-  .front-greet-section { background: #fff; padding: 24px 16px; border-bottom: 1px solid #E2E8F0; text-align: center; }
-  .front-greet-section h4 { font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--primary); margin-bottom: 16px; }
-  .circle-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(85px, 1fr)); gap: 16px; justify-content: center; max-width: 900px; margin: 0 auto; }
-  .circle-card { display: flex; flex-direction: column; align-items: center; text-decoration: none; cursor: pointer; transition: transform 0.2s; }
-  .circle-card:hover { transform: translateY(-3px); }
-  .circle-icon-box { width: 66px; height: 66px; border-radius: 50%; background: #F8FAFC; border: 2px solid var(--accent); display: flex; align-items: center; justify-content: center; font-size: 26px; box-shadow: 0 4px 10px rgba(0,0,0,0.04); }
-  .circle-title { font-size: 11px; font-weight: 700; color: var(--text-dark); margin-top: 8px; text-align: center; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-
-  .catnav { position: sticky; top: 72px; z-index: 1000; background: #fff; border-bottom: 1px solid #E2E8F0; overflow-x: auto; white-space: nowrap; padding: 12px 16px; display: flex; gap: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); scroll-behavior: smooth; }
-  .catnav::-webkit-scrollbar { display: none; }
-  .catnav a { flex-shrink: 0; background: var(--bg-light); border: 1px solid #E2E8F0; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; color: var(--text-dark); text-decoration: none; transition: all 0.2s; }
-  .catnav a.active, .catnav a:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
-
-  main { max-width: 1100px; margin: 0 auto; padding: 20px 16px; }
-  .cat-section { margin-bottom: 40px; scroll-margin-top: 145px; }
-  .cat-head { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
-  .cat-head h3 { font-family: 'Playfair Display', serif; font-size: 24px; color: var(--primary); font-weight: 700; }
-  .cat-line { flex: 1; height: 2px; background: #E2E8F0; }
-  
-  .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 16px; }
-  @media (max-width: 400px) { .products-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; } }
-
-  .product-card { background: var(--card-bg); border: 1px solid #E2E8F0; border-radius: 12px; padding: 12px; display: flex; flex-direction: column; justify-content: space-between; position: relative; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
-  .product-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.06); }
-  
-  .img-slot { width: 100%; aspect-ratio: 1/1; background: #F1F5F9; border-radius: 8px; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: var(--text-light); overflow: hidden; position: relative; }
-  .img-slot img { width: 100%; height: 100%; object-fit: cover; }
-  
-  .oos-badge { position: absolute; top: 8px; left: 8px; background: var(--danger); color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; z-index: 2; }
-  .oos-card { opacity: 0.6; }
-
-  .pname { font-size: 14px; font-weight: 700; color: var(--text-dark); margin-bottom: 6px; line-height: 1.3; min-height: 36px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-  .variant-wrapper { margin-bottom: 10px; }
-  .punit-select { width: 100%; padding: 6px 8px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 12px; background: #fff; color: var(--text-dark); font-weight: 500; outline: none; cursor: pointer; }
-  .price-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-  .price { font-size: 16px; font-weight: 800; color: var(--primary); }
-
-  .action-container { width: 100%; min-height: 36px; display: flex; align-items: center; }
-  .addbtn { width: 100%; background: var(--primary); color: #fff; border: none; height: 36px; border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; }
-  .addbtn:disabled { background: #CBD5E1; color: #94A3B8; cursor: not-allowed; }
-  
-  .stepper { width: 100%; display: flex; align-items: center; justify-content: space-between; border: 2px solid var(--primary); border-radius: 8px; background: #fff; overflow: hidden; height: 36px; }
-  .stepper button { width: 36px; height: 100%; border: none; background: var(--primary); color: #fff; font-size: 18px; font-weight: 800; cursor: pointer; }
-  .stepper button.minus { background: #E2E8F0; color: var(--text-dark); }
-  .stepper .qty { font-size: 14px; font-weight: 800; color: var(--text-dark); flex: 1; text-align: center; }
-
-  /* Views Specific Styles */
-  .view-container { max-width: 600px; margin: 30px auto; padding: 0 16px; }
-  .page-title { font-family: 'Playfair Display', serif; font-size: 28px; color: var(--primary); margin-bottom: 20px; text-align: center; }
-  
-  /* Profile / Login Card Styles */
-  .auth-card { background: #fff; border: 1px solid #E2E8F0; border-radius: 16px; padding: 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); text-align: center; }
-  .auth-input-group { text-align: left; margin-bottom: 15px; }
-  .auth-input-group label { font-size: 12px; font-weight: 700; color: var(--text-light); text-transform: uppercase; display: block; margin-bottom: 6px; }
-  .auth-input { width: 100%; padding: 12px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 14px; font-weight: 600; outline: none; }
-  .auth-btn { width: 100%; background: var(--primary); color:#fff; border:none; padding:12px; border-radius:8px; font-weight:700; font-size:14px; cursor:pointer; margin-top:10px; }
-  .member-badge { background: #FFF9E6; border: 2px dashed var(--accent); padding: 15px; border-radius: 10px; margin-bottom: 20px; font-family: monospace; font-size: 16px; font-weight: 700; color: var(--primary); }
-
-  /* Offers Layout */
-  .offer-card { background: linear-gradient(135deg, #FFFDF5 0%, #FFF9E6 100%); border: 1px dashed var(--accent); border-radius: 12px; padding: 16px; margin-bottom: 16px; position: relative; overflow: hidden; }
-  .offer-card::before { content: "🎁"; position: absolute; right: -10px; bottom: -10px; font-size: 60px; opacity: 0.1; }
-  .offer-title { font-size: 16px; font-weight: 800; color: var(--primary); margin-bottom: 6px; }
-  .offer-desc { font-size: 13px; color: var(--text-dark); font-weight: 500; margin-bottom: 10px; line-height: 1.4; }
-  .offer-code { display: inline-block; background: var(--primary); color: #fff; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 700; font-family: monospace; }
-
-  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1900; display: none; backdrop-filter: blur(2px); }
-  .overlay.show { display: block; }
-  
-  .menu-drawer { position: fixed; top: 0; left: 0; bottom: 0; width: min(300px, 85vw); background: #fff; z-index: 2500; transform: translateX(-100%); transition: transform 0.25s; display: flex; flex-direction: column; }
-  .menu-drawer.open { transform: translateX(0); }
-  .menu-drawer-head { background: var(--primary); color: #fff; padding: 18px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--accent); }
-  .menu-drawer-head h3 { color: #fff; font-family: 'Playfair Display', serif; }
-  .menu-drawer-head .close { background: none; border: none; color: #fff; font-size: 28px; cursor: pointer; }
-  .menu-drawer-body { flex: 1; overflow-y: auto; padding: 10px 0; }
-  .menu-cat-link { display: block; padding: 14px 20px; color: var(--text-dark); text-decoration: none; font-weight: 600; font-size: 14px; border-bottom: 1px solid #F1F5F9; }
-
-  .menu-admin-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: calc(100% - 32px); margin: 12px 16px; padding: 12px; background: #F1F5F9; border: 1px solid #CBD5E1; border-radius: 8px; color: var(--primary); font-weight: 700; font-size: 13px; cursor: pointer; }
-  .menu-contact-box { background: var(--bg-light); padding: 16px 20px; border-top: 2px dashed #CBD5E1; }
-  .menu-contact-box h4 { font-size: 13px; color: var(--primary); text-transform: uppercase; margin-bottom: 10px; }
-  .menu-contact-box p { font-size: 13px; margin-bottom: 8px; font-weight: 500; }
-
-  .ledger { background: #fff; border: 1px solid #E2E8F0; border-radius: 12px; padding: 15px; margin-bottom: 20px; }
-  .lrow { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #E2E8F0; font-size: 14px; gap: 10px; }
-  .lrow .lname { flex: 1; font-weight: 600; line-height: 1.3; }
-  .lrow .lprice { width: 65px; text-align: right; font-weight: 700; }
-  
-  .empty-note { text-align: center; color: var(--text-light); padding: 40px 0; font-weight: 600; }
-  .ltotal-box { border-top: 2px dashed #CBD5E1; margin-top: 10px; padding-top: 10px; }
-  .subrow { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-light); margin-bottom: 4px; }
-  .ltotal { display: flex; justify-content: space-between; font-weight: 800; font-size: 18px; color: var(--primary); margin-top: 6px; }
-  
-  .drawer-form { background: #fff; border: 1px solid #E2E8F0; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
-  .drawer-form label { font-size: 11px; text-transform: uppercase; color: var(--text-light); font-weight: 700; }
-  .drawer-form select, .drawer-form input, .drawer-form textarea { padding: 11px 14px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 13px; background: #fff; color: var(--text-dark) !important; width: 100%; outline: none; font-weight: 600; }
-  
-  .send-btn { background: #25D366; color: #fff; border: none; padding: 14px; border-radius: 8px; font-weight: 700; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 5px; box-shadow: 0 4px 12px rgba(37,211,102,0.2); }
-  .send-btn:disabled { background: #CBD5E1; color: #94A3B8; cursor: not-allowed; box-shadow: none; }
-  
-  footer { background: #073018; color: #fff; padding: 40px 20px; text-align: center; border-top: 4px solid var(--accent); margin-top: 30px; }
-  footer h4 { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--accent); margin-bottom: 12px; }
-  .admin-link { background: none; border: none; color: rgba(255,255,255,0.3); font-size: 12px; cursor: pointer; text-decoration: underline; }
-
-  /* Admin Control Overlays */
-  .admin-overlay { position: fixed; inset: 0; background: #fff; z-index: 3000; display: none; flex-direction: column; }
-  .admin-overlay.show { display: flex; }
-  .admin-head { background: var(--primary); color: #fff; padding: 166px 20px; display: flex; justify-content: space-between; align-items: center; }
-  .admin-head h3 { color: #fff; font-family: 'Playfair Display', serif; }
-  .admin-head button { background: none; border: none; color: #fff; font-size: 28px; cursor: pointer; }
-  
-  .admin-body { flex: 1; overflow-y: auto; padding: 20px; max-width: 1000px; margin: 0 auto; width: 100%; }
-  .admin-cat { background: #fff; border: 1px solid #E2E8F0; border-radius: 12px; padding: 16px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-  .admin-cat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid #E2E8F0; padding-bottom: 8px; }
-  .admin-cat-header input { font-size: 16px; font-weight: 700; color: var(--primary); border: 1px dashed #CBD5E1; padding: 4px 8px; border-radius: 4px; width: 40%; }
-  .admin-item-row { display: grid; grid-template-columns: 2fr 1.2fr 1.2fr 1.5fr 80px 40px; gap: 8px; margin-bottom: 10px; align-items: center; background: var(--bg-light); padding: 8px; border-radius: 6px; }
-  @media (max-width: 600px) { .admin-item-row { grid-template-columns: 1fr; gap: 6px; } }
-  .admin-item-row input { padding: 8px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 13px; width: 100%; }
-  .admin-item-row button { background: var(--danger); color: #fff; border: none; border-radius: 6px; height: 34px; font-size: 16px; cursor: pointer; }
-  
-  .admin-btn-row { display: flex; gap: 10px; margin-top: 10px; }
-  .admin-btn-row button { background: var(--primary); color: #fff; border: none; padding: 8px 16px; border-radius: 6px; font-size: 13px; cursor: pointer; font-weight: 600; }
-  
-  .print-box-tool { background: #FFF9E6; border: 2px dashed var(--accent); padding: 15px; border-radius: 10px; margin-bottom: 20px; }
-  .print-box-tool textarea { width: 100%; height: 80px; padding: 10px; border-radius: 6px; border: 1px solid #CBD5E1; margin: 8px 0; font-size: 12px; }
-
-  .save-bar { position: sticky; bottom: 0; background: #fff; border-top: 1px solid #E2E8F0; padding: 15px 20px; display: flex; flex-direction: column; gap: 10px; align-items: center; z-index: 10; }
-  .save-bar button { background: var(--primary); color: #fff; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 14px; width: 100%; max-width: 400px; }
-  .export-box { width: 100%; max-width: 600px; display: none; flex-direction: column; gap: 8px; margin-top: 10px; }
-  .export-box textarea { width: 100%; height: 100px; padding: 10px; font-family: monospace; font-size: 11px; }
-
-  #a4InvoicePrintout { display: none; }
-  @media print {
-    body * { display: none !important; }
-    #a4InvoicePrintout, #a4InvoicePrintout * { display: block !important; }
-    #a4InvoicePrintout { position: absolute; left: 0; top: 0; width: 100%; padding: 40px; font-family: Arial, sans-serif; color: #000; background: #fff; }
-    .inv-header { display: flex; justify-content: space-between; border-bottom: 3px solid #0B4624; padding-bottom: 15px; margin-bottom: 25px; }
-    .inv-title { font-size: 28px; font-weight: bold; color: #0B4624; }
-    .inv-meta { text-align: right; font-size: 12px; line-height: 1.5; }
-    .inv-bill-split { display: flex; justify-content: space-between; margin-bottom: 30px; gap: 20px; }
-    .inv-bill-to { width: 60%; font-size: 13px; background: #F8FAFC; padding: 15px; border-radius: 6px; border: 1px solid #E2E8F0; }
-    .inv-bill-to h5 { font-size: 14px; margin-bottom: 8px; text-transform: uppercase; color: #0B4624; border-bottom: 1px solid #CBD5E1; padding-bottom: 4px; }
-    .inv-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
-    .inv-table th { background: #0B4624; color: #fff; padding: 10px; font-size: 13px; text-align: left; }
-    .inv-table td { padding: 10px; border-bottom: 1px solid #ddd; font-size: 13px; }
-    .inv-summary { margin-left: auto; width: 280px; font-size: 14px; }
-    .inv-sum-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed #E2E8F0; }
-    .inv-total-row { display: flex; justify-content: space-between; padding: 10px 0; font-weight: bold; border-top: 2px solid #0B4624; font-size: 18px; color: #0B4624; margin-top: 5px; }
-    .inv-footer { text-align: center; margin-top: 60px; font-size: 12px; border-top: 1px dashed #ccc; padding-top: 15px; }
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FMB Food Portal</title>
+    <!-- Tailwind CSS for Premium Design -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Smooth Moving Display Style */
+        .marquee-wrapper {
+            background: linear-gradient(90deg, #ff4e50, #f9d423);
+            overflow: hidden;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+        }
+        .marquee-text {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee 20s linear infinite;
+        }
+        @keyframes marquee {
+            0 { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-100%, 0, 0); }
+        }
+    </style>
 </head>
-<body>
+<body class="bg-gray-50 text-gray-800 font-sans">
 
-<!-- ========================================== -->
-<!-- 2. FRONT-END : HTML LAYOUT STRUCTURE       -->
-<!-- ========================================== -->
-
-<header>
-  <div class="header-left">
-    <button class="menu-toggle" onclick="openMenuDrawer()">☰</button>
-    <div class="logo">
-      <div class="logo-mark">SNK</div>
-      <div class="logo-text"><h1>SNK Foods</h1><span>Premium Grocery</span></div>
-    </div>
-  </div>
-  <a class="wa-quick" href="https://wa.me/31685259659" target="_blank">📲 WhatsApp</a>
-</header>
-
-<!-- App-Like Sticky Bottom Navigation Bar -->
-<div class="bottom-nav">
-  <button class="nav-item active" id="btn-view-home" onclick="switchView('home')">
-    <span class="icon">🏠</span><span>Home</span>
-  </button>
-  <button class="nav-item" id="btn-view-categories" onclick="switchView('categories')">
-    <span class="icon">📂</span><span>Categories</span>
-  </button>
-  <button class="nav-item" id="btn-view-offers" onclick="switchView('offers')">
-    <span class="icon">🎁</span><span>Offers</span>
-  </button>
-  <button class="nav-item" id="btn-view-basket" onclick="switchView('basket')">
-    <div class="nav-badge-container">
-      <span class="icon">🛒</span>
-      <span class="nav-badge" id="bottomNavBadge" style="display:none;">0</span>
-    </div>
-    <span>Basket</span>
-  </button>
-  <button class="nav-item" id="btn-view-profile" onclick="switchView('profile')">
-    <span class="icon">👤</span><span id="profileTabText">Login</span>
-  </button>
-</div>
-
-<!-- VIEW 1: HOME PANEL -->
-<div id="view-home" class="app-view active-view">
-  <section class="hero">
-    <h2>Authentic Indian Taste, <br><em>Delivered Fresh.</em></h2>
-    <p>Premium quality grocery essentials curated for your kitchen.</p>
-    <div class="pills" id="hero-pills"></div>
-  </section>
-
-  <div class="search-section">
-    <input type="text" id="searchBar" oninput="filterProducts()" placeholder="Search products (e.g., Onion, Rice, Ghee)..." class="search-box">
-  </div>
-
-  <section class="front-greet-section">
-    <h4>Explore Our Categories</h4>
-    <div class="circle-grid" id="greetCircles"></div>
-  </section>
-
-  <nav class="catnav" id="catnav"></nav>
-  <main id="catalog"><div style="text-align:center; padding: 40px; color: var(--text-light);">Loading items...</div></main>
-</div>
-
-<!-- VIEW 2: CATEGORIES VIEW -->
-<div id="view-categories" class="app-view">
-  <div class="view-container">
-    <h2 class="page-title">All Categories</h2>
-    <div class="front-greet-section" style="border-bottom:none;">
-      <div class="circle-grid" id="fullCategoriesGrid" style="grid-template-columns: repeat(3, 1fr);"></div>
-    </div>
-  </div>
-</div>
-
-<!-- VIEW 3: EXCLUSIVE OFFERS VIEW -->
-<div id="view-offers" class="app-view">
-  <div class="view-container">
-    <h2 class="page-title">Exclusive Offers</h2>
-    <div id="offersContent"></div>
-  </div>
-</div>
-
-<!-- VIEW 4: BASKET VIEW -->
-<div id="view-basket" class="app-view">
-  <div class="view-container">
-    <h2 class="page-title">Your Shopping Basket</h2>
-    <div class="ledger" id="ledger"></div>
-    <div class="drawer-form">
-      <label>Delivery Destination</label>
-      <select id="area" onchange="syncCartTotals()"></select>
-      <label>Your Full Name</label><input id="cname" placeholder="Enter your name">
-      <label>Complete Address</label><input id="caddr" placeholder="Street name, house number, postcode">
-      <label>Review / Special Comments</label><textarea id="ccomments" placeholder="Custom requests..."></textarea>
-      <button class="send-btn" id="sendBtn" onclick="sendOrder()">📲 Send Order to WhatsApp</button>
-    </div>
-  </div>
-</div>
-
-<!-- VIEW 5: USER PROFILE & LOGIN -->
-<div id="view-profile" class="app-view">
-  <div class="view-container">
-    <h2 class="page-title">Customer Account</h2>
-    <div id="profileContent"></div>
-  </div>
-</div>
-
-<div class="overlay" id="overlay" onclick="closeAllDrawers()"></div>
-
-<div class="menu-drawer" id="menuDrawer">
-  <div class="menu-drawer-head"><h3>Categories Menu</h3><button class="close" onclick="closeMenuDrawer()">×</button></div>
-  <div class="menu-drawer-body" id="menuDrawerBody"></div>
-  <button class="menu-admin-btn" onclick="closeMenuDrawer(); adminLogin();">🛠️ Open Admin Portal</button>
-  <div class="menu-contact-box">
-    <h4>Contact Us</h4>
-    <p>Phone: +31 6 85259659</p>
-    <p>Open Hours: 09:00 AM - 08:00 PM</p>
-  </div>
-</div>
-
-<div id="a4InvoicePrintout"></div>
-
-<footer>
-  <h4>SNK Foods Netherlands</h4>
-  <button class="admin-link" onclick="adminLogin()">Store Admin Portal</button>
-</footer>
-
-<!-- ADMIN CONTROL PORTS -->
-<div class="admin-overlay" id="adminOverlay">
-  <div class="admin-head"><h3>SNK Operations Control</h3><button onclick="closeAdmin()">×</button></div>
-  <div class="admin-body" id="adminBody"></div>
-  <div class="save-bar">
-    <button onclick="saveCatalogAndExport()">1. Save & Generate Update Code</button>
-    <div class="export-box" id="exportBox">
-      <p style="font-size:12px; color:var(--danger); font-weight:700; text-align:center;">Copy the code below and paste it completely inside GitHub index.html file!</p>
-      <textarea id="exportTextarea" readonly onclick="this.select()"></textarea>
-      <button style="background:#007BFF;" onclick="copyExportCode()">2. Copy Code to Clipboard</button>
-    </div>
-    <div id="adminStatus" style="font-weight:700; color:var(--primary); font-size:13px; margin-top:5px;"></div>
-  </div>
-</div>
-
-
-<!-- ========================================== -->
-<!-- 3. BACK-END LOGIC : JAVASCRIPT CONTROLLER  -->
-<!-- ========================================== -->
-<script>
-const WA_NUMBER = "31685259659";
-const ADMIN_PASSCODE = "snk2026";
-
-// Live Core Database Setup
-const storeDatabase = {"categories":[{"id":"vegetables","name":"Fresh Vegetables","items":[["Onion","1kg, 5kg","1.49, 5.99","https://i.postimg.cc/yx2TwCSX/IMG-1455.png",false],["Tomato","1kg","1.99","",false],["Potato","1kg","1.29","",false]]},{"id":"fruits","name":"Fresh Fruits","items":[["Banana","1kg","1.99","",false],["Mango","1box","8.99","",false]]},{"id":"rice","name":"Rice & Atta Flour","items":[["Idli Rice","5kg","9.99","",false],["Chakki Atta","5kg","7.49","",false]]},{"id":"dals","name":"Dals & Lentils","items":[["Toor Dal","1kg","2.99","",false],["Urad Dal","1kg","3.49","",false]]},{"id":"spices","name":"Spices & Herbs","items":[["Cumin Seeds","200g","1.89","",false],["Mustard Seeds","200g","1.19","",false]]},{"id":"masalas","name":"Masala Powders","items":[["Sambar Powder","200g","2.49","",false],["Chilli Powder","200g","1.99","",false]]},{"id":"oils","name":"Oils & Ghee","items":[["Ghee","500ml","7.99","",false],["Gingelly Oil","1L","5.49","",false]]},{"id":"dairy","name":"Dairy & Paneer","items":[["Fresh Paneer","200g","2.49","",false],["Yogurt","1kg","1.99","",false]]},{"id":"snacks","name":"Snacks & Sweets","items":[["Murukku","200g","1.79","",false],["Mixture","200g","1.79","",false]]},{"id":"beverages","name":"Beverages & Tea","items":[["Filter Coffee Powder","250g","3.49","",false],["Assam Tea","250g","2.99","",false]]},{"id":"pickles","name":"Pickles & Papads","items":[["Mango Pickle","300g","2.29","",false],["Appalam Papad","1packet","0.99","",false]]},{"id":"instant","name":"Instant Mixes","items":[["Idli Dosa Batter","1kg","2.99","",false],["Gulab Jamun Mix","200g","1.49","",false]]},{"id":"frozen","name":"Frozen Foods","items":[["Parotta","5pcs","2.49","",false],["Frozen Okra","400g","1.99","",false]]},{"id":"pooja","name":"Pooja Essentials","items":[["Camphor","1pack","1.29","",false],["Incense Sticks","1pack","1.49","",false]]}],"locations":[{"name":"Den Haag","fee":2.50},{"name":"Rotterdam","fee":5.00},{"name":"Delft","fee":3.00},{"name":"Leiden","fee":4.00}],"offers":[{"title":"Welcome Offer","desc":"Get a free spice pack on your first order above €25!","code":"SNKFREE"},{"title":"Weekend Delivery Deal","desc":"10% discount on delivery charges for Den Haag residents this weekend.","code":"DH10"}]};
-
-let catalog = storeDatabase.categories;
-let locations = storeDatabase.locations || [];
-let offers = storeDatabase.offers || [];
-let cart = {};
-
-// SPA Engine Navigation Handler
-function switchView(viewId) {
-  document.querySelectorAll('.app-view').forEach(view => view.classList.remove('active-view'));
-  document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
-  
-  const targetView = document.getElementById(`view-${viewId}`);
-  const targetBtn = document.getElementById(`btn-view-${viewId}`);
-  
-  if(targetView) targetView.classList.add('active-view');
-  if(targetBtn) targetBtn.classList.add('active');
-  
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-  
-  if(viewId === 'profile') renderProfilePage();
-  if(viewId === 'offers') renderOffersPage();
-}
-
-function getCategoryEmoji(id) {
-  const maps = {
-    vegetables: "🥦", fruits: "🍎", rice: "🌾", dals: "🫘", spices: "🌶️",
-    masalas: "🧂", oils: "🛢️", dairy: "🧀", snacks: "🍪", beverages: "☕",
-    pickles: "🏺", instant: "🥣", frozen: "❄️", pooja: "🪔"
-  };
-  return maps[id] || "📦";
-}
-
-function parseVariants(unitStr, priceStr) {
-  const units = unitStr.split(',').map(s => s.trim());
-  const prices = priceStr.split(',').map(s => parseFloat(s.trim()) || 0);
-  return units.map((u, i) => ({ unit: u, price: prices[i] || prices[0] || 0 }));
-}
-
-function renderLocations() {
-  const pillsEl = document.getElementById('hero-pills');
-  const selectEl = document.getElementById('area');
-  if(pillsEl) {
-    pillsEl.innerHTML = locations.map(loc => `<span class="pill">📍 ${loc.name} (€${loc.fee.toFixed(2)})</span>`).join('');
-  }
-  if(selectEl) {
-    selectEl.innerHTML = `<option value="" disabled selected>--- Choose Delivery Location ---</option>` + 
-                         locations.map((loc, idx) => `<option value="${idx}">${loc.name} (+€${loc.fee.toFixed(2)})</option>`).join('');
-  }
-}
-
-function filterProducts() {
-  const query = document.getElementById('searchBar').value.toLowerCase().trim();
-  catalog.forEach(cat => {
-    let categoryHasMatches = false;
-    cat.items.forEach(([name], itemIdx) => {
-      const cardEl = document.getElementById(`card-${cat.id}-${itemIdx}`);
-      if(cardEl) {
-        if(name.toLowerCase().includes(query)) {
-          cardEl.style.display = 'flex';
-          categoryHasMatches = true;
-        } else {
-          cardEl.style.display = 'none';
-        }
-      }
-    });
-    const sectionEl = document.getElementById(`cat-${cat.id}`);
-    if(sectionEl) {
-      sectionEl.style.display = (categoryHasMatches || query === "") ? 'block' : 'none';
-    }
-  });
-}
-
-function renderCatalog(){
-  const navEl = document.getElementById('catnav');
-  const mainEl = document.getElementById('catalog');
-  const menuBodyEl = document.getElementById('menuDrawerBody');
-  const circlesEl = document.getElementById('greetCircles');
-  const fullGridEl = document.getElementById('fullCategoriesGrid');
-  
-  if(!navEl || !mainEl || !menuBodyEl || !circlesEl || !fullGridEl) return;
-  
-  navEl.innerHTML = ''; mainEl.innerHTML = ''; menuBodyEl.innerHTML = ''; circlesEl.innerHTML = ''; fullGridEl.innerHTML = '';
-  
-  if(catalog.length === 0) {
-    mainEl.innerHTML = `<div style="text-align:center; padding: 40px; color: var(--text-light);">No categories found.</div>`;
-    return;
-  }
-
-  catalog.forEach((cat, cIdx)=>{
-    const circleCard = document.createElement('div');
-    circleCard.className = 'circle-card';
-    circleCard.innerHTML = `<div class="circle-icon-box">${getCategoryEmoji(cat.id)}</div><div class="circle-title">${cat.name}</div>`;
-    circleCard.onclick = () => {
-      switchView('home');
-      setTimeout(() => {
-        document.getElementById(`cat-${cat.id}`).scrollIntoView({ behavior: 'smooth' });
-      }, 100);
-    };
-    circlesEl.appendChild(circleCard);
-
-    const fullCircleCard = circleCard.cloneNode(true);
-    fullCircleCard.onclick = () => {
-      switchView('home');
-      setTimeout(() => {
-        document.getElementById(`cat-${cat.id}`).scrollIntoView({ behavior: 'smooth' });
-      }, 150);
-    };
-    fullGridEl.appendChild(fullCircleCard);
-
-    const navLink = document.createElement('a');
-    navLink.href = `#cat-${cat.id}`;
-    navLink.textContent = cat.name;
-    navLink.setAttribute('data-id', cat.id);
-    if(cIdx === 0) navLink.classList.add('active');
-    navLink.onclick = (e) => {
-      e.preventDefault();
-      document.querySelectorAll('.catnav a').forEach(a => a.classList.remove('active'));
-      navLink.classList.add('active');
-      document.getElementById(`cat-${cat.id}`).scrollIntoView({ behavior: 'smooth' });
-    };
-    navEl.appendChild(navLink);
-
-    const menuLink = document.createElement('a');
-    menuLink.href = `#cat-${cat.id}`;
-    menuLink.className = 'menu-cat-link';
-    menuLink.textContent = cat.name;
-    menuLink.onclick = (e) => { e.preventDefault(); closeMenuDrawer(); switchView('home'); document.getElementById(`cat-${cat.id}`).scrollIntoView({ behavior: 'smooth' }); };
-    menuBodyEl.appendChild(menuLink);
-
-    let cardsHtml = '';
-    cat.items.forEach(([name, unitStr, priceStr, imgUrl, isOos], itemIdx)=>{
-      const variants = parseVariants(unitStr, priceStr);
-      const defaultPrice = variants[0] ? variants[0].price : 0;
-      const fallbackImg = `https://dummyimage.com/300x300/f1f5f9/0b4624.png&text=${encodeURIComponent(name)}`;
-      let finalImgSrc = imgUrl ? imgUrl.trim() : fallbackImg;
-
-      cardsHtml += `
-        <div class="product-card ${isOos ? 'oos-card' : ''}" id="card-${cat.id}-${itemIdx}">
-          ${isOos ? `<div class="oos-badge">Out Of Stock</div>` : ''}
-          <div>
-            <div class="img-slot"><img src="${finalImgSrc}" alt="${name}" loading="lazy"></div>
-            <div class="pname">${name}</div>
-          </div>
-          <div>
-            <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('${cat.id}', ${itemIdx}, '${name.replace(/'/g, "\\'")}', this.value)">
-                ${variants.map((v, idx) => `<option value="${idx}">${v.unit}</option>`).join('')}
-              </select>
-            </div>
-            <div class="price-row"><span class="price" id="price-${cat.id}-${itemIdx}">€${defaultPrice.toFixed(2)}</span></div>
-            <div class="action-container" id="action-${cat.id}-${itemIdx}">
-              ${isOos ? `<button class="addbtn" disabled>Out of Stock</button>` : `<button class="addbtn" onclick="handleInitialAdd('${cat.id}', ${itemIdx}, '${name.replace(/'/g, "\\'")}')">Add to Cart</button>`}
-            </div>
-          </div>
-        </div>`;
-    });
-    mainEl.innerHTML += `<div class="cat-section" id="cat-${cat.id}"><div class="cat-head"><h3>${cat.name}</h3><div class="cat-line"></div></div><div class="products-grid">${cardsHtml}</div></div>`;
-  });
-
-  syncCartTotals();
-}
-
-function onVariantChange(catId, itemIdx, name, val) {
-  const cat = catalog.find(c => c.id === catId);
-  const variants = parseVariants(cat.items[itemIdx][1], cat.items[itemIdx][2]);
-  document.getElementById(`price-${catId}-${itemIdx}`).textContent = `€${variants[val].price.toFixed(2)}`;
-  syncAllCardSteppers();
-}
-
-function handleInitialAdd(catId, itemIdx, name) {
-  const cat = catalog.find(c => c.id === catId);
-  const cardEl = document.getElementById(`card-${catId}-${itemIdx}`);
-  const selIdx = cardEl.querySelector('.punit-select').value;
-  const variants = parseVariants(cat.items[itemIdx][1], cat.items[itemIdx][2]);
-  const variant = variants[selIdx];
-  const key = `${catId}||${name}||${variant.unit}`;
-  cart[key] = { name, unit: variant.unit, price: variant.price, qty: 1 };
-  
-  saveCartToLocalStorage();
-  syncCartTotals();
-}
-
-function modifyCartQty(key, delta) {
-  if (!cart[key]) return;
-  cart[key].qty += delta;
-  if (cart[key].qty <= 0) {
-    delete cart[key];
-  }
-  saveCartToLocalStorage();
-  syncCartTotals();
-}
-
-function removeItemCompletely(key) {
-  if (cart[key]) {
-    delete cart[key];
-    saveCartToLocalStorage();
-    syncCartTotals();
-  }
-}
-
-function saveCartToLocalStorage() {
-  localStorage.setItem('snk_cart', JSON.stringify(cart));
-}
-
-function loadCartFromLocalStorage() {
-  const saved = localStorage.getItem('snk_cart');
-  if (saved) {
-    try { cart = JSON.parse(saved); } catch (e) { cart = {}; }
-  }
-  syncCartTotals();
-}
-
-function syncAllCardSteppers() {
-  catalog.forEach(cat => {
-    cat.items.forEach(([name, unitStr, priceStr], itemIdx) => {
-      const cardEl = document.getElementById(`card-${cat.id}-${itemIdx}`);
-      if (!cardEl) return;
-      const actionContainer = cardEl.querySelector('.action-container');
-      if (!actionContainer) return;
-      
-      const selectEl = cardEl.querySelector('.punit-select');
-      if (!selectEl) return;
-      const selIdx = selectEl.value;
-      const variants = parseVariants(unitStr, priceStr);
-      if (!variants[selIdx]) return;
-      const currentUnit = variants[selIdx].unit;
-      
-      const key = `${cat.id}||${name}||${currentUnit}`;
-      const cartItem = cart[key];
-      
-      if (cartItem && cartItem.qty > 0) {
-        actionContainer.innerHTML = `
-          <div class="stepper">
-            <button class="minus" onclick="modifyCartQty('${key.replace(/'/g, "\\'")}', -1)">−</button>
-            <span class="qty">${cartItem.qty}</span>
-            <button class="plus" onclick="modifyCartQty('${key.replace(/'/g, "\\'")}', 1)">+</button>
-          </div>`;
-      } else {
-        const isOos = cat.items[itemIdx][4];
-        if (isOos) {
-          actionContainer.innerHTML = `<button class="addbtn" disabled>Out of Stock</button>`;
-        } else {
-          actionContainer.innerHTML = `<button class="addbtn" onclick="handleInitialAdd('${cat.id}', ${itemIdx}, '${name.replace(/'/g, "\\'")}')">Add to Cart</button>`;
-        }
-      }
-    });
-  });
-}
-
-function syncCartTotals(){
-  const items = Object.values(cart);
-  const totalCount = items.reduce((sum, i)=> sum + i.qty, 0);
-  const subTotal = items.reduce((sum, i)=> sum + (i.qty * i.price), 0);
-  const taxAmount = subTotal * 0.09;
-  
-  const areaSelect = document.getElementById('area');
-  let deliveryFee = 0;
-  if(areaSelect && areaSelect.value !== "") {
-    const locObj = locations[parseInt(areaSelect.value)];
-    if(locObj) deliveryFee = locObj.fee;
-  }
-  
-  const grandTotal = subTotal + taxAmount + deliveryFee;
-  const badgeEl = document.getElementById('bottomNavBadge');
-  
-  if(totalCount > 0){
-    badgeEl.textContent = totalCount;
-    badgeEl.style.display = 'flex';
-  } else {
-    badgeEl.style.display = 'none';
-  }
-  renderLedger();
-  syncAllCardSteppers();
-}
-
-function renderLedger(){
-  const ledgerEl = document.getElementById('ledger');
-  const entries = Object.entries(cart);
-  if(entries.length === 0){
-    ledgerEl.innerHTML = `<div class="empty-note">Your shopping basket is empty.</div>`;
-    document.getElementById('sendBtn').disabled = true;
-    return;
-  }
-  document.getElementById('sendBtn').disabled = false;
-  let subTotal = 0, html = '';
-  
-  entries.forEach(([key, item])=>{
-    subTotal += item.qty * item.price;
-    const safeKey = key.replace(/'/g, "\\'");
-    html += `
-      <div class="lrow">
-        <div class="lname">${item.name} <br><small style="color:var(--text-light); font-weight:500;">${item.unit} @ €${item.price.toFixed(2)}</small></div>
-        <div style="display: flex; align-items: center; gap: 8px; margin-right: 10px;">
-          <button onclick="modifyCartQty('${safeKey}', -1)" style="width:26px; height:26px; border:1px solid #CBD5E1; background:#E2E8F0; border-radius:6px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center;">-</button>
-          <span style="font-weight:700; min-width:20px; text-align:center; font-size:14px;">${item.qty}</span>
-          <button onclick="modifyCartQty('${safeKey}', 1)" style="width:26px; height:26px; border:1px solid var(--primary); background:var(--primary); color:#fff; border-radius:6px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center;">+</button>
-          <button onclick="removeItemCompletely('${safeKey}')" style="width:26px; height:26px; border:none; background:none; color:var(--danger); font-size:16px; cursor:pointer; margin-left:4px; display:flex; align-items:center; justify-content:center;" title="Cancel Completely">❌</button>
+    <!-- 1. Moving Announcement Banner -->
+    <div class="marquee-wrapper text-white font-bold py-2 shadow-md text-sm md:text-base">
+        <div id="customer-announcement" class="marquee-text">
+            🔥 Special Offer: Keep ordering from our shop to get amazing discounts instantly! 🔥
         </div>
-        <div class="lprice">€${(item.qty * item.price).toFixed(2)}</div>
-      </div>`;
-  });
-  
-  const areaSelect = document.getElementById('area');
-  let deliveryFee = 0;
-  let deliveryName = "Not Selected";
-  if(areaSelect && areaSelect.value !== "") {
-    const locObj = locations[parseInt(areaSelect.value)];
-    if(locObj) { deliveryFee = locObj.fee; deliveryName = locObj.name; }
-  }
+    </div>
 
-  let taxAmount = subTotal * 0.09;
-  let grandTotal = subTotal + taxAmount + deliveryFee;
-
-  html += `
-    <div class="ltotal-box">
-      <div class="subrow"><span>Subtotal</span><span>€${subTotal.toFixed(2)}</span></div>
-      <div class="subrow"><span>BTW / Tax (9%)</span><span>€${taxAmount.toFixed(2)}</span></div>
-      <div class="subrow"><span>Delivery Fee (${deliveryName})</span><span>€${deliveryFee.toFixed(2)}</span></div>
-      <div class="ltotal"><span>Total Amount</span><span>€${grandTotal.toFixed(2)}</span></div>
-    </div>`;
-    
-  ledgerEl.innerHTML = html;
-}
-
-// User Core Session Auth Engine
-function isUserLoggedIn() {
-  return localStorage.getItem('snk_user_phone') !== null;
-}
-
-function handlePhoneLogin() {
-  const phone = document.getElementById('userPhoneInput').value.trim();
-  if(!phone || phone.length < 8) {
-    alert("Please enter a valid phone number!");
-    return;
-  }
-  const randomId = Math.floor(1000 + Math.random() * 9000);
-  const membershipCode = `SNK-MEMBER-${randomId}`;
-  
-  localStorage.setItem('snk_user_phone', phone);
-  localStorage.setItem('snk_user_code', membershipCode);
-  
-  switchView('home');
-  alert(`Login Successful! 🎉\nYour Premium Customer Code: ${membershipCode}`);
-}
-
-function handleLogout() {
-  localStorage.removeItem('snk_user_phone');
-  localStorage.removeItem('snk_user_code');
-  switchView('home');
-}
-
-function renderProfilePage() {
-  const target = document.getElementById('profileContent');
-  const tabTitle = document.getElementById('profileTabText');
-  if(!target) return;
-
-  if(isUserLoggedIn()) {
-    tabTitle.textContent = "Profile";
-    const phone = localStorage.getItem('snk_user_phone');
-    const code = localStorage.getItem('snk_user_code');
-    target.innerHTML = `
-      <div class="auth-card">
-        <div style="font-size:40px; margin-bottom:10px;">👑</div>
-        <h3>Welcome Premium Member!</h3>
-        <p style="color:var(--text-light); margin-bottom:15px;">Registered Phone: <b>${phone}</b></p>
-        <div class="member-badge">Your Exclusive Code: <br><span style="color:var(--accent-dark); font-size:20px;">${code}</span></div>
-        <p style="font-size:12px; color:var(--text-light); margin-bottom:15px;">Use this code to claim special privileges during manual support or orders.</p>
-        <button class="auth-btn" style="background:var(--danger);" onclick="handleLogout()">⚠️ Logout from Account</button>
-      </div>`;
-  } else {
-    tabTitle.textContent = "Login";
-    target.innerHTML = `
-      <div class="auth-card">
-        <div style="font-size:40px; margin-bottom:10px;">🔐</div>
-        <h3>Unlock Exclusive Member Offers</h3>
-        <p style="color:var(--text-light); font-size:13px; margin-bottom:20px;">Enter your phone number to generate an instant premium membership code.</p>
-        <div class="auth-input-group">
-          <label>Mobile Phone Number</label>
-          <input type="tel" id="userPhoneInput" class="auth-input" placeholder="e.g. +31 6 85259659">
+    <!-- Main Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-40">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-black text-orange-600 tracking-wide"><i class="fa-solid fa-utensils mr-2"></i>FMB FOODS</h1>
+            <button onclick="openAdminModal()" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-600 px-3 py-1.5 rounded-lg transition font-medium">
+                <i class="fa-solid fa-lock mr-1"></i> Store Admin
+            </button>
         </div>
-        <button class="auth-btn" onclick="handlePhoneLogin()">Generate Membership Code & Login</button>
-      </div>`;
-  }
-}
+    </header>
 
-// FIX: UNIVERSAL ENGLISH CONVERTED PROMPT FOR OFFERS ACCESS
-function renderOffersPage() {
-  const target = document.getElementById('offersContent');
-  if(!target) return;
-
-  if(!isUserLoggedIn()) {
-    target.innerHTML = `
-      <div class="auth-card" style="border-color: var(--danger); background: #FFF5F5;">
-        <div style="font-size:36px; margin-bottom:10px;">🔒</div>
-        <h4 style="color:var(--danger)">Access Denied</h4>
-        <p style="font-size:13px; color:var(--text-dark); margin: 8px 0 15px;">Please log in to view exclusive member offers and discount coupons!</p>
-        <button class="auth-btn" onclick="switchView('profile')">🔐 Go to Login Page</button>
-      </div>`;
-    return;
-  }
-
-  if(offers.length === 0) {
-    target.innerHTML = `<div class="empty-note">No special offers available right now. Check back soon!</div>`;
-    return;
-  }
-
-  target.innerHTML = offers.map(of => `
-    <div class="offer-card">
-      <div class="offer-title">${of.title}</div>
-      <div class="offer-desc">${of.desc}</div>
-      ${of.code ? `<div class="offer-code">COUPON: ${of.code}</div>` : ''}
-    </div>
-  `).join('');
-}
-
-function openMenuDrawer(){ document.getElementById('menuDrawer').classList.add('open'); document.getElementById('overlay').classList.add('show'); document.body.classList.add('menu-open'); }
-function closeMenuDrawer(){ document.getElementById('menuDrawer').classList.remove('open'); document.getElementById('overlay').classList.remove('show'); document.body.classList.remove('menu-open'); }
-function closeAllDrawers(){ closeMenuDrawer(); }
-
-function sendOrder(){
-  const items = Object.values(cart);
-  const areaIdx = document.getElementById('area').value;
-  const name = document.getElementById('cname').value.trim();
-  const addr = document.getElementById('caddr').value.trim();
-  const comments = document.getElementById('ccomments').value.trim() || "None";
-  
-  if(!areaIdx) { alert("Please select your Delivery Destination location!"); return; }
-  if(!name || !addr) { alert("Please enter Name and Address."); return; }
-  
-  const locObj = locations[parseInt(areaIdx)];
-  const areaName = locObj ? locObj.name : "Unknown";
-  const deliveryFee = locObj ? locObj.fee : 0;
-  
-  let subTotal = 0;
-  let lines = items.map((it, i)=>{ subTotal += it.qty * it.price; return `${i+1}. ${it.name} (${it.unit}) x${it.qty} - €${(it.qty*it.price).toFixed(2)}`; }).join('\n');
-  
-  let taxAmount = subTotal * 0.09;
-  let grandTotal = subTotal + taxAmount + deliveryFee;
-  
-  const mCode = localStorage.getItem('snk_user_code') || "Non-Member";
-  
-  let msg = `Hello SNK Foods!\nNew Order (Member Code: ${mCode}):\n\n${lines}\n\nSubtotal: €${subTotal.toFixed(2)}\nBTW (9%): €${taxAmount.toFixed(2)}\nDelivery Charge (${areaName}): €${deliveryFee.toFixed(2)}\nTotal Amount: €${grandTotal.toFixed(2)}\n\nDelivery to: ${areaName}\nName: ${name}\nAddress: ${addr}\nNotes: ${comments}`;
-  window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`,'_blank');
-}
-
-function printCurrentBasketInvoice() {
-  const items = Object.values(cart);
-  const areaIdx = document.getElementById('area').value;
-  if(!areaIdx) { alert("Please select a location in the basket first!"); return; }
-  if(items.length === 0) { alert("Basket is empty!"); return; }
-  
-  const locObj = locations[parseInt(areaIdx)];
-  const areaName = locObj ? locObj.name : "Leiden";
-  const deliveryFee = locObj ? locObj.fee : 0;
-  
-  const name = document.getElementById('cname').value.trim() || "Valued Customer";
-  const addr = document.getElementById('caddr').value.trim() || "Not Specified";
-  const comments = document.getElementById('ccomments').value.trim() || "None";
-  
-  let subTotal = 0;
-  let tableRows = items.map((it, idx) => {
-    subTotal += it.qty * it.price;
-    return `<tr><td>${idx + 1}</td><td><b>${it.name}</b></td><td>${it.unit}</td><td>${it.qty}</td><td>€${it.price.toFixed(2)}</td><td>€${(it.qty * it.price).toFixed(2)}</td></tr>`;
-  }).join('');
-  
-  triggerA4PrintHTML(name, addr, areaName, comments, tableRows, subTotal, deliveryFee);
-}
-
-function printFromPastedWhatsAppText() {
-  const text = document.getElementById('adminPasteText').value;
-  if(!text.trim()) { alert("Please paste the WhatsApp text first!"); return; }
-  
-  let name = text.match(/Name:\s*(.*)/)?.[1] || "Valued Customer";
-  let address = text.match(/Address:\s*(.*)/)?.[1] || "Not Specified";
-  let region = text.match(/Delivery to:\s*(.*)/)?.[1] || "Not Specified";
-  let notes = text.match(/Notes:\s*(.*)/)?.[1] || "None";
-  
-  let itemsHtml = "";
-  let lines = text.split('\n');
-  let itemIdx = 1;
-  
-  lines.forEach(line => {
-    let match = line.match(/^\d+\.\s+(.*?)\s+\((.*?)\)\s+x(\d+)\s+-\s+€(.*)/);
-    if(match) {
-      let pName = match[1];
-      let pUnit = match[2];
-      let pQty = match[3];
-      let pAmount = match[4];
-      let pRate = parseFloat(pAmount) / parseInt(pQty);
-      itemsHtml += `<tr><td>${itemIdx++}</td><td><b>${pName}</b></td><td>${pUnit}</td><td>${pQty}</td><td>€${pRate.toFixed(2)}</td><td>€${pAmount}</td></tr>`;
-    }
-  });
-  
-  let subTotalStr = text.match(/Subtotal:\s*€\s*([0-9.]+)/)?.[1] || "0.00";
-  let deliveryFeeStr = text.match(/Delivery Charge.*:\s*€\s*([0-9.]+)/)?.[1] || "0.00";
-  
-  if(!itemsHtml) {
-    itemsHtml = `<tr><td colspan="6" style="white-space:pre-wrap; text-align:left; padding:15px;">${text}</td></tr>`;
-  }
-  
-  triggerA4PrintHTML(name, address, region, notes, itemsHtml, parseFloat(subTotalStr), parseFloat(deliveryFeeStr));
-}
-
-function triggerA4PrintHTML(name, addr, area, comments, tableRows, subTotal, deliveryFee) {
-  let taxAmount = subTotal * 0.09;
-  let grandTotal = subTotal + taxAmount + deliveryFee;
-  let today = new Date().toLocaleDateString('nl-NL');
-
-  document.getElementById('a4InvoicePrintout').innerHTML = `
-    <div class="inv-header">
-      <div>
-        <div class="inv-title">SNK FOODS</div>
-        <p>Premium Indian Grocery Essentials</p>
-        <p>Netherlands | +31 6 85259659</p>
-      </div>
-      <div class="inv-meta">
-        <p><b>RETAIL INVOICE CHIT</b></p>
-        <p>Date: ${today}</p>
-        <p>Payment Mode: Cash / Tikkie</p>
-      </div>
-    </div>
-    <div class="inv-bill-split">
-      <div class="inv-bill-to">
-        <h5>Delivery & Customer Details</h5>
-        <p><b>Customer Name:</b> ${name}</p>
-        <p><b>Address:</b> ${addr}</p>
-        <p><b>Region/City:</b> ${area}</p>
-        <p><b>Special Notes:</b> ${comments}</p>
-      </div>
-    </div>
-    <table class="inv-table">
-      <thead><tr><th>#</th><th>Product Description</th><th>Unit Size</th><th>Qty</th><th>Rate</th><th>Gross Amount</th></tr></thead>
-      <tbody>${tableRows}</tbody>
-    </table>
-    <div class="inv-summary">
-      <div class="inv-sum-row"><span>Subtotal Goods:</span><span>€${subTotal.toFixed(2)}</span></div>
-      <div class="inv-sum-row"><span>BTW / Tax (9%):</span><span>€${taxAmount.toFixed(2)}</span></div>
-      <div class="inv-sum-row"><span>Delivery Service Charge:</span><span>€${deliveryFee.toFixed(2)}</span></div>
-      <div class="inv-total-row"><span>Total Payable:</span><span>€${grandTotal.toFixed(2)}</span></div>
-    </div>
-    <div class="inv-footer"><p>Thank you for shopping with SNK Foods!</p></div>
-  `;
-  window.print();
-}
-
-function adminLogin(){
-  const pass = prompt("Enter admin passcode:");
-  if(pass === ADMIN_PASSCODE){ document.getElementById('adminOverlay').classList.add('show'); loadProductsTab(); }
-  else if(pass !== null) { alert("Invalid Passcode."); }
-}
-function closeAdmin(){ document.getElementById('adminOverlay').classList.remove('show'); document.getElementById('exportBox').style.display='none'; }
-
-function loadProductsTab(){
-  const body = document.getElementById('adminBody');
-  
-  let html = `
-    <div class="print-box-tool">
-      <h4 style="color:var(--primary);">🖨️ WhatsApp Order To A4 Invoice Parser</h4>
-      <textarea id="adminPasteText" placeholder="Paste the complete WhatsApp order text here..."></textarea>
-      <div style="display:flex; gap:10px;">
-        <button onclick="printFromPastedWhatsAppText()" style="background:#007BFF; color:#fff; border:none; padding:8px 16px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:12px;">🖨️ Parse & Print WhatsApp Invoice</button>
-        <button onclick="printCurrentBasketInvoice()" style="background:var(--primary); color:#fff; border:none; padding:8px 16px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:12px;">🛒 Print Current Active Basket</button>
-      </div>
-    </div>
-
-    <div class="admin-cat" style="border: 2px solid #25D366;">
-      <div class="admin-cat-header">
-        <span style="font-size: 15px; font-weight: 800; color: var(--primary);">🎁 Manage Exclusive Customer Offers</span>
-      </div>
-      <div style="display: flex; flex-direction:column; gap: 10px; margin-top:10px;" id="adminOffersList">
-        ${offers.map((of, oi) => `
-          <div style="background:var(--bg-light); border:1px solid #CBD5E1; padding:10px; border-radius:8px; display:flex; flex-direction:column; gap:6px;">
-            <input style="font-weight:700;" value="${of.title}" onchange="offers[${oi}].title=this.value" placeholder="Offer Title">
-            <input value="${of.desc}" onchange="offers[${oi}].desc=this.value" placeholder="Offer Description">
-            <div style="display:flex; gap:10px; align-items:center;">
-              <input style="font-family:monospace; font-weight:700;" value="${of.code || ''}" onchange="offers[${oi}].code=this.value" placeholder="Coupon Code (Optional)">
-              <button onclick="offers.splice(${oi},1); loadProductsTab();" style="background:var(--danger); color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-weight:bold;">Remove</button>
+    <!-- Main Content -->
+    <main class="max-w-6xl mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+        
+        <!-- Menu List (FMB Food Page) -->
+        <div class="md:col-span-2 space-y-6">
+            <h2 class="text-xl font-bold border-b pb-2 border-orange-200">🍔 Today's Menu</h2>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <!-- Item 1 -->
+                <div class="bg-white p-4 rounded-xl shadow-xs border border-gray-100 flex justify-between items-center">
+                    <div>
+                        <h3 class="font-bold text-lg">Special Chicken Biryani</h3>
+                        <p class="text-orange-600 font-bold mt-1">€12.00</p>
+                    </div>
+                    <button onclick="addToBasket('Special Chicken Biryani', 12.00)" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg font-bold text-sm transition shadow-xs">Add</button>
+                </div>
+                <!-- Item 2 -->
+                <div class="bg-white p-4 rounded-xl shadow-xs border border-gray-100 flex justify-between items-center">
+                    <div>
+                        <h3 class="font-bold text-lg">Premium Veg Burger Combo</h3>
+                        <p class="text-orange-600 font-bold mt-1">€8.50</p>
+                    </div>
+                    <button onclick="addToBasket('Premium Veg Burger Combo', 8.50)" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg font-bold text-sm transition shadow-xs">Add</button>
+                </div>
             </div>
-          </div>
-        `).join('')}
-      </div>
-      <div class="admin-btn-row" style="margin-top:10px;">
-        <button onclick="offers.push({title:'New Offer Title', desc:'Offer details here...', code:'CODE10'}); loadProductsTab();" style="background:#25D366; color:white;">+ Add New Special Offer</button>
-      </div>
+
+            <!-- Offers Display Column -->
+            <div class="bg-orange-50 p-5 rounded-2xl border border-orange-100">
+                <h3 class="font-bold text-orange-800 flex items-center mb-2"><i class="fa-solid fa-gift mr-2"></i> Your Exclusive Offers</h3>
+                <p class="text-sm text-gray-600 mb-3">If you have completed 3 orders, use the code below to get your discount!</p>
+                <div class="bg-white p-3 rounded-xl border border-dashed border-orange-300 flex justify-between items-center">
+                    <div>
+                        <span class="text-xs text-gray-400 block font-medium">PROMO CODE</span>
+                        <span class="font-mono font-bold text-lg text-gray-700 tracking-wider">LOYAL4</span>
+                    </div>
+                    <button onclick="copyPromo()" class="text-xs bg-orange-100 text-orange-700 font-bold px-3 py-2 rounded-lg hover:bg-orange-200 transition">Copy Code</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Basket & Billing Column -->
+        <div class="bg-white p-6 rounded-2xl shadow-xs border border-gray-100 h-fit space-y-6">
+            <h2 class="text-xl font-bold flex items-center"><i class="fa-solid fa-basket-shopping mr-2 text-orange-500"></i> Your Basket</h2>
+            
+            <div id="basket-items" class="text-sm text-gray-500 space-y-2">
+                Your basket is empty...
+            </div>
+
+            <hr class="border-gray-100">
+
+            <!-- Promo Code Column -->
+            <div>
+                <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Promo / Coupon Code</label>
+                <div class="flex gap-2">
+                    <input type="text" id="promo-input" placeholder="Example: LOYAL4" class="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-hidden focus:border-orange-500 font-mono uppercase">
+                    <button onclick="applyDiscount()" class="bg-gray-800 hover:bg-gray-900 text-white text-sm font-bold px-4 py-2 rounded-xl transition">Apply</button>
+                </div>
+                <p id="promo-msg" class="text-xs mt-1.5 font-medium"></p>
+            </div>
+
+            <div class="space-y-2 text-sm pt-2">
+                <div class="flex justify-between"><span>Subtotal:</span><span id="subtotal-display">€0.00</span></div>
+                <div class="flex justify-between text-green-600 font-medium"><span>Discount:</span><span id="discount-display">-€0.00</span></div>
+                <hr class="border-gray-100 my-1">
+                <div class="flex justify-between text-lg font-black text-gray-900"><span>Total Bill:</span><span id="total-display">€0.00</span></div>
+            </div>
+
+            <button onclick="sendToWhatsApp()" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-xl shadow-xs transition flex items-center justify-center gap-2">
+                <i class="fa-brands fa-whatsapp text-xl"></i> Order via WhatsApp
+            </button>
+        </div>
+    </main>
+
+    <!-- 2. Store Admin Portal (Admin Modal) -->
+    <div id="admin-modal" class="fixed inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-center hidden z-50 p-4">
+        <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-xl space-y-6 relative animate-in fade-in zoom-in-95 duration-200">
+            
+            <button onclick="closeAdminModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl"><i class="fa-solid fa-xmark"></i></button>
+
+            <!-- Passcode Verification Section -->
+            <div id="passcode-section" class="space-y-4">
+                <div class="text-center">
+                    <div class="w-12 h-12 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center mx-auto text-xl mb-2"><i class="fa-solid fa-shield-halved"></i></div>
+                    <h3 class="text-lg font-bold">Admin Verification</h3>
+                    <p class="text-xs text-gray-500">Enter admin passcode to continue</p>
+                </div>
+                <input type="password" id="admin-passcode" placeholder="Enter Passcode" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-center font-bold tracking-widest focus:outline-hidden focus:border-orange-500">
+                <button onclick="verifyPasscode()" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-2.5 rounded-xl transition">Login</button>
+            </div>
+
+            <!-- Admin Settings Panel -->
+            <div id="settings-section" class="space-y-5 hidden">
+                <div class="border-b pb-2">
+                    <h3 class="text-lg font-black text-blue-600"><i class="fa-solid fa-sliders mr-2"></i>⚙️ Admin Control Panel</h3>
+                    <p class="text-xs text-gray-500">Make changes and update the live site</p>
+                </div>
+
+                <!-- Setting 1: Milestone -->
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 mb-1">1. Loyalty Milestone (Order Count)</label>
+                    <input type="number" id="input-milestone" value="3" class="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-blue-500 focus:outline-hidden font-bold">
+                </div>
+
+                <!-- Setting 2: Discount Percentage -->
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 mb-1">2. Discount Percentage (%)</label>
+                    <input type="number" id="input-discount" value="10" class="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-blue-500 focus:outline-hidden font-bold">
+                </div>
+
+                <!-- Setting 3: Running Announcement Text Control -->
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 mb-1">3. 📢 Edit Running Announcement Text</label>
+                    <textarea id="input-announcement" rows="2" class="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-blue-500 focus:outline-hidden font-medium" placeholder="The offer typed here will run on the main page..."></textarea>
+                </div>
+
+                <div class="pt-2">
+                    <button onclick="saveAdminSettings()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition shadow-md flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-floppy-disk"></i> Save & Update Live Site
+                    </button>
+                </div>
+            </div>
+
+        </div>
     </div>
 
-    <div class="admin-cat" style="border: 2px solid var(--accent);">
-      <div class="admin-cat-header"><span style="font-size: 14px; font-weight: 700; color: var(--primary);">📍 Manage Delivery Locations & Fees</span></div>
-      <div style="display: flex; flex-direction:column; gap: 8px; margin-top: 10px;">
-        ${locations.map((loc, li) => `
-          <div style="display: flex; align-items: center; background: var(--bg-light); padding: 8px; border-radius: 6px; border: 1px solid #CBD5E1; gap: 10px; justify-content:space-between;">
-            <input style="font-weight:600; width:50%;" value="${loc.name}" onchange="locations[${li}].name=this.value">
-            <div style="display:flex; align-items:center; gap:4px;"><span>€</span><input style="width:70px; font-weight:700;" type="number" step="0.01" value="${loc.fee}" onchange="locations[${li}].fee=parseFloat(this.value)||0"></div>
-            <button onclick="if(confirm('Delete ${loc.name}?')){locations.splice(${li},1); loadProductsTab();}" style="background: var(--danger); color: white; border: none; padding:4px 8px; border-radius:4px; cursor: pointer;">×</button>
-          </div>
-        `).join('')}
-      </div>
-      <div class="admin-btn-row" style="margin-top: 12px;"><button onclick="addLocationPrompt()" style="background: var(--accent); color: var(--primary);">+ Add New Location</button></div>
-    </div>
-  `;
-  
-  html += catalog.map((cat, ci)=>`
-    <div class="admin-cat">
-      <div class="admin-cat-header">
-        <input value="${cat.name}" onchange="catalog[${ci}].name=this.value; catalog[${ci}].id=this.value.toLowerCase().replace(/[^a-z0-9]/g,'')" placeholder="Category Name">
-        <button onclick="if(confirm('Delete entire category ${cat.name}?')){catalog.splice(${ci},1); loadProductsTab()}" style="background:var(--danger); color:#fff; border:none; padding:4px 10px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:700;">Delete Category</button>
-      </div>
-      <div style="margin-top:10px;">
-        ${cat.items.map((item, ii)=>`
-          <div class="admin-item-row">
-            <input value="${item[0]}" onchange="catalog[${ci}].items[${ii}][0]=this.value" placeholder="Name">
-            <input value="${item[1]}" onchange="catalog[${ci}].items[${ii}][1]=this.value" placeholder="Variants">
-            <input value="${item[2]}" onchange="catalog[${ci}].items[${ii}][2]=this.value" placeholder="Prices">
-            <input value="${item[3] || ''}" onchange="catalog[${ci}].items[${ii}][3]=this.value" placeholder="Image URL">
-            <label><input type="checkbox" ${item[4] ? 'checked' : ''} onchange="catalog[${ci}].items[${ii}][4]=this.checked"> OOS</label>
-            <button onclick="catalog[${ci}].items.splice(${ii},1); loadProductsTab()">×</button>
-          </div>
-        `).join('')}
-      </div>
-      <div class="admin-btn-row"><button onclick="catalog[${ci}].items.push(['New Item','1kg','1.99','',false]); loadProductsTab()">+ Add Product</button></div>
-    </div>
-  `).join('');
+    <!-- JavaScript Logic -->
+    <script>
+        // Global Admin Settings (Default values in English)
+        let appSettings = {
+            milestone: 3,
+            discountPercent: 10,
+            announcementText: "🔥 Special Offer: Keep ordering from our shop to get amazing discounts instantly! Have you completed more than 3 orders? Then you get an automatic 10% discount! 🔥"
+        };
 
-  html += `<div style="text-align:center; margin: 25px 0;"><button onclick="addNewCategoryPrompt()" style="background:#007BFF; color:#fff; border:none; padding:12px 24px; border-radius:8px; font-weight:700; cursor:pointer; font-size:14px;">➕ Add New Category</button></div>`;
-  body.innerHTML = html;
-}
+        let basket = [];
+        let appliedDiscountAmount = 0;
 
-function addLocationPrompt() {
-  const name = prompt("Enter New Delivery Location Name:");
-  if(name && name.trim() !== "") {
-    const feeStr = prompt("Enter Delivery Fee:", "0.00");
-    locations.push({ name: name.trim(), fee: parseFloat(feeStr) || 0 });
-    loadProductsTab();
-  }
-}
+        // Load data from LocalStorage
+        window.onload = function() {
+            const savedData = localStorage.getItem('fmb_store_settings');
+            if(savedData) {
+                appSettings = JSON.parse(savedData);
+            }
+            // Update UI elements with loaded settings
+            document.getElementById('customer-announcement').innerText = appSettings.announcementText;
+            document.getElementById('input-announcement').value = appSettings.announcementText;
+            document.getElementById('input-milestone').value = appSettings.milestone;
+            document.getElementById('input-discount').value = appSettings.discountPercent;
+        };
 
-function addNewCategoryPrompt() {
-  const name = prompt("Enter New Category Name:");
-  if(name && name.trim() !== "") {
-    const id = name.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
-    catalog.push({ id: id, name: name.trim(), items: [] });
-    loadProductsTab();
-  }
-}
+        // Add item to basket
+        function addToBasket(name, price) {
+            basket.push({name, price});
+            updateBasketUI();
+        }
 
-function saveCatalogAndExport(){
-  closeAdmin();
-  renderCatalog();
-  renderLocations();
-  
-  const databaseString = JSON.stringify({ categories: catalog, locations: locations, offers: offers });
-  const scriptRegex = /const storeDatabase = [\s\S]*?};/;
-  
-  let entirePageCode = document.documentElement.outerHTML;
-  entirePageCode = entirePageCode.replace(scriptRegex, `const storeDatabase = ${databaseString};`);
-  
-  const finalCleanCode = "<!DOCTYPE html>\n" + entirePageCode;
-  
-  document.getElementById('exportTextarea').value = finalCleanCode;
-  document.getElementById('adminOverlay').classList.add('show');
-  document.getElementById('exportBox').style.display = 'flex';
-  document.getElementById('adminStatus').textContent = "Clean Catalog Code Generated! Copy and update in GitHub.";
-}
+        // Update Basket UI
+        function updateBasketUI() {
+            const container = document.getElementById('basket-items');
+            if(basket.length === 0) {
+                container.innerHTML = "Your basket is empty...";
+                calculateTotals(0);
+                return;
+            }
 
-function copyExportCode() {
-  const textarea = document.getElementById('exportTextarea');
-  textarea.select();
-  document.execCommand('copy');
-  alert("Done! Data copied successfully! 📋\n\nPaste this new code inside your GitHub index.html and Save Changes.");
-}
+            container.innerHTML = basket.map(item => `
+                <div class="flex justify-between items-center bg-gray-50 p-2 rounded-lg">
+                    <span>${item.name}</span>
+                    <span class="font-bold">€${item.price.toFixed(2)}</span>
+                </div>
+            `).join('');
 
-// System Bootstrapper Init
-renderCatalog();
-renderLocations();
-loadCartFromLocalStorage();
-renderProfilePage(); 
-</script>
+            let subtotal = basket.reduce((sum, item) => sum + item.price, 0);
+            calculateTotals(subtotal);
+        }
+
+        // Calculate Totals
+        function calculateTotals(subtotal) {
+            document.getElementById('subtotal-display').innerText = `€${subtotal.toFixed(2)}`;
+            document.getElementById('discount-display').innerText = `-€${appliedDiscountAmount.toFixed(2)}`;
+            let finalTotal = Math.max(0, subtotal - appliedDiscountAmount);
+            document.getElementById('total-display').innerText = `€${finalTotal.toFixed(2)}`;
+        }
+
+        // Apply Discount Logic
+        function applyDiscount() {
+            const code = document.getElementById('promo-input').value.trim().toUpperCase();
+            const msg = document.getElementById('promo-msg');
+            let subtotal = basket.reduce((sum, item) => sum + item.price, 0);
+
+            if(subtotal === 0) {
+                msg.className = "text-xs mt-1.5 font-medium text-red-500";
+                msg.innerText = "Please add items to your basket before using the code!";
+                return;
+            }
+
+            if(code === "LOYAL4") {
+                appliedDiscountAmount = (subtotal * appSettings.discountPercent) / 100;
+                msg.className = "text-xs mt-1.5 font-medium text-green-600";
+                msg.innerText = `Success! ${appSettings.discountPercent}% discount applied automatically.`;
+            } else {
+                appliedDiscountAmount = 0;
+                msg.className = "text-xs mt-1.5 font-medium text-red-500";
+                msg.innerText = "Invalid code! Please try again.";
+            }
+            calculateTotals(subtotal);
+        }
+
+        // Send Order details to WhatsApp
+        function sendToWhatsApp() {
+            if(basket.length === 0) {
+                alert("Please select items before placing an order!");
+                return;
+            }
+            let subtotal = basket.reduce((sum, item) => sum + item.price, 0);
+            let finalTotal = Math.max(0, subtotal - appliedDiscountAmount);
+
+            let itemsText = basket.map(i => `- ${i.name} (€${i.price.toFixed(2)})`).join('%0A');
+            
+            let message = `*New Food Order (FMB FOODS)*%0A%0A`;
+            message += `*Item Details:*%0A${itemsText}%0A%0A`;
+            message += `Subtotal: €${subtotal.toFixed(2)}%0A`;
+            if(appliedDiscountAmount > 0) {
+                message += `Promo Applied: LOYAL4 (-€${appliedDiscountAmount.toFixed(2)})%0A`;
+            }
+            message += `*Total Amount To Pay: €${finalTotal.toFixed(2)}*%0A%0A`;
+            message += `Thank you! Please process the order.`;
+
+            window.open(`https://wa.me/31600000000?text=${message}`, '_blank');
+        }
+
+        // Admin Modal Functions
+        function openAdminModal() { document.getElementById('admin-modal').classList.remove('hidden'); }
+        function closeAdminModal() { 
+            document.getElementById('admin-modal').classList.add('hidden'); 
+            document.getElementById('passcode-section').classList.remove('hidden');
+            document.getElementById('settings-section').classList.add('hidden');
+            document.getElementById('admin-passcode').value = "";
+        }
+
+        function verifyPasscode() {
+            const pin = document.getElementById('admin-passcode').value;
+            if(pin === "snk2026") {
+                document.getElementById('passcode-section').classList.add('hidden');
+                document.getElementById('settings-section').classList.remove('hidden');
+            } else {
+                alert("Invalid passcode! Please enter the correct code.");
+            }
+        }
+
+        // Save Admin Settings
+        function saveAdminSettings() {
+            appSettings.milestone = parseInt(document.getElementById('input-milestone').value) || 3;
+            appSettings.discountPercent = parseInt(document.getElementById('input-discount').value) || 10;
+            appSettings.announcementText = document.getElementById('input-announcement').value;
+
+            localStorage.setItem('fmb_store_settings', JSON.stringify(appSettings));
+
+            // Update running text instantly
+            document.getElementById('customer-announcement').innerText = appSettings.announcementText;
+
+            alert("All settings and running announcement text saved successfully! 👍");
+            closeAdminModal();
+            updateBasketUI();
+        }
+
+        function copyPromo() {
+            navigator.clipboard.writeText("LOYAL4");
+            alert("Code Copied: LOYAL4");
+        }
+    </script>
 </body>
 </html>
