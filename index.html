@@ -6,6 +6,10 @@
 <title>SNK Foods — Premium Indian Grocery</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=400;500;600;700;800&family=Playfair+Display:wght=600;700;900&display=swap" rel="stylesheet">
+
+<!-- ========================================== -->
+<!-- 1. FRONT-END : CSS DESIGN STYLES           -->
+<!-- ========================================== -->
 <style>
   :root {
     --primary: #0B4624;
@@ -20,7 +24,6 @@
   
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
   body { background: var(--bg-light); color: var(--text-dark); padding-bottom: 90px; -webkit-tap-highlight-color: transparent; }
-  
   body.menu-open { overflow: hidden; height: 100vh; position: fixed; width: 100%; }
 
   header { position: sticky; top: 0; z-index: 1001; background: var(--primary); color: #fff; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
@@ -161,7 +164,7 @@
   /* Admin Control Overlays */
   .admin-overlay { position: fixed; inset: 0; background: #fff; z-index: 3000; display: none; flex-direction: column; }
   .admin-overlay.show { display: flex; }
-  .admin-head { background: var(--primary); color: #fff; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; }
+  .admin-head { background: var(--primary); color: #fff; padding: 166px 20px; display: flex; justify-content: space-between; align-items: center; }
   .admin-head h3 { color: #fff; font-family: 'Playfair Display', serif; }
   .admin-head button { background: none; border: none; color: #fff; font-size: 28px; cursor: pointer; }
   
@@ -208,6 +211,10 @@
 </head>
 <body>
 
+<!-- ========================================== -->
+<!-- 2. FRONT-END : HTML LAYOUT STRUCTURE       -->
+<!-- ========================================== -->
+
 <header>
   <div class="header-left">
     <button class="menu-toggle" onclick="openMenuDrawer()">☰</button>
@@ -219,7 +226,7 @@
   <a class="wa-quick" href="https://wa.me/31685259659" target="_blank">📲 WhatsApp</a>
 </header>
 
-<!-- App Like Sticky Bottom Navbar -->
+<!-- App-Like Sticky Bottom Navigation Bar -->
 <div class="bottom-nav">
   <button class="nav-item active" id="btn-view-home" onclick="switchView('home')">
     <span class="icon">🏠</span><span>Home</span>
@@ -325,7 +332,7 @@
   <button class="admin-link" onclick="adminLogin()">Store Admin Portal</button>
 </footer>
 
-<!-- ADMIN INTERFACE -->
+<!-- ADMIN CONTROL PORTS -->
 <div class="admin-overlay" id="adminOverlay">
   <div class="admin-head"><h3>SNK Operations Control</h3><button onclick="closeAdmin()">×</button></div>
   <div class="admin-body" id="adminBody"></div>
@@ -340,11 +347,15 @@
   </div>
 </div>
 
+
+<!-- ========================================== -->
+<!-- 3. BACK-END LOGIC : JAVASCRIPT CONTROLLER  -->
+<!-- ========================================== -->
 <script>
 const WA_NUMBER = "31685259659";
 const ADMIN_PASSCODE = "snk2026";
 
-// Extended database format to support exclusive offers
+// Live Core Database Setup
 const storeDatabase = {"categories":[{"id":"vegetables","name":"Fresh Vegetables","items":[["Onion","1kg, 5kg","1.49, 5.99","https://i.postimg.cc/yx2TwCSX/IMG-1455.png",false],["Tomato","1kg","1.99","",false],["Potato","1kg","1.29","",false]]},{"id":"fruits","name":"Fresh Fruits","items":[["Banana","1kg","1.99","",false],["Mango","1box","8.99","",false]]},{"id":"rice","name":"Rice & Atta Flour","items":[["Idli Rice","5kg","9.99","",false],["Chakki Atta","5kg","7.49","",false]]},{"id":"dals","name":"Dals & Lentils","items":[["Toor Dal","1kg","2.99","",false],["Urad Dal","1kg","3.49","",false]]},{"id":"spices","name":"Spices & Herbs","items":[["Cumin Seeds","200g","1.89","",false],["Mustard Seeds","200g","1.19","",false]]},{"id":"masalas","name":"Masala Powders","items":[["Sambar Powder","200g","2.49","",false],["Chilli Powder","200g","1.99","",false]]},{"id":"oils","name":"Oils & Ghee","items":[["Ghee","500ml","7.99","",false],["Gingelly Oil","1L","5.49","",false]]},{"id":"dairy","name":"Dairy & Paneer","items":[["Fresh Paneer","200g","2.49","",false],["Yogurt","1kg","1.99","",false]]},{"id":"snacks","name":"Snacks & Sweets","items":[["Murukku","200g","1.79","",false],["Mixture","200g","1.79","",false]]},{"id":"beverages","name":"Beverages & Tea","items":[["Filter Coffee Powder","250g","3.49","",false],["Assam Tea","250g","2.99","",false]]},{"id":"pickles","name":"Pickles & Papads","items":[["Mango Pickle","300g","2.29","",false],["Appalam Papad","1packet","0.99","",false]]},{"id":"instant","name":"Instant Mixes","items":[["Idli Dosa Batter","1kg","2.99","",false],["Gulab Jamun Mix","200g","1.49","",false]]},{"id":"frozen","name":"Frozen Foods","items":[["Parotta","5pcs","2.49","",false],["Frozen Okra","400g","1.99","",false]]},{"id":"pooja","name":"Pooja Essentials","items":[["Camphor","1pack","1.29","",false],["Incense Sticks","1pack","1.49","",false]]}],"locations":[{"name":"Den Haag","fee":2.50},{"name":"Rotterdam","fee":5.00},{"name":"Delft","fee":3.00},{"name":"Leiden","fee":4.00}],"offers":[{"title":"Welcome Offer","desc":"Get a free spice pack on your first order above €25!","code":"SNKFREE"},{"title":"Weekend Delivery Deal","desc":"10% discount on delivery charges for Den Haag residents this weekend.","code":"DH10"}]};
 
 let catalog = storeDatabase.categories;
@@ -352,7 +363,7 @@ let locations = storeDatabase.locations || [];
 let offers = storeDatabase.offers || [];
 let cart = {};
 
-// SPA View Switching Logic
+// SPA Engine Navigation Handler
 function switchView(viewId) {
   document.querySelectorAll('.app-view').forEach(view => view.classList.remove('active-view'));
   document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
@@ -435,7 +446,6 @@ function renderCatalog(){
   }
 
   catalog.forEach((cat, cIdx)=>{
-    // Setup Top Navigation Circle Cards
     const circleCard = document.createElement('div');
     circleCard.className = 'circle-card';
     circleCard.innerHTML = `<div class="circle-icon-box">${getCategoryEmoji(cat.id)}</div><div class="circle-title">${cat.name}</div>`;
@@ -447,7 +457,6 @@ function renderCatalog(){
     };
     circlesEl.appendChild(circleCard);
 
-    // Setup Dedicated Categories Tab Grid Cards
     const fullCircleCard = circleCard.cloneNode(true);
     fullCircleCard.onclick = () => {
       switchView('home');
@@ -672,7 +681,7 @@ function renderLedger(){
   ledgerEl.innerHTML = html;
 }
 
-// Phone Login Simulation Engine
+// User Core Session Auth Engine
 function isUserLoggedIn() {
   return localStorage.getItem('snk_user_phone') !== null;
 }
@@ -680,10 +689,9 @@ function isUserLoggedIn() {
 function handlePhoneLogin() {
   const phone = document.getElementById('userPhoneInput').value.trim();
   if(!phone || phone.length < 8) {
-    alert("Please enter a valid phone number! / தவறான மொபைல் எண்.");
+    alert("Please enter a valid phone number!");
     return;
   }
-  // Generate a premium unique customer code
   const randomId = Math.floor(1000 + Math.random() * 9000);
   const membershipCode = `SNK-MEMBER-${randomId}`;
   
@@ -734,6 +742,7 @@ function renderProfilePage() {
   }
 }
 
+// FIX: UNIVERSAL ENGLISH CONVERTED PROMPT FOR OFFERS ACCESS
 function renderOffersPage() {
   const target = document.getElementById('offersContent');
   if(!target) return;
@@ -743,7 +752,7 @@ function renderOffersPage() {
       <div class="auth-card" style="border-color: var(--danger); background: #FFF5F5;">
         <div style="font-size:36px; margin-bottom:10px;">🔒</div>
         <h4 style="color:var(--danger)">Access Denied</h4>
-        <p style="font-size:13px; color:var(--text-dark); margin: 8px 0 15px;">சலுகைகள் மற்றும் தள்ளுபடி கூப்பன்களைப் பார்க்க தயவுசெய்து லாகின் செய்யவும்!</p>
+        <p style="font-size:13px; color:var(--text-dark); margin: 8px 0 15px;">Please log in to view exclusive member offers and discount coupons!</p>
         <button class="auth-btn" onclick="switchView('profile')">🔐 Go to Login Page</button>
       </div>`;
     return;
@@ -913,7 +922,6 @@ function loadProductsTab(){
       </div>
     </div>
 
-    <!-- NEW ADMIN SECTION FOR OFFERS -->
     <div class="admin-cat" style="border: 2px solid #25D366;">
       <div class="admin-cat-header">
         <span style="font-size: 15px; font-weight: 800; color: var(--primary);">🎁 Manage Exclusive Customer Offers</span>
@@ -1020,7 +1028,7 @@ function copyExportCode() {
   alert("Done! Data copied successfully! 📋\n\nPaste this new code inside your GitHub index.html and Save Changes.");
 }
 
-// Global Init
+// System Bootstrapper Init
 renderCatalog();
 renderLocations();
 loadCartFromLocalStorage();
