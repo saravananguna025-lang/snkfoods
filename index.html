@@ -23,6 +23,29 @@
   body { background: var(--bg-light); color: var(--text-dark); padding-bottom: 90px; -webkit-tap-highlight-color: transparent; }
   body.menu-open { overflow: hidden; height: 100vh; position: fixed; width: 100%; }
 
+  /* Smooth Moving Display Style - Added by Request */
+  .marquee-wrapper {
+    background: linear-gradient(90deg, var(--primary), #115e32);
+    overflow: hidden;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid var(--accent);
+    padding: 8px 0;
+  }
+  .marquee-text {
+    display: inline-block;
+    padding-left: 100%;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    animation: marquee 25s linear infinite;
+  }
+  @keyframes marquee {
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(-100%, 0, 0); }
+  }
+
   header { position: sticky; top: 0; z-index: 1001; background: var(--primary); color: #fff; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
   .header-left { display: flex; align-items: center; gap: 12px; }
   .menu-toggle { background: none; border: none; color: #fff; font-size: 26px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; }
@@ -208,6 +231,12 @@
 </head>
 <body>
 
+<div class="marquee-wrapper" id="marqueeBanner">
+  <div id="customer-announcement" class="marquee-text">
+    🔥 Special Offer: Keep ordering from our shop to get amazing discounts instantly! 🔥
+  </div>
+</div>
+
 <header>
   <div class="header-left">
     <button class="menu-toggle" onclick="openMenuDrawer()">☰</button>
@@ -347,13 +376,12 @@ const WA_NUMBER = "31685259659";
 const ADMIN_PASSCODE = "snk2026";
 
 // Core System Database Structure
-const storeDatabase = {"categories":[{"id":"vegetables","name":"Fresh Vegetables","items":[["Onion","1kg, 5kg","1.49, 5.99","https://i.postimg.cc/yx2TwCSX/IMG-1455.png",false],["Tomato","1kg","1.99","",false],["Potato","1kg","1.29","",false]]},{"id":"fruits","name":"Fresh Fruits","items":[["Banana","1kg","1.99","",false],["Mango","1box","8.99","",false]]},{"id":"rice","name":"Rice & Atta Flour","items":[["Idli Rice","5kg","9.99","",false],["Chakki Atta","5kg","7.49","",false]]},{"id":"dals","name":"Dals & Lentils","items":[["Toor Dal","1kg","2.99","",false],["Urad Dal","1kg","3.49","",false]]},{"id":"spices","name":"Spices & Herbs","items":[["Cumin Seeds","200g","1.89","",false],["Mustard Seeds","200g","1.19","",false]]},{"id":"masalas","name":"Masala Powders","items":[["Sambar Powder","200g","2.49","",false],["Chilli Powder","200g","1.99","",false]]},{"id":"oils","name":"Oils & Ghee","items":[["Ghee","500ml","7.99","",false],["Gingelly Oil","1L","5.49","",false]]},{"id":"dairy","name":"Dairy & Paneer","items":[["Fresh Paneer","200g","2.49","",false],["Yogurt","1kg","1.99","",false]]},{"id":"snacks","name":"Snacks & Sweets","items":[["Murukku","200g","1.79","",false],["Mixture","200g","1.79","",false]]},{"id":"beverages","name":"Beverages & Tea","items":[["Filter Coffee Powder","250g","3.49","",false],["Assam Tea","250g","2.99","",false]]},{"id":"pickles","name":"Pickles & Papads","items":[["Mango Pickle","300g","2.29","",false],["Appalam Papad","1packet","0.99","",false]]},{"id":"instant","name":"Instant Mixes","items":[["Idli Dosa Batter","1kg","2.99","",false],["Gulab Jamun Mix","200g","1.49","",false]]},{"id":"frozen","name":"Frozen Foods","items":[["Parotta","5pcs","2.49","",false],["Frozen Okra","400g","1.99","",false]]},{"id":"pooja","name":"Pooja Essentials","items":[["Camphor","1pack","1.29","",false],["Incense Sticks","1pack","1.49","",false]]}],"locations":[{"name":"Den Haag","fee":2.5},{"name":"Rotterdam","fee":5},{"name":"Delft","fee":3},{"name":"Leiden","fee":4}],"offers":[{"title":"Welcome Offer","desc":"Get a free spice pack on your first order above €25!","code":"SNKFREE"},{"title":"Weekend Delivery Deal","desc":"10% discount on delivery charges for Den Haag residents this weekend.","code":"DH10"}],"settings":{"requiredOrders":3,"loyaltyDiscount":10}};
+const storeDatabase = {"categories":[{"id":"vegetables","name":"Fresh Vegetables","items":[["Onion","1kg, 5kg","1.49, 5.99","https://i.postimg.cc/yx2TwCSX/IMG-1455.png",false],["Tomato","1kg","1.99","",false],["Potato","1kg","1.29","",false]]},{"id":"fruits","name":"Fresh Fruits","items":[["Banana","1kg","1.99","",false],["Mango","1box","8.99","",false]]},{"id":"rice","name":"Rice & Atta Flour","items":[["Idli Rice","5kg","9.99","",false],["Chakki Atta","5kg","7.49","",false]]},{"id":"dals","name":"Dals & Lentils","items":[["Toor Dal","1kg","2.99","",false],["Urad Dal","1kg","3.49","",false]]},{"id":"spices","name":"Spices & Herbs","items":[["Cumin Seeds","200g","1.89","",false],["Mustard Seeds","200g","1.19","",false]]},{"id":"masalas","name":"Masala Powders","items":[["Sambar Powder","200g","2.49","",false],["Chilli Powder","200g","1.99","",false]]},{"id":"oils","name":"Oils & Ghee","items":[["Ghee","500ml","7.99","",false],["Gingelly Oil","1L","5.49","",false]]},{"id":"dairy","name":"Dairy & Paneer","items":[["Fresh Paneer","200g","2.49","",false],["Yogurt","1kg","1.99","",false]]},{"id":"snacks","name":"Snacks & Sweets","items":[["Murukku","200g","1.79","",false],["Mixture","200g","1.79","",false]]},{"id":"beverages","name":"Beverages & Tea","items":[["Filter Coffee Powder","250g","3.49","",false],["Assam Tea","250g","2.99","",false]]},{"id":"pickles","name":"Pickles & Papads","items":[["Mango Pickle","300g","2.29","",false],["Appalam Papad","1packet","0.99","",false]]},{"id":"instant","name":"Instant Mixes","items":[["Idli Dosa Batter","1kg","2.99","",false],["Gulab Jamun Mix","200g","1.49","",false]]},{"id":"frozen","name":"Frozen Foods","items":[["Parotta","5pcs","2.49","",false],["Frozen Okra","400g","1.99","",false]]},{"id":"pooja","name":"Pooja Essentials","items":[["Camphor","1pack","1.29","",false],["Incense Sticks","1pack","1.49","",false]]}],"locations":[{"name":"Den Haag","fee":2.5},{"name":"Rotterdam","fee":5},{"name":"Delft","fee":3},{"name":"Leiden","fee":4}],"offers":[{"title":"Welcome Offer","desc":"Get a free spice pack on your first order above €25!","code":"SNKFREE"},{"title":"Weekend Delivery Deal","desc":"10% discount on delivery charges for Den Haag residents this weekend.","code":"DH10"}],"settings":{"requiredOrders":3,"loyaltyDiscount":10,"announcementText":"🔥 Special Offer: Keep ordering from our shop to get amazing discounts instantly! 🔥"}};
 
 let catalog = storeDatabase.categories;
 let locations = storeDatabase.locations || [];
 let offers = storeDatabase.offers || [];
-// Default Fallbacks if settings objects don't exist
-storeDatabase.settings = storeDatabase.settings || { requiredOrders: 3, loyaltyDiscount: 10 };
+storeDatabase.settings = storeDatabase.settings || { requiredOrders: 3, loyaltyDiscount: 10, announcementText: "🔥 Special Offer: Keep ordering from our shop to get amazing discounts instantly! 🔥" };
 
 let cart = {};
 let activeCoupon = ""; 
@@ -615,7 +643,6 @@ function syncCartTotals(){
   syncAllCardSteppers();
 }
 
-// Applying promo codes with dynamic database parameters
 function applyPromoCode() {
   const input = document.getElementById('promoCodeInput').value.trim().toUpperCase();
   const msgEl = document.getElementById('promoMsg');
@@ -998,7 +1025,7 @@ function loadProductsTab(){
 
     <div class="admin-cat" style="border: 2px solid #007BFF; background: #F4F9FF;">
       <div class="admin-cat-header">
-        <span style="font-size: 15px; font-weight: 800; color: #0056b3;">⚙️ Dynamic Loyalty Milestone & Offer Settings</span>
+        <span style="font-size: 15px; font-weight: 800; color: #0056b3;">⚙️ Dynamic Loyalty Milestone & Announcement Settings</span>
       </div>
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top:12px;">
         <div>
@@ -1009,7 +1036,12 @@ function loadProductsTab(){
         <div>
           <label style="font-size:12px; font-weight:700; color:var(--text-dark); display:block; margin-bottom:4px;">Milestone Discount Percentage (%)</label>
           <input type="number" id="settingLoyaltyDiscount" value="${storeDatabase.settings.loyaltyDiscount || 10}" style="padding:10px; border-radius:6px; border:1px solid #CBD5E1; width:100%; font-weight:800;" onchange="storeDatabase.settings.loyaltyDiscount = parseInt(this.value) || 10">
-          <small style="color:var(--text-light); font-size:11px;">Enter pure numbers (e.g., 15 for 15%, 5 for 5%).</small>
+          <small style="color:var(--text-light); font-size:11px;">Enter pure numbers (e.g., 15 for 15%).</small>
+        </div>
+        
+        <div style="grid-column: span 2;">
+          <label style="font-size:12px; font-weight:700; color:var(--text-dark); display:block; margin-bottom:4px;">📢 Edit Live Running Announcement Text</label>
+          <textarea id="settingAnnouncementText" style="width:100%; height:60px; padding:10px; border-radius:6px; border:1px solid #CBD5E1; font-size:13px; font-weight:600;" onchange="storeDatabase.settings.announcementText = this.value" placeholder="Type here to instantly change the moving announcement scroll text...">${storeDatabase.settings.announcementText || ''}</textarea>
         </div>
       </div>
     </div>
@@ -1104,9 +1136,18 @@ function addNewCategoryPrompt() {
 }
 
 function saveCatalogAndExport(){
+  // Grab final real-time values from dashboard fields before export execution
+  const announceField = document.getElementById('settingAnnouncementText');
+  if(announceField) {
+    storeDatabase.settings.announcementText = announceField.value;
+  }
+  
   closeAdmin();
   renderCatalog();
   renderLocations();
+  
+  // Instantly apply state change to top interface presentation element
+  document.getElementById('customer-announcement').innerText = storeDatabase.settings.announcementText;
   
   const databaseString = JSON.stringify({ 
     categories: catalog, 
@@ -1135,6 +1176,7 @@ function copyExportCode() {
 }
 
 // System Init Bootstrapper
+document.getElementById('customer-announcement').innerText = storeDatabase.settings.announcementText || "🔥 Special Offer: Keep ordering from our shop to get amazing discounts instantly! 🔥";
 renderCatalog();
 renderLocations();
 loadCartFromLocalStorage();
