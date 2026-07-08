@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>SNK Foods — Premium Indian Grocery</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=400;500;600;700;800&family=Playfair+Display:wght=600;700;900&display=swap" rel="stylesheet">
@@ -19,7 +19,7 @@
   }
   
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
-  body { background: var(--bg-light); color: var(--text-dark); padding-bottom: 100px; -webkit-tap-highlight-color: transparent; }
+  body { background: var(--bg-light); color: var(--text-dark); padding-bottom: 90px; -webkit-tap-highlight-color: transparent; }
   
   body.menu-open { overflow: hidden; height: 100vh; position: fixed; width: 100%; }
 
@@ -31,6 +31,19 @@
   .logo-text h1 { font-family: 'Playfair Display', serif; font-size: 22px; color: #fff; line-height: 1; }
   .logo-text span { font-size: 11px; color: var(--accent); letter-spacing: 1px; text-transform: uppercase; font-weight: 600; }
   .wa-quick { background: #25D366; color: #fff; border: none; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 10px rgba(37,211,102,0.3); }
+
+  /* Bottom Navigation Bar Styles */
+  .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 70px; background: #ffffff; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #E2E8F0; box-shadow: 0 -4px 15px rgba(0,0,0,0.06); z-index: 1500; }
+  .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; background: none; border: none; color: var(--text-light); font-size: 11px; font-weight: 700; cursor: pointer; width: 20%; height: 100%; gap: 4px; text-decoration: none; transition: color 0.2s; }
+  .nav-item .icon { font-size: 22px; }
+  .nav-item.active { color: var(--primary); }
+  .nav-item.active .icon { color: var(--primary); }
+  .nav-badge-container { position: relative; display: inline-block; }
+  .nav-badge { position: absolute; top: -6px; right: -12px; background: var(--danger); color: white; border-radius: 50%; font-size: 10px; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-weight: 800; }
+
+  /* View Management */
+  .app-view { display: none; }
+  .app-view.active-view { display: block; }
 
   .hero { background: linear-gradient(135deg, #073018 0%, #0B4624 100%); color: #fff; padding: 40px 20px; text-align: center; border-bottom: 4px solid var(--accent); }
   .hero h2 { font-family: 'Playfair Display', serif; font-size: 32px; margin-bottom: 10px; color: #fff; }
@@ -89,17 +102,27 @@
   .stepper button.minus { background: #E2E8F0; color: var(--text-dark); }
   .stepper .qty { font-size: 14px; font-weight: 800; color: var(--text-dark); flex: 1; text-align: center; }
 
-  .float-cart { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--primary); color: #fff; padding: 14px 24px; border-radius: 30px; display: none; align-items: center; gap: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.25); z-index: 1100; font-weight: 700; width: 90%; max-width: 400px; justify-content: space-between; }
-  .float-cart .badge { background: var(--accent); color: var(--primary); border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; }
+  /* Views Specific Styles */
+  .view-container { max-width: 600px; margin: 30px auto; padding: 0 16px; }
+  .page-title { font-family: 'Playfair Display', serif; font-size: 28px; color: var(--primary); margin-bottom: 20px; text-align: center; }
+  
+  /* Profile / Login Card Styles */
+  .auth-card { background: #fff; border: 1px solid #E2E8F0; border-radius: 16px; padding: 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); text-align: center; }
+  .auth-input-group { text-align: left; margin-bottom: 15px; }
+  .auth-input-group label { font-size: 12px; font-weight: 700; color: var(--text-light); text-transform: uppercase; display: block; margin-bottom: 6px; }
+  .auth-input { width: 100%; padding: 12px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 14px; font-weight: 600; outline: none; }
+  .auth-btn { width: 100%; background: var(--primary); color:#fff; border:none; padding:12px; border-radius:8px; font-weight:700; font-size:14px; cursor:pointer; margin-top:10px; }
+  .member-badge { background: #FFF9E6; border: 2px dashed var(--accent); padding: 15px; border-radius: 10px; margin-bottom: 20px; font-family: monospace; font-size: 16px; font-weight: 700; color: var(--primary); }
+
+  /* Offers Layout */
+  .offer-card { background: linear-gradient(135deg, #FFFDF5 0%, #FFF9E6 100%); border: 1px dashed var(--accent); border-radius: 12px; padding: 16px; margin-bottom: 16px; position: relative; overflow: hidden; }
+  .offer-card::before { content: "🎁"; position: absolute; right: -10px; bottom: -10px; font-size: 60px; opacity: 0.1; }
+  .offer-title { font-size: 16px; font-weight: 800; color: var(--primary); margin-bottom: 6px; }
+  .offer-desc { font-size: 13px; color: var(--text-dark); font-weight: 500; margin-bottom: 10px; line-height: 1.4; }
+  .offer-code { display: inline-block; background: var(--primary); color: #fff; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 700; font-family: monospace; }
 
   .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1900; display: none; backdrop-filter: blur(2px); }
   .overlay.show { display: block; }
-  
-  .drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(450px, 100vw); background: #fff; z-index: 2000; transform: translateX(100%); transition: transform(0.25s); display: flex; flex-direction: column; }
-  .drawer.open { transform: translateX(0); }
-  .drawer-head { background: var(--primary); color: #fff; padding: 18px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--accent); }
-  .drawer-head h3 { color: #fff; font-family: 'Playfair Display', serif; }
-  .drawer-head .close { background: none; border: none; color: #fff; font-size: 28px; cursor: pointer; }
   
   .menu-drawer { position: fixed; top: 0; left: 0; bottom: 0; width: min(300px, 85vw); background: #fff; z-index: 2500; transform: translateX(-100%); transition: transform 0.25s; display: flex; flex-direction: column; }
   .menu-drawer.open { transform: translateX(0); }
@@ -110,33 +133,32 @@
   .menu-cat-link { display: block; padding: 14px 20px; color: var(--text-dark); text-decoration: none; font-weight: 600; font-size: 14px; border-bottom: 1px solid #F1F5F9; }
 
   .menu-admin-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: calc(100% - 32px); margin: 12px 16px; padding: 12px; background: #F1F5F9; border: 1px solid #CBD5E1; border-radius: 8px; color: var(--primary); font-weight: 700; font-size: 13px; cursor: pointer; }
-
   .menu-contact-box { background: var(--bg-light); padding: 16px 20px; border-top: 2px dashed #CBD5E1; }
   .menu-contact-box h4 { font-size: 13px; color: var(--primary); text-transform: uppercase; margin-bottom: 10px; }
   .menu-contact-box p { font-size: 13px; margin-bottom: 8px; font-weight: 500; }
 
-  .ledger { flex: 1; overflow-y: auto; padding: 20px; background: #F8FAFC; }
+  .ledger { background: #fff; border: 1px solid #E2E8F0; border-radius: 12px; padding: 15px; margin-bottom: 20px; }
   .lrow { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #E2E8F0; font-size: 14px; gap: 10px; }
   .lrow .lname { flex: 1; font-weight: 600; line-height: 1.3; }
   .lrow .lprice { width: 65px; text-align: right; font-weight: 700; }
   
-  .empty-note { text-align: center; color: var(--text-light); padding: 50px 0; }
+  .empty-note { text-align: center; color: var(--text-light); padding: 40px 0; font-weight: 600; }
   .ltotal-box { border-top: 2px dashed #CBD5E1; margin-top: 10px; padding-top: 10px; }
   .subrow { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-light); margin-bottom: 4px; }
   .ltotal { display: flex; justify-content: space-between; font-weight: 800; font-size: 18px; color: var(--primary); margin-top: 6px; }
   
-  .drawer-form { padding: 15px 20px; border-top: 1px solid #E2E8F0; background: #fff; display: flex; flex-direction: column; gap: 8px; max-height: 48vh; overflow-y: auto; }
+  .drawer-form { background: #fff; border: 1px solid #E2E8F0; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
   .drawer-form label { font-size: 11px; text-transform: uppercase; color: var(--text-light); font-weight: 700; }
-  .drawer-form select, .drawer-form input, .drawer-form textarea { padding: 9px 12px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 13px; background: #fff; color: var(--text-dark) !important; width: 100%; outline: none; font-weight: 600; }
-  .drawer-form select option { color: var(--text-dark) !important; background: #fff !important; }
+  .drawer-form select, .drawer-form input, .drawer-form textarea { padding: 11px 14px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 13px; background: #fff; color: var(--text-dark) !important; width: 100%; outline: none; font-weight: 600; }
   
-  .send-btn { background: #25D366; color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: 700; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 5px; }
-  .send-btn:disabled { background: #CBD5E1; color: #94A3B8; cursor: not-allowed; }
+  .send-btn { background: #25D366; color: #fff; border: none; padding: 14px; border-radius: 8px; font-weight: 700; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 5px; box-shadow: 0 4px 12px rgba(37,211,102,0.2); }
+  .send-btn:disabled { background: #CBD5E1; color: #94A3B8; cursor: not-allowed; box-shadow: none; }
   
-  footer { background: #073018; color: #fff; padding: 40px 20px; text-align: center; border-top: 4px solid var(--accent); }
+  footer { background: #073018; color: #fff; padding: 40px 20px; text-align: center; border-top: 4px solid var(--accent); margin-top: 30px; }
   footer h4 { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--accent); margin-bottom: 12px; }
   .admin-link { background: none; border: none; color: rgba(255,255,255,0.3); font-size: 12px; cursor: pointer; text-decoration: underline; }
 
+  /* Admin Control Overlays */
   .admin-overlay { position: fixed; inset: 0; background: #fff; z-index: 3000; display: none; flex-direction: column; }
   .admin-overlay.show { display: flex; }
   .admin-head { background: var(--primary); color: #fff; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; }
@@ -148,6 +170,7 @@
   .admin-cat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid #E2E8F0; padding-bottom: 8px; }
   .admin-cat-header input { font-size: 16px; font-weight: 700; color: var(--primary); border: 1px dashed #CBD5E1; padding: 4px 8px; border-radius: 4px; width: 40%; }
   .admin-item-row { display: grid; grid-template-columns: 2fr 1.2fr 1.2fr 1.5fr 80px 40px; gap: 8px; margin-bottom: 10px; align-items: center; background: var(--bg-light); padding: 8px; border-radius: 6px; }
+  @media (max-width: 600px) { .admin-item-row { grid-template-columns: 1fr; gap: 6px; } }
   .admin-item-row input { padding: 8px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 13px; width: 100%; }
   .admin-item-row button { background: var(--danger); color: #fff; border: none; border-radius: 6px; height: 34px; font-size: 16px; cursor: pointer; }
   
@@ -196,27 +219,90 @@
   <a class="wa-quick" href="https://wa.me/31685259659" target="_blank">📲 WhatsApp</a>
 </header>
 
-<section class="hero">
-  <h2>Authentic Indian Taste, <br><em>Delivered Fresh.</em></h2>
-  <p>Premium quality grocery essentials curated for your kitchen.</p>
-  <div class="pills" id="hero-pills"></div>
-</section>
-
-<div class="search-section">
-  <input type="text" id="searchBar" oninput="filterProducts()" placeholder="Search products (e.g., Onion, Rice, Ghee)..." class="search-box">
+<!-- App Like Sticky Bottom Navbar -->
+<div class="bottom-nav">
+  <button class="nav-item active" id="btn-view-home" onclick="switchView('home')">
+    <span class="icon">🏠</span><span>Home</span>
+  </button>
+  <button class="nav-item" id="btn-view-categories" onclick="switchView('categories')">
+    <span class="icon">📂</span><span>Categories</span>
+  </button>
+  <button class="nav-item" id="btn-view-offers" onclick="switchView('offers')">
+    <span class="icon">🎁</span><span>Offers</span>
+  </button>
+  <button class="nav-item" id="btn-view-basket" onclick="switchView('basket')">
+    <div class="nav-badge-container">
+      <span class="icon">🛒</span>
+      <span class="nav-badge" id="bottomNavBadge" style="display:none;">0</span>
+    </div>
+    <span>Basket</span>
+  </button>
+  <button class="nav-item" id="btn-view-profile" onclick="switchView('profile')">
+    <span class="icon">👤</span><span id="profileTabText">Login</span>
+  </button>
 </div>
 
-<section class="front-greet-section">
-  <h4>Explore Our Categories</h4>
-  <div class="circle-grid" id="greetCircles"></div>
-</section>
+<!-- VIEW 1: HOME PANEL -->
+<div id="view-home" class="app-view active-view">
+  <section class="hero">
+    <h2>Authentic Indian Taste, <br><em>Delivered Fresh.</em></h2>
+    <p>Premium quality grocery essentials curated for your kitchen.</p>
+    <div class="pills" id="hero-pills"></div>
+  </section>
 
-<nav class="catnav" id="catnav"></nav>
-<main id="catalog"><div style="text-align:center; padding: 40px; color: var(--text-light);">Loading items...</div></main>
+  <div class="search-section">
+    <input type="text" id="searchBar" oninput="filterProducts()" placeholder="Search products (e.g., Onion, Rice, Ghee)..." class="search-box">
+  </div>
 
-<div class="float-cart" id="floatCart" onclick="openCart()">
-  <span>🛒 <span id="floatText">0 items</span></span>
-  <span class="badge" id="floatBadge">0</span>
+  <section class="front-greet-section">
+    <h4>Explore Our Categories</h4>
+    <div class="circle-grid" id="greetCircles"></div>
+  </section>
+
+  <nav class="catnav" id="catnav"></nav>
+  <main id="catalog"><div style="text-align:center; padding: 40px; color: var(--text-light);">Loading items...</div></main>
+</div>
+
+<!-- VIEW 2: CATEGORIES VIEW -->
+<div id="view-categories" class="app-view">
+  <div class="view-container">
+    <h2 class="page-title">All Categories</h2>
+    <div class="front-greet-section" style="border-bottom:none;">
+      <div class="circle-grid" id="fullCategoriesGrid" style="grid-template-columns: repeat(3, 1fr);"></div>
+    </div>
+  </div>
+</div>
+
+<!-- VIEW 3: EXCLUSIVE OFFERS VIEW -->
+<div id="view-offers" class="app-view">
+  <div class="view-container">
+    <h2 class="page-title">Exclusive Offers</h2>
+    <div id="offersContent"></div>
+  </div>
+</div>
+
+<!-- VIEW 4: BASKET VIEW -->
+<div id="view-basket" class="app-view">
+  <div class="view-container">
+    <h2 class="page-title">Your Shopping Basket</h2>
+    <div class="ledger" id="ledger"></div>
+    <div class="drawer-form">
+      <label>Delivery Destination</label>
+      <select id="area" onchange="syncCartTotals()"></select>
+      <label>Your Full Name</label><input id="cname" placeholder="Enter your name">
+      <label>Complete Address</label><input id="caddr" placeholder="Street name, house number, postcode">
+      <label>Review / Special Comments</label><textarea id="ccomments" placeholder="Custom requests..."></textarea>
+      <button class="send-btn" id="sendBtn" onclick="sendOrder()">📲 Send Order to WhatsApp</button>
+    </div>
+  </div>
+</div>
+
+<!-- VIEW 5: USER PROFILE & LOGIN -->
+<div id="view-profile" class="app-view">
+  <div class="view-container">
+    <h2 class="page-title">Customer Account</h2>
+    <div id="profileContent"></div>
+  </div>
 </div>
 
 <div class="overlay" id="overlay" onclick="closeAllDrawers()"></div>
@@ -232,19 +318,6 @@
   </div>
 </div>
 
-<div class="drawer" id="drawer">
-  <div class="drawer-head"><h3>Your Basket Chit</h3><button class="close" onclick="closeCart()">×</button></div>
-  <div class="ledger" id="ledger"></div>
-  <div class="drawer-form">
-    <label>Delivery Destination</label>
-    <select id="area" onchange="syncCartTotals()"></select>
-    <label>Your Full Name</label><input id="cname" placeholder="Enter your name">
-    <label>Complete Address</label><input id="caddr" placeholder="Street name, house number, postcode">
-    <label>Review / Special Comments</label><textarea id="ccomments" placeholder="Custom requests..."></textarea>
-    <button class="send-btn" id="sendBtn" onclick="sendOrder()">📲 Send Order to WhatsApp</button>
-  </div>
-</div>
-
 <div id="a4InvoicePrintout"></div>
 
 <footer>
@@ -252,6 +325,7 @@
   <button class="admin-link" onclick="adminLogin()">Store Admin Portal</button>
 </footer>
 
+<!-- ADMIN INTERFACE -->
 <div class="admin-overlay" id="adminOverlay">
   <div class="admin-head"><h3>SNK Operations Control</h3><button onclick="closeAdmin()">×</button></div>
   <div class="admin-body" id="adminBody"></div>
@@ -270,11 +344,30 @@
 const WA_NUMBER = "31685259659";
 const ADMIN_PASSCODE = "snk2026";
 
-const storeDatabase = {"categories":[{"id":"vegetables","name":"Fresh Vegetables","items":[["Onion","1kg, 5kg","1.49, 5.99","https://i.postimg.cc/yx2TwCSX/IMG-1455.png",false],["Tomato","1kg","1.99","",false],["Potato","1kg","1.29","",false]]},{"id":"fruits","name":"Fresh Fruits","items":[["Banana","1kg","1.99","",false],["Mango","1box","8.99","",false]]},{"id":"rice","name":"Rice & Atta Flour","items":[["Idli Rice","5kg","9.99","",false],["Chakki Atta","5kg","7.49","",false]]},{"id":"dals","name":"Dals & Lentils","items":[["Toor Dal","1kg","2.99","",false],["Urad Dal","1kg","3.49","",false]]},{"id":"spices","name":"Spices & Herbs","items":[["Cumin Seeds","200g","1.89","",false],["Mustard Seeds","200g","1.19","",false]]},{"id":"masalas","name":"Masala Powders","items":[["Sambar Powder","200g","2.49","",false],["Chilli Powder","200g","1.99","",false]]},{"id":"oils","name":"Oils & Ghee","items":[["Ghee","500ml","7.99","",false],["Gingelly Oil","1L","5.49","",false]]},{"id":"dairy","name":"Dairy & Paneer","items":[["Fresh Paneer","200g","2.49","",false],["Yogurt","1kg","1.99","",false]]},{"id":"snacks","name":"Snacks & Sweets","items":[["Murukku","200g","1.79","",false],["Mixture","200g","1.79","",false]]},{"id":"beverages","name":"Beverages & Tea","items":[["Filter Coffee Powder","250g","3.49","",false],["Assam Tea","250g","2.99","",false]]},{"id":"pickles","name":"Pickles & Papads","items":[["Mango Pickle","300g","2.29","",false],["Appalam Papad","1packet","0.99","",false]]},{"id":"instant","name":"Instant Mixes","items":[["Idli Dosa Batter","1kg","2.99","",false],["Gulab Jamun Mix","200g","1.49","",false]]},{"id":"frozen","name":"Frozen Foods","items":[["Parotta","5pcs","2.49","",false],["Frozen Okra","400g","1.99","",false]]},{"id":"pooja","name":"Pooja Essentials","items":[["Camphor","1pack","1.29","",false],["Incense Sticks","1pack","1.49","",false]]}],"locations":[{"name":"Den Haag","fee":2.50},{"name":"Rotterdam","fee":5.00},{"name":"Delft","fee":3.00},{"name":"Leiden","fee":4.00}]};
+// Extended database format to support exclusive offers
+const storeDatabase = {"categories":[{"id":"vegetables","name":"Fresh Vegetables","items":[["Onion","1kg, 5kg","1.49, 5.99","https://i.postimg.cc/yx2TwCSX/IMG-1455.png",false],["Tomato","1kg","1.99","",false],["Potato","1kg","1.29","",false]]},{"id":"fruits","name":"Fresh Fruits","items":[["Banana","1kg","1.99","",false],["Mango","1box","8.99","",false]]},{"id":"rice","name":"Rice & Atta Flour","items":[["Idli Rice","5kg","9.99","",false],["Chakki Atta","5kg","7.49","",false]]},{"id":"dals","name":"Dals & Lentils","items":[["Toor Dal","1kg","2.99","",false],["Urad Dal","1kg","3.49","",false]]},{"id":"spices","name":"Spices & Herbs","items":[["Cumin Seeds","200g","1.89","",false],["Mustard Seeds","200g","1.19","",false]]},{"id":"masalas","name":"Masala Powders","items":[["Sambar Powder","200g","2.49","",false],["Chilli Powder","200g","1.99","",false]]},{"id":"oils","name":"Oils & Ghee","items":[["Ghee","500ml","7.99","",false],["Gingelly Oil","1L","5.49","",false]]},{"id":"dairy","name":"Dairy & Paneer","items":[["Fresh Paneer","200g","2.49","",false],["Yogurt","1kg","1.99","",false]]},{"id":"snacks","name":"Snacks & Sweets","items":[["Murukku","200g","1.79","",false],["Mixture","200g","1.79","",false]]},{"id":"beverages","name":"Beverages & Tea","items":[["Filter Coffee Powder","250g","3.49","",false],["Assam Tea","250g","2.99","",false]]},{"id":"pickles","name":"Pickles & Papads","items":[["Mango Pickle","300g","2.29","",false],["Appalam Papad","1packet","0.99","",false]]},{"id":"instant","name":"Instant Mixes","items":[["Idli Dosa Batter","1kg","2.99","",false],["Gulab Jamun Mix","200g","1.49","",false]]},{"id":"frozen","name":"Frozen Foods","items":[["Parotta","5pcs","2.49","",false],["Frozen Okra","400g","1.99","",false]]},{"id":"pooja","name":"Pooja Essentials","items":[["Camphor","1pack","1.29","",false],["Incense Sticks","1pack","1.49","",false]]}],"locations":[{"name":"Den Haag","fee":2.50},{"name":"Rotterdam","fee":5.00},{"name":"Delft","fee":3.00},{"name":"Leiden","fee":4.00}],"offers":[{"title":"Welcome Offer","desc":"Get a free spice pack on your first order above €25!","code":"SNKFREE"},{"title":"Weekend Delivery Deal","desc":"10% discount on delivery charges for Den Haag residents this weekend.","code":"DH10"}]};
 
 let catalog = storeDatabase.categories;
-let locations = storeDatabase.locations || [{"name":"Den Haag","fee":2.50},{"name":"Rotterdam","fee":5.00}];
+let locations = storeDatabase.locations || [];
+let offers = storeDatabase.offers || [];
 let cart = {};
+
+// SPA View Switching Logic
+function switchView(viewId) {
+  document.querySelectorAll('.app-view').forEach(view => view.classList.remove('active-view'));
+  document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
+  
+  const targetView = document.getElementById(`view-${viewId}`);
+  const targetBtn = document.getElementById(`btn-view-${viewId}`);
+  
+  if(targetView) targetView.classList.add('active-view');
+  if(targetBtn) targetBtn.classList.add('active');
+  
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  
+  if(viewId === 'profile') renderProfilePage();
+  if(viewId === 'offers') renderOffersPage();
+}
 
 function getCategoryEmoji(id) {
   const maps = {
@@ -330,9 +423,11 @@ function renderCatalog(){
   const mainEl = document.getElementById('catalog');
   const menuBodyEl = document.getElementById('menuDrawerBody');
   const circlesEl = document.getElementById('greetCircles');
-  if(!navEl || !mainEl || !menuBodyEl || !circlesEl) return;
+  const fullGridEl = document.getElementById('fullCategoriesGrid');
   
-  navEl.innerHTML = ''; mainEl.innerHTML = ''; menuBodyEl.innerHTML = ''; circlesEl.innerHTML = '';
+  if(!navEl || !mainEl || !menuBodyEl || !circlesEl || !fullGridEl) return;
+  
+  navEl.innerHTML = ''; mainEl.innerHTML = ''; menuBodyEl.innerHTML = ''; circlesEl.innerHTML = ''; fullGridEl.innerHTML = '';
   
   if(catalog.length === 0) {
     mainEl.innerHTML = `<div style="text-align:center; padding: 40px; color: var(--text-light);">No categories found.</div>`;
@@ -340,16 +435,27 @@ function renderCatalog(){
   }
 
   catalog.forEach((cat, cIdx)=>{
+    // Setup Top Navigation Circle Cards
     const circleCard = document.createElement('div');
     circleCard.className = 'circle-card';
     circleCard.innerHTML = `<div class="circle-icon-box">${getCategoryEmoji(cat.id)}</div><div class="circle-title">${cat.name}</div>`;
     circleCard.onclick = () => {
-      document.getElementById(`cat-${cat.id}`).scrollIntoView({ behavior: 'smooth' });
-      document.querySelectorAll('.catnav a').forEach(a => {
-        a.classList.toggle('active', a.getAttribute('data-id') === cat.id);
-      });
+      switchView('home');
+      setTimeout(() => {
+        document.getElementById(`cat-${cat.id}`).scrollIntoView({ behavior: 'smooth' });
+      }, 100);
     };
     circlesEl.appendChild(circleCard);
+
+    // Setup Dedicated Categories Tab Grid Cards
+    const fullCircleCard = circleCard.cloneNode(true);
+    fullCircleCard.onclick = () => {
+      switchView('home');
+      setTimeout(() => {
+        document.getElementById(`cat-${cat.id}`).scrollIntoView({ behavior: 'smooth' });
+      }, 150);
+    };
+    fullGridEl.appendChild(fullCircleCard);
 
     const navLink = document.createElement('a');
     navLink.href = `#cat-${cat.id}`;
@@ -368,7 +474,7 @@ function renderCatalog(){
     menuLink.href = `#cat-${cat.id}`;
     menuLink.className = 'menu-cat-link';
     menuLink.textContent = cat.name;
-    menuLink.onclick = (e) => { e.preventDefault(); closeMenuDrawer(); document.getElementById(`cat-${cat.id}`).scrollIntoView({ behavior: 'smooth' }); };
+    menuLink.onclick = (e) => { e.preventDefault(); closeMenuDrawer(); switchView('home'); document.getElementById(`cat-${cat.id}`).scrollIntoView({ behavior: 'smooth' }); };
     menuBodyEl.appendChild(menuLink);
 
     let cardsHtml = '';
@@ -434,7 +540,6 @@ function modifyCartQty(key, delta) {
   syncCartTotals();
 }
 
-/* புதிய ஃபங்க்ஷன்: பாஸ்கெட்டில் இருக்கும் ஒரு பொருளை ஒரே கிளிக்கில் மொத்தமாக நீக்க */
 function removeItemCompletely(key) {
   if (cart[key]) {
     delete cart[key];
@@ -450,11 +555,7 @@ function saveCartToLocalStorage() {
 function loadCartFromLocalStorage() {
   const saved = localStorage.getItem('snk_cart');
   if (saved) {
-    try {
-      cart = JSON.parse(saved);
-    } catch (e) {
-      cart = {};
-    }
+    try { cart = JSON.parse(saved); } catch (e) { cart = {}; }
   }
   syncCartTotals();
 }
@@ -510,20 +611,18 @@ function syncCartTotals(){
   }
   
   const grandTotal = subTotal + taxAmount + deliveryFee;
+  const badgeEl = document.getElementById('bottomNavBadge');
   
-  const floatCart = document.getElementById('floatCart');
   if(totalCount > 0){
-    document.getElementById('floatText').textContent = `${totalCount} item${totalCount!==1?'s':''} - €${grandTotal.toFixed(2)}`;
-    document.getElementById('floatBadge').textContent = totalCount;
-    floatCart.style.display = 'flex';
+    badgeEl.textContent = totalCount;
+    badgeEl.style.display = 'flex';
   } else {
-    floatCart.style.display = 'none';
+    badgeEl.style.display = 'none';
   }
   renderLedger();
   syncAllCardSteppers();
 }
 
-/* மேம்படுத்தப்பட்ட பாஸ்கெட் லெட்ஜர்: இதில் பிளஸ் (+), மைனஸ் (-) மற்றும் பிரத்யேக கேன்சல் (❌) பட்டன்கள் உள்ளன */
 function renderLedger(){
   const ledgerEl = document.getElementById('ledger');
   const entries = Object.entries(cart);
@@ -556,10 +655,7 @@ function renderLedger(){
   let deliveryName = "Not Selected";
   if(areaSelect && areaSelect.value !== "") {
     const locObj = locations[parseInt(areaSelect.value)];
-    if(locObj) {
-      deliveryFee = locObj.fee;
-      deliveryName = locObj.name;
-    }
+    if(locObj) { deliveryFee = locObj.fee; deliveryName = locObj.name; }
   }
 
   let taxAmount = subTotal * 0.09;
@@ -576,11 +672,100 @@ function renderLedger(){
   ledgerEl.innerHTML = html;
 }
 
-function openCart(){ document.getElementById('drawer').classList.add('open'); document.getElementById('overlay').classList.add('show'); document.body.classList.add('menu-open'); }
-function closeCart(){ document.getElementById('drawer').classList.remove('open'); document.getElementById('overlay').classList.remove('show'); document.body.classList.remove('menu-open'); }
+// Phone Login Simulation Engine
+function isUserLoggedIn() {
+  return localStorage.getItem('snk_user_phone') !== null;
+}
+
+function handlePhoneLogin() {
+  const phone = document.getElementById('userPhoneInput').value.trim();
+  if(!phone || phone.length < 8) {
+    alert("Please enter a valid phone number! / தவறான மொபைல் எண்.");
+    return;
+  }
+  // Generate a premium unique customer code
+  const randomId = Math.floor(1000 + Math.random() * 9000);
+  const membershipCode = `SNK-MEMBER-${randomId}`;
+  
+  localStorage.setItem('snk_user_phone', phone);
+  localStorage.setItem('snk_user_code', membershipCode);
+  
+  switchView('home');
+  alert(`Login Successful! 🎉\nYour Premium Customer Code: ${membershipCode}`);
+}
+
+function handleLogout() {
+  localStorage.removeItem('snk_user_phone');
+  localStorage.removeItem('snk_user_code');
+  switchView('home');
+}
+
+function renderProfilePage() {
+  const target = document.getElementById('profileContent');
+  const tabTitle = document.getElementById('profileTabText');
+  if(!target) return;
+
+  if(isUserLoggedIn()) {
+    tabTitle.textContent = "Profile";
+    const phone = localStorage.getItem('snk_user_phone');
+    const code = localStorage.getItem('snk_user_code');
+    target.innerHTML = `
+      <div class="auth-card">
+        <div style="font-size:40px; margin-bottom:10px;">👑</div>
+        <h3>Welcome Premium Member!</h3>
+        <p style="color:var(--text-light); margin-bottom:15px;">Registered Phone: <b>${phone}</b></p>
+        <div class="member-badge">Your Exclusive Code: <br><span style="color:var(--accent-dark); font-size:20px;">${code}</span></div>
+        <p style="font-size:12px; color:var(--text-light); margin-bottom:15px;">Use this code to claim special privileges during manual support or orders.</p>
+        <button class="auth-btn" style="background:var(--danger);" onclick="handleLogout()">⚠️ Logout from Account</button>
+      </div>`;
+  } else {
+    tabTitle.textContent = "Login";
+    target.innerHTML = `
+      <div class="auth-card">
+        <div style="font-size:40px; margin-bottom:10px;">🔐</div>
+        <h3>Unlock Exclusive Member Offers</h3>
+        <p style="color:var(--text-light); font-size:13px; margin-bottom:20px;">Enter your phone number to generate an instant premium membership code.</p>
+        <div class="auth-input-group">
+          <label>Mobile Phone Number</label>
+          <input type="tel" id="userPhoneInput" class="auth-input" placeholder="e.g. +31 6 85259659">
+        </div>
+        <button class="auth-btn" onclick="handlePhoneLogin()">Generate Membership Code & Login</button>
+      </div>`;
+  }
+}
+
+function renderOffersPage() {
+  const target = document.getElementById('offersContent');
+  if(!target) return;
+
+  if(!isUserLoggedIn()) {
+    target.innerHTML = `
+      <div class="auth-card" style="border-color: var(--danger); background: #FFF5F5;">
+        <div style="font-size:36px; margin-bottom:10px;">🔒</div>
+        <h4 style="color:var(--danger)">Access Denied</h4>
+        <p style="font-size:13px; color:var(--text-dark); margin: 8px 0 15px;">சலுகைகள் மற்றும் தள்ளுபடி கூப்பன்களைப் பார்க்க தயவுசெய்து லாகின் செய்யவும்!</p>
+        <button class="auth-btn" onclick="switchView('profile')">🔐 Go to Login Page</button>
+      </div>`;
+    return;
+  }
+
+  if(offers.length === 0) {
+    target.innerHTML = `<div class="empty-note">No special offers available right now. Check back soon!</div>`;
+    return;
+  }
+
+  target.innerHTML = offers.map(of => `
+    <div class="offer-card">
+      <div class="offer-title">${of.title}</div>
+      <div class="offer-desc">${of.desc}</div>
+      ${of.code ? `<div class="offer-code">COUPON: ${of.code}</div>` : ''}
+    </div>
+  `).join('');
+}
+
 function openMenuDrawer(){ document.getElementById('menuDrawer').classList.add('open'); document.getElementById('overlay').classList.add('show'); document.body.classList.add('menu-open'); }
 function closeMenuDrawer(){ document.getElementById('menuDrawer').classList.remove('open'); document.getElementById('overlay').classList.remove('show'); document.body.classList.remove('menu-open'); }
-function closeAllDrawers(){ closeCart(); closeMenuDrawer(); }
+function closeAllDrawers(){ closeMenuDrawer(); }
 
 function sendOrder(){
   const items = Object.values(cart);
@@ -589,7 +774,7 @@ function sendOrder(){
   const addr = document.getElementById('caddr').value.trim();
   const comments = document.getElementById('ccomments').value.trim() || "None";
   
-  if(!areaIdx) { alert("Please select your Delivery Destination location! / தயவுசெய்து டெலிவரி இடத்தை தேர்ந்தெடுக்கவும்."); return; }
+  if(!areaIdx) { alert("Please select your Delivery Destination location!"); return; }
   if(!name || !addr) { alert("Please enter Name and Address."); return; }
   
   const locObj = locations[parseInt(areaIdx)];
@@ -602,7 +787,9 @@ function sendOrder(){
   let taxAmount = subTotal * 0.09;
   let grandTotal = subTotal + taxAmount + deliveryFee;
   
-  let msg = `Hello SNK Foods!\nNew Order:\n\n${lines}\n\nSubtotal: €${subTotal.toFixed(2)}\nBTW (9%): €${taxAmount.toFixed(2)}\nDelivery Charge (${areaName}): €${deliveryFee.toFixed(2)}\nTotal Amount: €${grandTotal.toFixed(2)}\n\nDelivery to: ${areaName}\nName: ${name}\nAddress: ${addr}\nNotes: ${comments}`;
+  const mCode = localStorage.getItem('snk_user_code') || "Non-Member";
+  
+  let msg = `Hello SNK Foods!\nNew Order (Member Code: ${mCode}):\n\n${lines}\n\nSubtotal: €${subTotal.toFixed(2)}\nBTW (9%): €${taxAmount.toFixed(2)}\nDelivery Charge (${areaName}): €${deliveryFee.toFixed(2)}\nTotal Amount: €${grandTotal.toFixed(2)}\n\nDelivery to: ${areaName}\nName: ${name}\nAddress: ${addr}\nNotes: ${comments}`;
   window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`,'_blank');
 }
 
@@ -682,7 +869,6 @@ function triggerA4PrintHTML(name, addr, area, comments, tableRows, subTotal, del
         <p>Payment Mode: Cash / Tikkie</p>
       </div>
     </div>
-    
     <div class="inv-bill-split">
       <div class="inv-bill-to">
         <h5>Delivery & Customer Details</h5>
@@ -692,34 +878,17 @@ function triggerA4PrintHTML(name, addr, area, comments, tableRows, subTotal, del
         <p><b>Special Notes:</b> ${comments}</p>
       </div>
     </div>
-    
     <table class="inv-table">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Product Description</th>
-          <th>Unit Size</th>
-          <th>Qty</th>
-          <th>Rate</th>
-          <th>Gross Amount</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${tableRows}
-      </tbody>
+      <thead><tr><th>#</th><th>Product Description</th><th>Unit Size</th><th>Qty</th><th>Rate</th><th>Gross Amount</th></tr></thead>
+      <tbody>${tableRows}</tbody>
     </table>
-    
     <div class="inv-summary">
       <div class="inv-sum-row"><span>Subtotal Goods:</span><span>€${subTotal.toFixed(2)}</span></div>
       <div class="inv-sum-row"><span>BTW / Tax (9%):</span><span>€${taxAmount.toFixed(2)}</span></div>
       <div class="inv-sum-row"><span>Delivery Service Charge:</span><span>€${deliveryFee.toFixed(2)}</span></div>
       <div class="inv-total-row"><span>Total Payable:</span><span>€${grandTotal.toFixed(2)}</span></div>
     </div>
-    
-    <div class="inv-footer">
-      <p>Thank you for shopping with SNK Foods!</p>
-      <p>Please check your items upon delivery.</p>
-    </div>
+    <div class="inv-footer"><p>Thank you for shopping with SNK Foods!</p></div>
   `;
   window.print();
 }
@@ -737,7 +906,6 @@ function loadProductsTab(){
   let html = `
     <div class="print-box-tool">
       <h4 style="color:var(--primary);">🖨️ WhatsApp Order To A4 Invoice Parser</h4>
-      <p style="font-size:12px; color:var(--text-light);">வாட்ஸ்அப்பில் கஸ்டமர் அனுப்பிய மெசேஜை அப்படியே கீழே பேஸ்ட் செய்து பில் பிரிண்ட் எடுக்கலாம்:</p>
       <textarea id="adminPasteText" placeholder="Paste the complete WhatsApp order text here..."></textarea>
       <div style="display:flex; gap:10px;">
         <button onclick="printFromPastedWhatsAppText()" style="background:#007BFF; color:#fff; border:none; padding:8px 16px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:12px;">🖨️ Parse & Print WhatsApp Invoice</button>
@@ -745,25 +913,40 @@ function loadProductsTab(){
       </div>
     </div>
 
-    <div class="admin-cat" style="border: 2px solid var(--accent);">
+    <!-- NEW ADMIN SECTION FOR OFFERS -->
+    <div class="admin-cat" style="border: 2px solid #25D366;">
       <div class="admin-cat-header">
-        <span style="font-size: 14px; font-weight: 700; color: var(--primary);">📍 Manage Delivery Locations & Fees (€)</span>
+        <span style="font-size: 15px; font-weight: 800; color: var(--primary);">🎁 Manage Exclusive Customer Offers</span>
       </div>
+      <div style="display: flex; flex-direction:column; gap: 10px; margin-top:10px;" id="adminOffersList">
+        ${offers.map((of, oi) => `
+          <div style="background:var(--bg-light); border:1px solid #CBD5E1; padding:10px; border-radius:8px; display:flex; flex-direction:column; gap:6px;">
+            <input style="font-weight:700;" value="${of.title}" onchange="offers[${oi}].title=this.value" placeholder="Offer Title">
+            <input value="${of.desc}" onchange="offers[${oi}].desc=this.value" placeholder="Offer Description">
+            <div style="display:flex; gap:10px; align-items:center;">
+              <input style="font-family:monospace; font-weight:700;" value="${of.code || ''}" onchange="offers[${oi}].code=this.value" placeholder="Coupon Code (Optional)">
+              <button onclick="offers.splice(${oi},1); loadProductsTab();" style="background:var(--danger); color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-weight:bold;">Remove</button>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+      <div class="admin-btn-row" style="margin-top:10px;">
+        <button onclick="offers.push({title:'New Offer Title', desc:'Offer details here...', code:'CODE10'}); loadProductsTab();" style="background:#25D366; color:white;">+ Add New Special Offer</button>
+      </div>
+    </div>
+
+    <div class="admin-cat" style="border: 2px solid var(--accent);">
+      <div class="admin-cat-header"><span style="font-size: 14px; font-weight: 700; color: var(--primary);">📍 Manage Delivery Locations & Fees</span></div>
       <div style="display: flex; flex-direction:column; gap: 8px; margin-top: 10px;">
         ${locations.map((loc, li) => `
           <div style="display: flex; align-items: center; background: var(--bg-light); padding: 8px; border-radius: 6px; border: 1px solid #CBD5E1; gap: 10px; justify-content:space-between;">
             <input style="font-weight:600; width:50%;" value="${loc.name}" onchange="locations[${li}].name=this.value">
-            <div style="display:flex; align-items:center; gap:4px;">
-              <span>€</span>
-              <input style="width:70px; font-weight:700;" type="number" step="0.01" value="${loc.fee}" onchange="locations[${li}].fee=parseFloat(this.value)||0">
-            </div>
+            <div style="display:flex; align-items:center; gap:4px;"><span>€</span><input style="width:70px; font-weight:700;" type="number" step="0.01" value="${loc.fee}" onchange="locations[${li}].fee=parseFloat(this.value)||0"></div>
             <button onclick="if(confirm('Delete ${loc.name}?')){locations.splice(${li},1); loadProductsTab();}" style="background: var(--danger); color: white; border: none; padding:4px 8px; border-radius:4px; cursor: pointer;">×</button>
           </div>
         `).join('')}
       </div>
-      <div class="admin-btn-row" style="margin-top: 12px;">
-        <button onclick="addLocationPrompt()" style="background: var(--accent); color: var(--primary);">+ Add New Location</button>
-      </div>
+      <div class="admin-btn-row" style="margin-top: 12px;"><button onclick="addLocationPrompt()" style="background: var(--accent); color: var(--primary);">+ Add New Location</button></div>
     </div>
   `;
   
@@ -789,18 +972,14 @@ function loadProductsTab(){
     </div>
   `).join('');
 
-  html += `
-    <div style="text-align:center; margin: 25px 0;">
-      <button onclick="addNewCategoryPrompt()" style="background:#007BFF; color:#fff; border:none; padding:12px 24px; border-radius:8px; font-weight:700; cursor:pointer; font-size:14px;">➕ Add New Category</button>
-    </div>
-  `;
+  html += `<div style="text-align:center; margin: 25px 0;"><button onclick="addNewCategoryPrompt()" style="background:#007BFF; color:#fff; border:none; padding:12px 24px; border-radius:8px; font-weight:700; cursor:pointer; font-size:14px;">➕ Add New Category</button></div>`;
   body.innerHTML = html;
 }
 
 function addLocationPrompt() {
   const name = prompt("Enter New Delivery Location Name:");
   if(name && name.trim() !== "") {
-    const feeStr = prompt("Enter Delivery Fee for " + name + " (e.g., 3.50):", "0.00");
+    const feeStr = prompt("Enter Delivery Fee:", "0.00");
     locations.push({ name: name.trim(), fee: parseFloat(feeStr) || 0 });
     loadProductsTab();
   }
@@ -820,7 +999,7 @@ function saveCatalogAndExport(){
   renderCatalog();
   renderLocations();
   
-  const databaseString = JSON.stringify({ categories: catalog, locations: locations });
+  const databaseString = JSON.stringify({ categories: catalog, locations: locations, offers: offers });
   const scriptRegex = /const storeDatabase = [\s\S]*?};/;
   
   let entirePageCode = document.documentElement.outerHTML;
@@ -841,9 +1020,11 @@ function copyExportCode() {
   alert("Done! Data copied successfully! 📋\n\nPaste this new code inside your GitHub index.html and Save Changes.");
 }
 
+// Global Init
 renderCatalog();
 renderLocations();
 loadCartFromLocalStorage();
+renderProfilePage(); 
 </script>
 </body>
 </html>
