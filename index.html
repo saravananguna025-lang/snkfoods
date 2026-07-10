@@ -3,145 +3,236 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fresh Vegetables Store</title>
+    <title>Online Store</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        .badge { @apply absolute top-2 right-2 bg-green-600 text-white text-xs px-2 py-1 rounded-full font-bold z-10; }
-        .tab-btn.active { @apply bg-green-600 text-white shadow-md; }
-        .admin-table th, .admin-table td { @apply border border-gray-200 p-2 text-left text-sm; }
+        .custom-shadow { box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); }
+        .product-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .product-card:hover { transform: translateY(-4px); }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="bg-gray-50 font-sans pb-24">
+<body class="bg-gray-50 text-gray-800 antialiased min-h-screen flex flex-col">
 
     <!-- Header -->
-    <header class="bg-gradient-to-r from-green-600 to-green-700 text-white shadow-lg sticky top-0 z-40">
-        <div class="max-w-4xl mx-auto px-4 py-3 flex justify-between items-center">
-            <h1 class="text-xl font-black tracking-tight flex items-center gap-2">
-                <i class="fa-solid fa-leaf"></i> FRESH VEGETABLES
-            </h1>
-            <button onclick="toggleAdminModal()" class="text-xs bg-green-800/50 hover:bg-green-800 px-2 py-1 rounded transition">
-                <i class="fa-solid fa-lock"></i> Admin
-            </button>
+    <header class="bg-white border-b border-gray-100 sticky top-0 z-40 bg-opacity-95 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-green-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-green-100">
+                    <i class="fas fa-shop text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-gray-900 leading-tight">SNK VEGETABLES</h1>
+                    <p class="text-xs text-gray-500 flex items-center gap-1">
+                        <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span> Open Store
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Quick Search inside Header -->
+            <div class="relative hidden md:block w-72">
+                <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                <input type="text" id="headerSearchInput" oninput="syncAndSearch('header')" placeholder="Search items..." 
+                       class="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500 transition-all">
+            </div>
         </div>
     </header>
 
-    <!-- Main Container -->
-    <main class="max-w-4xl mx-auto px-4 mt-4">
-        <!-- Tabs -->
-        <div class="flex gap-2 mb-4 overflow-x-auto pb-1" id="tabContainer">
-            <button onclick="switchTab('all')" id="tab-all" class="tab-btn active px-4 py-2 rounded-full text-sm font-bold bg-white text-gray-700 shadow-sm whitespace-nowrap transition">All Items</button>
-            <button onclick="switchTab('veg')" id="tab-veg" class="tab-btn px-4 py-2 rounded-full text-sm font-bold bg-white text-gray-700 shadow-sm whitespace-nowrap transition">Vegetables</button>
-            <button onclick="switchTab('fruit')" id="tab-fruit" class="tab-btn px-4 py-2 rounded-full text-sm font-bold bg-white text-gray-700 shadow-sm whitespace-nowrap transition">Fruits</button>
-        </div>
+    <!-- Main Content Area -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow w-full">
+        
+        <!-- Search & Filter Section -->
+        <div class="mb-6 space-y-4">
+            <!-- Mobile Search -->
+            <div class="relative md:hidden">
+                <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                <input type="text" id="mainSearchInput" oninput="syncAndSearch('main')" placeholder="Search for vegetables, fruits..." 
+                       class="w-full pl-11 pr-4 py-3 bg-white border border-gray-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500 shadow-sm transition-all">
+            </div>
 
-        <!-- Search -->
-        <div class="relative mb-6">
-            <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-gray-400"></i>
-            <input type="text" id="searchInput" oninput="searchItems()" placeholder="Search vegetables, fruits..." class="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 text-sm">
+            <!-- Categories Tabs -->
+            <div class="flex items-center gap-2 overflow-x-auto pb-1 hide-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
+                <button onclick="filterCategory('all')" id="btn-all" class="cat-btn px-5 py-2.5 bg-green-600 text-white font-medium text-sm rounded-xl shadow-sm whitespace-nowrap transition-all">
+                    All Items
+                </button>
+                <button onclick="filterCategory('veg')" id="btn-veg" class="cat-btn px-5 py-2.5 bg-white border border-gray-200 text-gray-600 font-medium text-sm rounded-xl hover:bg-gray-50 whitespace-nowrap transition-all">
+                    Vegetables
+                </button>
+                <button onclick="filterCategory('fruit')" id="btn-fruit" class="cat-btn px-5 py-2.5 bg-white border border-gray-200 text-gray-600 font-medium text-sm rounded-xl hover:bg-gray-50 whitespace-nowrap transition-all">
+                    Fruits
+                </button>
+            </div>
         </div>
 
         <!-- Products Grid -->
-        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3" id="productsGrid"></div>
+        <div id="productsDisplay" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            <!-- Dynamic Injection -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="hidden text-center py-12 space-y-3">
+            <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto text-gray-400 text-xl">
+                <i class="fas fa-box-open"></i>
+            </div>
+            <p class="text-gray-500 text-sm font-medium">No items found matching your search.</p>
+        </div>
     </main>
 
-    <!-- Floating Cart Bar -->
-    <div id="floatingCart" class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] z-40 hidden">
-        <div class="max-w-4xl mx-auto flex items-center justify-between">
-            <div>
-                <span id="cartCount" class="bg-green-100 text-green-800 text-xs font-bold px-2.5 py-1 rounded-full">0 Items</span>
-                <div class="text-lg font-black text-gray-800 mt-1">Total: ₹<span id="cartTotal">0.00</span></div>
+    <!-- Footer Meta/Admin Access -->
+    <footer class="bg-white border-t border-gray-100 py-6 mb-20">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-2">
+            <p class="text-xs text-gray-400">© 2026 SNK Vegetables Store. All rights reserved.</p>
+            <button onclick="openAdminModal()" class="text-xs text-gray-400 hover:text-green-600 font-medium transition-all inline-flex items-center gap-1">
+                <i class="fas fa-lock text-[10px]"></i> Store Admin Portal
+            </button>
+        </div>
+    </footer>
+
+    <!-- Floating Action Cart Bar -->
+    <div id="cartFloater" class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-4 shadow-[0_-8px_30px_rgb(0,0,0,0.04)] z-40 transform translate-y-full transition-transform duration-300">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center text-green-600 relative">
+                    <i class="fas fa-basket-shopping text-lg"></i>
+                    <span id="cartBadge" class="absolute -top-1.5 -right-1.5 bg-green-600 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white">0</span>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-400 font-medium">Estimated Total</p>
+                    <p class="text-base font-bold text-gray-900">₹<span id="cartTotal">0.00</span></p>
+                </div>
             </div>
-            <button onclick="openCheckout()" class="bg-gradient-to-r from-green-600 to-green-700 text-white font-bold px-6 py-3 rounded-xl shadow-md hover:opacity-90 flex items-center gap-2 transition">
-                Order via WhatsApp <i class="fa-brands fa-whatsapp text-lg"></i>
+            
+            <button onclick="openCheckoutModal()" class="flex-grow sm:flex-grow-0 bg-green-600 hover:bg-green-700 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-green-600/10 transition-all flex items-center justify-center gap-2 text-sm">
+                Proceed to Order <i class="fab fa-whatsapp text-base"></i>
             </button>
         </div>
     </div>
 
-    <!-- Checkout Modal -->
-    <div id="checkoutModal" class="fixed inset-0 bg-black/50 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 hidden">
-        <div class="bg-white w-full sm:max-w-md rounded-t-2xl sm:rounded-2xl p-6 shadow-xl max-h-[90vh] overflow-y-auto animate-slide-up">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-black text-gray-900">Delivery Details</h3>
-                <button onclick="closeCheckout()" class="text-gray-400 hover:text-gray-600 text-xl"><i class="fa-solid fa-xmark"></i></button>
+    <!-- Checkout Modal Sheet -->
+    <div id="checkoutModal" class="fixed inset-0 bg-black/40 z-50 flex items-end sm:items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 p-0 sm:p-4">
+        <div class="bg-white w-full sm:max-w-md rounded-t-3xl sm:rounded-2xl p-6 shadow-2xl transform translate-y-full sm:translate-y-0 sm:scale-95 transition-all duration-300 max-h-[90vh] flex flex-col">
+            <div class="flex items-center justify-between pb-4 border-b border-gray-100">
+                <h3 class="text-base font-bold text-gray-900 flex items-center gap-2">
+                    <i class="fas fa-truck text-green-600 text-sm"></i> Delivery Information
+                </h3>
+                <button onclick="closeCheckoutModal()" class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-all">
+                    <i class="fas fa-times text-sm"></i>
+                </button>
             </div>
-            <form id="orderForm" onsubmit="submitOrder(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Name *</label>
-                    <input type="text" id="custName" required class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 outline-none text-sm">
+
+            <form id="checkoutForm" onsubmit="handleCheckoutSubmit(event)" class="space-y-4 py-4 overflow-y-auto flex-grow hide-scrollbar">
+                <div class="space-y-1">
+                    <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Your Full Name</label>
+                    <input type="text" id="custName" required placeholder="Enter your name" 
+                           class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500 transition-all">
                 </div>
-                <div>
-                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">WhatsApp Number *</label>
-                    <input type="tel" id="custPhone" required class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 outline-none text-sm">
+                <div class="space-y-1">
+                    <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider">WhatsApp Number</label>
+                    <input type="tel" id="custPhone" required placeholder="e.g. 9876543210" 
+                           class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500 transition-all">
                 </div>
-                <div>
-                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Delivery Address *</label>
-                    <textarea id="custAddress" required rows="3" class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 outline-none text-sm"></textarea>
+                <div class="space-y-1">
+                    <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Delivery Address</label>
+                    <textarea id="custAddress" required rows="3" placeholder="Flat/House No, Street, Area, Landmark" 
+                              class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500 transition-all resize-none"></textarea>
                 </div>
-                <div class="bg-gray-50 p-3 rounded-lg border border-gray-100">
-                    <h4 class="text-xs font-bold text-gray-500 uppercase mb-2">Order Summary</h4>
-                    <div id="checkoutSummary" class="text-xs space-y-1 text-gray-700 max-h-32 overflow-y-auto"></div>
+
+                <!-- Micro Order Summary -->
+                <div class="bg-gray-50 rounded-xl p-4 border border-gray-100 space-y-2.5">
+                    <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Items Summary</p>
+                    <div id="modalSummaryList" class="space-y-1.5 max-h-24 overflow-y-auto text-xs text-gray-600 hide-scrollbar">
+                        <!-- Dynamic list -->
+                    </div>
+                    <div class="pt-2 border-t border-gray-200/60 flex justify-between items-center text-sm font-bold text-gray-900">
+                        <span>Total to Pay</span>
+                        <span>₹<span id="modalSummaryTotal">0.00</span></span>
+                    </div>
                 </div>
-                <button type="submit" class="w-full bg-green-600 text-white font-bold py-3 rounded-xl shadow-md hover:bg-green-700 transition flex justify-center items-center gap-2">
-                    Confirm & Send to WhatsApp <i class="fa-solid fa-paper-plane"></i>
+
+                <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-green-600/10 transition-all flex items-center justify-center gap-2 text-sm">
+                    Send Order via WhatsApp <i class="fab fa-whatsapp text-base"></i>
                 </button>
             </form>
         </div>
     </div>
 
-    <!-- Admin Modal -->
-    <div id="adminModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white w-full max-w-3xl rounded-2xl p-6 shadow-xl max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-black text-gray-900">Store Management Portal</h3>
-                <button onclick="toggleAdminModal()" class="text-gray-400 hover:text-gray-600 text-xl"><i class="fa-solid fa-xmark"></i></button>
-            </div>
+    <!-- Live Management Dashboard Portal Modal -->
+    <div id="adminPortalModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 p-4">
+        <div class="bg-white w-full max-w-4xl rounded-2xl shadow-2xl overflow-hidden transform scale-95 transition-all duration-300 max-h-[90vh] flex flex-col">
             
-            <div id="adminAuth">
-                <div class="max-w-sm mx-auto text-center py-8 space-y-4">
-                    <i class="fa-solid fa-shield-halved text-4xl text-green-600"></i>
-                    <p class="text-sm text-gray-600">Enter passcode to access admin settings.</p>
-                    <input type="password" id="adminPass" class="w-full p-2.5 border border-gray-300 rounded-lg text-center" placeholder="••••••••">
-                    <button onclick="verifyAdmin()" class="w-full bg-green-600 text-white font-bold py-2 rounded-lg">Login</button>
+            <!-- Modal Header -->
+            <div class="px-6 py-4 bg-gray-900 text-white flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-sliders text-green-400"></i>
+                    <h2 class="font-bold text-sm uppercase tracking-wider">Store Database Config Portal</h2>
+                </div>
+                <button onclick="closeAdminModal()" class="text-gray-400 hover:text-white transition-all"><i class="fas fa-times"></i></button>
+            </div>
+
+            <!-- Auth Panel -->
+            <div id="adminAuthPanel" class="p-8 text-center max-w-sm mx-auto space-y-4 my-auto flex flex-col items-center justify-center">
+                <div class="w-12 h-12 bg-green-50 text-green-600 rounded-full flex items-center justify-center text-lg"><i class="fas fa-shield-halved"></i></div>
+                <div>
+                    <h3 class="font-bold text-gray-900">Security Check Required</h3>
+                    <p class="text-xs text-gray-500 mt-0.5">Please enter management passcode to open records.</p>
+                </div>
+                <input type="password" id="passcodeField" placeholder="Enter System Passcode" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-center font-mono text-sm focus:outline-none focus:ring-2 focus:ring-green-500/20">
+                <button onclick="validateAdminIdentity()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl text-sm transition-all shadow-md">Authenticate</button>
+            </div>
+
+            <!-- Dashboard Content (Initially Hidden) -->
+            <div id="adminDashboardPanel" class="hidden flex-grow flex flex-col overflow-hidden">
+                <div class="p-4 bg-gray-50 border-b border-gray-100 flex flex-wrap items-center justify-between gap-3">
+                    <span class="text-xs bg-green-100 text-green-800 font-bold px-2.5 py-1 rounded-full flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span> Live Connection Verified
+                    </span>
+                    <button onclick="compileAndDeployDatabase()" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition-all shadow-sm">
+                        Save & Generate Update Code
+                    </button>
+                </div>
+
+                <!-- Database Rows Container -->
+                <div class="flex-grow overflow-auto p-6">
+                    <table class="w-full text-left border-collapse min-w-[700px]">
+                        <thead>
+                            <tr class="text-xs font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100 pb-3">
+                                <th class="pb-3 pl-2">Item Name</th>
+                                <th class="pb-3">Weight Variants (comma separated)</th>
+                                <th class="pb-3">Prices in INR (comma separated)</th>
+                                <th class="pb-3">Direct Image URL string</th>
+                                <th class="pb-3 text-center">Is Fruit?</th>
+                                <th class="pb-3 text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dashboardRowsInject" class="divide-y divide-gray-100 text-sm">
+                            <!-- Injected rows via javascript loop -->
+                        </tbody>
+                    </table>
+                    
+                    <button onclick="insertEmptyRowToDashboard()" class="mt-4 text-xs font-bold text-green-600 hover:text-green-700 flex items-center gap-1.5 transition-all">
+                        <i class="fas fa-plus-circle"></i> Insert New Item Row
+                    </button>
+                </div>
+
+                <!-- Array Deployment Output Generator -->
+                <div id="deployOutputZone" class="hidden p-6 bg-gray-50 border-t border-gray-100 space-y-2">
+                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Generated Production Array Block Code</p>
+                    <p class="text-[11px] text-gray-400 leading-relaxed">Copy the entire data matrix array below and replace the exact <code>storeDatabase</code> global variable block manually inside your local HTML repository file structure to hard-deploy updates permanently.</p>
+                    <textarea id="outputMatrixCodeArea" readonly rows="5" class="w-full p-3 font-mono text-[11px] bg-gray-900 text-green-400 rounded-xl shadow-inner border border-gray-800 focus:outline-none"></textarea>
                 </div>
             </div>
 
-            <div id="adminContent" class="hidden space-y-6">
-                <div class="flex justify-between items-center">
-                    <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded font-mono">Status: Authenticated</span>
-                    <button onclick="generateUpdateCode()" class="bg-blue-600 text-white text-xs font-bold px-3 py-1.5 rounded hover:bg-blue-700">Save & Generate Update Code</button>
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full admin-table border-collapse">
-                        <thead>
-                            <tr class="bg-gray-50">
-                                <th>Item Name</th>
-                                <th>Variants (Comma separated)</th>
-                                <th>Prices (Comma separated)</th>
-                                <th>Image URL</th>
-                                <th>Is Fruit?</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="adminTableBody"></tbody>
-                    </table>
-                </div>
-                <button onclick="addAdminRow()" class="text-sm text-green-600 font-bold hover:text-green-700"><i class="fa-solid fa-plus"></i> Add New Item</button>
-                
-                <div id="outputContainer" class="hidden space-y-2">
-                    <label class="block text-xs font-bold text-gray-700 uppercase">Copy this updated database array block:</label>
-                    <textarea id="outputArea" readonly rows="6" class="w-full p-2.5 font-mono text-xs bg-gray-900 text-green-400 rounded-lg"></textarea>
-                </div>
-            </div>
         </div>
     </div>
 
-    <!-- JavaScript Data and Logic -->
+    <!-- Core Runtime Execution Script Engine Engine -->
     <script>
-        // WHATSAPP CONFIG
-        const WHATSAPP_NUMBER = "919000000000"; // Replace with your actual WhatsApp number
+        // CONFIGURATION PARAMETERS
+        const SYSTEM_WHATSAPP_ROUTING_TARGET = "919000000000"; 
 
-        // MAIN DATABASE
+        // TARGET GLOBAL MASTER DATABASE MATRIX
         let storeDatabase = [
             ["Onion", "500g, 1kg", "1.49, 2.79", "https://i.postimg.cc/yx2TwCSX/IMG-1455.png", false],
             ["Tomato", "500g, 1kg", "1.19, 1.99", "", false],
@@ -151,282 +242,336 @@
             ["Carrot", "500g", "0.99", "", false]
         ];
 
-        let cart = {};
-        let currentTab = 'all';
+        let internalCartState = {};
+        let runtimeSelectedCategory = 'all';
 
-        // Initialize Store
         window.onload = function() {
-            renderStore();
+            triggerStoreEngineRender();
         };
 
-        // Render Store Products
-        function renderStore() {
-            const grid = document.getElementById('productsGrid');
-            const searchVal = document.getElementById('searchInput').value.toLowerCase();
-            grid.innerHTML = '';
+        // UI Synchronization Engine
+        function syncAndSearch(triggerSource) {
+            const hInput = document.getElementById('headerSearchInput');
+            const mInput = document.getElementById('mainSearchInput');
+            if(triggerSource === 'header') mInput.value = hInput.value;
+            else hInput.value = mInput.value;
+            triggerStoreEngineRender();
+        }
 
-            storeDatabase.forEach((item, index) => {
-                const [name, variantsStr, pricesStr, imgUrl, isFruit] = item;
-                
-                // Filter tabs
-                if (currentTab === 'veg' && isFruit) return;
-                if (currentTab === 'fruit' && !isFruit) return;
+        function filterCategory(categoryKey) {
+            runtimeSelectedCategory = categoryKey;
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.className = "cat-btn px-5 py-2.5 bg-white border border-gray-200 text-gray-600 font-medium text-sm rounded-xl hover:bg-gray-50 whitespace-nowrap transition-all";
+            });
+            const activeBtn = document.getElementById(`btn-${categoryKey}`);
+            activeBtn.className = "cat-btn px-5 py-2.5 bg-green-600 text-white font-medium text-sm rounded-xl shadow-sm whitespace-nowrap transition-all";
+            triggerStoreEngineRender();
+        }
 
-                // Filter search
-                if (searchVal && !name.toLowerCase().includes(searchVal)) return;
+        // Production Dynamic Matrix Core Rendering Engine
+        function triggerStoreEngineRender() {
+            const targetContainer = document.getElementById('productsDisplay');
+            const query = document.getElementById('mainSearchInput').value.toLowerCase().trim();
+            const emptyState = document.getElementById('emptyState');
+            targetContainer.innerHTML = '';
+            let injectedCounter = 0;
 
-                const variants = variantsStr.split(',').map(v => v.trim());
-                const prices = pricesStr.split(',').map(p => p.trim());
+            storeDatabase.forEach((itemMatrix, indexSignature) => {
+                const [itemName, itemVariantsStr, itemPricesStr, itemImageLink, flagIsFruit] = itemMatrix;
 
-                // AUTOMATED IMAGE LOGIC (No more manual copy-pasting URL strings)
-                // If imgUrl is empty, it automatically paths to your GitHub folder: images/ItemName.png
-                let cleanedName = name.trim();
-                let finalImgUrl = imgUrl ? imgUrl : `images/${cleanedName}.png`;
+                // Category Context Evaluation
+                if(runtimeSelectedCategory === 'veg' && flagIsFruit) return;
+                if(runtimeSelectedCategory === 'fruit' && !flagIsFruit) return;
 
-                // Set default variant if not already selected in cart
-                const cartKeyBase = `item-${index}-`;
-                let selectedVariantIdx = 0;
-                
-                // Check if this item already has a selected state in cart to preserve UI dropdown state
-                variants.forEach((v, vIdx) => {
-                    if(cart[cartKeyBase + vIdx]) selectedVariantIdx = vIdx;
+                // Query Text Context Evaluation Search Matcher
+                if(query && !itemName.toLowerCase().includes(query)) return;
+
+                injectedCounter++;
+
+                const parsingVariants = itemVariantsStr.split(',').map(v => v.trim());
+                const parsingPrices = itemPricesStr.split(',').map(p => p.trim());
+
+                // -------------------------------------------------------------
+                // AUTOMATED IMAGE DIRECT PATH LOADING (உங்க பிளான் படி மாத்தப்பட்ட பகுதி)
+                // -------------------------------------------------------------
+                let cleanedName = itemName.trim();
+                let computedImageSrc = itemImageLink ? itemImageLink : `images/${cleanedName}.png`;
+                // -------------------------------------------------------------
+
+                // Evaluate fallback configuration state or look up active item signature inside checkout storage
+                let targetActiveSelectionIndex = 0;
+                parsingVariants.forEach((variantName, checkIdx) => {
+                    if(internalCartState[`cart-key-${indexSignature}-${checkIdx}`]) {
+                        targetActiveSelectionIndex = checkIdx;
+                    }
                 });
 
-                let optionsHtml = '';
-                variants.forEach((variant, vIdx) => {
-                    optionsHtml += `<option value="${vIdx}" ${vIdx === selectedVariantIdx ? 'selected' : ''}>${variant} - ₹${prices[vIdx]}</option>`;
+                let dynamicOptionsBlock = '';
+                parsingVariants.forEach((variant, vIdx) => {
+                    dynamicOptionsBlock += `<option value="${vIdx}" ${vIdx === targetActiveSelectionIndex ? 'selected' : ''}>${variant} - ₹${parsingPrices[vIdx]}</option>`;
                 });
 
-                const productCard = `
-                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col justify-between relative group hover:shadow-md transition">
+                const structuralCardNodeString = `
+                    <div class="product-card bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col justify-between relative">
                         <div>
-                            <div class="w-full aspect-square bg-gray-100 relative overflow-hidden">
-                                <img src="${finalImgUrl}" alt="${name}" class="w-full h-full object-cover object-center" onerror="this.onerror=null; this.src='https://dummyimage.com/300x300/e2e8f0/0f172a.png&text=${encodeURIComponent(name)}';">
+                            <div class="w-full aspect-[4/3] bg-gray-50 relative overflow-hidden group border-b border-gray-50">
+                                <img src="${computedImageSrc}" alt="${itemName}" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://dummyimage.com/400x300/f8fafc/64748b.png&text=${encodeURIComponent(itemName)}';">
                             </div>
-                            <div class="p-3">
-                                <h4 class="font-black text-gray-800 text-sm leading-tight">${name}</h4>
-                                <select id="select-${index}" onchange="updateCardUI(${index})" class="w-full mt-2 p-1.5 bg-gray-50 border border-gray-200 rounded-lg text-xs font-semibold text-gray-700 outline-none">
-                                    ${optionsHtml}
+                            <div class="p-3.5 space-y-2">
+                                <h3 class="font-bold text-gray-900 text-sm tracking-tight leading-tight">${itemName}</h3>
+                                <select id="dropdown-selector-${indexSignature}" onchange="recalculateCardActionsState(${indexSignature})" class="w-full px-2 py-2 bg-gray-50 border border-gray-200/80 rounded-xl text-xs font-semibold text-gray-700 outline-none focus:border-green-500 transition-all">
+                                    ${dynamicOptionsBlock}
                                 </select>
                             </div>
                         </div>
-                        <div class="p-3 pt-0">
-                            <div id="action-box-${index}">
-                                ${getActionBtnHtml(index, selectedVariantIdx, prices[selectedVariantIdx])}
+                        <div class="p-3.5 pt-0">
+                            <div id="action-wrapper-slot-${indexSignature}">
+                                ${generateContextButtonMarkup(indexSignature, targetActiveSelectionIndex, parsingPrices[targetActiveSelectionIndex])}
                             </div>
                         </div>
                     </div>
                 `;
-                grid.insertAdjacentHTML('beforeend', productCard);
+                targetContainer.insertAdjacentHTML('beforeend', structuralCardNodeString);
             });
+
+            if(injectedCounter === 0) emptyState.classList.remove('hidden');
+            else emptyState.classList.add('hidden');
         }
 
-        function getActionBtnHtml(itemIdx, variantIdx, price) {
-            const cartKey = `item-${itemIdx}-${variantIdx}`;
-            const qty = cart[cartKey] ? cart[cartKey].qty : 0;
+        function generateContextButtonMarkup(itemIdx, variantIdx, targetedPriceValue) {
+            const compositeKey = `cart-key-${itemIdx}-${variantIdx}`;
+            const lookupRecord = internalCartState[compositeKey];
 
-            if (qty > 0) {
+            if(lookupRecord && lookupRecord.quantity > 0) {
                 return `
-                    <div class="flex items-center justify-between bg-green-600 text-white rounded-xl p-1">
-                        <button onclick="changeQty(${itemIdx}, ${variantIdx}, -1)" class="w-8 h-8 font-bold flex items-center justify-center hover:bg-green-700 rounded-lg transition">-</button>
-                        <span class="font-bold text-sm">${qty}</span>
-                        <button onclick="changeQty(${itemIdx}, ${variantIdx}, 1)" class="w-8 h-8 font-bold flex items-center justify-center hover:bg-green-700 rounded-lg transition">+</button>
+                    <div class="flex items-center justify-between bg-green-600 text-white rounded-xl p-1 font-bold text-sm shadow-sm shadow-green-600/10">
+                        <button onclick="modifyCartStateQuantity(${itemIdx}, ${variantIdx}, -1)" class="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-green-700 transition-all text-base">-</button>
+                        <span class="w-8 text-center tabular-nums">${lookupRecord.quantity}</span>
+                        <button onclick="modifyCartStateQuantity(${itemIdx}, ${variantIdx}, 1)" class="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-green-700 transition-all text-base">+</button>
                     </div>
                 `;
             } else {
                 return `
-                    <button onclick="changeQty(${itemIdx}, ${variantIdx}, 1)" class="w-full bg-gray-900 hover:bg-gray-800 text-white text-xs font-bold py-2.5 px-4 rounded-xl transition flex items-center justify-center gap-1">
-                        <i class="fa-solid fa-plus text-[10px]"></i> Add To Cart
+                    <button onclick="modifyCartStateQuantity(${itemIdx}, ${variantIdx}, 1)" class="w-full bg-gray-900 hover:bg-gray-800 text-white text-xs font-bold py-3 px-4 rounded-xl transition-all flex items-center justify-center gap-1.5 shadow-sm">
+                        <i class="fas fa-plus text-[9px] text-gray-400"></i> Add To Basket
                     </button>
                 `;
             }
         }
 
-        function updateCardUI(itemIdx) {
-            const select = document.getElementById(`select-${itemIdx}`);
-            const variantIdx = parseInt(select.value);
-            const prices = storeDatabase[itemIdx][2].split(',').map(p => p.trim());
-            const actionBox = document.getElementById(`action-box-${itemIdx}`);
-            actionBox.innerHTML = getActionBtnHtml(itemIdx, variantIdx, prices[variantIdx]);
-        }
-
-        function changeQty(itemIdx, variantIdx, delta) {
-            const cartKey = `item-${itemIdx}-${variantIdx}`;
-            const item = storeDatabase[itemIdx];
-            const name = item[0];
-            const variant = item[1].split(',')[variantIdx].trim();
-            const price = parseFloat(item[2].split(',')[variantIdx].trim());
-
-            if (!cart[cartKey]) {
-                cart[cartKey] = { name, variant, price, qty: 0 };
-            }
-
-            cart[cartKey].qty += delta;
-
-            if (cart[cartKey].qty <= 0) {
-                delete cart[cartKey];
-            }
-
-            updateCardUI(itemIdx);
-            calculateCart();
-        }
-
-        function calculateCart() {
-            let total = 0;
-            let count = 0;
-
-            for (let key in cart) {
-                total += cart[key].price * cart[key].qty;
-                count += cart[key].qty;
-            }
-
-            const bar = document.getElementById('floatingCart');
-            if (count > 0) {
-                bar.classList.remove('hidden');
-                document.getElementById('cartCount').innerText = `${count} ${count === 1 ? 'Item' : 'Items'}`;
-                document.getElementById('cartTotal').innerText = total.toFixed(2);
-            } else {
-                bar.classList.add('hidden');
-            }
-        }
-
-        function switchTab(tab) {
-            currentTab = tab;
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active', 'bg-green-600', 'text-white'));
-            document.getElementById(`tab-${tab}`).classList.add('active', 'bg-green-600', 'text-white');
-            renderStore();
-        }
-
-        function searchItems() {
-            renderStore();
-        }
-
-        // Checkout Logic
-        function openCheckout() {
-            document.getElementById('checkoutModal').classList.remove('hidden');
-            const summary = document.getElementById('checkoutSummary');
-            summary.innerHTML = '';
+        function recalculateCardActionsState(itemIndexRef) {
+            const selectorNode = document.getElementById(`dropdown-selector-${itemIndexRef}`);
+            const assignedVariantIndex = parseInt(selectorNode.value);
+            const absolutePricesRow = storeDatabase[itemIndexRef][2].split(',').map(p => p.trim());
+            const targetActionContainer = document.getElementById(`action-wrapper-slot-${itemIndexRef}`);
             
-            for (let key in cart) {
-                const c = cart[key];
-                summary.innerHTML += `
-                    <div class="flex justify-between border-b border-gray-100 py-1">
-                        <span>${c.name} (${c.variant}) x ${c.qty}</span>
-                        <span class="font-semibold">₹${(c.price * c.qty).toFixed(2)}</span>
+            targetActionContainer.innerHTML = generateContextButtonMarkup(itemIndexRef, assignedVariantIndex, absolutePricesRow[assignedVariantIndex]);
+        }
+
+        function modifyCartStateQuantity(itemIndex, variantIndex, operationDelta) {
+            const generationKey = `cart-key-${itemIndex}-${variantIndex}`;
+            const targetReferenceArray = storeDatabase[itemIndex];
+            
+            const evaluatedName = targetReferenceArray[0];
+            const evaluatedVariantText = targetReferenceArray[1].split(',')[variantIndex].trim();
+            const evaluatedPriceFloat = parseFloat(targetReferenceArray[2].split(',')[variantIndex].trim());
+
+            if(!internalCartState[generationKey]) {
+                internalCartState[generationKey] = {
+                    name: evaluatedName,
+                    variant: evaluatedVariantText,
+                    price: evaluatedPriceFloat,
+                    quantity: 0
+                };
+            }
+
+            internalCartState[generationKey].quantity += operationDelta;
+
+            if(internalCartState[generationKey].quantity <= 0) {
+                delete internalCartState[generationKey];
+            }
+
+            recalculateCardActionsState(itemIndex);
+            recalculateCartFinancialSumMetrics();
+        }
+
+        function recalculateCartFinancialSumMetrics() {
+            let computationalSumTotal = 0;
+            let computationalItemCount = 0;
+
+            for (let compositeStorageKey in internalCartState) {
+                const loopObject = internalCartState[compositeStorageKey];
+                computationalSumTotal += (loopObject.price * loopObject.quantity);
+                computationalItemCount += loopObject.quantity;
+            }
+
+            const visualCartFloaterElement = document.getElementById('cartFloater');
+            if(computationalItemCount > 0) {
+                visualCartFloaterElement.classList.remove('translate-y-full');
+                document.getElementById('cartBadge').innerText = computationalItemCount;
+                document.getElementById('cartTotal').innerText = computationalSumTotal.toFixed(2);
+            } else {
+                visualCartFloaterElement.classList.add('translate-y-full');
+            }
+        }
+
+        // Checkout Sheet Display Handlers
+        function openCheckoutModal() {
+            const rootModalNode = document.getElementById('checkoutModal');
+            rootModalNode.classList.remove('opacity-0', 'pointer-events-none');
+            rootModalNode.firstElementChild.classList.remove('translate-y-full', 'sm:scale-95');
+            
+            const summaryDisplayListNode = document.getElementById('modalSummaryList');
+            summaryDisplayListNode.innerHTML = '';
+            let computedRunningTotalValue = 0;
+
+            for (let operationalKey in internalCartState) {
+                const targetCartData = internalCartState[operationalKey];
+                const aggregateItemCost = targetCartData.price * targetCartData.quantity;
+                computedRunningTotalValue += aggregateItemCost;
+
+                summaryDisplayListNode.innerHTML += `
+                    <div class="flex justify-between items-center gap-4 py-0.5">
+                        <span class="truncate pr-2">${targetCartData.name} <span class="text-[10px] text-gray-400 font-medium">(${targetCartData.variant})</span> <span class="font-bold text-gray-900">x${targetCartData.quantity}</span></span>
+                        <span class="font-semibold text-gray-900 tabular-nums">₹${aggregateItemCost.toFixed(2)}</span>
                     </div>
                 `;
             }
+            document.getElementById('modalSummaryTotal').innerText = computedRunningTotalValue.toFixed(2);
         }
 
-        function closeCheckout() {
-            document.getElementById('checkoutModal').classList.add('hidden');
+        function closeCheckoutModal() {
+            const rootModalNode = document.getElementById('checkoutModal');
+            rootModalNode.classList.add('opacity-0', 'pointer-events-none');
+            rootModalNode.firstElementChild.classList.add('translate-y-full', 'sm:scale-95');
         }
 
-        function submitOrder(e) {
-            e.preventDefault();
-            const name = document.getElementById('custName').value;
-            const phone = document.getElementById('custPhone').value;
-            const address = document.getElementById('custAddress').value;
+        function handleCheckoutSubmit(formEvent) {
+            formEvent.preventDefault();
+            const payloadName = document.getElementById('custName').value.trim();
+            const payloadPhone = document.getElementById('custPhone').value.trim();
+            const payloadAddress = document.getElementById('custAddress').value.trim();
 
-            let text = `*New Order Received!*\n\n`;
-            text += `*Customer Details:*\n`;
-            text += `Name: ${name}\n`;
-            text += `Phone: ${phone}\n`;
-            text += `Address: ${address}\n\n`;
-            text += `*Order Items:*\n`;
+            let formatStringPayload = `*NEW ORDER RECEIVED*\n`;
+            formatStringPayload += `-----------------------------\n`;
+            formatStringPayload += `*Customer:* ${payloadName}\n`;
+            formatStringPayload += `*WhatsApp:* ${payloadPhone}\n`;
+            formatStringPayload += `*Address:* ${payloadAddress}\n`;
+            formatStringPayload += `-----------------------------\n`;
+            formatStringPayload += `*Order Specifics:*\n`;
 
-            let grandTotal = 0;
-            for (let key in cart) {
-                const c = cart[key];
-                const itemTotal = c.price * c.qty;
-                grandTotal += itemTotal;
-                text += `- ${c.name} (${c.variant}) x ${c.qty} : ₹${itemTotal.toFixed(2)}\n`;
+            let runningSumCalculation = 0;
+            for(let keyItem in internalCartState) {
+                const dataInstance = internalCartState[keyItem];
+                const calculatedRowValue = dataInstance.price * dataInstance.quantity;
+                runningSumCalculation += calculatedRowValue;
+                formatStringPayload += `• ${dataInstance.name} (${dataInstance.variant}) x ${dataInstance.quantity} -> ₹${calculatedRowValue.toFixed(2)}\n`;
             }
-            text += `\n*Grand Total: ₹${grandTotal.toFixed(2)}*`;
 
-            const url = `https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${encodeURIComponent(text)}`;
-            window.open(url, '_blank');
+            formatStringPayload += `-----------------------------\n`;
+            formatStringPayload += `*Grand Absolute Total: ₹${runningSumCalculation.toFixed(2)}*`;
+
+            const finalReroutingApiUrl = `https://api.whatsapp.com/send?phone=${SYSTEM_WHATSAPP_ROUTING_TARGET}&text=${encodeURIComponent(formatStringPayload)}`;
+            window.open(finalReroutingApiUrl, '_blank');
         }
 
-        // Admin Management Logic
-        function toggleAdminModal() {
-            const modal = document.getElementById('adminModal');
-            modal.classList.toggle('hidden');
+        // Live Administrative Portal Core Logic Modules
+        function openAdminModal() {
+            const targetNode = document.getElementById('adminPortalModal');
+            targetNode.classList.remove('opacity-0', 'pointer-events-none');
+            targetNode.firstElementChild.classList.remove('scale-95');
         }
 
-        function verifyAdmin() {
-            const pass = document.getElementById('adminPass').value;
-            if (pass === 'snk2026') {
-                document.getElementById('adminAuth').classList.add('hidden');
-                document.getElementById('adminContent').classList.remove('hidden');
-                renderAdminTable();
+        function closeAdminModal() {
+            const targetNode = document.getElementById('adminPortalModal');
+            targetNode.classList.add('opacity-0', 'pointer-events-none');
+            targetNode.firstElementChild.classList.add('scale-95');
+            
+            // Clean up admin visual layout view states
+            document.getElementById('adminAuthPanel').classList.remove('hidden');
+            document.getElementById('adminDashboardPanel').classList.add('hidden');
+            document.getElementById('deployOutputZone').classList.add('hidden');
+            document.getElementById('passcodeField').value = '';
+        }
+
+        function validateAdminIdentity() {
+            const enteredToken = document.getElementById('passcodeField').value;
+            if(enteredToken === 'snk2026') {
+                document.getElementById('adminAuthPanel').classList.add('hidden');
+                document.getElementById('adminDashboardPanel').classList.remove('hidden');
+                synchronizeAndRenderDashboardRowsTable();
             } else {
-                alert('Incorrect Passcode!');
+                alert('Security violation: Authentication passcode does not match target environment validation hashes.');
             }
         }
 
-        function renderAdminTable() {
-            const tbody = document.getElementById('adminTableBody');
-            tbody.innerHTML = '';
-            storeDatabase.forEach((item, index) => {
-                tbody.innerHTML += `
-                    <tr id="admin-row-${index}">
-                        <td><input type="text" value="${item[0]}" class="w-full p-1 text-sm border rounded"></td>
-                        <td><input type="text" value="${item[1]}" class="w-full p-1 text-sm border rounded"></td>
-                        <td><input type="text" value="${item[2]}" class="w-full p-1 text-sm border rounded"></td>
-                        <td><input type="text" value="${item[3]}" placeholder="Optional (Auto paths to images/)" class="w-full p-1 text-sm border rounded"></td>
-                        <td><input type="checkbox" ${item[4] ? 'checked' : ''} class="w-4 h-4 mt-2"></td>
-                        <td><button onclick="deleteAdminRow(${index})" class="text-red-500 text-xs hover:underline">Delete</button></td>
+        function synchronizeAndRenderDashboardRowsTable() {
+            const rowsTargetSlot = document.getElementById('dashboardRowsInject');
+            rowsTargetSlot.innerHTML = '';
+
+            storeDatabase.forEach((matrixItem, indexSignatureRow) => {
+                rowsTargetSlot.innerHTML += `
+                    <tr id="dashboard-editable-row-${indexSignatureRow}" class="hover:bg-gray-50/80 transition-colors">
+                        <td class="py-3 pl-1 pr-2"><input type="text" value="${matrixItem[0]}" class="w-full px-2 py-1.5 border border-gray-200 rounded-lg text-xs font-medium focus:border-green-500 outline-none"></td>
+                        <td class="py-3 pr-2"><input type="text" value="${matrixItem[1]}" class="w-full px-2 py-1.5 border border-gray-200 rounded-lg text-xs font-medium focus:border-green-500 outline-none"></td>
+                        <td class="py-3 pr-2"><input type="text" value="${matrixItem[2]}" class="w-full px-2 py-1.5 border border-gray-200 rounded-lg text-xs font-medium focus:border-green-500 outline-none"></td>
+                        <td class="py-3 pr-2"><input type="text" value="${matrixItem[3]}" placeholder="Optional (Auto paths to images/)" class="w-full px-2 py-1.5 border border-gray-200 rounded-lg text-xs font-medium focus:border-green-500 outline-none"></td>
+                        <td class="py-3 text-center"><input type="checkbox" ${matrixItem[4] ? 'checked' : ''} class="w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500"></td>
+                        <td class="py-3 text-center"><button onclick="removeTargetedDashboardRowInstance(${indexSignatureRow})" class="w-7 h-7 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 transition-all text-xs"><i class="fas fa-trash-can"></i></button></td>
                     </tr>
                 `;
             });
         }
 
-        function addAdminRow() {
-            const tbody = document.getElementById('adminTableBody');
-            const newIndex = tbody.children.length;
-            tbody.insertAdjacentHTML('beforeend', `
-                <tr id="admin-row-${newIndex}">
-                    <td><input type="text" value="" placeholder="e.g. Garlic" class="w-full p-1 text-sm border rounded"></td>
-                    <td><input type="text" value="" placeholder="250g, 500g" class="w-full p-1 text-sm border rounded"></td>
-                    <td><input type="text" value="" placeholder="0.50, 0.90" class="w-full p-1 text-sm border rounded"></td>
-                    <td><input type="text" value="" placeholder="Optional" class="w-full p-1 text-sm border rounded"></td>
-                    <td><input type="checkbox" class="w-4 h-4 mt-2"></td>
-                    <td><button onclick="this.closest('tr').remove()" class="text-red-500 text-xs hover:underline">Delete</button></td>
+        function insertEmptyRowToDashboard() {
+            const tableBodyNode = document.getElementById('dashboardRowsInject');
+            const generationIdentityIndex = tableBodyNode.children.length;
+            
+            const rawRowStringTemplate = `
+                <tr id="dashboard-editable-row-${generationIdentityIndex}" class="bg-green-50/30 hover:bg-green-50/60 transition-colors animate-fade-in">
+                    <td class="py-3 pl-1 pr-2"><input type="text" placeholder="e.g., Spinach" class="w-full px-2 py-1.5 border border-gray-200 rounded-lg text-xs font-medium focus:border-green-500 outline-none"></td>
+                    <td class="py-3 pr-2"><input type="text" placeholder="250g, 500g" class="w-full px-2 py-1.5 border border-gray-200 rounded-lg text-xs font-medium focus:border-green-500 outline-none"></td>
+                    <td class="py-3 pr-2"><input type="text" placeholder="30, 55" class="w-full px-2 py-1.5 border border-gray-200 rounded-lg text-xs font-medium focus:border-green-500 outline-none"></td>
+                    <td class="py-3 pr-2"><input type="text" placeholder="Optional" class="w-full px-2 py-1.5 border border-gray-200 rounded-lg text-xs font-medium focus:border-green-500 outline-none"></td>
+                    <td class="py-3 text-center"><input type="checkbox" class="w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500"></td>
+                    <td class="py-3 text-center"><button onclick="this.closest('tr').remove()" class="w-7 h-7 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 transition-all text-xs"><i class="fas fa-trash-can"></i></button></td>
                 </tr>
-            `);
+            `;
+            tableBodyNode.insertAdjacentHTML('beforeend', rawRowStringTemplate);
         }
 
-        function deleteAdminRow(index) {
-            document.getElementById(`admin-row-${index}`).remove();
+        function removeTargetedDashboardRowInstance(rowKeyId) {
+            document.getElementById(`dashboard-editable-row-${rowKeyId}`).remove();
         }
 
-        function generateUpdateCode() {
-            const tbody = document.getElementById('adminTableBody');
-            const rows = tbody.querySelectorAll('tr');
-            let updatedDB = [];
+        function compileAndDeployDatabase() {
+            const dynamicTableRowsCollection = document.querySelectorAll('#dashboardRowsInject tr');
+            let temporaryDatabaseAggregationMatrix = [];
 
-            rows.forEach(row => {
-                const inputs = row.querySelectorAll('input');
-                const name = inputs[0].value.trim();
-                const variants = inputs[1].value.trim();
-                const prices = inputs[2].value.trim();
-                const imgUrl = inputs[3].value.trim();
-                const isFruit = inputs[4].checked;
+            dynamicTableRowsCollection.forEach(htmlRowNode => {
+                const targetInputsList = htmlRowNode.querySelectorAll('input');
+                const rowItemName = targetInputsList[0].value.trim();
+                const rowVariants = targetInputsList[1].value.trim();
+                const rowPrices = targetInputsList[2].value.trim();
+                const rowImageURL = targetInputsList[3].value.trim();
+                const rowFlagIsFruit = targetInputsList[4].checked;
 
-                if (name && variants && prices) {
-                    updatedDB.push([name, variants, prices, imgUrl, isFruit]);
+                if(rowItemName && rowVariants && rowPrices) {
+                    temporaryDatabaseAggregationMatrix.push([
+                        rowItemName, rowVariants, rowPrices, rowImageURL, rowFlagIsFruit
+                    ]);
                 }
             });
 
-            storeDatabase = updatedDB;
-            renderStore();
+            storeDatabase = temporaryDatabaseAggregationMatrix;
+            triggerStoreEngineRender();
 
-            const outputContainer = document.getElementById('outputContainer');
-            const outputArea = document.getElementById('outputArea');
-            outputArea.value = JSON.stringify(updatedDB, null, 4);
-            outputContainer.classList.remove('hidden');
-            alert('Store synchronized successfully! Code block generated below.');
+            const deploymentOutputAreaContainer = document.getElementById('deployOutputZone');
+            const targetTextAreaNode = document.getElementById('outputMatrixCodeArea');
+            
+            targetTextAreaNode.value = JSON.stringify(temporaryDatabaseAggregationMatrix, null, 4);
+            deploymentOutputAreaContainer.classList.remove('hidden');
+            alert('Live runtime context structural matrix records synchronized successfully.');
         }
     </script>
 </body>
