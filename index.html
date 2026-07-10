@@ -1209,6 +1209,16 @@ renderCatalog();
 renderLocations();
 loadCartFromLocalStorage();
 renderProfilePage(); 
+let originalRender = triggerStoreEngineRender;
+triggerStoreEngineRender = function() {
+    storeDatabase.forEach(item => {
+        if (!item[3] || item[3].trim() === "") {
+            item[3] = `images/${item[0].trim()}.png`;
+        }
+    });
+    originalRender();
+};
+
 </script>
 </body>
 </html>
