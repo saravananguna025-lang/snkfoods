@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en" __gcrremoteframetoken="4e1abf2658566a764e15bd8f13fd2a76"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>SNK Foods — Premium Indian Grocery</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=400;500;600;700;800&family=Playfair+Display:wght=600;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=400;500;600;700;800&amp;family=Playfair+Display:wght=600;700;900&amp;display=swap" rel="stylesheet">
 
 <style>
   :root {
@@ -229,12 +228,10 @@
   }
 </style>
 </head>
-<body>
+<body class="">
 
 <div class="marquee-wrapper" id="marqueeBanner">
-  <div id="customer-announcement" class="marquee-text">
-    🔥 Special Offer: Keep ordering from our shop to get amazing discounts instantly! 🔥
-  </div>
+  <div id="customer-announcement" class="marquee-text">🔥 Special Offer: Keep ordering from our shop to get amazing discounts instantly! 🔥</div>
 </div>
 
 <header>
@@ -274,27 +271,635 @@
   <section class="hero">
     <h2>Authentic Indian Taste, <br><em>Delivered Fresh.</em></h2>
     <p>Premium quality grocery essentials curated for your kitchen.</p>
-    <div class="pills" id="hero-pills"></div>
+    <div class="pills" id="hero-pills"><span class="pill">📍 Den Haag (€2.50)</span><span class="pill">📍 Rotterdam (€5.00)</span><span class="pill">📍 Delft (€3.00)</span><span class="pill">📍 Leiden (€4.00)</span></div>
   </section>
 
   <div class="search-section">
-    <input type="text" id="searchBar" oninput="filterProducts()" placeholder="Search products (e.g., Onion, Rice, Ghee)..." class="search-box">
+    <input type="text" id="searchBar" oninput="filterProducts()" placeholder="Search products (e.g., Onion, Rice, Ghee)..." class="search-box" __gcruniqueid="1">
   </div>
 
   <section class="front-greet-section">
     <h4>Explore Our Categories</h4>
-    <div class="circle-grid" id="greetCircles"></div>
+    <div class="circle-grid" id="greetCircles"><div class="circle-card"><div class="circle-icon-box">🥦</div><div class="circle-title">Fresh Vegetables</div></div><div class="circle-card"><div class="circle-icon-box">🍎</div><div class="circle-title">Fresh Fruits</div></div><div class="circle-card"><div class="circle-icon-box">🌾</div><div class="circle-title">Rice &amp; Atta Flour</div></div><div class="circle-card"><div class="circle-icon-box">🫘</div><div class="circle-title">Dals &amp; Lentils</div></div><div class="circle-card"><div class="circle-icon-box">🌶️</div><div class="circle-title">Spices &amp; Herbs</div></div><div class="circle-card"><div class="circle-icon-box">🧂</div><div class="circle-title">Masala Powders</div></div><div class="circle-card"><div class="circle-icon-box">🛢️</div><div class="circle-title">Oils &amp; Ghee</div></div><div class="circle-card"><div class="circle-icon-box">🧀</div><div class="circle-title">Dairy &amp; Paneer</div></div><div class="circle-card"><div class="circle-icon-box">🍪</div><div class="circle-title">Snacks &amp; Sweets</div></div><div class="circle-card"><div class="circle-icon-box">☕</div><div class="circle-title">Beverages &amp; Tea</div></div><div class="circle-card"><div class="circle-icon-box">🏺</div><div class="circle-title">Pickles &amp; Papads</div></div><div class="circle-card"><div class="circle-icon-box">🥣</div><div class="circle-title">Instant Mixes</div></div><div class="circle-card"><div class="circle-icon-box">❄️</div><div class="circle-title">Frozen Foods</div></div><div class="circle-card"><div class="circle-icon-box">🪔</div><div class="circle-title">Pooja Essentials</div></div></div>
   </section>
 
-  <nav class="catnav" id="catnav"></nav>
-  <main id="catalog"><div style="text-align:center; padding: 40px; color: var(--text-light);">Loading items...</div></main>
+  <nav class="catnav" id="catnav"><a href="#cat-vegetables" data-id="vegetables" class="active">Fresh Vegetables</a><a href="#cat-fruits" data-id="fruits">Fresh Fruits</a><a href="#cat-rice" data-id="rice">Rice &amp; Atta Flour</a><a href="#cat-dals" data-id="dals">Dals &amp; Lentils</a><a href="#cat-spices" data-id="spices">Spices &amp; Herbs</a><a href="#cat-masalas" data-id="masalas">Masala Powders</a><a href="#cat-oils" data-id="oils">Oils &amp; Ghee</a><a href="#cat-dairy" data-id="dairy">Dairy &amp; Paneer</a><a href="#cat-snacks" data-id="snacks">Snacks &amp; Sweets</a><a href="#cat-beverages" data-id="beverages">Beverages &amp; Tea</a><a href="#cat-pickles" data-id="pickles">Pickles &amp; Papads</a><a href="#cat-instant" data-id="instant">Instant Mixes</a><a href="#cat-frozen" data-id="frozen">Frozen Foods</a><a href="#cat-pooja" data-id="pooja">Pooja Essentials</a></nav>
+  <main id="catalog"><div class="cat-section" id="cat-vegetables"><div class="cat-head"><h3>Fresh Vegetables</h3><div class="cat-line"></div></div><div class="products-grid">
+        <div class="product-card " id="card-vegetables-0">
+          
+          <div>
+            <div class="img-slot"><img src="https://i.postimg.cc/yx2TwCSX/IMG-1455.png" alt="Onion" loading="lazy"></div>
+            <div class="pname">Onion</div>
+          </div>
+          <div>
+            <div class="variant-wrapper">
+              <select class="punit-select" onchange="onVariantChange('vegetables', 0, 'Onion', this.value)">
+                <option value="0">1kg</option><option value="1">5kg</option><option value="2">10kg</option>
+              </select>
+            </div>
+            <div class="price-row"><span class="price" id="price-vegetables-0">€1.49</span></div>
+            <div class="action-container" id="action-vegetables-0"><button class="addbtn" onclick="handleInitialAdd('vegetables', 0, 'Onion')">Add to Cart</button></div>
+          </div>
+        </div>
+        <div class="product-card " id="card-vegetables-1">
+          
+          <div>
+            <div class="img-slot"><img src="Tomato" alt="Tomato" loading="lazy"></div>
+            <div class="pname">Tomato</div>
+          </div>
+          <div>
+            <div class="variant-wrapper">
+              <select class="punit-select" onchange="onVariantChange('vegetables', 1, 'Tomato', this.value)">
+                <option value="0">500g</option><option value="1">1kg</option>
+              </select>
+            </div>
+            <div class="price-row"><span class="price" id="price-vegetables-1">€1.19</span></div>
+            <div class="action-container" id="action-vegetables-1"><button class="addbtn" onclick="handleInitialAdd('vegetables', 1, 'Tomato')">Add to Cart</button></div>
+          </div>
+        </div>
+        <div class="product-card " id="card-vegetables-2">
+          
+          <div>
+            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Potato" alt="Potato" loading="lazy"></div>
+            <div class="pname">Potato</div>
+          </div>
+          <div>
+            <div class="variant-wrapper">
+              <select class="punit-select" onchange="onVariantChange('vegetables', 2, 'Potato', this.value)">
+                <option value="0">1kg</option><option value="1">2.5kg</option><option value="2">5kg</option>
+              </select>
+            </div>
+            <div class="price-row"><span class="price" id="price-vegetables-2">€1.29</span></div>
+            <div class="action-container" id="action-vegetables-2"><button class="addbtn" onclick="handleInitialAdd('vegetables', 2, 'Potato')">Add to Cart</button></div>
+          </div>
+        </div>
+        <div class="product-card " id="card-vegetables-3">
+          
+          <div>
+            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Green%20Chillies" alt="Green Chillies" loading="lazy"></div>
+            <div class="pname">Green Chillies</div>
+          </div>
+          <div>
+            <div class="variant-wrapper">
+              <select class="punit-select" onchange="onVariantChange('vegetables', 3, 'Green Chillies', this.value)">
+                <option value="0">100g</option><option value="1">250g</option><option value="2">500g</option>
+              </select>
+            </div>
+            <div class="price-row"><span class="price" id="price-vegetables-3">€0.99</span></div>
+            <div class="action-container" id="action-vegetables-3"><button class="addbtn" onclick="handleInitialAdd('vegetables', 3, 'Green Chillies')">Add to Cart</button></div>
+          </div>
+        </div>
+        <div class="product-card " id="card-vegetables-4">
+          
+          <div>
+            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Sambar%20Onions" alt="Sambar Onions" loading="lazy"></div>
+            <div class="pname">Sambar Onions</div>
+          </div>
+          <div>
+            <div class="variant-wrapper">
+              <select class="punit-select" onchange="onVariantChange('vegetables', 4, 'Sambar Onions', this.value)">
+                <option value="0">250g</option><option value="1">500g</option><option value="2">1kg</option>
+              </select>
+            </div>
+            <div class="price-row"><span class="price" id="price-vegetables-4">€1.49</span></div>
+            <div class="action-container" id="action-vegetables-4"><button class="addbtn" onclick="handleInitialAdd('vegetables', 4, 'Sambar Onions')">Add to Cart</button></div>
+          </div>
+        </div></div></div><div class="cat-section" id="cat-fruits"><div class="cat-head"><h3>Fresh Fruits</h3><div class="cat-line"></div></div><div class="products-grid">
+        <div class="product-card " id="card-fruits-0">
+          
+          <div>
+            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Banana" alt="Banana" loading="lazy"></div>
+            <div class="pname">Banana</div>
+          </div>
+          <div>
+            <div class="variant-wrapper">
+              <select class="punit-select" onchange="onVariantChange('fruits', 0, 'Banana', this.value)">
+                <option value="0">500g</option><option value="1">1kg</option>
+              </select>
+            </div>
+            <div class="price-row"><span class="price" id="price-fruits-0">€1.10</span></div>
+            <div class="action-container" id="action-fruits-0"><button class="addbtn" onclick="handleInitialAdd('fruits', 0, 'Banana')">Add to Cart</button></div>
+          </div>
+        </div>
+        <div class="product-card " id="card-fruits-1">
+          
+          <div>
+            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Mango%20Box" alt="Mango Box" loading="lazy"></div>
+            <div class="pname">Mango Box</div>
+          </div>
+          <div>
+            <div class="variant-wrapper">
+              <select class="punit-select" onchange="onVariantChange('fruits', 1, 'Mango Box', this.value)">
+                <option value="0">1box (4pcs)</option><option value="1">1box (6pcs)</option>
+              </select>
+            </div>
+            <div class="price-row"><span class="price" id="price-fruits-1">€6.99</span></div>
+            <div class="action-container" id="action-fruits-1"><button class="addbtn" onclick="handleInitialAdd('fruits', 1, 'Mango Box')">Add to Cart</button></div>
+          </div>
+        </div></div></div><div class="cat-section" id="cat-rice"><div class="cat-head"><h3>Rice &amp; Atta Flour</h3><div class="cat-line"></div></div><div class="products-grid">
+        <div class="product-card " id="card-rice-0">
+          
+          <div>
+            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Premium%20Idli%20Rice" alt="Premium Idli Rice" loading="lazy"></div>
+            <div class="pname">Premium Idli Rice</div>
+          </div>
+          <div>
+            <div class="variant-wrapper">
+              <select class="punit-select" onchange="onVariantChange('rice', 0, 'Premium Idli Rice', this.value)">
+                <option value="0">1kg</option><option value="1">5kg</option><option value="2">10kg</option>
+              </select>
+            </div>
+            <div class="price-row"><span class="price" id="price-rice-0">€2.49</span></div>
+            <div class="action-container" id="action-rice-0"><button class="addbtn" onclick="handleInitialAdd('rice', 0, 'Premium Idli Rice')">Add to Cart</button></div>
+          </div>
+        </div>
+        <div class="product-card " id="card-rice-1">
+          
+          <div>
+            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Aashirvaad%20Chakki%20Atta" alt="Aashirvaad Chakki Atta" loading="lazy"></div>
+            <div class="pname">Aashirvaad Chakki Atta</div>
+          </div>
+          <div>
+            <div class="variant-wrapper">
+              <select class="punit-select" onchange="onVariantChange('rice', 1, 'Aashirvaad Chakki Atta', this.value)">
+                <option value="0">1kg</option><option value="1">5kg</option><option value="2">10kg</option>
+              </select>
+            </div>
+            <div class="price-row"><span class="price" id="price-rice-1">€3.29</span></div>
+            <div class="action-container" id="action-rice-1"><button class="addbtn" onclick="handleInitialAdd('rice', 1, 'Aashirvaad Chakki Atta')">Add to Cart</button></div>
+          </div>
+        </div>
+        <div class="product-card " id="card-rice-2">
+          
+          <div>
+            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Premium%20Basmati%20Rice" alt="Premium Basmati Rice" loading="lazy"></div>
+            <div class="pname">Premium Basmati Rice</div>
+          </div>
+          <div>
+            <div class="variant-wrapper">
+              <select class="punit-select" onchange="onVariantChange('rice', 2, 'Premium Basmati Rice', this.value)">
+                <option value="0">1kg</option><option value="1">5kg</option><option value="2">10kg</option>
+              </select>
+            </div>
+            <div class="price-row"><span class="price" id="price-rice-2">€2.99</span></div>
+            <div class="action-container" id="action-rice-2"><button class="addbtn" onclick="handleInitialAdd('rice', 2, 'Premium Basmati Rice')">Add to Cart</button></div>
+          </div>
+        </div>
+        <div class="product-card " id="card-rice-3">
+          
+          <div>
+            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Ponni%20Boiled%20Rice" alt="Ponni Boiled Rice" loading="lazy"></div>
+            <div class="pname">Ponni Boiled Rice</div>
+          </div>
+          <div>
+            <div class="variant-wrapper">
+              <select class="punit-select" onchange="onVariantChange('rice', 3, 'Ponni Boiled Rice', this.value)">
+                <option value="0">5kg</option><option value="1">10kg</option><option value="2">20kg</option>
+              </select>
+            </div>
+            <div class="price-row"><span class="price" id="price-rice-3">€11.49</span></div>
+            <div class="action-container" id="action-rice-3"><button class="addbtn" onclick="handleInitialAdd('rice', 3, 'Ponni Boiled Rice')">Add to Cart</button></div>
+          </div>
+        </div></div></div><div class="cat-section" id="cat-dals"><div class="cat-head"><h3>Dals &amp; Lentils</h3><div class="cat-line"></div></div><div class="products-grid">
+        <div class="product-card " id="card-dals-0">
+          
+          <div>
+            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Toor%20Dal" alt="Toor Dal" loading="lazy"></div>
+            <div class="pname">Toor Dal</div>
+          </div>
+          <div>
+            <div class="variant-wrapper">
+              <select class="punit-select" onchange="onVariantChange('dals', 0, 'Toor Dal', this.value)">
+                <option value="0">500g</option><option value="1">1kg</option><option value="2">2kg</option>
+              </select>
+            </div>
+            <div class="price-row"><span class="price" id="price-dals-0">€1.69</span></div>
+            <div class="action-container" id="action-dals-0"><button class="addbtn" onclick="handleInitialAdd('dals', 0, 'Toor Dal')">Add to Cart</button></div>
+          </div>
+        </div>
+        <div class="product-card " id="card-dals-1">
+          
+          <div>
+            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Urad%20Dal%20Whole" alt="Urad Dal Whole" loading="lazy"></div>
+            <div class="pname">Urad Dal Whole</div>
+          </div>
+          <div>
+            <div class="variant-wrapper">
+              <select class="punit-select" onchange="onVariantChange('dals', 1, 'Urad Dal Whole', this.value)">
+                <option value="0">500g</option><option value="1">1kg</option>
+              </select>
+            </div>
+            <div class="price-row"><span class="price" id="price-dals-1">€1.89</span></div>
+            <div class="action-container" id="action-dals-1"><button class="addbtn" onclick="handleInitialAdd('dals', 1, 'Urad Dal Whole')">Add to Cart</button></div>
+          </div>
+        </div>
+        <div class="product-card " id="card-dals-2">
+          
+          <div>
+            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Chana%20Dal" alt="Chana Dal" loading="lazy"></div>
+            <div class="pname">Chana Dal</div>
+          </div>
+          <div>
+            <div class="variant-wrapper">
+              <select class="punit-select" onchange="onVariantChange('dals', 2, 'Chana Dal', this.value)">
+                <option value="0">500g</option><option value="1">1kg</option>
+              </select>
+            </div>
+            <div class="price-row"><span class="price" id="price-dals-2">€1.49</span></div>
+            <div class="action-container" id="action-dals-2"><button class="addbtn" onclick="handleInitialAdd('dals', 2, 'Chana Dal')">Add to Cart</button></div>
+          </div>
+        </div>
+        <div class="product-card " id="card-dals-3">
+          
+          <div>
+            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Moong%20Dal" alt="Moong Dal" loading="lazy"></div>
+            <div class="pname">Moong Dal</div>
+          </div>
+          <div>
+            <div class="variant-wrapper">
+              <select class="punit-select" onchange="onVariantChange('dals', 3, 'Moong Dal', this.value)">
+                <option value="0">500g</option><option value="1">1kg</option>
+              </select>
+            </div>
+            <div class="price-row"><span class="price" id="price-dals-3">€1.79</span></div>
+            <div class="action-container" id="action-dals-3"><button class="addbtn" onclick="handleInitialAdd('dals', 3, 'Moong Dal')">Add to Cart</button></div>
+          </div>
+        </div></div></div><div class="cat-section" id="cat-spices"><div class="cat-head"><h3>Spices &amp; Herbs</h3><div class="cat-line"></div></div><div class="products-grid">
+        <div class="product-card " id="card-spices-0">
+          
+          <div>
+            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Cumin%20Seeds" alt="Cumin Seeds" loading="lazy"></div>
+            <div class="pname">Cumin Seeds</div>
+          </div>
+          <div>
+            <div class="variant-wrapper">
+              <select class="punit-select" onchange="onVariantChange('spices', 0, 'Cumin Seeds', this.value)">
+                <option value="0">50g</option><option value="1">100g</option><option value="2">250g</option>
+              </select>
+            </div>
+            <div class="price-row"><span class="price" id="price-spices-0">€0.89</span></div>
+            <div class="action-container" id="action-spices-0"><button class="addbtn" onclick="handleInitialAdd('spices', 0, 'Cumin Seeds')">Add to Cart</button></div>
+          </div>
+        </div>
+        <div class="product-card " id="card-spices-1">
+          
+          <div>
+            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Mustard%20Seeds" alt="Mustard Seeds" loading="lazy"></div>
+            <div class="pname">Mustard Seeds</div>
+          </div>
+          <div>
+            <div class="variant-wrapper">
+              <select class="punit-select" onchange="onVariantChange('spices', 1, 'Mustard Seeds', this.value)">
+                <option value="0">100g</option><option value="1">200g</option><option value="2">500g</option>
+              </select>
+            </div>
+            <div class="price-row"><span class="price" id="price-spices-1">€0.69</span></div>
+            <div class="action-container" id="action-spices-1"><button class="addbtn" onclick="handleInitialAdd('spices', 1, 'Mustard Seeds')">Add to Cart</button></div>
+          </div>
+        </div>
+        <div class="product-card " id="card-spices-2">
+          
+          <div>
+            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Cardamom%20%2F%20Elaichi" alt="Cardamom / Elaichi" loading="lazy"></div>
+            <div class="pname">Cardamom / Elaichi</div>
+          </div>
+          <div>
+            <div class="variant-wrapper">
+              <select class="punit-select" onchange="onVariantChange('spices', 2, 'Cardamom / Elaichi', this.value)">
+                <option value="0">50g</option><option value="1">100g</option>
+              </select>
+            </div>
+            <div class="price-row"><span class="price" id="price-spices-2">€2.49</span></div>
+            <div class="action-container" id="action-spices-2"><button class="addbtn" onclick="handleInitialAdd('spices', 2, 'Cardamom / Elaichi')">Add to Cart</button></div>
+          </div>
+        </div></div></div><div class="cat-section" id="cat-masalas"><div class="cat-head"><h3>Masala Powders</h3><div class="cat-line"></div></div><div class="products-grid">
+        <div class="product-card " id="card-masalas-0">
+          
+          <div>
+            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Achi%20Sambar%20Powder" alt="Achi Sambar Powder" loading="lazy"></div>
+            <div class="pname">Achi Sambar Powder</div>
+          </div>
+          <div>
+            <div class="variant-wrapper">
+              <select class="punit-select" onchange="onVariantChange('masalas', 0, 'Achi Sambar Powder', this.value)">
+                <option value="0">100g</option><option value="1">200g</option><option value="2">500g</option>
+              </select>
+            </div>
+            <div class="price-row"><span class="price" id="price-masalas-0">€1.39</span></div>
+            <div class="action-container" id="action-masalas-0"><button class="addbtn" onclick="handleInitialAdd('masalas', 0, 'Achi Sambar Powder')">Add to Cart</button></div>
+          </div>
+        </div>
+        <div class="product-card " id="card-masalas-1">
+          
+          <div>
+            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Sakthi%20Chilli%20Powder" alt="Sakthi Chilli Powder" loading="lazy"></div>
+            <div class="pname">Sakthi Chilli Powder</div>
+          </div>
+          <div>
+            <div class="variant-wrapper">
+              <select class="punit-select" onchange="onVariantChange('masalas', 1, 'Sakthi Chilli Powder', this.value)">
+                <option value="0">100g</option><option value="1">200g</option><option value="2">500g</option>
+              </select>
+            </div>
+            <div class="price-row"><span class="price" id="price-masalas-1">€1.19</span></div>
+            <div class="action-container" id="action-masalas-1"><button class="addbtn" onclick="handleInitialAdd('masalas', 1, 'Sakthi Chilli Powder')">Add to Cart</button></div>
+          </div>
+        </div>
+        <div class="product-card " id="card-masalas-2">
+          
+          <div>
+            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Garam%20Masala" alt="Garam Masala" loading="lazy"></div>
+            <div class="pname">Garam Masala</div>
+          </div>
+          <div>
+            <div class="variant-wrapper">
+              <select class="punit-select" onchange="onVariantChange('masalas', 2, 'Garam Masala', this.value)">
+                <option value="0">100g</option><option value="1">250g</option>
+              </select>
+            </div>
+            <div class="price-row"><span class="price" id="price-masalas-2">€1.29</span></div>
+            <div class="action-container" id="action-masalas-2"><button class="addbtn" onclick="handleInitialAdd('masalas', 2, 'Garam Masala')">Add to Cart</button></div>
+          </div>
+        </div></div></div><div class="cat-section" id="cat-oils"><div class="cat-head"><h3>Oils &amp; Ghee</h3><div class="cat-line"></div></div><div class="products-grid">
+        <div class="product-card " id="card-oils-0">
+          
+          <div>
+            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Pure%20Cow%20Ghee" alt="Pure Cow Ghee" loading="lazy"></div>
+            <div class="pname">Pure Cow Ghee</div>
+          </div>
+          <div>
+            <div class="variant-wrapper">
+              <select class="punit-select" onchange="onVariantChange('oils', 0, 'Pure Cow Ghee', this.value)">
+                <option value="0">200ml</option><option value="1">500ml</option><option value="2">1L</option>
+              </select>
+            </div>
+            <div class="price-row"><span class="price" id="price-oils-0">€3.79</span></div>
+            <div class="action-container" id="action-oils-0"><button class="addbtn" onclick="handleInitialAdd('oils', 0, 'Pure Cow Ghee')">Add to Cart</button></div>
+          </div>
+        </div>
+        <div class="product-card " id="card-oils-1">
+          
+          <div>
+            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Idhayam%20Gingelly%20Oil" alt="Idhayam Gingelly Oil" loading="lazy"></div>
+            <div class="pname">Idhayam Gingelly Oil</div>
+          </div>
+          <div>
+            <div class="variant-wrapper">
+              <select class="punit-select" onchange="onVariantChange('oils', 1, 'Idhayam Gingelly Oil', this.value)">
+                <option value="0">500ml</option><option value="1">1L</option>
+              </select>
+            </div>
+            <div class="price-row"><span class="price" id="price-oils-1">€3.29</span></div>
+            <div class="action-container" id="action-oils-1"><button class="addbtn" onclick="handleInitialAdd('oils', 1, 'Idhayam Gingelly Oil')">Add to Cart</button></div>
+          </div>
+        </div>
+        <div class="product-card " id="card-oils-2">
+          
+          <div>
+            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Gold%20Winner%20Sunflower%20Oil" alt="Gold Winner Sunflower Oil" loading="lazy"></div>
+            <div class="pname">Gold Winner Sunflower Oil</div>
+          </div>
+          <div>
+            <div class="variant-wrapper">
+              <select class="punit-select" onchange="onVariantChange('oils', 2, 'Gold Winner Sunflower Oil', this.value)">
+                <option value="0">1L</option><option value="1">2L</option><option value="2">5L</option>
+              </select>
+            </div>
+            <div class="price-row"><span class="price" id="price-oils-2">€2.19</span></div>
+            <div class="action-container" id="action-oils-2"><button class="addbtn" onclick="handleInitialAdd('oils', 2, 'Gold Winner Sunflower Oil')">Add to Cart</button></div>
+          </div>
+        </div></div></div><div class="cat-section" id="cat-dairy"><div class="cat-head"><h3>Dairy &amp; Paneer</h3><div class="cat-line"></div></div><div class="products-grid">
+        <div class="product-card " id="card-dairy-0">
+          
+          <div>
+            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Amul%20Fresh%20Paneer" alt="Amul Fresh Paneer" loading="lazy"></div>
+            <div class="pname">Amul Fresh Paneer</div>
+          </div>
+          <div>
+            <div class="variant-wrapper">
+              <select class="punit-select" onchange="onVariantChange('dairy', 0, 'Amul Fresh Paneer', this.value)">
+                <option value="0">200g</option><option value="1">500g</option><option value="2">1kg</option>
+              </select>
+            </div>
+            <div class="price-row"><span class="price" id="price-dairy-0">€2.49</span></div>
+            <div class="action-container" id="action-dairy-0"><button class="addbtn" onclick="handleInitialAdd('dairy', 0, 'Amul Fresh Paneer')">Add to Cart</button></div>
+          </div>
+        </div>
+        <div class="product-card " id="card-dairy-1">
+          
+          <div>
+            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Set%20Yogurt%20%2F%20Curd" alt="Set Yogurt / Curd" loading="lazy"></div>
+            <div class="pname">Set Yogurt / Curd</div>
+          </div>
+          <div>
+            <div class="variant-wrapper">
+              <select class="punit-select" onchange="onVariantChange('dairy', 1, 'Set Yogurt / Curd', this.value)">
+                <option value="0">500g</option><option value="1">1kg</option>
+              </select>
+            </div>
+            <div class="price-row"><span class="price" id="price-dairy-1">€1.29</span></div>
+            <div class="action-container" id="action-dairy-1"><button class="addbtn" onclick="handleInitialAdd('dairy', 1, 'Set Yogurt / Curd')">Add to Cart</button></div>
+          </div>
+        </div></div></div><div class="cat-section" id="cat-snacks"><div class="cat-head"><h3>Snacks &amp; Sweets</h3><div class="cat-line"></div></div><div class="products-grid">
+        <div class="product-card " id="card-snacks-0">
+          
+          <div>
+            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Grand%20Sweets%20Murukku" alt="Grand Sweets Murukku" loading="lazy"></div>
+            <div class="pname">Grand Sweets Murukku</div>
+          </div>
+          <div>
+            <div class="variant-wrapper">
+              <select class="punit-select" onchange="onVariantChange('snacks', 0, 'Grand Sweets Murukku', this.value)">
+                <option value="0">200g</option><option value="1">500g</option>
+              </select>
+            </div>
+            <div class="price-row"><span class="price" id="price-snacks-0">€1.79</span></div>
+            <div class="action-container" id="action-snacks-0"><button class="addbtn" onclick="handleInitialAdd('snacks', 0, 'Grand Sweets Murukku')">Add to Cart</button></div>
+          </div>
+        </div>
+        <div class="product-card " id="card-snacks-1">
+          
+          <div>
+            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Madras%20Mixture" alt="Madras Mixture" loading="lazy"></div>
+            <div class="pname">Madras Mixture</div>
+          </div>
+          <div>
+            <div class="variant-wrapper">
+              <select class="punit-select" onchange="onVariantChange('snacks', 1, 'Madras Mixture', this.value)">
+                <option value="0">200g</option><option value="1">500g</option>
+              </select>
+            </div>
+            <div class="price-row"><span class="price" id="price-snacks-1">€1.79</span></div>
+            <div class="action-container" id="action-snacks-1"><button class="addbtn" onclick="handleInitialAdd('snacks', 1, 'Madras Mixture')">Add to Cart</button></div>
+          </div>
+        </div></div></div><div class="cat-section" id="cat-beverages"><div class="cat-head"><h3>Beverages &amp; Tea</h3><div class="cat-line"></div></div><div class="products-grid">
+        <div class="product-card " id="card-beverages-0">
+          
+          <div>
+            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Narasu's%20Filter%20Coffee" alt="Narasu's Filter Coffee" loading="lazy"></div>
+            <div class="pname">Narasu's Filter Coffee</div>
+          </div>
+          <div>
+            <div class="variant-wrapper">
+              <select class="punit-select" onchange="onVariantChange('beverages', 0, 'Narasu\'s Filter Coffee', this.value)">
+                <option value="0">250g</option><option value="1">500g</option>
+              </select>
+            </div>
+            <div class="price-row"><span class="price" id="price-beverages-0">€3.49</span></div>
+            <div class="action-container" id="action-beverages-0"><button class="addbtn" onclick="handleInitialAdd('beverages', 0, 'Narasu\'s Filter Coffee')">Add to Cart</button></div>
+          </div>
+        </div>
+        <div class="product-card " id="card-beverages-1">
+          
+          <div>
+            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=3%20Kings%20Assam%20Tea" alt="3 Kings Assam Tea" loading="lazy"></div>
+            <div class="pname">3 Kings Assam Tea</div>
+          </div>
+          <div>
+            <div class="variant-wrapper">
+              <select class="punit-select" onchange="onVariantChange('beverages', 1, '3 Kings Assam Tea', this.value)">
+                <option value="0">250g</option><option value="1">500g</option>
+              </select>
+            </div>
+            <div class="price-row"><span class="price" id="price-beverages-1">€2.99</span></div>
+            <div class="action-container" id="action-beverages-1"><button class="addbtn" onclick="handleInitialAdd('beverages', 1, '3 Kings Assam Tea')">Add to Cart</button></div>
+          </div>
+        </div></div></div><div class="cat-section" id="cat-pickles"><div class="cat-head"><h3>Pickles &amp; Papads</h3><div class="cat-line"></div></div><div class="products-grid">
+        <div class="product-card " id="card-pickles-0">
+          
+          <div>
+            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Priya%20Mango%20Pickle" alt="Priya Mango Pickle" loading="lazy"></div>
+            <div class="pname">Priya Mango Pickle</div>
+          </div>
+          <div>
+            <div class="variant-wrapper">
+              <select class="punit-select" onchange="onVariantChange('pickles', 0, 'Priya Mango Pickle', this.value)">
+                <option value="0">300g</option><option value="1">1kg</option>
+              </select>
+            </div>
+            <div class="price-row"><span class="price" id="price-pickles-0">€2.29</span></div>
+            <div class="action-container" id="action-pickles-0"><button class="addbtn" onclick="handleInitialAdd('pickles', 0, 'Priya Mango Pickle')">Add to Cart</button></div>
+          </div>
+        </div>
+        <div class="product-card " id="card-pickles-1">
+          
+          <div>
+            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Lijjat%20Appalam%20Papad" alt="Lijjat Appalam Papad" loading="lazy"></div>
+            <div class="pname">Lijjat Appalam Papad</div>
+          </div>
+          <div>
+            <div class="variant-wrapper">
+              <select class="punit-select" onchange="onVariantChange('pickles', 1, 'Lijjat Appalam Papad', this.value)">
+                <option value="0">1packet</option><option value="1">1box</option>
+              </select>
+            </div>
+            <div class="price-row"><span class="price" id="price-pickles-1">€0.99</span></div>
+            <div class="action-container" id="action-pickles-1"><button class="addbtn" onclick="handleInitialAdd('pickles', 1, 'Lijjat Appalam Papad')">Add to Cart</button></div>
+          </div>
+        </div></div></div><div class="cat-section" id="cat-instant"><div class="cat-head"><h3>Instant Mixes</h3><div class="cat-line"></div></div><div class="products-grid">
+        <div class="product-card " id="card-instant-0">
+          
+          <div>
+            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Fresh%20Idli%20Dosa%20Batter" alt="Fresh Idli Dosa Batter" loading="lazy"></div>
+            <div class="pname">Fresh Idli Dosa Batter</div>
+          </div>
+          <div>
+            <div class="variant-wrapper">
+              <select class="punit-select" onchange="onVariantChange('instant', 0, 'Fresh Idli Dosa Batter', this.value)">
+                <option value="0">1kg</option><option value="1">2kg</option>
+              </select>
+            </div>
+            <div class="price-row"><span class="price" id="price-instant-0">€2.99</span></div>
+            <div class="action-container" id="action-instant-0"><button class="addbtn" onclick="handleInitialAdd('instant', 0, 'Fresh Idli Dosa Batter')">Add to Cart</button></div>
+          </div>
+        </div>
+        <div class="product-card " id="card-instant-1">
+          
+          <div>
+            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=MTR%20Gulab%20Jamun%20Mix" alt="MTR Gulab Jamun Mix" loading="lazy"></div>
+            <div class="pname">MTR Gulab Jamun Mix</div>
+          </div>
+          <div>
+            <div class="variant-wrapper">
+              <select class="punit-select" onchange="onVariantChange('instant', 1, 'MTR Gulab Jamun Mix', this.value)">
+                <option value="0">200g</option><option value="1">400g</option>
+              </select>
+            </div>
+            <div class="price-row"><span class="price" id="price-instant-1">€1.49</span></div>
+            <div class="action-container" id="action-instant-1"><button class="addbtn" onclick="handleInitialAdd('instant', 1, 'MTR Gulab Jamun Mix')">Add to Cart</button></div>
+          </div>
+        </div></div></div><div class="cat-section" id="cat-frozen"><div class="cat-head"><h3>Frozen Foods</h3><div class="cat-line"></div></div><div class="products-grid">
+        <div class="product-card " id="card-frozen-0">
+          
+          <div>
+            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=ID%20Frozen%20Parotta" alt="ID Frozen Parotta" loading="lazy"></div>
+            <div class="pname">ID Frozen Parotta</div>
+          </div>
+          <div>
+            <div class="variant-wrapper">
+              <select class="punit-select" onchange="onVariantChange('frozen', 0, 'ID Frozen Parotta', this.value)">
+                <option value="0">5pcs (400g)</option><option value="1">10pcs (800g)</option>
+              </select>
+            </div>
+            <div class="price-row"><span class="price" id="price-frozen-0">€2.49</span></div>
+            <div class="action-container" id="action-frozen-0"><button class="addbtn" onclick="handleInitialAdd('frozen', 0, 'ID Frozen Parotta')">Add to Cart</button></div>
+          </div>
+        </div>
+        <div class="product-card " id="card-frozen-1">
+          
+          <div>
+            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Frozen%20Cut%20Okra" alt="Frozen Cut Okra" loading="lazy"></div>
+            <div class="pname">Frozen Cut Okra</div>
+          </div>
+          <div>
+            <div class="variant-wrapper">
+              <select class="punit-select" onchange="onVariantChange('frozen', 1, 'Frozen Cut Okra', this.value)">
+                <option value="0">400g</option><option value="1">1kg</option>
+              </select>
+            </div>
+            <div class="price-row"><span class="price" id="price-frozen-1">€1.99</span></div>
+            <div class="action-container" id="action-frozen-1"><button class="addbtn" onclick="handleInitialAdd('frozen', 1, 'Frozen Cut Okra')">Add to Cart</button></div>
+          </div>
+        </div></div></div><div class="cat-section" id="cat-pooja"><div class="cat-head"><h3>Pooja Essentials</h3><div class="cat-line"></div></div><div class="products-grid">
+        <div class="product-card " id="card-pooja-0">
+          
+          <div>
+            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Pooja%20Camphor" alt="Pooja Camphor" loading="lazy"></div>
+            <div class="pname">Pooja Camphor</div>
+          </div>
+          <div>
+            <div class="variant-wrapper">
+              <select class="punit-select" onchange="onVariantChange('pooja', 0, 'Pooja Camphor', this.value)">
+                <option value="0">1pack (50g)</option><option value="1">1pack (100g)</option>
+              </select>
+            </div>
+            <div class="price-row"><span class="price" id="price-pooja-0">€1.29</span></div>
+            <div class="action-container" id="action-pooja-0"><button class="addbtn" onclick="handleInitialAdd('pooja', 0, 'Pooja Camphor')">Add to Cart</button></div>
+          </div>
+        </div>
+        <div class="product-card " id="card-pooja-1">
+          
+          <div>
+            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Cycle%20Incense%20Sticks" alt="Cycle Incense Sticks" loading="lazy"></div>
+            <div class="pname">Cycle Incense Sticks</div>
+          </div>
+          <div>
+            <div class="variant-wrapper">
+              <select class="punit-select" onchange="onVariantChange('pooja', 1, 'Cycle Incense Sticks', this.value)">
+                <option value="0">1pack</option><option value="1">1bundle</option>
+              </select>
+            </div>
+            <div class="price-row"><span class="price" id="price-pooja-1">€1.49</span></div>
+            <div class="action-container" id="action-pooja-1"><button class="addbtn" onclick="handleInitialAdd('pooja', 1, 'Cycle Incense Sticks')">Add to Cart</button></div>
+          </div>
+        </div></div></div></main>
 </div>
 
 <div id="view-categories" class="app-view">
   <div class="view-container">
     <h2 class="page-title">All Categories</h2>
     <div class="front-greet-section" style="border-bottom:none;">
-      <div class="circle-grid" id="fullCategoriesGrid" style="grid-template-columns: repeat(3, 1fr);"></div>
+      <div class="circle-grid" id="fullCategoriesGrid" style="grid-template-columns: repeat(3, 1fr);"><div class="circle-card"><div class="circle-icon-box">🥦</div><div class="circle-title">Fresh Vegetables</div></div><div class="circle-card"><div class="circle-icon-box">🍎</div><div class="circle-title">Fresh Fruits</div></div><div class="circle-card"><div class="circle-icon-box">🌾</div><div class="circle-title">Rice &amp; Atta Flour</div></div><div class="circle-card"><div class="circle-icon-box">🫘</div><div class="circle-title">Dals &amp; Lentils</div></div><div class="circle-card"><div class="circle-icon-box">🌶️</div><div class="circle-title">Spices &amp; Herbs</div></div><div class="circle-card"><div class="circle-icon-box">🧂</div><div class="circle-title">Masala Powders</div></div><div class="circle-card"><div class="circle-icon-box">🛢️</div><div class="circle-title">Oils &amp; Ghee</div></div><div class="circle-card"><div class="circle-icon-box">🧀</div><div class="circle-title">Dairy &amp; Paneer</div></div><div class="circle-card"><div class="circle-icon-box">🍪</div><div class="circle-title">Snacks &amp; Sweets</div></div><div class="circle-card"><div class="circle-icon-box">☕</div><div class="circle-title">Beverages &amp; Tea</div></div><div class="circle-card"><div class="circle-icon-box">🏺</div><div class="circle-title">Pickles &amp; Papads</div></div><div class="circle-card"><div class="circle-icon-box">🥣</div><div class="circle-title">Instant Mixes</div></div><div class="circle-card"><div class="circle-icon-box">❄️</div><div class="circle-title">Frozen Foods</div></div><div class="circle-card"><div class="circle-icon-box">🪔</div><div class="circle-title">Pooja Essentials</div></div></div>
     </div>
   </div>
 </div>
@@ -309,22 +914,22 @@
 <div id="view-basket" class="app-view">
   <div class="view-container">
     <h2 class="page-title">Your Shopping Basket</h2>
-    <div class="ledger" id="ledger"></div>
+    <div class="ledger" id="ledger"><div class="empty-note">Your shopping basket is empty.</div></div>
     <div class="drawer-form">
       
       <label>Promo Code / Coupon</label>
       <div style="display: flex; gap: 8px; margin-bottom: 4px;">
-        <input id="promoCodeInput" placeholder="ENTER CODE (E.G., SNKFREE)" style="text-transform: uppercase;">
+        <input id="promoCodeInput" placeholder="ENTER CODE (E.G., SNKFREE)" style="text-transform: uppercase;" __gcruniqueid="40">
         <button type="button" onclick="applyPromoCode()" style="background: var(--accent); color: var(--primary); border: none; padding: 0 16px; border-radius: 8px; font-weight: 700; cursor: pointer; white-space: nowrap;">Apply</button>
       </div>
       <div id="promoMsg" style="font-size: 12px; font-weight: 700; margin-bottom: 12px; min-height: 15px;"></div>
       
       <label>Delivery Destination</label>
-      <select id="area" onchange="syncCartTotals()"></select>
-      <label>Your Full Name</label><input id="cname" placeholder="Enter your name">
-      <label>Complete Address</label><input id="caddr" placeholder="Street name, house number, postcode">
-      <label>Review / Special Comments</label><textarea id="ccomments" placeholder="Custom requests..."></textarea>
-      <button class="send-btn" id="sendBtn" onclick="sendOrder()">📲 Send Order to WhatsApp</button>
+      <select id="area" onchange="syncCartTotals()" __gcruniqueid="41"><option value="" disabled="" selected="">--- Choose Delivery Location ---</option><option value="0">Den Haag (+€2.50)</option><option value="1">Rotterdam (+€5.00)</option><option value="2">Delft (+€3.00)</option><option value="3">Leiden (+€4.00)</option></select>
+      <label>Your Full Name</label><input id="cname" placeholder="Enter your name" __gcruniqueid="42">
+      <label>Complete Address</label><input id="caddr" placeholder="Street name, house number, postcode" __gcruniqueid="43">
+      <label>Review / Special Comments</label><textarea id="ccomments" placeholder="Custom requests..." __gcruniqueid="44"></textarea>
+      <button class="send-btn" id="sendBtn" onclick="sendOrder()" disabled="">📲 Send Order to WhatsApp</button>
     </div>
   </div>
 </div>
@@ -332,7 +937,17 @@
 <div id="view-profile" class="app-view">
   <div class="view-container">
     <h2 class="page-title">Customer Account</h2>
-    <div id="profileContent"></div>
+    <div id="profileContent">
+      <div class="auth-card">
+        <div style="font-size:40px; margin-bottom:10px;">🔐</div>
+        <h3>Unlock Exclusive Member Offers</h3>
+        <p style="color:var(--text-light); font-size:13px; margin-bottom:20px;">Enter your phone number to generate an instant premium membership code.</p>
+        <div class="auth-input-group">
+          <label>Mobile Phone Number</label>
+          <input type="tel" id="userPhoneInput" class="auth-input" placeholder="e.g. +31 6 85259659" __gcruniqueid="45">
+        </div>
+        <button class="auth-btn" onclick="handlePhoneLogin()">Generate Membership Code &amp; Login</button>
+      </div></div>
   </div>
 </div>
 
@@ -340,7 +955,7 @@
 
 <div class="menu-drawer" id="menuDrawer">
   <div class="menu-drawer-head"><h3>Categories Menu</h3><button class="close" onclick="closeMenuDrawer()">×</button></div>
-  <div class="menu-drawer-body" id="menuDrawerBody"></div>
+  <div class="menu-drawer-body" id="menuDrawerBody"><a href="#cat-vegetables" class="menu-cat-link">Fresh Vegetables</a><a href="#cat-fruits" class="menu-cat-link">Fresh Fruits</a><a href="#cat-rice" class="menu-cat-link">Rice &amp; Atta Flour</a><a href="#cat-dals" class="menu-cat-link">Dals &amp; Lentils</a><a href="#cat-spices" class="menu-cat-link">Spices &amp; Herbs</a><a href="#cat-masalas" class="menu-cat-link">Masala Powders</a><a href="#cat-oils" class="menu-cat-link">Oils &amp; Ghee</a><a href="#cat-dairy" class="menu-cat-link">Dairy &amp; Paneer</a><a href="#cat-snacks" class="menu-cat-link">Snacks &amp; Sweets</a><a href="#cat-beverages" class="menu-cat-link">Beverages &amp; Tea</a><a href="#cat-pickles" class="menu-cat-link">Pickles &amp; Papads</a><a href="#cat-instant" class="menu-cat-link">Instant Mixes</a><a href="#cat-frozen" class="menu-cat-link">Frozen Foods</a><a href="#cat-pooja" class="menu-cat-link">Pooja Essentials</a></div>
   <button class="menu-admin-btn" onclick="closeMenuDrawer(); adminLogin();">🛠️ Open Admin Portal</button>
   <div class="menu-contact-box">
     <h4>Contact Us</h4>
@@ -358,12 +973,611 @@
 
 <div class="admin-overlay" id="adminOverlay">
   <div class="admin-head"><h3>SNK Operations Control</h3><button onclick="closeAdmin()">×</button></div>
-  <div class="admin-body" id="adminBody"></div>
+  <div class="admin-body" id="adminBody">
+    <div class="print-box-tool">
+      <h4 style="color:var(--primary);">🖨️ WhatsApp Order To A4 Invoice Parser</h4>
+      <textarea id="adminPasteText" placeholder="Paste the complete WhatsApp order text here..." __gcruniqueid="47"></textarea>
+      <div style="display:flex; gap:10px;">
+        <button onclick="printFromPastedWhatsAppText()" style="background:#007BFF; color:#fff; border:none; padding:8px 16px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:12px;">🖨️ Parse &amp; Print WhatsApp Invoice</button>
+        <button onclick="printCurrentBasketInvoice()" style="background:var(--primary); color:#fff; border:none; padding:8px 16px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:12px;">🛒 Print Current Active Basket</button>
+      </div>
+    </div>
+
+    <div class="admin-cat" style="border: 2px solid #007BFF; background: #F4F9FF;">
+      <div class="admin-cat-header">
+        <span style="font-size: 15px; font-weight: 800; color: #0056b3;">⚙️ Dynamic Loyalty Milestone &amp; Announcement Settings</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top:12px;">
+        <div>
+          <label style="font-size:12px; font-weight:700; color:var(--text-dark); display:block; margin-bottom:4px;">Required Orders to Unlock Coupon</label>
+          <input type="number" id="settingRequiredOrders" value="3" style="padding:10px; border-radius:6px; border:1px solid #CBD5E1; width:100%; font-weight:800;" onchange="storeDatabase.settings.requiredOrders = parseInt(this.value) || 3" __gcruniqueid="48">
+          <small style="color:var(--text-light); font-size:11px;">e.g., 3 means offer unlocks on the 4th order.</small>
+        </div>
+        <div>
+          <label style="font-size:12px; font-weight:700; color:var(--text-dark); display:block; margin-bottom:4px;">Milestone Discount Percentage (%)</label>
+          <input type="number" id="settingLoyaltyDiscount" value="10" style="padding:10px; border-radius:6px; border:1px solid #CBD5E1; width:100%; font-weight:800;" onchange="storeDatabase.settings.loyaltyDiscount = parseInt(this.value) || 10" __gcruniqueid="49">
+          <small style="color:var(--text-light); font-size:11px;">Enter pure numbers (e.g., 15 for 15%).</small>
+        </div>
+        
+        <div style="grid-column: span 2;">
+          <label style="font-size:12px; font-weight:700; color:var(--text-dark); display:block; margin-bottom:4px;">📢 Edit Live Running Announcement Text</label>
+          <textarea id="settingAnnouncementText" style="width:100%; height:60px; padding:10px; border-radius:6px; border:1px solid #CBD5E1; font-size:13px; font-weight:600;" onchange="storeDatabase.settings.announcementText = this.value" placeholder="Type here to instantly change the moving announcement scroll text..." __gcruniqueid="50">🔥 Special Offer: Keep ordering from our shop to get amazing discounts instantly! 🔥</textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="admin-cat" style="border: 1px solid #CBD5E1; background: #FFFDF5;">
+      <div class="admin-cat-header">
+        <span style="font-size:14px; font-weight:800; color:var(--accent-dark);">👤 Registered User Tracker Insight</span>
+      </div>
+      <p style="font-size:12px; color:var(--text-dark); line-height:1.4; margin-top:5px;">
+        <b>Note on User Tracking:</b> Because this application is server-less, user identities are securely mapped in individual phone storages to save maintenance costs. You instantly receive their <b>Membership Codes</b> and verified phone numbers embedded right within their WhatsApp messages when orders are submitted.
+      </p>
+    </div>
+
+    <div class="admin-cat" style="border: 2px solid #25D366;">
+      <div class="admin-cat-header">
+        <span style="font-size: 15px; font-weight: 800; color: var(--primary);">🎁 Manage Static Customer Offers</span>
+      </div>
+      <div style="display: flex; flex-direction:column; gap: 10px; margin-top:10px;" id="adminOffersList">
+        
+          <div style="background:var(--bg-light); border:1px solid #CBD5E1; padding:10px; border-radius:8px; display:flex; flex-direction:column; gap:6px;">
+            <input style="font-weight:700;" value="Welcome Offer" onchange="offers[0].title=this.value" placeholder="Offer Title" __gcruniqueid="51">
+            <input value="Get a free spice pack on your first order above €25!" onchange="offers[0].desc=this.value" placeholder="Offer Description" __gcruniqueid="52">
+            <div style="display:flex; gap:10px; align-items:center;">
+              <input style="font-family:monospace; font-weight:700;" value="SNKFREE" onchange="offers[0].code=this.value" placeholder="Coupon Code (Optional)" __gcruniqueid="53">
+              <button onclick="offers.splice(0,1); loadProductsTab();" style="background:var(--danger); color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-weight:bold;">Remove</button>
+            </div>
+          </div>
+        
+          <div style="background:var(--bg-light); border:1px solid #CBD5E1; padding:10px; border-radius:8px; display:flex; flex-direction:column; gap:6px;">
+            <input style="font-weight:700;" value="Weekend Delivery Deal" onchange="offers[1].title=this.value" placeholder="Offer Title" __gcruniqueid="54">
+            <input value="10% discount on delivery charges for Den Haag residents this weekend." onchange="offers[1].desc=this.value" placeholder="Offer Description" __gcruniqueid="55">
+            <div style="display:flex; gap:10px; align-items:center;">
+              <input style="font-family:monospace; font-weight:700;" value="DH10" onchange="offers[1].code=this.value" placeholder="Coupon Code (Optional)" __gcruniqueid="56">
+              <button onclick="offers.splice(1,1); loadProductsTab();" style="background:var(--danger); color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-weight:bold;">Remove</button>
+            </div>
+          </div>
+        
+      </div>
+      <div class="admin-btn-row" style="margin-top:10px;">
+        <button onclick="offers.push({title:'New Offer Title', desc:'Offer details here...', code:'CODE10'}); loadProductsTab();" style="background:#25D366; color:white;">+ Add New Special Offer</button>
+      </div>
+    </div>
+
+    <div class="admin-cat" style="border: 2px solid var(--accent);">
+      <div class="admin-cat-header"><span style="font-size: 14px; font-weight: 700; color: var(--primary);">📍 Manage Delivery Locations &amp; Fees</span></div>
+      <div style="display: flex; flex-direction:column; gap: 8px; margin-top: 10px;">
+        
+          <div style="display: flex; align-items: center; background: var(--bg-light); padding: 8px; border-radius: 6px; border: 1px solid #CBD5E1; gap: 10px; justify-content:space-between;">
+            <input style="font-weight:600; width:50%;" value="Den Haag" onchange="locations[0].name=this.value" __gcruniqueid="57">
+            <div style="display:flex; align-items:center; gap:4px;"><span>€</span><input style="width:70px; font-weight:700;" type="number" step="0.01" value="2.5" onchange="locations[0].fee=parseFloat(this.value)||0" __gcruniqueid="58"></div>
+            <button onclick="if(confirm('Delete Den Haag?')){locations.splice(0,1); loadProductsTab();}" style="background: var(--danger); color: white; border: none; padding:4px 8px; border-radius:4px; cursor: pointer;">×</button>
+          </div>
+        
+          <div style="display: flex; align-items: center; background: var(--bg-light); padding: 8px; border-radius: 6px; border: 1px solid #CBD5E1; gap: 10px; justify-content:space-between;">
+            <input style="font-weight:600; width:50%;" value="Rotterdam" onchange="locations[1].name=this.value" __gcruniqueid="59">
+            <div style="display:flex; align-items:center; gap:4px;"><span>€</span><input style="width:70px; font-weight:700;" type="number" step="0.01" value="5" onchange="locations[1].fee=parseFloat(this.value)||0" __gcruniqueid="60"></div>
+            <button onclick="if(confirm('Delete Rotterdam?')){locations.splice(1,1); loadProductsTab();}" style="background: var(--danger); color: white; border: none; padding:4px 8px; border-radius:4px; cursor: pointer;">×</button>
+          </div>
+        
+          <div style="display: flex; align-items: center; background: var(--bg-light); padding: 8px; border-radius: 6px; border: 1px solid #CBD5E1; gap: 10px; justify-content:space-between;">
+            <input style="font-weight:600; width:50%;" value="Delft" onchange="locations[2].name=this.value" __gcruniqueid="61">
+            <div style="display:flex; align-items:center; gap:4px;"><span>€</span><input style="width:70px; font-weight:700;" type="number" step="0.01" value="3" onchange="locations[2].fee=parseFloat(this.value)||0" __gcruniqueid="62"></div>
+            <button onclick="if(confirm('Delete Delft?')){locations.splice(2,1); loadProductsTab();}" style="background: var(--danger); color: white; border: none; padding:4px 8px; border-radius:4px; cursor: pointer;">×</button>
+          </div>
+        
+          <div style="display: flex; align-items: center; background: var(--bg-light); padding: 8px; border-radius: 6px; border: 1px solid #CBD5E1; gap: 10px; justify-content:space-between;">
+            <input style="font-weight:600; width:50%;" value="Leiden" onchange="locations[3].name=this.value" __gcruniqueid="63">
+            <div style="display:flex; align-items:center; gap:4px;"><span>€</span><input style="width:70px; font-weight:700;" type="number" step="0.01" value="4" onchange="locations[3].fee=parseFloat(this.value)||0" __gcruniqueid="64"></div>
+            <button onclick="if(confirm('Delete Leiden?')){locations.splice(3,1); loadProductsTab();}" style="background: var(--danger); color: white; border: none; padding:4px 8px; border-radius:4px; cursor: pointer;">×</button>
+          </div>
+        
+      </div>
+      <div class="admin-btn-row" style="margin-top: 12px;"><button onclick="addLocationPrompt()" style="background: var(--accent); color: var(--primary);">+ Add New Location</button></div>
+    </div>
+  
+    <div class="admin-cat">
+      <div class="admin-cat-header">
+        <input value="Fresh Vegetables" onchange="catalog[0].name=this.value; catalog[0].id=this.value.toLowerCase().replace(/[^a-z0-9]/g,'')" placeholder="Category Name" __gcruniqueid="65">
+        <button onclick="if(confirm('Delete entire category Fresh Vegetables?')){catalog.splice(0,1); loadProductsTab()}" style="background:var(--danger); color:#fff; border:none; padding:4px 10px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:700;">Delete Category</button>
+      </div>
+      <div style="margin-top:10px;">
+        
+          <div class="admin-item-row">
+            <input value="Onion" onchange="catalog[0].items[0][0]=this.value" placeholder="Name" __gcruniqueid="66">
+            <input value="1kg, 5kg, 10kg" onchange="catalog[0].items[0][1]=this.value" placeholder="Variants" __gcruniqueid="67">
+            <input value="1.49, 5.99, 10.99" onchange="catalog[0].items[0][2]=this.value" placeholder="Prices" __gcruniqueid="68">
+            <input value="https://i.postimg.cc/yx2TwCSX/IMG-1455.png" onchange="catalog[0].items[0][3]=this.value" placeholder="Image URL" __gcruniqueid="69">
+            <label><input type="checkbox" onchange="catalog[0].items[0][4]=this.checked"> OOS</label>
+            <button onclick="catalog[0].items.splice(0,1); loadProductsTab()">×</button>
+          </div>
+        
+          <div class="admin-item-row">
+            <input value="Tomato" onchange="catalog[0].items[1][0]=this.value" placeholder="Name" __gcruniqueid="70">
+            <input value="500g, 1kg" onchange="catalog[0].items[1][1]=this.value" placeholder="Variants" __gcruniqueid="71">
+            <input value="1.19, 1.99" onchange="catalog[0].items[1][2]=this.value" placeholder="Prices" __gcruniqueid="72">
+            <input value="" onchange="catalog[0].items[1][3]=this.value" placeholder="Image URL" __gcruniqueid="73">
+            <label><input type="checkbox" onchange="catalog[0].items[1][4]=this.checked"> OOS</label>
+            <button onclick="catalog[0].items.splice(1,1); loadProductsTab()">×</button>
+          </div>
+        
+          <div class="admin-item-row">
+            <input value="Potato" onchange="catalog[0].items[2][0]=this.value" placeholder="Name" __gcruniqueid="74">
+            <input value="1kg, 2.5kg, 5kg" onchange="catalog[0].items[2][1]=this.value" placeholder="Variants" __gcruniqueid="75">
+            <input value="1.29, 2.99, 4.99" onchange="catalog[0].items[2][2]=this.value" placeholder="Prices" __gcruniqueid="76">
+            <input value="" onchange="catalog[0].items[2][3]=this.value" placeholder="Image URL" __gcruniqueid="77">
+            <label><input type="checkbox" onchange="catalog[0].items[2][4]=this.checked"> OOS</label>
+            <button onclick="catalog[0].items.splice(2,1); loadProductsTab()">×</button>
+          </div>
+        
+          <div class="admin-item-row">
+            <input value="Green Chillies" onchange="catalog[0].items[3][0]=this.value" placeholder="Name" __gcruniqueid="78">
+            <input value="100g, 250g, 500g" onchange="catalog[0].items[3][1]=this.value" placeholder="Variants" __gcruniqueid="79">
+            <input value="0.99, 1.99, 3.49" onchange="catalog[0].items[3][2]=this.value" placeholder="Prices" __gcruniqueid="80">
+            <input value="" onchange="catalog[0].items[3][3]=this.value" placeholder="Image URL" __gcruniqueid="81">
+            <label><input type="checkbox" onchange="catalog[0].items[3][4]=this.checked"> OOS</label>
+            <button onclick="catalog[0].items.splice(3,1); loadProductsTab()">×</button>
+          </div>
+        
+          <div class="admin-item-row">
+            <input value="Sambar Onions" onchange="catalog[0].items[4][0]=this.value" placeholder="Name" __gcruniqueid="82">
+            <input value="250g, 500g, 1kg" onchange="catalog[0].items[4][1]=this.value" placeholder="Variants" __gcruniqueid="83">
+            <input value="1.49, 2.79, 4.99" onchange="catalog[0].items[4][2]=this.value" placeholder="Prices" __gcruniqueid="84">
+            <input value="" onchange="catalog[0].items[4][3]=this.value" placeholder="Image URL" __gcruniqueid="85">
+            <label><input type="checkbox" onchange="catalog[0].items[4][4]=this.checked"> OOS</label>
+            <button onclick="catalog[0].items.splice(4,1); loadProductsTab()">×</button>
+          </div>
+        
+      </div>
+      <div class="admin-btn-row"><button onclick="catalog[0].items.push(['New Item','1kg','1.99','',false]); loadProductsTab()">+ Add Product</button></div>
+    </div>
+  
+    <div class="admin-cat">
+      <div class="admin-cat-header">
+        <input value="Fresh Fruits" onchange="catalog[1].name=this.value; catalog[1].id=this.value.toLowerCase().replace(/[^a-z0-9]/g,'')" placeholder="Category Name" __gcruniqueid="86">
+        <button onclick="if(confirm('Delete entire category Fresh Fruits?')){catalog.splice(1,1); loadProductsTab()}" style="background:var(--danger); color:#fff; border:none; padding:4px 10px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:700;">Delete Category</button>
+      </div>
+      <div style="margin-top:10px;">
+        
+          <div class="admin-item-row">
+            <input value="Banana" onchange="catalog[1].items[0][0]=this.value" placeholder="Name" __gcruniqueid="87">
+            <input value="500g, 1kg" onchange="catalog[1].items[0][1]=this.value" placeholder="Variants" __gcruniqueid="88">
+            <input value="1.10, 1.99" onchange="catalog[1].items[0][2]=this.value" placeholder="Prices" __gcruniqueid="89">
+            <input value="" onchange="catalog[1].items[0][3]=this.value" placeholder="Image URL" __gcruniqueid="90">
+            <label><input type="checkbox" onchange="catalog[1].items[0][4]=this.checked"> OOS</label>
+            <button onclick="catalog[1].items.splice(0,1); loadProductsTab()">×</button>
+          </div>
+        
+          <div class="admin-item-row">
+            <input value="Mango Box" onchange="catalog[1].items[1][0]=this.value" placeholder="Name" __gcruniqueid="91">
+            <input value="1box (4pcs), 1box (6pcs)" onchange="catalog[1].items[1][1]=this.value" placeholder="Variants" __gcruniqueid="92">
+            <input value="6.99, 9.99" onchange="catalog[1].items[1][2]=this.value" placeholder="Prices" __gcruniqueid="93">
+            <input value="" onchange="catalog[1].items[1][3]=this.value" placeholder="Image URL" __gcruniqueid="94">
+            <label><input type="checkbox" onchange="catalog[1].items[1][4]=this.checked"> OOS</label>
+            <button onclick="catalog[1].items.splice(1,1); loadProductsTab()">×</button>
+          </div>
+        
+      </div>
+      <div class="admin-btn-row"><button onclick="catalog[1].items.push(['New Item','1kg','1.99','',false]); loadProductsTab()">+ Add Product</button></div>
+    </div>
+  
+    <div class="admin-cat">
+      <div class="admin-cat-header">
+        <input value="Rice &amp; Atta Flour" onchange="catalog[2].name=this.value; catalog[2].id=this.value.toLowerCase().replace(/[^a-z0-9]/g,'')" placeholder="Category Name" __gcruniqueid="95">
+        <button onclick="if(confirm('Delete entire category Rice &amp; Atta Flour?')){catalog.splice(2,1); loadProductsTab()}" style="background:var(--danger); color:#fff; border:none; padding:4px 10px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:700;">Delete Category</button>
+      </div>
+      <div style="margin-top:10px;">
+        
+          <div class="admin-item-row">
+            <input value="Premium Idli Rice" onchange="catalog[2].items[0][0]=this.value" placeholder="Name" __gcruniqueid="96">
+            <input value="1kg, 5kg, 10kg" onchange="catalog[2].items[0][1]=this.value" placeholder="Variants" __gcruniqueid="97">
+            <input value="2.49, 9.99, 18.99" onchange="catalog[2].items[0][2]=this.value" placeholder="Prices" __gcruniqueid="98">
+            <input value="" onchange="catalog[2].items[0][3]=this.value" placeholder="Image URL" __gcruniqueid="99">
+            <label><input type="checkbox" onchange="catalog[2].items[0][4]=this.checked"> OOS</label>
+            <button onclick="catalog[2].items.splice(0,1); loadProductsTab()">×</button>
+          </div>
+        
+          <div class="admin-item-row">
+            <input value="Aashirvaad Chakki Atta" onchange="catalog[2].items[1][0]=this.value" placeholder="Name" __gcruniqueid="100">
+            <input value="1kg, 5kg, 10kg" onchange="catalog[2].items[1][1]=this.value" placeholder="Variants" __gcruniqueid="101">
+            <input value="3.29, 14.49, 26.99" onchange="catalog[2].items[1][2]=this.value" placeholder="Prices" __gcruniqueid="102">
+            <input value="" onchange="catalog[2].items[1][3]=this.value" placeholder="Image URL" __gcruniqueid="103">
+            <label><input type="checkbox" onchange="catalog[2].items[1][4]=this.checked"> OOS</label>
+            <button onclick="catalog[2].items.splice(1,1); loadProductsTab()">×</button>
+          </div>
+        
+          <div class="admin-item-row">
+            <input value="Premium Basmati Rice" onchange="catalog[2].items[2][0]=this.value" placeholder="Name" __gcruniqueid="104">
+            <input value="1kg, 5kg, 10kg" onchange="catalog[2].items[2][1]=this.value" placeholder="Variants" __gcruniqueid="105">
+            <input value="2.99, 12.99, 24.99" onchange="catalog[2].items[2][2]=this.value" placeholder="Prices" __gcruniqueid="106">
+            <input value="" onchange="catalog[2].items[2][3]=this.value" placeholder="Image URL" __gcruniqueid="107">
+            <label><input type="checkbox" onchange="catalog[2].items[2][4]=this.checked"> OOS</label>
+            <button onclick="catalog[2].items.splice(2,1); loadProductsTab()">×</button>
+          </div>
+        
+          <div class="admin-item-row">
+            <input value="Ponni Boiled Rice" onchange="catalog[2].items[3][0]=this.value" placeholder="Name" __gcruniqueid="108">
+            <input value="5kg, 10kg, 20kg" onchange="catalog[2].items[3][1]=this.value" placeholder="Variants" __gcruniqueid="109">
+            <input value="11.49, 21.99, 41.99" onchange="catalog[2].items[3][2]=this.value" placeholder="Prices" __gcruniqueid="110">
+            <input value="" onchange="catalog[2].items[3][3]=this.value" placeholder="Image URL" __gcruniqueid="111">
+            <label><input type="checkbox" onchange="catalog[2].items[3][4]=this.checked"> OOS</label>
+            <button onclick="catalog[2].items.splice(3,1); loadProductsTab()">×</button>
+          </div>
+        
+      </div>
+      <div class="admin-btn-row"><button onclick="catalog[2].items.push(['New Item','1kg','1.99','',false]); loadProductsTab()">+ Add Product</button></div>
+    </div>
+  
+    <div class="admin-cat">
+      <div class="admin-cat-header">
+        <input value="Dals &amp; Lentils" onchange="catalog[3].name=this.value; catalog[3].id=this.value.toLowerCase().replace(/[^a-z0-9]/g,'')" placeholder="Category Name" __gcruniqueid="112">
+        <button onclick="if(confirm('Delete entire category Dals &amp; Lentils?')){catalog.splice(3,1); loadProductsTab()}" style="background:var(--danger); color:#fff; border:none; padding:4px 10px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:700;">Delete Category</button>
+      </div>
+      <div style="margin-top:10px;">
+        
+          <div class="admin-item-row">
+            <input value="Toor Dal" onchange="catalog[3].items[0][0]=this.value" placeholder="Name" __gcruniqueid="113">
+            <input value="500g, 1kg, 2kg" onchange="catalog[3].items[0][1]=this.value" placeholder="Variants" __gcruniqueid="114">
+            <input value="1.69, 2.99, 5.79" onchange="catalog[3].items[0][2]=this.value" placeholder="Prices" __gcruniqueid="115">
+            <input value="" onchange="catalog[3].items[0][3]=this.value" placeholder="Image URL" __gcruniqueid="116">
+            <label><input type="checkbox" onchange="catalog[3].items[0][4]=this.checked"> OOS</label>
+            <button onclick="catalog[3].items.splice(0,1); loadProductsTab()">×</button>
+          </div>
+        
+          <div class="admin-item-row">
+            <input value="Urad Dal Whole" onchange="catalog[3].items[1][0]=this.value" placeholder="Name" __gcruniqueid="117">
+            <input value="500g, 1kg" onchange="catalog[3].items[1][1]=this.value" placeholder="Variants" __gcruniqueid="118">
+            <input value="1.89, 3.49" onchange="catalog[3].items[1][2]=this.value" placeholder="Prices" __gcruniqueid="119">
+            <input value="" onchange="catalog[3].items[1][3]=this.value" placeholder="Image URL" __gcruniqueid="120">
+            <label><input type="checkbox" onchange="catalog[3].items[1][4]=this.checked"> OOS</label>
+            <button onclick="catalog[3].items.splice(1,1); loadProductsTab()">×</button>
+          </div>
+        
+          <div class="admin-item-row">
+            <input value="Chana Dal" onchange="catalog[3].items[2][0]=this.value" placeholder="Name" __gcruniqueid="121">
+            <input value="500g, 1kg" onchange="catalog[3].items[2][1]=this.value" placeholder="Variants" __gcruniqueid="122">
+            <input value="1.49, 2.69" onchange="catalog[3].items[2][2]=this.value" placeholder="Prices" __gcruniqueid="123">
+            <input value="" onchange="catalog[3].items[2][3]=this.value" placeholder="Image URL" __gcruniqueid="124">
+            <label><input type="checkbox" onchange="catalog[3].items[2][4]=this.checked"> OOS</label>
+            <button onclick="catalog[3].items.splice(2,1); loadProductsTab()">×</button>
+          </div>
+        
+          <div class="admin-item-row">
+            <input value="Moong Dal" onchange="catalog[3].items[3][0]=this.value" placeholder="Name" __gcruniqueid="125">
+            <input value="500g, 1kg" onchange="catalog[3].items[3][1]=this.value" placeholder="Variants" __gcruniqueid="126">
+            <input value="1.79, 3.29" onchange="catalog[3].items[3][2]=this.value" placeholder="Prices" __gcruniqueid="127">
+            <input value="" onchange="catalog[3].items[3][3]=this.value" placeholder="Image URL" __gcruniqueid="128">
+            <label><input type="checkbox" onchange="catalog[3].items[3][4]=this.checked"> OOS</label>
+            <button onclick="catalog[3].items.splice(3,1); loadProductsTab()">×</button>
+          </div>
+        
+      </div>
+      <div class="admin-btn-row"><button onclick="catalog[3].items.push(['New Item','1kg','1.99','',false]); loadProductsTab()">+ Add Product</button></div>
+    </div>
+  
+    <div class="admin-cat">
+      <div class="admin-cat-header">
+        <input value="Spices &amp; Herbs" onchange="catalog[4].name=this.value; catalog[4].id=this.value.toLowerCase().replace(/[^a-z0-9]/g,'')" placeholder="Category Name" __gcruniqueid="129">
+        <button onclick="if(confirm('Delete entire category Spices &amp; Herbs?')){catalog.splice(4,1); loadProductsTab()}" style="background:var(--danger); color:#fff; border:none; padding:4px 10px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:700;">Delete Category</button>
+      </div>
+      <div style="margin-top:10px;">
+        
+          <div class="admin-item-row">
+            <input value="Cumin Seeds" onchange="catalog[4].items[0][0]=this.value" placeholder="Name" __gcruniqueid="130">
+            <input value="50g, 100g, 250g" onchange="catalog[4].items[0][1]=this.value" placeholder="Variants" __gcruniqueid="131">
+            <input value="0.89, 1.59, 3.49" onchange="catalog[4].items[0][2]=this.value" placeholder="Prices" __gcruniqueid="132">
+            <input value="" onchange="catalog[4].items[0][3]=this.value" placeholder="Image URL" __gcruniqueid="133">
+            <label><input type="checkbox" onchange="catalog[4].items[0][4]=this.checked"> OOS</label>
+            <button onclick="catalog[4].items.splice(0,1); loadProductsTab()">×</button>
+          </div>
+        
+          <div class="admin-item-row">
+            <input value="Mustard Seeds" onchange="catalog[4].items[1][0]=this.value" placeholder="Name" __gcruniqueid="134">
+            <input value="100g, 200g, 500g" onchange="catalog[4].items[1][1]=this.value" placeholder="Variants" __gcruniqueid="135">
+            <input value="0.69, 1.19, 2.49" onchange="catalog[4].items[1][2]=this.value" placeholder="Prices" __gcruniqueid="136">
+            <input value="" onchange="catalog[4].items[1][3]=this.value" placeholder="Image URL" __gcruniqueid="137">
+            <label><input type="checkbox" onchange="catalog[4].items[1][4]=this.checked"> OOS</label>
+            <button onclick="catalog[4].items.splice(1,1); loadProductsTab()">×</button>
+          </div>
+        
+          <div class="admin-item-row">
+            <input value="Cardamom / Elaichi" onchange="catalog[4].items[2][0]=this.value" placeholder="Name" __gcruniqueid="138">
+            <input value="50g, 100g" onchange="catalog[4].items[2][1]=this.value" placeholder="Variants" __gcruniqueid="139">
+            <input value="2.49, 4.79" onchange="catalog[4].items[2][2]=this.value" placeholder="Prices" __gcruniqueid="140">
+            <input value="" onchange="catalog[4].items[2][3]=this.value" placeholder="Image URL" __gcruniqueid="141">
+            <label><input type="checkbox" onchange="catalog[4].items[2][4]=this.checked"> OOS</label>
+            <button onclick="catalog[4].items.splice(2,1); loadProductsTab()">×</button>
+          </div>
+        
+      </div>
+      <div class="admin-btn-row"><button onclick="catalog[4].items.push(['New Item','1kg','1.99','',false]); loadProductsTab()">+ Add Product</button></div>
+    </div>
+  
+    <div class="admin-cat">
+      <div class="admin-cat-header">
+        <input value="Masala Powders" onchange="catalog[5].name=this.value; catalog[5].id=this.value.toLowerCase().replace(/[^a-z0-9]/g,'')" placeholder="Category Name" __gcruniqueid="142">
+        <button onclick="if(confirm('Delete entire category Masala Powders?')){catalog.splice(5,1); loadProductsTab()}" style="background:var(--danger); color:#fff; border:none; padding:4px 10px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:700;">Delete Category</button>
+      </div>
+      <div style="margin-top:10px;">
+        
+          <div class="admin-item-row">
+            <input value="Achi Sambar Powder" onchange="catalog[5].items[0][0]=this.value" placeholder="Name" __gcruniqueid="143">
+            <input value="100g, 200g, 500g" onchange="catalog[5].items[0][1]=this.value" placeholder="Variants" __gcruniqueid="144">
+            <input value="1.39, 2.49, 5.49" onchange="catalog[5].items[0][2]=this.value" placeholder="Prices" __gcruniqueid="145">
+            <input value="" onchange="catalog[5].items[0][3]=this.value" placeholder="Image URL" __gcruniqueid="146">
+            <label><input type="checkbox" onchange="catalog[5].items[0][4]=this.checked"> OOS</label>
+            <button onclick="catalog[5].items.splice(0,1); loadProductsTab()">×</button>
+          </div>
+        
+          <div class="admin-item-row">
+            <input value="Sakthi Chilli Powder" onchange="catalog[5].items[1][0]=this.value" placeholder="Name" __gcruniqueid="147">
+            <input value="100g, 200g, 500g" onchange="catalog[5].items[1][1]=this.value" placeholder="Variants" __gcruniqueid="148">
+            <input value="1.19, 1.99, 4.49" onchange="catalog[5].items[1][2]=this.value" placeholder="Prices" __gcruniqueid="149">
+            <input value="" onchange="catalog[5].items[1][3]=this.value" placeholder="Image URL" __gcruniqueid="150">
+            <label><input type="checkbox" onchange="catalog[5].items[1][4]=this.checked"> OOS</label>
+            <button onclick="catalog[5].items.splice(1,1); loadProductsTab()">×</button>
+          </div>
+        
+          <div class="admin-item-row">
+            <input value="Garam Masala" onchange="catalog[5].items[2][0]=this.value" placeholder="Name" __gcruniqueid="151">
+            <input value="100g, 250g" onchange="catalog[5].items[2][1]=this.value" placeholder="Variants" __gcruniqueid="152">
+            <input value="1.29, 2.89" onchange="catalog[5].items[2][2]=this.value" placeholder="Prices" __gcruniqueid="153">
+            <input value="" onchange="catalog[5].items[2][3]=this.value" placeholder="Image URL" __gcruniqueid="154">
+            <label><input type="checkbox" onchange="catalog[5].items[2][4]=this.checked"> OOS</label>
+            <button onclick="catalog[5].items.splice(2,1); loadProductsTab()">×</button>
+          </div>
+        
+      </div>
+      <div class="admin-btn-row"><button onclick="catalog[5].items.push(['New Item','1kg','1.99','',false]); loadProductsTab()">+ Add Product</button></div>
+    </div>
+  
+    <div class="admin-cat">
+      <div class="admin-cat-header">
+        <input value="Oils &amp; Ghee" onchange="catalog[6].name=this.value; catalog[6].id=this.value.toLowerCase().replace(/[^a-z0-9]/g,'')" placeholder="Category Name" __gcruniqueid="155">
+        <button onclick="if(confirm('Delete entire category Oils &amp; Ghee?')){catalog.splice(6,1); loadProductsTab()}" style="background:var(--danger); color:#fff; border:none; padding:4px 10px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:700;">Delete Category</button>
+      </div>
+      <div style="margin-top:10px;">
+        
+          <div class="admin-item-row">
+            <input value="Pure Cow Ghee" onchange="catalog[6].items[0][0]=this.value" placeholder="Name" __gcruniqueid="156">
+            <input value="200ml, 500ml, 1L" onchange="catalog[6].items[0][1]=this.value" placeholder="Variants" __gcruniqueid="157">
+            <input value="3.79, 7.99, 14.99" onchange="catalog[6].items[0][2]=this.value" placeholder="Prices" __gcruniqueid="158">
+            <input value="" onchange="catalog[6].items[0][3]=this.value" placeholder="Image URL" __gcruniqueid="159">
+            <label><input type="checkbox" onchange="catalog[6].items[0][4]=this.checked"> OOS</label>
+            <button onclick="catalog[6].items.splice(0,1); loadProductsTab()">×</button>
+          </div>
+        
+          <div class="admin-item-row">
+            <input value="Idhayam Gingelly Oil" onchange="catalog[6].items[1][0]=this.value" placeholder="Name" __gcruniqueid="160">
+            <input value="500ml, 1L" onchange="catalog[6].items[1][1]=this.value" placeholder="Variants" __gcruniqueid="161">
+            <input value="3.29, 5.99" onchange="catalog[6].items[1][2]=this.value" placeholder="Prices" __gcruniqueid="162">
+            <input value="" onchange="catalog[6].items[1][3]=this.value" placeholder="Image URL" __gcruniqueid="163">
+            <label><input type="checkbox" onchange="catalog[6].items[1][4]=this.checked"> OOS</label>
+            <button onclick="catalog[6].items.splice(1,1); loadProductsTab()">×</button>
+          </div>
+        
+          <div class="admin-item-row">
+            <input value="Gold Winner Sunflower Oil" onchange="catalog[6].items[2][0]=this.value" placeholder="Name" __gcruniqueid="164">
+            <input value="1L, 2L, 5L" onchange="catalog[6].items[2][1]=this.value" placeholder="Variants" __gcruniqueid="165">
+            <input value="2.19, 4.19, 9.99" onchange="catalog[6].items[2][2]=this.value" placeholder="Prices" __gcruniqueid="166">
+            <input value="" onchange="catalog[6].items[2][3]=this.value" placeholder="Image URL" __gcruniqueid="167">
+            <label><input type="checkbox" onchange="catalog[6].items[2][4]=this.checked"> OOS</label>
+            <button onclick="catalog[6].items.splice(2,1); loadProductsTab()">×</button>
+          </div>
+        
+      </div>
+      <div class="admin-btn-row"><button onclick="catalog[6].items.push(['New Item','1kg','1.99','',false]); loadProductsTab()">+ Add Product</button></div>
+    </div>
+  
+    <div class="admin-cat">
+      <div class="admin-cat-header">
+        <input value="Dairy &amp; Paneer" onchange="catalog[7].name=this.value; catalog[7].id=this.value.toLowerCase().replace(/[^a-z0-9]/g,'')" placeholder="Category Name" __gcruniqueid="168">
+        <button onclick="if(confirm('Delete entire category Dairy &amp; Paneer?')){catalog.splice(7,1); loadProductsTab()}" style="background:var(--danger); color:#fff; border:none; padding:4px 10px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:700;">Delete Category</button>
+      </div>
+      <div style="margin-top:10px;">
+        
+          <div class="admin-item-row">
+            <input value="Amul Fresh Paneer" onchange="catalog[7].items[0][0]=this.value" placeholder="Name" __gcruniqueid="169">
+            <input value="200g, 500g, 1kg" onchange="catalog[7].items[0][1]=this.value" placeholder="Variants" __gcruniqueid="170">
+            <input value="2.49, 5.49, 9.99" onchange="catalog[7].items[0][2]=this.value" placeholder="Prices" __gcruniqueid="171">
+            <input value="" onchange="catalog[7].items[0][3]=this.value" placeholder="Image URL" __gcruniqueid="172">
+            <label><input type="checkbox" onchange="catalog[7].items[0][4]=this.checked"> OOS</label>
+            <button onclick="catalog[7].items.splice(0,1); loadProductsTab()">×</button>
+          </div>
+        
+          <div class="admin-item-row">
+            <input value="Set Yogurt / Curd" onchange="catalog[7].items[1][0]=this.value" placeholder="Name" __gcruniqueid="173">
+            <input value="500g, 1kg" onchange="catalog[7].items[1][1]=this.value" placeholder="Variants" __gcruniqueid="174">
+            <input value="1.29, 1.99" onchange="catalog[7].items[1][2]=this.value" placeholder="Prices" __gcruniqueid="175">
+            <input value="" onchange="catalog[7].items[1][3]=this.value" placeholder="Image URL" __gcruniqueid="176">
+            <label><input type="checkbox" onchange="catalog[7].items[1][4]=this.checked"> OOS</label>
+            <button onclick="catalog[7].items.splice(1,1); loadProductsTab()">×</button>
+          </div>
+        
+      </div>
+      <div class="admin-btn-row"><button onclick="catalog[7].items.push(['New Item','1kg','1.99','',false]); loadProductsTab()">+ Add Product</button></div>
+    </div>
+  
+    <div class="admin-cat">
+      <div class="admin-cat-header">
+        <input value="Snacks &amp; Sweets" onchange="catalog[8].name=this.value; catalog[8].id=this.value.toLowerCase().replace(/[^a-z0-9]/g,'')" placeholder="Category Name" __gcruniqueid="177">
+        <button onclick="if(confirm('Delete entire category Snacks &amp; Sweets?')){catalog.splice(8,1); loadProductsTab()}" style="background:var(--danger); color:#fff; border:none; padding:4px 10px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:700;">Delete Category</button>
+      </div>
+      <div style="margin-top:10px;">
+        
+          <div class="admin-item-row">
+            <input value="Grand Sweets Murukku" onchange="catalog[8].items[0][0]=this.value" placeholder="Name" __gcruniqueid="178">
+            <input value="200g, 500g" onchange="catalog[8].items[0][1]=this.value" placeholder="Variants" __gcruniqueid="179">
+            <input value="1.79, 3.99" onchange="catalog[8].items[0][2]=this.value" placeholder="Prices" __gcruniqueid="180">
+            <input value="" onchange="catalog[8].items[0][3]=this.value" placeholder="Image URL" __gcruniqueid="181">
+            <label><input type="checkbox" onchange="catalog[8].items[0][4]=this.checked"> OOS</label>
+            <button onclick="catalog[8].items.splice(0,1); loadProductsTab()">×</button>
+          </div>
+        
+          <div class="admin-item-row">
+            <input value="Madras Mixture" onchange="catalog[8].items[1][0]=this.value" placeholder="Name" __gcruniqueid="182">
+            <input value="200g, 500g" onchange="catalog[8].items[1][1]=this.value" placeholder="Variants" __gcruniqueid="183">
+            <input value="1.79, 3.99" onchange="catalog[8].items[1][2]=this.value" placeholder="Prices" __gcruniqueid="184">
+            <input value="" onchange="catalog[8].items[1][3]=this.value" placeholder="Image URL" __gcruniqueid="185">
+            <label><input type="checkbox" onchange="catalog[8].items[1][4]=this.checked"> OOS</label>
+            <button onclick="catalog[8].items.splice(1,1); loadProductsTab()">×</button>
+          </div>
+        
+      </div>
+      <div class="admin-btn-row"><button onclick="catalog[8].items.push(['New Item','1kg','1.99','',false]); loadProductsTab()">+ Add Product</button></div>
+    </div>
+  
+    <div class="admin-cat">
+      <div class="admin-cat-header">
+        <input value="Beverages &amp; Tea" onchange="catalog[9].name=this.value; catalog[9].id=this.value.toLowerCase().replace(/[^a-z0-9]/g,'')" placeholder="Category Name" __gcruniqueid="186">
+        <button onclick="if(confirm('Delete entire category Beverages &amp; Tea?')){catalog.splice(9,1); loadProductsTab()}" style="background:var(--danger); color:#fff; border:none; padding:4px 10px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:700;">Delete Category</button>
+      </div>
+      <div style="margin-top:10px;">
+        
+          <div class="admin-item-row">
+            <input value="Narasu's Filter Coffee" onchange="catalog[9].items[0][0]=this.value" placeholder="Name" __gcruniqueid="187">
+            <input value="250g, 500g" onchange="catalog[9].items[0][1]=this.value" placeholder="Variants" __gcruniqueid="188">
+            <input value="3.49, 6.49" onchange="catalog[9].items[0][2]=this.value" placeholder="Prices" __gcruniqueid="189">
+            <input value="" onchange="catalog[9].items[0][3]=this.value" placeholder="Image URL" __gcruniqueid="190">
+            <label><input type="checkbox" onchange="catalog[9].items[0][4]=this.checked"> OOS</label>
+            <button onclick="catalog[9].items.splice(0,1); loadProductsTab()">×</button>
+          </div>
+        
+          <div class="admin-item-row">
+            <input value="3 Kings Assam Tea" onchange="catalog[9].items[1][0]=this.value" placeholder="Name" __gcruniqueid="191">
+            <input value="250g, 500g" onchange="catalog[9].items[1][1]=this.value" placeholder="Variants" __gcruniqueid="192">
+            <input value="2.99, 5.49" onchange="catalog[9].items[1][2]=this.value" placeholder="Prices" __gcruniqueid="193">
+            <input value="" onchange="catalog[9].items[1][3]=this.value" placeholder="Image URL" __gcruniqueid="194">
+            <label><input type="checkbox" onchange="catalog[9].items[1][4]=this.checked"> OOS</label>
+            <button onclick="catalog[9].items.splice(1,1); loadProductsTab()">×</button>
+          </div>
+        
+      </div>
+      <div class="admin-btn-row"><button onclick="catalog[9].items.push(['New Item','1kg','1.99','',false]); loadProductsTab()">+ Add Product</button></div>
+    </div>
+  
+    <div class="admin-cat">
+      <div class="admin-cat-header">
+        <input value="Pickles &amp; Papads" onchange="catalog[10].name=this.value; catalog[10].id=this.value.toLowerCase().replace(/[^a-z0-9]/g,'')" placeholder="Category Name" __gcruniqueid="195">
+        <button onclick="if(confirm('Delete entire category Pickles &amp; Papads?')){catalog.splice(10,1); loadProductsTab()}" style="background:var(--danger); color:#fff; border:none; padding:4px 10px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:700;">Delete Category</button>
+      </div>
+      <div style="margin-top:10px;">
+        
+          <div class="admin-item-row">
+            <input value="Priya Mango Pickle" onchange="catalog[10].items[0][0]=this.value" placeholder="Name" __gcruniqueid="196">
+            <input value="300g, 1kg" onchange="catalog[10].items[0][1]=this.value" placeholder="Variants" __gcruniqueid="197">
+            <input value="2.29, 6.49" onchange="catalog[10].items[0][2]=this.value" placeholder="Prices" __gcruniqueid="198">
+            <input value="" onchange="catalog[10].items[0][3]=this.value" placeholder="Image URL" __gcruniqueid="199">
+            <label><input type="checkbox" onchange="catalog[10].items[0][4]=this.checked"> OOS</label>
+            <button onclick="catalog[10].items.splice(0,1); loadProductsTab()">×</button>
+          </div>
+        
+          <div class="admin-item-row">
+            <input value="Lijjat Appalam Papad" onchange="catalog[10].items[1][0]=this.value" placeholder="Name" __gcruniqueid="200">
+            <input value="1packet, 1box" onchange="catalog[10].items[1][1]=this.value" placeholder="Variants" __gcruniqueid="201">
+            <input value="0.99, 9.49" onchange="catalog[10].items[1][2]=this.value" placeholder="Prices" __gcruniqueid="202">
+            <input value="" onchange="catalog[10].items[1][3]=this.value" placeholder="Image URL">
+            <label><input type="checkbox" onchange="catalog[10].items[1][4]=this.checked"> OOS</label>
+            <button onclick="catalog[10].items.splice(1,1); loadProductsTab()">×</button>
+          </div>
+        
+      </div>
+      <div class="admin-btn-row"><button onclick="catalog[10].items.push(['New Item','1kg','1.99','',false]); loadProductsTab()">+ Add Product</button></div>
+    </div>
+  
+    <div class="admin-cat">
+      <div class="admin-cat-header">
+        <input value="Instant Mixes" onchange="catalog[11].name=this.value; catalog[11].id=this.value.toLowerCase().replace(/[^a-z0-9]/g,'')" placeholder="Category Name">
+        <button onclick="if(confirm('Delete entire category Instant Mixes?')){catalog.splice(11,1); loadProductsTab()}" style="background:var(--danger); color:#fff; border:none; padding:4px 10px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:700;">Delete Category</button>
+      </div>
+      <div style="margin-top:10px;">
+        
+          <div class="admin-item-row">
+            <input value="Fresh Idli Dosa Batter" onchange="catalog[11].items[0][0]=this.value" placeholder="Name">
+            <input value="1kg, 2kg" onchange="catalog[11].items[0][1]=this.value" placeholder="Variants">
+            <input value="2.99, 5.49" onchange="catalog[11].items[0][2]=this.value" placeholder="Prices">
+            <input value="" onchange="catalog[11].items[0][3]=this.value" placeholder="Image URL">
+            <label><input type="checkbox" onchange="catalog[11].items[0][4]=this.checked"> OOS</label>
+            <button onclick="catalog[11].items.splice(0,1); loadProductsTab()">×</button>
+          </div>
+        
+          <div class="admin-item-row">
+            <input value="MTR Gulab Jamun Mix" onchange="catalog[11].items[1][0]=this.value" placeholder="Name">
+            <input value="200g, 400g" onchange="catalog[11].items[1][1]=this.value" placeholder="Variants">
+            <input value="1.49, 2.79" onchange="catalog[11].items[1][2]=this.value" placeholder="Prices">
+            <input value="" onchange="catalog[11].items[1][3]=this.value" placeholder="Image URL">
+            <label><input type="checkbox" onchange="catalog[11].items[1][4]=this.checked"> OOS</label>
+            <button onclick="catalog[11].items.splice(1,1); loadProductsTab()">×</button>
+          </div>
+        
+      </div>
+      <div class="admin-btn-row"><button onclick="catalog[11].items.push(['New Item','1kg','1.99','',false]); loadProductsTab()">+ Add Product</button></div>
+    </div>
+  
+    <div class="admin-cat">
+      <div class="admin-cat-header">
+        <input value="Frozen Foods" onchange="catalog[12].name=this.value; catalog[12].id=this.value.toLowerCase().replace(/[^a-z0-9]/g,'')" placeholder="Category Name">
+        <button onclick="if(confirm('Delete entire category Frozen Foods?')){catalog.splice(12,1); loadProductsTab()}" style="background:var(--danger); color:#fff; border:none; padding:4px 10px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:700;">Delete Category</button>
+      </div>
+      <div style="margin-top:10px;">
+        
+          <div class="admin-item-row">
+            <input value="ID Frozen Parotta" onchange="catalog[12].items[0][0]=this.value" placeholder="Name">
+            <input value="5pcs (400g), 10pcs (800g)" onchange="catalog[12].items[0][1]=this.value" placeholder="Variants">
+            <input value="2.49, 4.49" onchange="catalog[12].items[0][2]=this.value" placeholder="Prices">
+            <input value="" onchange="catalog[12].items[0][3]=this.value" placeholder="Image URL">
+            <label><input type="checkbox" onchange="catalog[12].items[0][4]=this.checked"> OOS</label>
+            <button onclick="catalog[12].items.splice(0,1); loadProductsTab()">×</button>
+          </div>
+        
+          <div class="admin-item-row">
+            <input value="Frozen Cut Okra" onchange="catalog[12].items[1][0]=this.value" placeholder="Name">
+            <input value="400g, 1kg" onchange="catalog[12].items[1][1]=this.value" placeholder="Variants">
+            <input value="1.99, 4.49" onchange="catalog[12].items[1][2]=this.value" placeholder="Prices">
+            <input value="" onchange="catalog[12].items[1][3]=this.value" placeholder="Image URL">
+            <label><input type="checkbox" onchange="catalog[12].items[1][4]=this.checked"> OOS</label>
+            <button onclick="catalog[12].items.splice(1,1); loadProductsTab()">×</button>
+          </div>
+        
+      </div>
+      <div class="admin-btn-row"><button onclick="catalog[12].items.push(['New Item','1kg','1.99','',false]); loadProductsTab()">+ Add Product</button></div>
+    </div>
+  
+    <div class="admin-cat">
+      <div class="admin-cat-header">
+        <input value="Pooja Essentials" onchange="catalog[13].name=this.value; catalog[13].id=this.value.toLowerCase().replace(/[^a-z0-9]/g,'')" placeholder="Category Name">
+        <button onclick="if(confirm('Delete entire category Pooja Essentials?')){catalog.splice(13,1); loadProductsTab()}" style="background:var(--danger); color:#fff; border:none; padding:4px 10px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:700;">Delete Category</button>
+      </div>
+      <div style="margin-top:10px;">
+        
+          <div class="admin-item-row">
+            <input value="Pooja Camphor" onchange="catalog[13].items[0][0]=this.value" placeholder="Name">
+            <input value="1pack (50g), 1pack (100g)" onchange="catalog[13].items[0][1]=this.value" placeholder="Variants">
+            <input value="1.29, 2.29" onchange="catalog[13].items[0][2]=this.value" placeholder="Prices">
+            <input value="" onchange="catalog[13].items[0][3]=this.value" placeholder="Image URL">
+            <label><input type="checkbox" onchange="catalog[13].items[0][4]=this.checked"> OOS</label>
+            <button onclick="catalog[13].items.splice(0,1); loadProductsTab()">×</button>
+          </div>
+        
+          <div class="admin-item-row">
+            <input value="Cycle Incense Sticks" onchange="catalog[13].items[1][0]=this.value" placeholder="Name">
+            <input value="1pack, 1bundle" onchange="catalog[13].items[1][1]=this.value" placeholder="Variants">
+            <input value="1.49, 4.99" onchange="catalog[13].items[1][2]=this.value" placeholder="Prices">
+            <input value="" onchange="catalog[13].items[1][3]=this.value" placeholder="Image URL">
+            <label><input type="checkbox" onchange="catalog[13].items[1][4]=this.checked"> OOS</label>
+            <button onclick="catalog[13].items.splice(1,1); loadProductsTab()">×</button>
+          </div>
+        
+      </div>
+      <div class="admin-btn-row"><button onclick="catalog[13].items.push(['New Item','1kg','1.99','',false]); loadProductsTab()">+ Add Product</button></div>
+    </div>
+  <div style="text-align:center; margin: 25px 0;"><button onclick="addNewCategoryPrompt()" style="background:#007BFF; color:#fff; border:none; padding:12px 24px; border-radius:8px; font-weight:700; cursor:pointer; font-size:14px;">➕ Add New Category</button></div></div>
   <div class="save-bar">
-    <button onclick="saveCatalogAndExport()">1. Save & Generate Update Code</button>
-    <div class="export-box" id="exportBox">
+    <button onclick="saveCatalogAndExport()">1. Save &amp; Generate Update Code</button>
+    <div class="export-box" id="exportBox" style="display: none;">
       <p style="font-size:12px; color:var(--danger); font-weight:700; text-align:center;">Copy the code below and paste it completely inside GitHub index.html file!</p>
-      <textarea id="exportTextarea" readonly onclick="this.select()"></textarea>
+      <textarea id="exportTextarea" readonly="" onclick="this.select()" __gcruniqueid="46"></textarea>
       <button style="background:#007BFF;" onclick="copyExportCode()">2. Copy Code to Clipboard</button>
     </div>
     <div id="adminStatus" style="font-weight:700; color:var(--primary); font-size:13px; margin-top:5px;"></div>
@@ -378,7 +1592,7 @@ const ADMIN_PASSCODE = "snk2026";
 const GOOGLE_SCRIPT_URL = " https://script.google.com/macros/s/AKfycbyIFe79oQ4BfYhtqyDzL7YErRkzoG8G0t3zJmwIdT1UaM_OohbJSGNGYs2vXx8jqyW2Ug/exec";
 
 // Core System Database Structure — Category Specific Balanced Weights Array
-const storeDatabase = {"categories":[{"id":"vegetables","name":"Fresh Vegetables","items":[["Onion","1kg, 5kg, 10kg","1.49, 5.99, 10.99","https://i.postimg.cc/yx2TwCSX/IMG-1455.png",false],["Tomato","500g, 1kg","1.19, 1.99","",false],["Potato","1kg, 2.5kg, 5kg","1.29, 2.99, 4.99","",false],["Green Chillies","100g, 250g, 500g","0.99, 1.99, 3.49","",false],["Sambar Onions","250g, 500g, 1kg","1.49, 2.79, 4.99","",false]]},{"id":"fruits","name":"Fresh Fruits","items":[["Banana","500g, 1kg","1.10, 1.99","",false],["Mango Box","1box (4pcs), 1box (6pcs)","6.99, 9.99","",false]]},{"id":"rice","name":"Rice & Atta Flour","items":[["Premium Idli Rice","1kg, 5kg, 10kg","2.49, 9.99, 18.99","",false],["Aashirvaad Chakki Atta","1kg, 5kg, 10kg","3.29, 14.49, 26.99","",false],["Premium Basmati Rice","1kg, 5kg, 10kg","2.99, 12.99, 24.99","",false],["Ponni Boiled Rice","5kg, 10kg, 20kg","11.49, 21.99, 41.99","",false]]},{"id":"dals","name":"Dals & Lentils","items":[["Toor Dal","500g, 1kg, 2kg","1.69, 2.99, 5.79","",false],["Urad Dal Whole","500g, 1kg","1.89, 3.49","",false],["Chana Dal","500g, 1kg","1.49, 2.69","",false],["Moong Dal","500g, 1kg","1.79, 3.29","",false]]},{"id":"spices","name":"Spices & Herbs","items":[["Cumin Seeds","50g, 100g, 250g","0.89, 1.59, 3.49","",false],["Mustard Seeds","100g, 200g, 500g","0.69, 1.19, 2.49","",false],["Cardamom / Elaichi","50g, 100g","2.49, 4.79","",false]]},{"id":"masalas","name":"Masala Powders","items":[["Achi Sambar Powder","100g, 200g, 500g","1.39, 2.49, 5.49","",false],["Sakthi Chilli Powder","100g, 200g, 500g","1.19, 1.99, 4.49","",false],["Garam Masala","100g, 250g","1.29, 2.89","",false]]},{"id":"oils","name":"Oils & Ghee","items":[["Pure Cow Ghee","200ml, 500ml, 1L","3.79, 7.99, 14.99","",false],["Idhayam Gingelly Oil","500ml, 1L","3.29, 5.99","",false],["Gold Winner Sunflower Oil","1L, 2L, 5L","2.19, 4.19, 9.99","",false]]},{"id":"dairy","name":"Dairy & Paneer","items":[["Amul Fresh Paneer","200g, 500g, 1kg","2.49, 5.49, 9.99","",false],["Set Yogurt / Curd","500g, 1kg","1.29, 1.99","",false]]},{"id":"snacks","name":"Snacks & Sweets","items":[["Grand Sweets Murukku","200g, 500g","1.79, 3.99","",false],["Madras Mixture","200g, 500g","1.79, 3.99","",false]]},{"id":"beverages","name":"Beverages & Tea","items":[["Narasu's Filter Coffee","250g, 500g","3.49, 6.49","",false],["3 Kings Assam Tea","250g, 500g","2.99, 5.49","",false]]},{"id":"pickles","name":"Pickles & Papads","items":[["Priya Mango Pickle","300g, 1kg","2.29, 6.49","",false],["Lijjat Appalam Papad","1packet, 1box","0.99, 9.49","",false]]},{"id":"instant","name":"Instant Mixes","items":[["Fresh Idli Dosa Batter","1kg, 2kg","2.99, 5.49","",false],["MTR Gulab Jamun Mix","200g, 400g","1.49, 2.79","",false]]},{"id":"frozen","name":"Frozen Foods","items":[["ID Frozen Parotta","5pcs (400g), 10pcs (800g)","2.49, 4.49","",false],["Frozen Cut Okra","400g, 1kg","1.99, 4.49","",false]]},{"id":"pooja","name":"Pooja Essentials","items":[["Pooja Camphor","1pack (50g), 1pack (100g)","1.29, 2.29","",false],["Cycle Incense Sticks","1pack, 1bundle","1.49, 4.99","",false]]}],"locations":[{"name":"Den Haag","fee":2.5},{"name":"Rotterdam","fee":5},{"name":"Delft","fee":3},{"name":"Leiden","fee":4}],"offers":[{"title":"Welcome Offer","desc":"Get a free spice pack on your first order above €25!","code":"SNKFREE"},{"title":"Weekend Delivery Deal","desc":"10% discount on delivery charges for Den Haag residents this weekend.","code":"DH10"}],"settings":{"requiredOrders":3,"loyaltyDiscount":10,"announcementText":"🔥 Special Offer: Keep ordering from our shop to get amazing discounts instantly! 🔥"}};
+const storeDatabase = {"categories":[{"id":"vegetables","name":"Fresh Vegetables","items":[["Onion","1kg, 5kg, 10kg","1.49, 5.99, 10.99","https://i.postimg.cc/yx2TwCSX/IMG-1455.png",false],["Tomato","500g, 1kg","1.19, 1.99","Tomato",false],["Potato","1kg, 2.5kg, 5kg","1.29, 2.99, 4.99","",false],["Green Chillies","100g, 250g, 500g","0.99, 1.99, 3.49","",false],["Sambar Onions","250g, 500g, 1kg","1.49, 2.79, 4.99","",false]]},{"id":"fruits","name":"Fresh Fruits","items":[["Banana","500g, 1kg","1.10, 1.99","",false],["Mango Box","1box (4pcs), 1box (6pcs)","6.99, 9.99","",false]]},{"id":"rice","name":"Rice & Atta Flour","items":[["Premium Idli Rice","1kg, 5kg, 10kg","2.49, 9.99, 18.99","",false],["Aashirvaad Chakki Atta","1kg, 5kg, 10kg","3.29, 14.49, 26.99","",false],["Premium Basmati Rice","1kg, 5kg, 10kg","2.99, 12.99, 24.99","",false],["Ponni Boiled Rice","5kg, 10kg, 20kg","11.49, 21.99, 41.99","",false]]},{"id":"dals","name":"Dals & Lentils","items":[["Toor Dal","500g, 1kg, 2kg","1.69, 2.99, 5.79","",false],["Urad Dal Whole","500g, 1kg","1.89, 3.49","",false],["Chana Dal","500g, 1kg","1.49, 2.69","",false],["Moong Dal","500g, 1kg","1.79, 3.29","",false]]},{"id":"spices","name":"Spices & Herbs","items":[["Cumin Seeds","50g, 100g, 250g","0.89, 1.59, 3.49","",false],["Mustard Seeds","100g, 200g, 500g","0.69, 1.19, 2.49","",false],["Cardamom / Elaichi","50g, 100g","2.49, 4.79","",false]]},{"id":"masalas","name":"Masala Powders","items":[["Achi Sambar Powder","100g, 200g, 500g","1.39, 2.49, 5.49","",false],["Sakthi Chilli Powder","100g, 200g, 500g","1.19, 1.99, 4.49","",false],["Garam Masala","100g, 250g","1.29, 2.89","",false]]},{"id":"oils","name":"Oils & Ghee","items":[["Pure Cow Ghee","200ml, 500ml, 1L","3.79, 7.99, 14.99","",false],["Idhayam Gingelly Oil","500ml, 1L","3.29, 5.99","",false],["Gold Winner Sunflower Oil","1L, 2L, 5L","2.19, 4.19, 9.99","",false]]},{"id":"dairy","name":"Dairy & Paneer","items":[["Amul Fresh Paneer","200g, 500g, 1kg","2.49, 5.49, 9.99","",false],["Set Yogurt / Curd","500g, 1kg","1.29, 1.99","",false]]},{"id":"snacks","name":"Snacks & Sweets","items":[["Grand Sweets Murukku","200g, 500g","1.79, 3.99","",false],["Madras Mixture","200g, 500g","1.79, 3.99","",false]]},{"id":"beverages","name":"Beverages & Tea","items":[["Narasu's Filter Coffee","250g, 500g","3.49, 6.49","",false],["3 Kings Assam Tea","250g, 500g","2.99, 5.49","",false]]},{"id":"pickles","name":"Pickles & Papads","items":[["Priya Mango Pickle","300g, 1kg","2.29, 6.49","",false],["Lijjat Appalam Papad","1packet, 1box","0.99, 9.49","",false]]},{"id":"instant","name":"Instant Mixes","items":[["Fresh Idli Dosa Batter","1kg, 2kg","2.99, 5.49","",false],["MTR Gulab Jamun Mix","200g, 400g","1.49, 2.79","",false]]},{"id":"frozen","name":"Frozen Foods","items":[["ID Frozen Parotta","5pcs (400g), 10pcs (800g)","2.49, 4.49","",false],["Frozen Cut Okra","400g, 1kg","1.99, 4.49","",false]]},{"id":"pooja","name":"Pooja Essentials","items":[["Pooja Camphor","1pack (50g), 1pack (100g)","1.29, 2.29","",false],["Cycle Incense Sticks","1pack, 1bundle","1.49, 4.99","",false]]}],"locations":[{"name":"Den Haag","fee":2.5},{"name":"Rotterdam","fee":5},{"name":"Delft","fee":3},{"name":"Leiden","fee":4}],"offers":[{"title":"Welcome Offer","desc":"Get a free spice pack on your first order above €25!","code":"SNKFREE"},{"title":"Weekend Delivery Deal","desc":"10% discount on delivery charges for Den Haag residents this weekend.","code":"DH10"}],"settings":{"requiredOrders":3,"loyaltyDiscount":10,"announcementText":"🔥 Special Offer: Keep ordering from our shop to get amazing discounts instantly! 🔥"}};
 
 let catalog = storeDatabase.categories;
 let locations = storeDatabase.locations || [];
@@ -1220,5 +2434,6 @@ triggerStoreEngineRender = function() {
 };
 
 </script>
-</body>
-</html>
+
+
+</body></html>
