@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en"><head>
+<html lang="en">
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>SNK Foods — Premium Indian Grocery</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=400;500;600;700;800&amp;family=Playfair+Display:wght=600;700;900&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=400;500;600;700;800&family=Playfair+Display:wght=600;700;900&display=swap" rel="stylesheet">
 
 <style>
   :root {
@@ -223,7 +224,7 @@
   }
 </style>
 </head>
-<body class="">
+<body>
 
 <div class="marquee-wrapper" id="marqueeBanner">
   <div id="customer-announcement" class="marquee-text">🔥 Special Offer: Keep ordering from our shop to get amazing discounts instantly! 🔥</div>
@@ -267,7 +268,7 @@
     <div class="shop-badge">🛒 SNKFoods Online Shop</div>
     <h2>Authentic Indian Taste, <br><em>Delivered Fresh.</em></h2>
     <p>Premium quality grocery essentials curated for your kitchen.</p>
-    <div class="pills" id="hero-pills"><span class="pill">📍 Den Haag (€2.50)</span><span class="pill">📍 Rotterdam (€5.00)</span><span class="pill">📍 Delft (€3.00)</span><span class="pill">📍 Leiden (€4.00)</span></div>
+    <div class="pills" id="hero-pills"></div>
   </section>
 
   <div class="search-section">
@@ -276,7 +277,7 @@
 
   <section class="front-greet-section">
     <h4>Explore Our Categories</h4>
-    <div class="circle-grid" id="greetCircles"><div class="circle-card"><div class="circle-icon-box">🥦</div><div class="circle-title">Fresh Vegetables</div></div><div class="circle-card"><div class="circle-icon-box">🍎</div><div class="circle-title">Fresh Fruits</div></div><div class="circle-card"><div class="circle-icon-box">🌾</div><div class="circle-title">Rice &amp; Atta Flour</div></div><div class="circle-card"><div class="circle-icon-box">🫘</div><div class="circle-title">Dals &amp; Lentils</div></div><div class="circle-card"><div class="circle-icon-box">🌶️</div><div class="circle-title">Spices &amp; Herbs</div></div><div class="circle-card"><div class="circle-icon-box">🧂</div><div class="circle-title">Masala Powders</div></div><div class="circle-card"><div class="circle-icon-box">🛢️</div><div class="circle-title">Oils &amp; Ghee</div></div><div class="circle-card"><div class="circle-icon-box">🧀</div><div class="circle-title">Dairy &amp; Paneer</div></div><div class="circle-card"><div class="circle-icon-box">🍪</div><div class="circle-title">Snacks &amp; Sweets</div></div><div class="circle-card"><div class="circle-icon-box">☕</div><div class="circle-title">Beverages &amp; Tea</div></div><div class="circle-card"><div class="circle-icon-box">🏺</div><div class="circle-title">Pickles &amp; Papads</div></div><div class="circle-card"><div class="circle-icon-box">🥣</div><div class="circle-title">Instant Mixes</div></div><div class="circle-card"><div class="circle-icon-box">❄️</div><div class="circle-title">Frozen Foods</div></div><div class="circle-card"><div class="circle-icon-box">🪔</div><div class="circle-title">Pooja Essentials</div></div></div>
+    <div class="circle-grid" id="greetCircles"></div>
   </section>
 
   <div id="noResultsMsg" class="empty-note" style="display:none; padding: 40px 16px;">
@@ -284,661 +285,1153 @@
     <button onclick="requestMissingProduct()" style="margin-top:14px; background: var(--primary); color:#fff; border:none; padding:10px 22px; border-radius:8px; font-weight:700; cursor:pointer; font-size:13px;">📩 Request this product on WhatsApp</button>
   </div>
 
-  <nav class="catnav" id="catnav"><a href="#cat-vegetables" data-id="vegetables" class="active">Fresh Vegetables</a><a href="#cat-fruits" data-id="fruits">Fresh Fruits</a><a href="#cat-rice" data-id="rice">Rice &amp; Atta Flour</a><a href="#cat-dals" data-id="dals">Dals &amp; Lentils</a><a href="#cat-spices" data-id="spices">Spices &amp; Herbs</a><a href="#cat-masalas" data-id="masalas">Masala Powders</a><a href="#cat-oils" data-id="oils">Oils &amp; Ghee</a><a href="#cat-dairy" data-id="dairy">Dairy &amp; Paneer</a><a href="#cat-snacks" data-id="snacks">Snacks &amp; Sweets</a><a href="#cat-beverages" data-id="beverages">Beverages &amp; Tea</a><a href="#cat-pickles" data-id="pickles">Pickles &amp; Papads</a><a href="#cat-instant" data-id="instant">Instant Mixes</a><a href="#cat-frozen" data-id="frozen">Frozen Foods</a><a href="#cat-pooja" data-id="pooja">Pooja Essentials</a></nav>
-  <main id="catalog"><div class="cat-section" id="cat-vegetables"><div class="cat-head"><h3>Fresh Vegetables</h3><div class="cat-line"></div></div><div class="products-grid">
-        <div class="product-card " id="card-vegetables-0">
-          
+  <nav class="catnav" id="catnav"></nav>
+  <main id="catalog"></main>
+</div>
+
+<div id="view-categories" class="app-view">
+  <div class="view-container">
+    <h2 class="page-title">All Categories</h2>
+    <div class="front-greet-section" style="border-bottom:none;">
+      <div class="circle-grid" id="fullCategoriesGrid" style="grid-template-columns: repeat(3, 1fr);"></div>
+    </div>
+  </div>
+</div>
+
+<div id="view-offers" class="app-view">
+  <div class="view-container">
+    <h2 class="page-title">Exclusive Offers</h2>
+    <div id="offersContent"></div>
+  </div>
+</div>
+
+<div id="view-basket" class="app-view">
+  <div class="view-container">
+    <h2 class="page-title">Your Shopping Basket</h2>
+    <div class="ledger" id="ledger"><div class="empty-note">Your shopping basket is empty.</div></div>
+    <div class="drawer-form">
+      
+      <label>Promo Code / Coupon</label>
+      <div style="display: flex; gap: 8px; margin-bottom: 4px;">
+        <input id="promoCodeInput" placeholder="ENTER CODE (E.G., SNKFREE)" style="text-transform: uppercase;">
+        <button type="button" onclick="applyPromoCode()" style="background: var(--accent); color: var(--primary); border: none; padding: 0 16px; border-radius: 8px; font-weight: 700; cursor: pointer; white-space: nowrap;">Apply</button>
+      </div>
+      <div id="promoMsg" style="font-size: 12px; font-weight: 700; margin-bottom: 12px; min-height: 15px;"></div>
+      
+      <label>Delivery Destination</label>
+      <select id="area" onchange="syncCartTotals()"></select>
+      <label>Your Full Name</label><input id="cname" placeholder="Enter your name">
+      <label>Complete Address</label><input id="caddr" placeholder="Street name, house number, postcode">
+      <label>Review / Special Comments</label><textarea id="ccomments" placeholder="Custom requests..."></textarea>
+      <button class="send-btn" id="sendBtn" onclick="sendOrder()" disabled>📲 Send Order to WhatsApp</button>
+    </div>
+  </div>
+</div>
+
+<div id="view-profile" class="app-view">
+  <div class="view-container">
+    <h2 class="page-title">Customer Account</h2>
+    <div id="profileContent"></div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay" onclick="closeAllDrawers()"></div>
+
+<div class="menu-drawer" id="menuDrawer">
+  <div class="menu-drawer-head"><h3>Categories Menu</h3><button class="close" onclick="closeMenuDrawer()">×</button></div>
+  <div class="menu-drawer-body" id="menuDrawerBody"></div>
+  <button class="menu-admin-btn" style="background:#FFF9E6; border-color:var(--accent); color:var(--accent-dark);" onclick="closeMenuDrawer(); openCustomerMessageBox();">📩 Message Us / Request a Product</button>
+  <button class="menu-admin-btn" onclick="closeMenuDrawer(); adminLogin();">🛠️ Open Admin Portal</button>
+  <div class="menu-contact-box">
+    <h4>Contact Us</h4>
+    <p>Phone: +31 6 85259659</p>
+    <p>Open Hours: 09:00 AM - 08:00 PM</p>
+  </div>
+</div>
+
+<div id="a4InvoicePrintout"></div>
+
+<footer>
+  <h4>SNK Foods Netherlands</h4>
+  <button class="admin-link" onclick="adminLogin()">Store Admin Portal</button>
+</footer>
+
+<div class="admin-overlay" id="adminOverlay">
+  <div class="admin-head"><h3>SNK Operations Control</h3><button onclick="closeAdmin()">×</button></div>
+  <div class="admin-body" id="adminBody"></div>
+  <div class="save-bar">
+    <button onclick="saveCatalogAndExport()">1. Save & Generate Update Code</button>
+    <div class="export-box" id="exportBox" style="display: none;">
+      <p style="font-size:12px; color:var(--danger); font-weight:700; text-align:center;">Copy the code below and paste it completely inside GitHub index.html file!</p>
+      <textarea id="exportTextarea" readonly onclick="this.select()"></textarea>
+      <button style="background:#007BFF;" onclick="copyExportCode()">2. Copy Code to Clipboard</button>
+    </div>
+    <div id="adminStatus" style="font-weight:700; color:var(--primary); font-size:13px; margin-top:5px;">Clean System Code Generated! Copy and update in GitHub.</div>
+  </div>
+</div>
+
+
+<script>
+const WA_NUMBER = "31685259659";
+const ADMIN_PASSCODE = "snk2026";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyIFe79oQ4BfYhtqyDzL7YErRkzoG8G0t3zJmwIdT1UaM_OohbJSGNGYs2vXx8jqyW2Ug/exec";
+
+const storeDatabase = {"categories":[{"id":"vegetables","name":"Fresh Vegetables","items":[["Onion","1kg, 5kg, 10kg","1.49, 5.99, 10.99","https://i.postimg.cc/yx2TwCSX/IMG-1455.png",false],["Tomato","500g, 1kg","1.19, 1.99","Tomato.jpg",false],["Potato","1kg, 2.5kg, 5kg","1.29, 2.99, 4.99","",false],["Green Chillies","100g, 250g, 500g","0.99, 1.99, 3.49","",false],["Sambar Onions","250g, 500g, 1kg","1.49, 2.79, 4.99","",false]]},{"id":"fruits","name":"Fresh Fruits","items":[["Banana","500g, 1kg","1.10, 1.99","",false],["Mango Box","1box (4pcs), 1box (6pcs)","6.99, 9.99","",false]]},{"id":"rice","name":"Rice & Atta Flour","items":[["Premium Idli Rice","1kg, 5kg, 10kg","2.49, 9.99, 18.99","",false],["Aashirvaad Chakki Atta","1kg, 5kg, 10kg","3.29, 14.49, 26.99","",false],["Premium Basmati Rice","1kg, 5kg, 10kg","2.99, 12.99, 24.99","",false],["Ponni Boiled Rice","5kg, 10kg, 20kg","11.49, 21.99, 41.99","",false]]},{"id":"dals","name":"Dals & Lentils","items":[["Toor Dal","500g, 1kg, 2kg","1.69, 2.99, 5.79","",false],["Urad Dal Whole","500g, 1kg","1.89, 3.49","",false],["Chana Dal","500g, 1kg","1.49, 2.69","",false],["Moong Dal","500g, 1kg","1.79, 3.29","",false]]},{"id":"spices","name":"Spices & Herbs","items":[["Cumin Seeds","50g, 100g, 250g","0.89, 1.59, 3.49","",false],["Mustard Seeds","100g, 200g, 500g","0.69, 1.19, 2.49","",false],["Cardamom / Elaichi","50g, 100g","2.49, 4.79","",false]]},{"id":"masalas","name":"Masala Powders","items":[["Achi Sambar Powder","100g, 200g, 500g","1.39, 2.49, 5.49","",false],["Sakthi Chilli Powder","100g, 200g, 500g","1.19, 1.99, 4.49","",false],["Garam Masala","100g, 250g","1.29, 2.89","",false]]},{"id":"oils","name":"Oils & Ghee","items":[["Pure Cow Ghee","200ml, 500ml, 1L","3.79, 7.99, 14.99","",false],["Idhayam Gingelly Oil","500ml, 1L","3.29, 5.99","",false],["Gold Winner Sunflower Oil","1L, 2L, 5L","2.19, 4.19, 9.99","",false]]},{"id":"dairy","name":"Dairy & Paneer","items":[["Amul Fresh Paneer","200g, 500g, 1kg","2.49, 5.49, 9.99","",false],["Set Yogurt / Curd","500g, 1kg","1.29, 1.99","",false]]},{"id":"snacks","name":"Snacks & Sweets","items":[["Grand Sweets Murukku","200g, 500g","1.79, 3.99","",false],["Madras Mixture","200g, 500g","1.79, 3.99","",false]]},{"id":"beverages","name":"Beverages & Tea","items":[["Narasu's Filter Coffee","250g, 500g","3.49, 6.49","",false],["3 Kings Assam Tea","250g, 500g","2.99, 5.49","",false]]},{"id":"pickles","name":"Pickles & Papads","items":[["Priya Mango Pickle","300g, 1kg","2.29, 6.49","",false],["Lijjat Appalam Papad","1packet, 1box","0.99, 9.49","",false]]},{"id":"instant","name":"Instant Mixes","items":[["Fresh Idli Dosa Batter","1kg, 2kg","2.99, 5.49","",false],["MTR Gulab Jamun Mix","200g, 400g","1.49, 2.79","",false]]},{"id":"frozen","name":"Frozen Foods","items":[["ID Frozen Parotta","5pcs (400g), 10pcs (800g)","2.49, 4.49","",false],["Frozen Cut Okra","400g, 1kg","1.99, 4.49","",false]]},{"id":"pooja","name":"Pooja Essentials","items":[["Pooja Camphor","1pack (50g), 1pack (100g)","1.29, 2.29","",false],["Cycle Incense Sticks","1pack, 1bundle","1.49, 4.99","",false]]}],"locations":[{"name":"Den Haag","fee":2.5},{"name":"Rotterdam","fee":5},{"name":"Delft","fee":3},{"name":"Leiden","fee":4}],"offers":[{"title":"Welcome Offer","desc":"Get a free spice pack on your first order above €25!","code":"SNKFREE"},{"title":"Weekend Delivery Deal","desc":"10% discount on delivery charges for Den Haag residents this weekend.","code":"DH10"}],"settings":{"requiredOrders":3,"loyaltyDiscount":10,"announcementText":"🔥 Special Offer: Keep ordering from our shop to get amazing discounts instantly! 🔥"}};
+
+let catalog = storeDatabase.categories;
+let locations = storeDatabase.locations || [];
+let offers = storeDatabase.offers || [];
+storeDatabase.settings = storeDatabase.settings || { requiredOrders: 3, loyaltyDiscount: 10, announcementText: "🔥 Special Offer: Keep ordering from our shop to get amazing discounts instantly! 🔥" };
+
+let cart = {};
+let activeCoupon = ""; 
+
+function switchView(viewId) {
+  document.querySelectorAll('.app-view').forEach(view => view.classList.remove('active-view'));
+  document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
+  
+  const targetView = document.getElementById(`view-${viewId}`);
+  const targetBtn = document.getElementById(`btn-view-${viewId}`);
+  
+  if(targetView) targetView.classList.add('active-view');
+  if(targetBtn) targetBtn.classList.add('active');
+  
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  
+  if(viewId === 'profile') renderProfilePage();
+  if(viewId === 'offers') renderOffersPage();
+}
+
+function getCategoryEmoji(id) {
+  const maps = {
+    vegetables: "🥦", fruits: "🍎", rice: "🌾", dals: "🫘", spices: "🌶️",
+    masalas: "🧂", oils: "🛢️", dairy: "🧀", snacks: "🍪", beverages: "☕",
+    pickles: "🏺", instant: "🥣", frozen: "❄️", pooja: "🪔"
+  };
+  return maps[id] || "📦";
+}
+
+function getCategoryIconHtml(cat) {
+  if(cat.icon && typeof cat.icon === 'string' && cat.icon.trim() !== '' && (cat.icon.startsWith('data:') || cat.icon.startsWith('http'))) {
+    return `<img src="${cat.icon}" alt="${cat.name}" style="width:100%;height:100%;object-fit:cover;">`;
+  }
+  return (cat.icon && cat.icon.trim() !== '') ? cat.icon : getCategoryEmoji(cat.id);
+}
+
+function parseVariants(unitStr, priceStr) {
+  const units = unitStr.split(',').map(s => s.trim());
+  const prices = priceStr.split(',').map(s => parseFloat(s.trim()) || 0);
+  return units.map((u, i) => ({ unit: u, price: prices[i] || prices[0] || 0 }));
+}
+
+function renderLocations() {
+  const pillsEl = document.getElementById('hero-pills');
+  const selectEl = document.getElementById('area');
+  if(pillsEl) {
+    pillsEl.innerHTML = locations.map(loc => `<span class="pill">📍 ${loc.name} (€${loc.fee.toFixed(2)})</span>`).join('');
+  }
+  if(selectEl) {
+    selectEl.innerHTML = `<option value="" disabled selected>--- Choose Delivery Location ---</option>` + 
+                         locations.map((loc, idx) => `<option value="${idx}">${loc.name} (+€${loc.fee.toFixed(2)})</option>`).join('');
+  }
+}
+
+function filterProducts() {
+  const query = document.getElementById('searchBar').value.toLowerCase().trim();
+  let anyMatch = false;
+  catalog.forEach(cat => {
+    let categoryHasMatches = false;
+    cat.items.forEach(([name], itemIdx) => {
+      const cardEl = document.getElementById(`card-${cat.id}-${itemIdx}`);
+      if(cardEl) {
+        if(name.toLowerCase().includes(query)) {
+          cardEl.style.display = 'flex';
+          categoryHasMatches = true;
+        } else {
+          cardEl.style.display = 'none';
+        }
+      }
+    });
+    const sectionEl = document.getElementById(`cat-${cat.id}`);
+    if(sectionEl) {
+      sectionEl.style.display = (categoryHasMatches || query === "") ? 'block' : 'none';
+    }
+    if(categoryHasMatches) anyMatch = true;
+  });
+
+  const noResultsEl = document.getElementById('noResultsMsg');
+  const noResultsQueryEl = document.getElementById('noResultsQuery');
+  if(query !== "" && !anyMatch) {
+    if(noResultsEl) noResultsEl.style.display = 'block';
+    if(noResultsQueryEl) noResultsQueryEl.textContent = document.getElementById('searchBar').value.trim();
+    logMissedSearch(document.getElementById('searchBar').value.trim());
+  } else {
+    if(noResultsEl) noResultsEl.style.display = 'none';
+  }
+}
+
+let missedSearchTimer = null;
+function logMissedSearch(term) {
+  if(!term) return;
+  clearTimeout(missedSearchTimer);
+  missedSearchTimer = setTimeout(() => {
+    recordMissedSearch(term);
+  }, 1200);
+}
+
+function recordMissedSearch(term) {
+  const key = 'snk_missed_searches';
+  let list = [];
+  try { list = JSON.parse(localStorage.getItem(key) || '[]'); } catch(e) { list = []; }
+  const normalized = term.toLowerCase();
+  const existing = list.find(x => x.term.toLowerCase() === normalized);
+  if(existing) {
+    existing.count += 1;
+    existing.lastSearched = new Date().toISOString();
+  } else {
+    list.unshift({ term: term, count: 1, lastSearched: new Date().toISOString() });
+  }
+  list = list.slice(0, 100);
+  localStorage.setItem(key, JSON.stringify(list));
+
+  if(GOOGLE_SCRIPT_URL && GOOGLE_SCRIPT_URL !== "YOUR_APPS_SCRIPT_URL_HERE") {
+    fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type: 'missed_search', searchTerm: term, dateTime: new Date().toLocaleString('nl-NL') })
+    }).catch(err => console.log("Missed search log error: ", err));
+  }
+}
+
+function requestMissingProduct() {
+  const term = document.getElementById('searchBar').value.trim();
+  const msg = `Hello SNK Foods! 🙏\nI searched for "${term}" but couldn't find it on the website. Can you please add this product? Thank you!`;
+  window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+function openCustomerMessageBox() {
+  const msg = prompt("What would you like to tell us? (Product request, feedback, or any question)");
+  if(!msg || msg.trim() === "") return;
+  const trimmedMsg = msg.trim();
+  const waMsg = `Hello SNK Foods! 📩\nCustomer Message:\n${trimmedMsg}`;
+
+  if(GOOGLE_SCRIPT_URL && GOOGLE_SCRIPT_URL !== "YOUR_APPS_SCRIPT_URL_HERE") {
+    fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type: 'customer_message', message: trimmedMsg, dateTime: new Date().toLocaleString('nl-NL') })
+    }).catch(err => console.log("Customer message log error: ", err));
+  }
+
+  window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(waMsg)}`, '_blank');
+}
+
+function renderMissedSearchListHtml() {
+  let list = [];
+  try { list = JSON.parse(localStorage.getItem('snk_missed_searches') || '[]'); } catch(e) { list = []; }
+  if(list.length === 0) return `<div class="empty-note" style="padding:15px 0;">No missed searches recorded on this device yet.</div>`;
+  return list.map(item => `
+    <div style="display:flex; justify-content:space-between; align-items:center; background:#fff; border:1px solid #FFD5D5; padding:8px 12px; border-radius:6px; margin-bottom:6px; gap:10px;">
+      <div><b>${item.term}</b> <span style="color:var(--text-light); font-size:11px;">(searched ${item.count}x, last: ${new Date(item.lastSearched).toLocaleDateString('nl-NL')})</span></div>
+    </div>
+  `).join('');
+}
+
+function clearMissedSearches() {
+  if(confirm('Clear all recorded search requests on this device?')) {
+    localStorage.removeItem('snk_missed_searches');
+    loadProductsTab();
+  }
+}
+
+function renderCatalog(){
+  const navEl = document.getElementById('catnav');
+  const mainEl = document.getElementById('catalog');
+  const menuBodyEl = document.getElementById('menuDrawerBody');
+  const circlesEl = document.getElementById('greetCircles');
+  const fullGridEl = document.getElementById('fullCategoriesGrid');
+  
+  if(!navEl || !mainEl || !menuBodyEl || !circlesEl || !fullGridEl) return;
+  
+  navEl.innerHTML = ''; mainEl.innerHTML = ''; menuBodyEl.innerHTML = ''; circlesEl.innerHTML = ''; fullGridEl.innerHTML = '';
+  
+  if(catalog.length === 0) {
+    mainEl.innerHTML = `<div style="text-align:center; padding: 40px; color: var(--text-light);">No categories found.</div>`;
+    return;
+  }
+
+  catalog.forEach((cat, cIdx)=>{
+    const circleCard = document.createElement('div');
+    circleCard.className = 'circle-card';
+    circleCard.innerHTML = `<div class="circle-icon-box">${getCategoryIconHtml(cat)}</div><div class="circle-title">${cat.name}</div>`;
+    circleCard.onclick = () => {
+      switchView('home');
+      setTimeout(() => {
+        document.getElementById(`cat-${cat.id}`).scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    };
+    circlesEl.appendChild(circleCard);
+
+    const fullCircleCard = circleCard.cloneNode(true);
+    fullCircleCard.onclick = () => {
+      switchView('home');
+      setTimeout(() => {
+        document.getElementById(`cat-${cat.id}`).scrollIntoView({ behavior: 'smooth' });
+      }, 150);
+    };
+    fullGridEl.appendChild(fullCircleCard);
+
+    const navLink = document.createElement('a');
+    navLink.href = `#cat-${cat.id}`;
+    navLink.textContent = cat.name;
+    navLink.setAttribute('data-id', cat.id);
+    if(cIdx === 0) navLink.classList.add('active');
+    navLink.onclick = (e) => {
+      e.preventDefault();
+      document.querySelectorAll('.catnav a').forEach(a => a.classList.remove('active'));
+      navLink.classList.add('active');
+      document.getElementById(`cat-${cat.id}`).scrollIntoView({ behavior: 'smooth' });
+    };
+    navEl.appendChild(navLink);
+
+    const menuLink = document.createElement('a');
+    menuLink.href = `#cat-${cat.id}`;
+    menuLink.className = 'menu-cat-link';
+    menuLink.textContent = cat.name;
+    menuLink.onclick = (e) => { e.preventDefault(); closeMenuDrawer(); switchView('home'); document.getElementById(`cat-${cat.id}`).scrollIntoView({ behavior: 'smooth' }); };
+    menuBodyEl.appendChild(menuLink);
+
+    let cardsHtml = '';
+    cat.items.forEach(([name, unitStr, priceStr, imgUrl, isOos], itemIdx)=>{
+      const variants = parseVariants(unitStr, priceStr);
+      const defaultPrice = variants[0] ? variants[0].price : 0;
+      const fallbackImg = `https://dummyimage.com/300x300/f1f5f9/0b4624.png&text=${encodeURIComponent(name)}`;
+      let finalImgSrc = imgUrl ? imgUrl.trim() : fallbackImg;
+
+      cardsHtml += `
+        <div class="product-card ${isOos ? 'oos-card' : ''}" id="card-${cat.id}-${itemIdx}">
+          ${isOos ? `<div class="oos-badge">Out Of Stock</div>` : ''}
           <div>
-            <div class="img-slot"><img src="https://i.postimg.cc/yx2TwCSX/IMG-1455.png" alt="Onion" loading="lazy"></div>
-            <div class="pname">Onion</div>
+            <div class="img-slot"><img src="${finalImgSrc}" alt="${name}" loading="lazy"></div>
+            <div class="pname">${name}</div>
           </div>
           <div>
             <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('vegetables', 0, 'Onion', this.value)">
-                <option value="0">1kg</option><option value="1">5kg</option><option value="2">10kg</option>
+              <select class="punit-select" onchange="onVariantChange('${cat.id}', ${itemIdx}, '${name.replace(/'/g, "\\'")}', this.value)">
+                ${variants.map((v, idx) => `<option value="${idx}">${v.unit}</option>`).join('')}
               </select>
             </div>
-            <div class="price-row"><span class="price" id="price-vegetables-0">€1.49</span></div>
-            <div class="action-container" id="action-vegetables-0"><button class="addbtn" onclick="handleInitialAdd('vegetables', 0, 'Onion')">Add to Cart</button></div>
+            <div class="price-row"><span class="price" id="price-${cat.id}-${itemIdx}">€${defaultPrice.toFixed(2)}</span></div>
+            <div class="action-container" id="action-${cat.id}-${itemIdx}">
+              ${isOos ? `<button class="addbtn" disabled>Out of Stock</button>` : `<button class="addbtn" onclick="handleInitialAdd('${cat.id}', ${itemIdx}, '${name.replace(/'/g, "\\'")}')">Add to Cart</button>`}
+            </div>
           </div>
+        </div>`;
+    });
+    mainEl.innerHTML += `<div class="cat-section" id="cat-${cat.id}"><div class="cat-head"><h3>${cat.name}</h3><div class="cat-line"></div></div><div class="products-grid">${cardsHtml}</div></div>`;
+  });
+
+  syncCartTotals();
+}
+
+function onVariantChange(catId, itemIdx, name, val) {
+  const cat = catalog.find(c => c.id === catId);
+  const variants = parseVariants(cat.items[itemIdx][1], cat.items[itemIdx][2]);
+  document.getElementById(`price-${catId}-${itemIdx}`).textContent = `€${variants[val].price.toFixed(2)}`;
+  syncAllCardSteppers();
+}
+
+function handleInitialAdd(catId, itemIdx, name) {
+  const cat = catalog.find(c => c.id === catId);
+  const cardEl = document.getElementById('card-' + catId + '-' + itemIdx);
+  const selIdx = cardEl.querySelector('.punit-select').value;
+  const variants = parseVariants(cat.items[itemIdx][1], cat.items[itemIdx][2]);
+  const variant = variants[selIdx];
+  const key = `${catId}||${name}||${variant.unit}`;
+  cart[key] = { name, unit: variant.unit, price: variant.price, qty: 1 };
+  
+  saveCartToLocalStorage();
+  syncCartTotals();
+}
+
+function modifyCartQty(key, delta) {
+  if (!cart[key]) return;
+  cart[key].qty += delta;
+  if (cart[key].qty <= 0) {
+    delete cart[key];
+  }
+  saveCartToLocalStorage();
+  syncCartTotals();
+}
+
+function removeItemCompletely(key) {
+  if (cart[key]) {
+    delete cart[key];
+    saveCartToLocalStorage();
+    syncCartTotals();
+  }
+}
+
+function saveCartToLocalStorage() {
+  localStorage.setItem('snk_cart', JSON.stringify(cart));
+}
+
+function loadCartFromLocalStorage() {
+  const saved = localStorage.getItem('snk_cart');
+  if (saved) {
+    try { cart = JSON.parse(saved); } catch (e) { cart = {}; }
+  }
+  syncCartTotals();
+}
+
+function syncAllCardSteppers() {
+  catalog.forEach(cat => {
+    cat.items.forEach(([name, unitStr, priceStr], itemIdx) => {
+      const cardEl = document.getElementById(`card-${cat.id}-${itemIdx}`);
+      if (!cardEl) return;
+      const actionContainer = cardEl.querySelector('.action-container');
+      if (!actionContainer) return;
+      
+      const selectEl = cardEl.querySelector('.punit-select');
+      if (!selectEl) return;
+      const selIdx = selectEl.value;
+      const variants = parseVariants(unitStr, priceStr);
+      if (!variants[selIdx]) return;
+      const currentUnit = variants[selIdx].unit;
+      
+      const key = `${cat.id}||${name}||${currentUnit}`;
+      const cartItem = cart[key];
+      
+      if (cartItem && cartItem.qty > 0) {
+        actionContainer.innerHTML = `
+          <div class="stepper">
+            <button class="minus" onclick="modifyCartQty('${key.replace(/'/g, "\\'")}', -1)">−</button>
+            <span class="qty">${cartItem.qty}</span>
+            <button class="plus" onclick="modifyCartQty('${key.replace(/'/g, "\\'")}', 1)">+</button>
+          </div>`;
+      } else {
+        const isOos = cat.items[itemIdx][4];
+        if (isOos) {
+          actionContainer.innerHTML = `<button class="addbtn" disabled>Out of Stock</button>`;
+        } else {
+          actionContainer.innerHTML = `<button class="addbtn" onclick="handleInitialAdd('${cat.id}', ${itemIdx}, '${name.replace(/'/g, "\\'")}')">Add to Cart</button>`;
+        }
+      }
+    });
+  });
+}
+
+function syncCartTotals(){
+  const items = Object.values(cart);
+  const totalCount = items.reduce((sum, i)=> sum + i.qty, 0);
+  const badgeEl = document.getElementById('bottomNavBadge');
+  
+  if(totalCount > 0){
+    badgeEl.textContent = totalCount;
+    badgeEl.style.display = 'flex';
+  } else {
+    badgeEl.style.display = 'none';
+  }
+  renderLedger();
+  syncAllCardSteppers();
+}
+
+function applyPromoCode() {
+  const input = document.getElementById('promoCodeInput').value.trim().toUpperCase();
+  const msgEl = document.getElementById('promoMsg');
+  
+  if(!input) {
+    activeCoupon = "";
+    msgEl.textContent = "";
+    syncCartTotals();
+    return;
+  }
+  
+  const requiredOrders = parseInt(storeDatabase.settings.requiredOrders || 3);
+  const loyaltyDiscount = parseInt(storeDatabase.settings.loyaltyDiscount || 10);
+  const orderCount = parseInt(localStorage.getItem('snk_order_count') || '0');
+  
+  if(input === "LOYAL4" && orderCount >= requiredOrders) {
+    activeCoupon = "LOYAL4";
+    msgEl.style.color = "green";
+    msgEl.textContent = `Milestone Coupon 'LOYAL4' Applied! ${loyaltyDiscount}% Loyalty Discount Added! 🎉`;
+    syncCartTotals();
+    return;
+  }
+  
+  const validOffer = offers.find(o => o.code && o.code.toUpperCase() === input);
+  if(validOffer) {
+    activeCoupon = input;
+    msgEl.style.color = "green";
+    msgEl.textContent = `Coupon "${input}" Applied! (${loyaltyDiscount}% Off Subtotal) 🎉`;
+    syncCartTotals();
+  } else {
+    activeCoupon = "";
+    msgEl.style.color = "var(--danger)";
+    msgEl.textContent = "Invalid Coupon Code! Please try again. ❌";
+    syncCartTotals();
+  }
+}
+
+function renderLedger(){
+  const ledgerEl = document.getElementById('ledger');
+  const entries = Object.entries(cart);
+  if(entries.length === 0){
+    ledgerEl.innerHTML = `<div class="empty-note">Your shopping basket is empty.</div>`;
+    document.getElementById('sendBtn').disabled = true;
+    return;
+  }
+  document.getElementById('sendBtn').disabled = false;
+  let subTotal = 0, html = '';
+  
+  entries.forEach(([key, item])=>{
+    subTotal += item.qty * item.price;
+    const safeKey = key.replace(/'/g, "\\'");
+    html += `
+      <div class="lrow">
+        <div class="lname">${item.name} <br><small style="color:var(--text-light); font-weight:500;">${item.unit} @ €${item.price.toFixed(2)}</small></div>
+        <div style="display: flex; align-items: center; gap: 8px; margin-right: 10px;">
+          <button onclick="modifyCartQty('${safeKey}', -1)" style="width:26px; height:26px; border:1px solid #CBD5E1; background:#E2E8F0; border-radius:6px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center;">-</button>
+          <span style="font-weight:700; min-width:20px; text-align:center; font-size:14px;">${item.qty}</span>
+          <button onclick="modifyCartQty('${safeKey}', 1)" style="width:26px; height:26px; border:1px solid var(--primary); background:var(--primary); color:#fff; border-radius:6px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center;">+</button>
+          <button onclick="removeItemCompletely('${safeKey}')" style="width:26px; height:26px; border:none; background:none; color:var(--danger); font-size:16px; cursor:pointer; margin-left:4px; display:flex; align-items:center; justify-content:center;" title="Cancel Completely">❌</button>
         </div>
-        <div class="product-card " id="card-vegetables-1">
-          
-          <div>
-            <div class="img-slot"><img src="Tomato.jpg" alt="Tomato" loading="lazy"></div>
-            <div class="pname">Tomato</div>
-          </div>
-          <div>
-            <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('vegetables', 1, 'Tomato', this.value)">
-                <option value="0">500g</option><option value="1">1kg</option>
-              </select>
-            </div>
-            <div class="price-row"><span class="price" id="price-vegetables-1">€1.19</span></div>
-            <div class="action-container" id="action-vegetables-1"><button class="addbtn" onclick="handleInitialAdd('vegetables', 1, 'Tomato')">Add to Cart</button></div>
-          </div>
+        <div class="lprice">€${(item.qty * item.price).toFixed(2)}</div>
+      </div>`;
+  });
+  
+  const areaSelect = document.getElementById('area');
+  let deliveryFee = 0;
+  let deliveryName = "Not Selected";
+  if(areaSelect && areaSelect.value !== "") {
+    const locObj = locations[parseInt(areaSelect.value)];
+    if(locObj) { deliveryFee = locObj.fee; deliveryName = locObj.name; }
+  }
+
+  let discountAmount = 0;
+  if(activeCoupon) {
+    const loyaltyDiscountPercent = parseFloat(storeDatabase.settings.loyaltyDiscount || 10) / 100;
+    discountAmount = subTotal * loyaltyDiscountPercent; 
+  }
+  let finalSub = Math.max(0, subTotal - discountAmount);
+  let taxAmount = finalSub * 0.09;
+  let grandTotal = finalSub + taxAmount + deliveryFee;
+
+  html += `
+    <div class="ltotal-box">
+      <div class="subrow"><span>Subtotal</span><span>€${subTotal.toFixed(2)}</span></div>
+      ${activeCoupon ? `<div class="subrow" style="color:green; font-weight:700;"><span>Promo Discount (${activeCoupon})</span><span>-€${discountAmount.toFixed(2)}</span></div>` : ''}
+      <div class="subrow"><span>BTW / Tax (9%)</span><span>€${taxAmount.toFixed(2)}</span></div>
+      <div class="subrow"><span>Delivery Fee (${deliveryName})</span><span>€${deliveryFee.toFixed(2)}</span></div>
+      <div class="ltotal"><span>Total Amount</span><span>€${grandTotal.toFixed(2)}</span></div>
+    </div>`;
+    
+  ledgerEl.innerHTML = html;
+}
+
+function isUserLoggedIn() {
+  return localStorage.getItem('snk_user_phone') !== null;
+}
+
+function handlePhoneLogin() {
+  const phone = document.getElementById('userPhoneInput').value.trim();
+  if(!phone || phone.length < 8) {
+    alert("Please enter a valid phone number!");
+    return;
+  }
+  const randomId = Math.floor(1000 + Math.random() * 9000);
+  const membershipCode = `SNK-MEMBER-${randomId}`;
+  
+  localStorage.setItem('snk_user_phone', phone);
+  localStorage.setItem('snk_user_code', membershipCode);
+  if(!localStorage.getItem('snk_order_count')) {
+    localStorage.setItem('snk_order_count', '0'); 
+  }
+  
+  switchView('home');
+  alert(`Login Successful! 🎉\nYour Premium Customer Code: ${membershipCode}`);
+}
+
+function handleLogout() {
+  localStorage.removeItem('snk_user_phone');
+  localStorage.removeItem('snk_user_code');
+  switchView('home');
+}
+
+function renderProfilePage() {
+  const target = document.getElementById('profileContent');
+  const tabTitle = document.getElementById('profileTabText');
+  if(!target) return;
+
+  if(isUserLoggedIn()) {
+    tabTitle.textContent = "Profile";
+    const phone = localStorage.getItem('snk_user_phone');
+    const code = localStorage.getItem('snk_user_code');
+    const orderCount = localStorage.getItem('snk_order_count') || '0';
+    target.innerHTML = `
+      <div class="auth-card">
+        <div style="font-size:40px; margin-bottom:10px;">👑</div>
+        <h3>Welcome Premium Member!</h3>
+        <p style="color:var(--text-light); margin-bottom:8px;">Registered Phone: <b>${phone}</b></p>
+        <p style="font-size:13px; color:var(--primary); font-weight:700; margin-bottom:15px;">Your Total Orders: ${orderCount}</p>
+        <div class="member-badge">Your Exclusive Code: <br><span style="color:var(--accent-dark); font-size:20px;">${code}</span></div>
+        <p style="font-size:12px; color:var(--text-light); margin-bottom:15px;">Use this code to claim special privileges during support or orders.</p>
+        <button class="auth-btn" style="background:var(--danger);" onclick="handleLogout()">⚠️ Logout from Account</button>
+      </div>`;
+  } else {
+    tabTitle.textContent = "Login";
+    target.innerHTML = `
+      <div class="auth-card">
+        <div style="font-size:40px; margin-bottom:10px;">🔐</div>
+        <h3>Unlock Exclusive Member Offers</h3>
+        <p style="color:var(--text-light); font-size:13px; margin-bottom:20px;">Enter your phone number to generate an instant premium membership code.</p>
+        <div class="auth-input-group">
+          <label>Mobile Phone Number</label>
+          <input type="tel" id="userPhoneInput" class="auth-input" placeholder="e.g. +31 6 85259659">
         </div>
-        <div class="product-card " id="card-vegetables-2">
-          
-          <div>
-            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Potato" alt="Potato" loading="lazy"></div>
-            <div class="pname">Potato</div>
-          </div>
-          <div>
-            <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('vegetables', 2, 'Potato', this.value)">
-                <option value="0">1kg</option><option value="1">2.5kg</option><option value="2">5kg</option>
-              </select>
-            </div>
-            <div class="price-row"><span class="price" id="price-vegetables-2">€1.29</span></div>
-            <div class="action-container" id="action-vegetables-2"><button class="addbtn" onclick="handleInitialAdd('vegetables', 2, 'Potato')">Add to Cart</button></div>
-          </div>
+        <button class="auth-btn" onclick="handlePhoneLogin()">Generate Membership Code & Login</button>
+      </div>`;
+  }
+}
+
+function renderOffersPage() {
+  const target = document.getElementById('offersContent');
+  if(!target) return;
+
+  if(!isUserLoggedIn()) {
+    target.innerHTML = `
+      <div class="auth-card" style="border-color: var(--danger); background: #FFF5F5;">
+        <div style="font-size:36px; margin-bottom:10px;">🔒</div>
+        <h4 style="color:var(--danger)">Access Denied</h4>
+        <p style="font-size:13px; color:var(--text-dark); margin: 8px 0 15px;">Please log in to view exclusive member offers and discount coupons!</p>
+        <button class="auth-btn" onclick="switchView('profile')">🔐 Go to Login Page</button>
+      </div>`;
+    return;
+  }
+
+  let dynamicOffers = [...offers];
+  const requiredOrders = parseInt(storeDatabase.settings.requiredOrders || 3);
+  const loyaltyDiscount = parseInt(storeDatabase.settings.loyaltyDiscount || 10);
+  const orderCount = parseInt(localStorage.getItem('snk_order_count') || '0');
+  
+  if(orderCount >= requiredOrders) {
+    dynamicOffers.unshift({
+      title: `🎉 Milestone Loyalty Reward Unlocked!`,
+      desc: `Thank you for completing ${orderCount} orders! You have unlocked an exclusive ${loyaltyDiscount}% absolute discount for your next transaction!`,
+      code: "LOYAL4"
+    });
+  }
+
+  if(dynamicOffers.length === 0) {
+    target.innerHTML = `<div class="empty-note">No special offers available right now. Check back soon!</div>`;
+    return;
+  }
+
+  target.innerHTML = dynamicOffers.map(of => `
+    <div class="offer-card" style="${of.code === 'LOYAL4' ? 'border: 2px solid green; background:#EFFFF0;' : ''}">
+      <div class="offer-title">${of.title}</div>
+      <div class="offer-desc">${of.desc}</div>
+      ${of.code ? `<div class="offer-code" style="${of.code === 'LOYAL4' ? 'background:green;' : ''}">COUPON: ${of.code}</div>` : ''}
+    </div>
+  `).join('');
+}
+
+function openMenuDrawer(){ document.getElementById('menuDrawer').classList.add('open'); document.getElementById('overlay').classList.add('show'); document.body.classList.add('menu-open'); }
+function closeMenuDrawer(){ document.getElementById('menuDrawer').classList.remove('open'); document.getElementById('overlay').classList.remove('show'); document.body.classList.remove('menu-open'); }
+function closeAllDrawers(){ closeMenuDrawer(); }
+
+function sendOrder(){
+  const items = Object.values(cart);
+  const areaIdx = document.getElementById('area').value;
+  const name = document.getElementById('cname').value.trim();
+  const addr = document.getElementById('caddr').value.trim();
+  const comments = document.getElementById('ccomments').value.trim() || "None";
+  
+  if(!areaIdx) { alert("Please select your Delivery Destination location!"); return; }
+  if(!name || !addr) { alert("Please enter Name and Address."); return; }
+  
+  const locObj = locations[parseInt(areaIdx)];
+  const areaName = locObj ? locObj.name : "Unknown";
+  const deliveryFee = locObj ? locObj.fee : 0;
+  
+  let subTotal = 0;
+  let lines = items.map((it, i)=>{ subTotal += it.qty * it.price; return `${i+1}. ${it.name} (${it.unit}) x${it.qty} - €${(it.qty*it.price).toFixed(2)}`; }).join('\n');
+  
+  let discountAmount = 0;
+  if(activeCoupon) {
+    const loyaltyDiscountPercent = parseFloat(storeDatabase.settings.loyaltyDiscount || 10) / 100;
+    discountAmount = subTotal * loyaltyDiscountPercent;
+  }
+  let finalSub = Math.max(0, subTotal - discountAmount);
+  let taxAmount = finalSub * 0.09;
+  let grandTotal = finalSub + taxAmount + deliveryFee;
+  
+  const mCode = localStorage.getItem('snk_user_code') || "Non-Member";
+  const uPhone = localStorage.getItem('snk_user_phone') || "Unknown Phone";
+  
+  if(GOOGLE_SCRIPT_URL && GOOGLE_SCRIPT_URL !== "YOUR_APPS_SCRIPT_URL_HERE") {
+    const sheetData = {
+      memberCode: mCode,
+      phone: uPhone,
+      name: name,
+      address: addr,
+      location: areaName,
+      items: items.map(it => `${it.name} (${it.unit}) x${it.qty}`).join(', '),
+      subtotal: `€${subTotal.toFixed(2)}`,
+      discount: `€${discountAmount.toFixed(2)}`,
+      tax: `€${taxAmount.toFixed(2)}`,
+      deliveryFee: `€${deliveryFee.toFixed(2)}`,
+      total: `€${grandTotal.toFixed(2)}`,
+      notes: comments
+    };
+
+    fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(sheetData)
+    }).catch(err => console.log("Google Sheet Integration Error: ", err));
+  }
+  
+  let msg = `Hello SNK Foods!\nNew Order (Member Code: ${mCode} | Phone: ${uPhone}):\n\n${lines}\n\nSubtotal: €${subTotal.toFixed(2)}\n`;
+  if(activeCoupon) {
+    msg += `Promo Applied: ${activeCoupon} (-€${discountAmount.toFixed(2)})\n`;
+  }
+  msg += `BTW (9%): €${taxAmount.toFixed(2)}\nDelivery Charge (${areaName}): €${deliveryFee.toFixed(2)}\nTotal Amount: €${grandTotal.toFixed(2)}\n\nDelivery to: ${areaName}\nName: ${name}\nAddress: ${addr}\nNotes: ${comments}`;
+  
+  let currentCount = parseInt(localStorage.getItem('snk_order_count') || '0');
+  if(activeCoupon === "LOYAL4") {
+    localStorage.setItem('snk_order_count', '0'); 
+  } else {
+    localStorage.setItem('snk_order_count', (currentCount + 1).toString()); 
+  }
+  
+  activeCoupon = ""; 
+  document.getElementById('promoCodeInput').value = "";
+  document.getElementById('promoMsg').textContent = "";
+  
+  window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`,'_blank');
+}
+
+function printCurrentBasketInvoice() {
+  const items = Object.values(cart);
+  const areaIdx = document.getElementById('area').value;
+  if(!areaIdx) { alert("Please select a location in the basket first!"); return; }
+  if(items.length === 0) { alert("Basket is empty!"); return; }
+  
+  const locObj = locations[parseInt(areaIdx)];
+  const areaName = locObj ? locObj.name : "Leiden";
+  const deliveryFee = locObj ? locObj.fee : 0;
+  
+  const name = document.getElementById('cname').value.trim() || "Valued Customer";
+  const addr = document.getElementById('caddr').value.trim() || "Not Specified";
+  const comments = document.getElementById('ccomments').value.trim() || "None";
+  
+  let subTotal = 0;
+  let tableRows = items.map((it, idx) => {
+    subTotal += it.qty * it.price;
+    return `<tr><td>${idx + 1}</td><td><b>${it.name}</b></td><td>${it.unit}</td><td>${it.qty}</td><td>€${it.price.toFixed(2)}</td><td>€${(it.qty * it.price).toFixed(2)}</td></tr>`;
+  }).join('');
+  
+  triggerA4PrintHTML(name, addr, areaName, comments, tableRows, subTotal, deliveryFee);
+}
+
+function printFromPastedWhatsAppText() {
+  const text = document.getElementById('adminPasteText').value;
+  if(!text.trim()) { alert("Please paste the WhatsApp text first!"); return; }
+  
+  let name = text.match(/Name:\s*(.*)/)?.[1] || "Valued Customer";
+  let address = text.match(/Address:\s*(.*)/)?.[1] || "Not Specified";
+  let region = text.match(/Delivery to:\s*(.*)/)?.[1] || "Not Specified";
+  let notes = text.match(/Notes:\s*(.*)/)?.[1] || "None";
+  
+  let itemsHtml = "";
+  let lines = text.split('\n');
+  let itemIdx = 1;
+  
+  lines.forEach(line => {
+    let match = line.match(/^\d+\.\s+(.*?)\s+\((.*?)\)\s+x(\d+)\s+-\s+€(.*)/);
+    if(match) {
+      let pName = match[1];
+      let pUnit = match[2];
+      let pQty = match[3];
+      let pAmount = match[4];
+      let pRate = parseFloat(pAmount) / parseInt(pQty);
+      itemsHtml += `<tr><td>${itemIdx++}</td><td><b>${pName}</b></td><td>${pUnit}</td><td>${pQty}</td><td>€${pRate.toFixed(2)}</td><td>€${pAmount}</td></tr>`;
+    }
+  });
+  
+  let subTotalStr = text.match(/Subtotal:\s*€\s*([0-9.]+)/)?.[1] || "0.00";
+  let deliveryFeeStr = text.match(/Delivery Charge.*:\s*€\s*([0-9.]+)/)?.[1] || "0.00";
+  
+  if(!itemsHtml) {
+    itemsHtml = `<tr><td colspan="6" style="white-space:pre-wrap; text-align:left; padding:15px;">${text}</td></tr>`;
+  }
+  
+  triggerA4PrintHTML(name, address, region, notes, itemsHtml, parseFloat(subTotalStr), parseFloat(deliveryFeeStr));
+}
+
+function triggerA4PrintHTML(name, addr, area, comments, tableRows, subTotal, deliveryFee) {
+  let discountAmount = 0;
+  if(activeCoupon) {
+    const loyaltyDiscountPercent = parseFloat(storeDatabase.settings.loyaltyDiscount || 10) / 100;
+    discountAmount = subTotal * loyaltyDiscountPercent;
+  }
+  let finalSub = Math.max(0, subTotal - discountAmount);
+  let taxAmount = finalSub * 0.09;
+  let grandTotal = finalSub + taxAmount + deliveryFee;
+  let today = new Date().toLocaleDateString('nl-NL');
+
+  document.getElementById('a4InvoicePrintout').innerHTML = `
+    <div class="inv-header">
+      <div>
+        <div class="inv-title">SNK FOODS</div>
+        <p>Premium Indian Grocery Essentials</p>
+        <p>Netherlands | +31 6 85259659</p>
+      </div>
+      <div class="inv-meta">
+        <p><b>RETAIL INVOICE CHIT</b></p>
+        <p>Date: ${today}</p>
+        <p>Payment Mode: Cash / Tikkie</p>
+      </div>
+    </div>
+    <div class="inv-bill-split">
+      <div class="inv-bill-to">
+        <h5>Delivery & Customer Details</h5>
+        <p><b>Customer Name:</b> ${name}</p>
+        <p><b>Address:</b> ${addr}</p>
+        <p><b>Region/City:</b> ${area}</p>
+        <p><b>Special Notes:</b> ${comments}</p>
+      </div>
+    </div>
+    <table class="inv-table">
+      <thead><tr><th>#</th><th>Product Description</th><th>Unit Size</th><th>Qty</th><th>Rate</th><th>Gross Amount</th></tr></thead>
+      <tbody>${tableRows}</tbody>
+    </table>
+    <div class="inv-summary">
+      <div class="inv-sum-row"><span>Subtotal Goods:</span><span>€${subTotal.toFixed(2)}</span></div>
+      ${activeCoupon ? `<div class="inv-sum-row" style="color:green; font-weight:bold;"><span>Discount (${activeCoupon}):</span><span>-€${discountAmount.toFixed(2)}</span></div>` : ''}
+      <div class="inv-sum-row"><span>BTW / Tax (9%):</span><span>€${taxAmount.toFixed(2)}</span></div>
+      <div class="inv-sum-row"><span>Delivery Service Charge:</span><span>€${deliveryFee.toFixed(2)}</span></div>
+      <div class="inv-total-row"><span>Total Payable:</span><span>€${grandTotal.toFixed(2)}</span></div>
+    </div>
+    <div class="inv-footer"><p>Thank you for shopping with SNK Foods!</p></div>
+  `;
+  window.print();
+}
+
+function adminLogin(){
+  const pass = prompt("Enter admin passcode:");
+  if(pass === ADMIN_PASSCODE){ document.getElementById('adminOverlay').classList.add('show'); loadProductsTab(); }
+  else if(pass !== null) { alert("Invalid Passcode."); }
+}
+function closeAdmin(){ document.getElementById('adminOverlay').classList.remove('show'); document.getElementById('exportBox').style.display='none'; }
+
+function handleImageUpload(event, ci, ii) {
+  const file = event.target.files[0];
+  if(!file) return;
+  if(!file.type.startsWith('image/')) { alert('Please select an image file.'); return; }
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = new Image();
+    img.onload = function() {
+      const MAX = 600;
+      let w = img.width, h = img.height;
+      if(w > h) { if(w > MAX){ h = Math.round(h * (MAX / w)); w = MAX; } }
+      else { if(h > MAX){ w = Math.round(w * (MAX / h)); h = MAX; } }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.75);
+
+      catalog[ci].items[ii][3] = dataUrl;
+      loadProductsTab();
+    };
+    img.onerror = function() { alert('Could not read this image, please try another file.'); };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function parseWeightGrams(unitStr) {
+  const s = unitStr.trim().toLowerCase();
+  const m = s.match(/^([\d.]+)\s*(kg|g|l|ml)\b/);
+  if(!m) return null;
+  const val = parseFloat(m[1]);
+  const unit = m[2];
+  if(unit === 'kg') return { type: 'weight', amount: val * 1000 };
+  if(unit === 'g') return { type: 'weight', amount: val };
+  if(unit === 'l') return { type: 'volume', amount: val * 1000 };
+  if(unit === 'ml') return { type: 'volume', amount: val };
+  return null;
+}
+
+function autoCalcVariantPrices(ci, ii) {
+  const item = catalog[ci].items[ii];
+  const variants = item[1].split(',').map(s => s.trim());
+  const parsed = variants.map(v => parseWeightGrams(v));
+  const priceParts = item[2].split(',').map(s => s.trim());
+
+  let baseIdx = parsed.findIndex((p, i) => p && p.amount === 1000 && priceParts[i] && parseFloat(priceParts[i]) > 0);
+  let basePrice;
+
+  if(baseIdx === -1) {
+    const fallbackIdx = parsed.findIndex(p => p && p.amount === 1000);
+    const labelVariant = fallbackIdx !== -1 ? variants[fallbackIdx] : variants[0];
+    const promptVal = prompt(`Enter the price for "${labelVariant}" (base variant):`, priceParts[fallbackIdx !== -1 ? fallbackIdx : 0] || '');
+    if(promptVal === null) return;
+    basePrice = parseFloat(promptVal);
+    if(isNaN(basePrice) || basePrice <= 0) { alert('Please enter a valid price.'); return; }
+    baseIdx = fallbackIdx !== -1 ? fallbackIdx : 0;
+    if(!parsed[baseIdx]) { alert('Could not detect a weight/volume unit on this variant to calculate from.'); return; }
+  } else {
+    basePrice = parseFloat(priceParts[baseIdx]);
+  }
+
+  const baseInfo = parsed[baseIdx];
+  const newPrices = variants.map((v, i) => {
+    if(i === baseIdx) return basePrice.toFixed(2);
+    if(!baseInfo || !parsed[i] || parsed[i].type !== baseInfo.type) {
+      return priceParts[i] || '';
+    }
+    const ratio = parsed[i].amount / baseInfo.amount;
+    return (basePrice * ratio).toFixed(2);
+  });
+
+  catalog[ci].items[ii][2] = newPrices.join(', ');
+  loadProductsTab();
+}
+
+function handleCategoryImageUpload(event, ci) {
+  const file = event.target.files[0];
+  if(!file) return;
+  if(!file.type.startsWith('image/')) { alert('Please select an image file.'); return; }
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = new Image();
+    img.onload = function() {
+      const MAX = 200;
+      let w = img.width, h = img.height;
+      if(w > h) { if(w > MAX){ h = Math.round(h * (MAX / w)); w = MAX; } }
+      else { if(h > MAX){ w = Math.round(w * (MAX / h)); h = MAX; } }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+      catalog[ci].icon = dataUrl;
+      loadProductsTab();
+      renderCatalog();
+    };
+    img.onerror = function() { alert('Could not read this image, please try another file.'); };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function loadProductsTab(){
+  const body = document.getElementById('adminBody');
+  
+  let html = `
+    <div class="print-box-tool">
+      <h4 style="color:var(--primary);">🖨️ WhatsApp Order To A4 Invoice Parser</h4>
+      <textarea id="adminPasteText" placeholder="Paste the complete WhatsApp order text here..."></textarea>
+      <div style="display:flex; gap:10px;">
+        <button onclick="printFromPastedWhatsAppText()" style="background:#007BFF; color:#fff; border:none; padding:8px 16px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:12px;">🖨️ Parse & Print WhatsApp Invoice</button>
+        <button onclick="printCurrentBasketInvoice()" style="background:var(--primary); color:#fff; border:none; padding:8px 16px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:12px;">🛒 Print Current Active Basket</button>
+      </div>
+    </div>
+
+    <div class="admin-cat" style="border: 2px solid #FF6B6B; background: #FFF5F5;">
+      <div class="admin-cat-header">
+        <span style="font-size: 15px; font-weight: 800; color: #C0392B;">🔍 Customer Search Requests (products not found)</span>
+      </div>
+      <p style="font-size:11px; color:var(--text-light); margin: 6px 0 10px;">Shows product names customers searched for with zero results, recorded on <b>this device</b>. Since the site has no shared server, requests made from customer phones reach you instantly via WhatsApp instead (they get a "Request this product" button), and are also logged to your Google Sheet if connected.</p>
+      <div id="missedSearchList">${renderMissedSearchListHtml()}</div>
+      <div class="admin-btn-row"><button onclick="clearMissedSearches()" style="background:var(--danger); color:#fff;">Clear List</button></div>
+    </div>
+
+    <div class="admin-cat" style="border: 1px solid #CBD5E1; background: #F4FFF7;">
+      <div class="admin-cat-header">
+        <span style="font-size:14px; font-weight:800; color:var(--primary);">📥 Customer Messages</span>
+      </div>
+      <p style="font-size:12px; color:var(--text-dark); line-height:1.4; margin-top:5px;">
+        Customers can tap <b>"📩 Message Us / Request a Product"</b> in the menu to send you free-text requests or feedback. Every message opens WhatsApp with the text pre-filled and sent straight to <b>+31 6 85259659</b>, so you never miss one. If Google Sheets is connected, a copy is logged there too for your records.
+      </p>
+    </div>
+
+    <div class="admin-cat" style="border: 2px solid #007BFF; background: #F4F9FF;">
+      <div class="admin-cat-header">
+        <span style="font-size: 15px; font-weight: 800; color: #0056b3;">⚙️ Dynamic Loyalty Milestone & Announcement Settings</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top:12px;">
+        <div>
+          <label style="font-size:12px; font-weight:700; color:var(--text-dark); display:block; margin-bottom:4px;">Required Orders to Unlock Coupon</label>
+          <input type="number" id="settingRequiredOrders" value="${storeDatabase.settings.requiredOrders || 3}" style="padding:10px; border-radius:6px; border:1px solid #CBD5E1; width:100%; font-weight:800;" onchange="storeDatabase.settings.requiredOrders = parseInt(this.value) || 3">
+          <small style="color:var(--text-light); font-size:11px;">e.g., 3 means offer unlocks on the 4th order.</small>
         </div>
-        <div class="product-card " id="card-vegetables-3">
-          
-          <div>
-            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Green%20Chillies" alt="Green Chillies" loading="lazy"></div>
-            <div class="pname">Green Chillies</div>
-          </div>
-          <div>
-            <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('vegetables', 3, 'Green Chillies', this.value)">
-                <option value="0">100g</option><option value="1">250g</option><option value="2">500g</option>
-              </select>
-            </div>
-            <div class="price-row"><span class="price" id="price-vegetables-3">€0.99</span></div>
-            <div class="action-container" id="action-vegetables-3"><button class="addbtn" onclick="handleInitialAdd('vegetables', 3, 'Green Chillies')">Add to Cart</button></div>
-          </div>
+        <div>
+          <label style="font-size:12px; font-weight:700; color:var(--text-dark); display:block; margin-bottom:4px;">Milestone Discount Percentage (%)</label>
+          <input type="number" id="settingLoyaltyDiscount" value="${storeDatabase.settings.loyaltyDiscount || 10}" style="padding:10px; border-radius:6px; border:1px solid #CBD5E1; width:100%; font-weight:800;" onchange="storeDatabase.settings.loyaltyDiscount = parseInt(this.value) || 10">
+          <small style="color:var(--text-light); font-size:11px;">Enter pure numbers (e.g., 15 for 15%).</small>
         </div>
-        <div class="product-card " id="card-vegetables-4">
-          
-          <div>
-            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Sambar%20Onions" alt="Sambar Onions" loading="lazy"></div>
-            <div class="pname">Sambar Onions</div>
-          </div>
-          <div>
-            <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('vegetables', 4, 'Sambar Onions', this.value)">
-                <option value="0">250g</option><option value="1">500g</option><option value="2">1kg</option>
-              </select>
-            </div>
-            <div class="price-row"><span class="price" id="price-vegetables-4">€1.49</span></div>
-            <div class="action-container" id="action-vegetables-4"><button class="addbtn" onclick="handleInitialAdd('vegetables', 4, 'Sambar Onions')">Add to Cart</button></div>
-          </div>
+        
+        <div style="grid-column: span 2;">
+          <label style="font-size:12px; font-weight:700; color:var(--text-dark); display:block; margin-bottom:4px;">📢 Edit Live Running Announcement Text</label>
+          <textarea id="settingAnnouncementText" style="width:100%; height:60px; padding:10px; border-radius:6px; border:1px solid #CBD5E1; font-size:13px; font-weight:600;" onchange="storeDatabase.settings.announcementText = this.value" placeholder="Type here to instantly change the moving announcement scroll text...">${storeDatabase.settings.announcementText || ''}</textarea>
         </div>
-        <div class="product-card " id="card-vegetables-5">
-          
-          <div>
-            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Brinjal%2FEggplant" alt="Brinjal/Eggplant" loading="lazy"></div>
-            <div class="pname">Brinjal/Eggplant</div>
-          </div>
-          <div>
-            <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('vegetables', 5, 'Brinjal/Eggplant', this.value)">
-                <option value="0">1kg</option><option value="1">500g</option><option value="2">250g</option>
-              </select>
+      </div>
+    </div>
+
+    <div class="admin-cat" style="border: 1px solid #CBD5E1; background: #FFFDF5;">
+      <div class="admin-cat-header">
+        <span style="font-size:14px; font-weight:800; color:var(--accent-dark);">👤 Registered User Tracker Insight</span>
+      </div>
+      <p style="font-size:12px; color:var(--text-dark); line-height:1.4; margin-top:5px;">
+        <b>Note on User Tracking:</b> Because this application is server-less, user identities are securely mapped in individual phone storages to save maintenance costs. You instantly receive their <b>Membership Codes</b> and verified phone numbers embedded right within their WhatsApp messages when orders are submitted.
+      </p>
+    </div>
+
+    <div class="admin-cat" style="border: 2px solid #25D366;">
+      <div class="admin-cat-header">
+        <span style="font-size: 15px; font-weight: 800; color: var(--primary);">🎁 Manage Static Customer Offers</span>
+      </div>
+      <div style="display: flex; flex-direction:column; gap: 10px; margin-top:10px;" id="adminOffersList">
+        ${offers.map((of, oi) => `
+          <div style="background:var(--bg-light); border:1px solid #CBD5E1; padding:10px; border-radius:8px; display:flex; flex-direction:column; gap:6px;">
+            <input style="font-weight:700;" value="${of.title}" onchange="offers[${oi}].title=this.value" placeholder="Offer Title">
+            <input value="${of.desc}" onchange="offers[${oi}].desc=this.value" placeholder="Offer Description">
+            <div style="display:flex; gap:10px; align-items:center;">
+              <input style="font-family:monospace; font-weight:700;" value="${of.code || ''}" onchange="offers[${oi}].code=this.value" placeholder="Coupon Code (Optional)">
+              <button onclick="offers.splice(${oi},1); loadProductsTab();" style="background:var(--danger); color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-weight:bold;">Remove</button>
             </div>
-            <div class="price-row"><span class="price" id="price-vegetables-5">€7.99</span></div>
-            <div class="action-container" id="action-vegetables-5"><button class="addbtn" onclick="handleInitialAdd('vegetables', 5, 'Brinjal/Eggplant')">Add to Cart</button></div>
           </div>
+        `).join('')}
+      </div>
+      <div class="admin-btn-row" style="margin-top:10px;">
+        <button onclick="offers.push({title:'New Offer Title', desc:'Offer details here...', code:'CODE10'}); loadProductsTab();" style="background:#25D366; color:white;">+ Add New Special Offer</button>
+      </div>
+    </div>
+
+    <div class="admin-cat" style="border: 2px solid var(--accent);">
+      <div class="admin-cat-header"><span style="font-size: 14px; font-weight: 700; color: var(--primary);">📍 Manage Delivery Locations & Fees</span></div>
+      <div style="display: flex; flex-direction:column; gap: 8px; margin-top: 10px;">
+        ${locations.map((loc, li) => `
+          <div style="display: flex; align-items: center; background: var(--bg-light); padding: 8px; border-radius: 6px; border: 1px solid #CBD5E1; gap: 10px; justify-content:space-between;">
+            <input style="font-weight:600; width:50%;" value="${loc.name}" onchange="locations[${li}].name=this.value">
+            <div style="display:flex; align-items:center; gap:4px;"><span>€</span><input style="width:70px; font-weight:700;" type="number" step="0.01" value="${loc.fee}" onchange="locations[${li}].fee=parseFloat(this.value)||0"></div>
+            <button onclick="if(confirm('Delete ${loc.name}?')){locations.splice(${li},1); loadProductsTab();}" style="background: var(--danger); color: white; border: none; padding:4px 8px; border-radius:4px; cursor: pointer;">×</button>
+          </div>
+        `).join('')}
+      </div>
+      <div class="admin-btn-row" style="margin-top: 12px;"><button onclick="addLocationPrompt()" style="background: var(--accent); color: var(--primary);">+ Add New Location</button></div>
+    </div>
+  `;
+  
+  html += catalog.map((cat, ci)=>`
+    <div class="admin-cat">
+      <div class="admin-cat-header" style="flex-wrap:wrap; gap:10px;">
+        <div style="display:flex; align-items:center; gap:8px; flex:1; min-width:200px;">
+          <div style="width:38px; height:38px; border-radius:10px; background:#F1F5F9; border:1px solid #CBD5E1; display:flex; align-items:center; justify-content:center; font-size:18px; overflow:hidden; flex-shrink:0;">${getCategoryIconHtml(cat)}</div>
+          <label style="cursor:pointer; background:var(--accent); color:var(--primary); width:30px; height:30px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0;" title="Change category picture">
+            📷<input type="file" accept="image/*" style="display:none;" onchange="handleCategoryImageUpload(event, ${ci})">
+          </label>
+          <input value="${cat.name}" onchange="catalog[${ci}].name=this.value; catalog[${ci}].id=this.value.toLowerCase().replace(/[^a-z0-9]/g,'')" placeholder="Category Name" style="flex:1; min-width:100px; width:auto;">
         </div>
-        <div class="product-card " id="card-vegetables-6">
-          
-          <div>
-            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Bitter%20Gourd" alt="Bitter Gourd" loading="lazy"></div>
-            <div class="pname">Bitter Gourd</div>
-          </div>
-          <div>
-            <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('vegetables', 6, 'Bitter Gourd', this.value)">
-                <option value="0">1kg</option><option value="1">500g</option><option value="2">250g</option>
-              </select>
+        <button onclick="if(confirm('Delete entire category ${cat.name}?')){catalog.splice(${ci},1); loadProductsTab()}" style="background:var(--danger); color:#fff; border:none; padding:4px 10px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:700; flex-shrink:0;">Delete Category</button>
+      </div>
+      <div style="margin-top:10px;">
+        ${cat.items.map((item, ii)=>`
+          <div class="admin-item-row">
+            <input value="${item[0]}" onchange="catalog[${ci}].items[${ii}][0]=this.value" placeholder="Name">
+            <input value="${item[1]}" onchange="catalog[${ci}].items[${ii}][1]=this.value" placeholder="Variants">
+            <div style="display:flex; gap:4px; align-items:center;">
+              <input value="${item[2]}" onchange="catalog[${ci}].items[${ii}][2]=this.value" placeholder="Prices" style="flex:1; min-width:0;">
+              <button type="button" onclick="autoCalcVariantPrices(${ci}, ${ii})" title="Auto-calculate other variant prices from base price" style="background:var(--primary); color:#fff; border:none; width:32px; height:32px; border-radius:6px; font-size:14px; cursor:pointer; flex-shrink:0;">⚡</button>
             </div>
-            <div class="price-row"><span class="price" id="price-vegetables-6">€7.99</span></div>
-            <div class="action-container" id="action-vegetables-6"><button class="addbtn" onclick="handleInitialAdd('vegetables', 6, 'Bitter Gourd')">Add to Cart</button></div>
-          </div>
-        </div>
-        <div class="product-card " id="card-vegetables-7">
-          
-          <div>
-            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Lvy%20Gourd%2FTindoori" alt="Lvy Gourd/Tindoori" loading="lazy"></div>
-            <div class="pname">Lvy Gourd/Tindoori</div>
-          </div>
-          <div>
-            <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('vegetables', 7, 'Lvy Gourd/Tindoori', this.value)">
-                <option value="0">1kg</option><option value="1">500g</option><option value="2">250g</option>
-              </select>
+            <div style="display:flex; gap:4px; align-items:center;">
+              <input value="${(item[3] || '').length > 60 ? '(uploaded image)' : (item[3] || '')}" onchange="catalog[${ci}].items[${ii}][3]=this.value" placeholder="Image URL" style="flex:1; min-width:0;">
+              <label style="cursor:pointer; background:var(--accent); color:var(--primary); width:32px; height:32px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0;" title="Upload image from your phone/computer">
+                📷<input type="file" accept="image/*" style="display:none;" onchange="handleImageUpload(event, ${ci}, ${ii})">
+              </label>
             </div>
-            <div class="price-row"><span class="price" id="price-vegetables-7">€7.99</span></div>
-            <div class="action-container" id="action-vegetables-7"><button class="addbtn" onclick="handleInitialAdd('vegetables', 7, 'Lvy Gourd/Tindoori')">Add to Cart</button></div>
-          </div>
-        </div>
-        <div class="product-card " id="card-vegetables-8">
-          
-          <div>
-            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Garlic%20" alt="Garlic " loading="lazy"></div>
-            <div class="pname">Garlic </div>
-          </div>
-          <div>
-            <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('vegetables', 8, 'Garlic ', this.value)">
-                <option value="0">1kg</option><option value="1">500g</option><option value="2">250g</option>
-              </select>
-            </div>
-            <div class="price-row"><span class="price" id="price-vegetables-8">€3.49</span></div>
-            <div class="action-container" id="action-vegetables-8"><button class="addbtn" onclick="handleInitialAdd('vegetables', 8, 'Garlic ')">Add to Cart</button></div>
-          </div>
-        </div>
-        <div class="product-card " id="card-vegetables-9">
-          
-          <div>
-            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Drumstick%2FMoringa" alt="Drumstick/Moringa" loading="lazy"></div>
-            <div class="pname">Drumstick/Moringa</div>
-          </div>
-          <div>
-            <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('vegetables', 9, 'Drumstick/Moringa', this.value)">
-                <option value="0">1kg</option><option value="1">500g</option><option value="2">250g</option>
-              </select>
-            </div>
-            <div class="price-row"><span class="price" id="price-vegetables-9">€10.00</span></div>
-            <div class="action-container" id="action-vegetables-9"><button class="addbtn" onclick="handleInitialAdd('vegetables', 9, 'Drumstick/Moringa')">Add to Cart</button></div>
-          </div>
-        </div>
-        <div class="product-card " id="card-vegetables-10">
-          
-          <div>
-            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Onion(Red)" alt="Onion(Red)" loading="lazy"></div>
-            <div class="pname">Onion(Red)</div>
-          </div>
-          <div>
-            <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('vegetables', 10, 'Onion(Red)', this.value)">
-                <option value="0">1kg</option><option value="1">500g</option><option value="2">250g</option>
-              </select>
-            </div>
-            <div class="price-row"><span class="price" id="price-vegetables-10">€1.00</span></div>
-            <div class="action-container" id="action-vegetables-10"><button class="addbtn" onclick="handleInitialAdd('vegetables', 10, 'Onion(Red)')">Add to Cart</button></div>
-          </div>
-        </div>
-        <div class="product-card " id="card-vegetables-11">
-          
-          <div>
-            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Bottle%20Gourd%2FLauki" alt="Bottle Gourd/Lauki" loading="lazy"></div>
-            <div class="pname">Bottle Gourd/Lauki</div>
-          </div>
-          <div>
-            <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('vegetables', 11, 'Bottle Gourd/Lauki', this.value)">
-                <option value="0">1kg</option><option value="1">500g</option><option value="2">250g</option>
-              </select>
-            </div>
-            <div class="price-row"><span class="price" id="price-vegetables-11">€7.99</span></div>
-            <div class="action-container" id="action-vegetables-11"><button class="addbtn" onclick="handleInitialAdd('vegetables', 11, 'Bottle Gourd/Lauki')">Add to Cart</button></div>
-          </div>
-        </div>
-        <div class="product-card " id="card-vegetables-12">
-          
-          <div>
-            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Suran" alt="Suran" loading="lazy"></div>
-            <div class="pname">Suran</div>
-          </div>
-          <div>
-            <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('vegetables', 12, 'Suran', this.value)">
-                <option value="0">1kg</option><option value="1">500g</option><option value="2">250g</option>
-              </select>
-            </div>
-            <div class="price-row"><span class="price" id="price-vegetables-12">€8.99</span></div>
-            <div class="action-container" id="action-vegetables-12"><button class="addbtn" onclick="handleInitialAdd('vegetables', 12, 'Suran')">Add to Cart</button></div>
-          </div>
-        </div>
-        <div class="product-card " id="card-vegetables-13">
-          
-          <div>
-            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Curry%20leaves%201%20pack" alt="Curry leaves 1 pack" loading="lazy"></div>
-            <div class="pname">Curry leaves 1 pack</div>
-          </div>
-          <div>
-            <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('vegetables', 13, 'Curry leaves 1 pack', this.value)">
-                <option value="0">1 pack</option>
-              </select>
-            </div>
-            <div class="price-row"><span class="price" id="price-vegetables-13">€2.49</span></div>
-            <div class="action-container" id="action-vegetables-13"><button class="addbtn" onclick="handleInitialAdd('vegetables', 13, 'Curry leaves 1 pack')">Add to Cart</button></div>
-          </div>
-        </div>
-        <div class="product-card " id="card-vegetables-14">
-          
-          <div>
-            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Yellow%20Cucumber" alt="Yellow Cucumber" loading="lazy"></div>
-            <div class="pname">Yellow Cucumber</div>
-          </div>
-          <div>
-            <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('vegetables', 14, 'Yellow Cucumber', this.value)">
-                <option value="0">1kg</option><option value="1">500g</option><option value="2"></option>
-              </select>
-            </div>
-            <div class="price-row"><span class="price" id="price-vegetables-14">€8.99</span></div>
-            <div class="action-container" id="action-vegetables-14"><button class="addbtn" onclick="handleInitialAdd('vegetables', 14, 'Yellow Cucumber')">Add to Cart</button></div>
-          </div>
-        </div>
-        <div class="product-card " id="card-vegetables-15">
-          
-          <div>
-            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Ginger%20" alt="Ginger " loading="lazy"></div>
-            <div class="pname">Ginger </div>
-          </div>
-          <div>
-            <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('vegetables', 15, 'Ginger ', this.value)">
-                <option value="0">1kg</option><option value="1">500g</option><option value="2">250g</option>
-              </select>
-            </div>
-            <div class="price-row"><span class="price" id="price-vegetables-15">€8.99</span></div>
-            <div class="action-container" id="action-vegetables-15"><button class="addbtn" onclick="handleInitialAdd('vegetables', 15, 'Ginger ')">Add to Cart</button></div>
-          </div>
-        </div>
-        <div class="product-card " id="card-vegetables-16">
-          
-          <div>
-            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Green%20Mango" alt="Green Mango" loading="lazy"></div>
-            <div class="pname">Green Mango</div>
-          </div>
-          <div>
-            <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('vegetables', 16, 'Green Mango', this.value)">
-                <option value="0">1kg</option><option value="1">500g</option><option value="2">250g</option>
-              </select>
-            </div>
-            <div class="price-row"><span class="price" id="price-vegetables-16">€7.99</span></div>
-            <div class="action-container" id="action-vegetables-16"><button class="addbtn" onclick="handleInitialAdd('vegetables', 16, 'Green Mango')">Add to Cart</button></div>
-          </div>
-        </div>
-        <div class="product-card " id="card-vegetables-17">
-          
-          <div>
-            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Rettich" alt="Rettich" loading="lazy"></div>
-            <div class="pname">Rettich</div>
-          </div>
-          <div>
-            <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('vegetables', 17, 'Rettich', this.value)">
-                <option value="0">1kg</option><option value="1">500g</option><option value="2">250g</option>
-              </select>
-            </div>
-            <div class="price-row"><span class="price" id="price-vegetables-17">€8.00</span></div>
-            <div class="action-container" id="action-vegetables-17"><button class="addbtn" onclick="handleInitialAdd('vegetables', 17, 'Rettich')">Add to Cart</button></div>
-          </div>
-        </div>
-        <div class="product-card " id="card-vegetables-18">
-          
-          <div>
-            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Valor%20papdi%20%2FAvarai" alt="Valor papdi /Avarai" loading="lazy"></div>
-            <div class="pname">Valor papdi /Avarai</div>
-          </div>
-          <div>
-            <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('vegetables', 18, 'Valor papdi /Avarai', this.value)">
-                <option value="0">1kg</option><option value="1">500g</option><option value="2">250g</option>
-              </select>
-            </div>
-            <div class="price-row"><span class="price" id="price-vegetables-18">€8.49</span></div>
-            <div class="action-container" id="action-vegetables-18"><button class="addbtn" onclick="handleInitialAdd('vegetables', 18, 'Valor papdi /Avarai')">Add to Cart</button></div>
-          </div>
-        </div>
-        <div class="product-card " id="card-vegetables-19">
-          
-          <div>
-            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Okra%2FBhendi" alt="Okra/Bhendi" loading="lazy"></div>
-            <div class="pname">Okra/Bhendi</div>
-          </div>
-          <div>
-            <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('vegetables', 19, 'Okra/Bhendi', this.value)">
-                <option value="0">1kg</option><option value="1">500g</option><option value="2">250g</option>
-              </select>
-            </div>
-            <div class="price-row"><span class="price" id="price-vegetables-19">€7.99</span></div>
-            <div class="action-container" id="action-vegetables-19"><button class="addbtn" onclick="handleInitialAdd('vegetables', 19, 'Okra/Bhendi')">Add to Cart</button></div>
-          </div>
-        </div>
-        <div class="product-card " id="card-vegetables-20">
-          
-          <div>
-            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Mint%201pack%20" alt="Mint 1pack " loading="lazy"></div>
-            <div class="pname">Mint 1pack </div>
-          </div>
-          <div>
-            <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('vegetables', 20, 'Mint 1pack ', this.value)">
-                <option value="0">1 stuck</option>
-              </select>
-            </div>
-            <div class="price-row"><span class="price" id="price-vegetables-20">€1.99</span></div>
-            <div class="action-container" id="action-vegetables-20"><button class="addbtn" onclick="handleInitialAdd('vegetables', 20, 'Mint 1pack ')">Add to Cart</button></div>
-          </div>
-        </div>
-        <div class="product-card " id="card-vegetables-21">
-          
-          <div>
-            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Coconut%20" alt="Coconut " loading="lazy"></div>
-            <div class="pname">Coconut </div>
-          </div>
-          <div>
-            <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('vegetables', 21, 'Coconut ', this.value)">
-                <option value="0">1 pcs</option>
-              </select>
-            </div>
-            <div class="price-row"><span class="price" id="price-vegetables-21">€2.49</span></div>
-            <div class="action-container" id="action-vegetables-21"><button class="addbtn" onclick="handleInitialAdd('vegetables', 21, 'Coconut ')">Add to Cart</button></div>
-          </div>
-        </div>
-        <div class="product-card " id="card-vegetables-22">
-          
-          <div>
-            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Methi%20leaves" alt="Methi leaves" loading="lazy"></div>
-            <div class="pname">Methi leaves</div>
-          </div>
-          <div>
-            <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('vegetables', 22, 'Methi leaves', this.value)">
-                <option value="0">1 pcs</option>
-              </select>
-            </div>
-            <div class="price-row"><span class="price" id="price-vegetables-22">€2.49</span></div>
-            <div class="action-container" id="action-vegetables-22"><button class="addbtn" onclick="handleInitialAdd('vegetables', 22, 'Methi leaves')">Add to Cart</button></div>
-          </div>
-        </div>
-        <div class="product-card " id="card-vegetables-23">
-          
-          <div>
-            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Coriander%201pcs" alt="Coriander 1pcs" loading="lazy"></div>
-            <div class="pname">Coriander 1pcs</div>
-          </div>
-          <div>
-            <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('vegetables', 23, 'Coriander 1pcs', this.value)">
-                <option value="0">1stuck</option>
-              </select>
-            </div>
-            <div class="price-row"><span class="price" id="price-vegetables-23">€2.49</span></div>
-            <div class="action-container" id="action-vegetables-23"><button class="addbtn" onclick="handleInitialAdd('vegetables', 23, 'Coriander 1pcs')">Add to Cart</button></div>
-          </div>
-        </div>
-        <div class="product-card " id="card-vegetables-24">
-          
-          <div>
-            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Kola%20" alt="Kola " loading="lazy"></div>
-            <div class="pname">Kola </div>
-          </div>
-          <div>
-            <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('vegetables', 24, 'Kola ', this.value)">
-                <option value="0">1kg</option><option value="1">500g</option><option value="2">250g</option>
-              </select>
-            </div>
-            <div class="price-row"><span class="price" id="price-vegetables-24">€8.49</span></div>
-            <div class="action-container" id="action-vegetables-24"><button class="addbtn" onclick="handleInitialAdd('vegetables', 24, 'Kola ')">Add to Cart</button></div>
-          </div>
-        </div>
-        <div class="product-card " id="card-vegetables-25">
-          
-          <div>
-            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Guwar%2FCluster%20Beans" alt="Guwar/Cluster Beans" loading="lazy"></div>
-            <div class="pname">Guwar/Cluster Beans</div>
-          </div>
-          <div>
-            <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('vegetables', 25, 'Guwar/Cluster Beans', this.value)">
-                <option value="0">1kg</option><option value="1">500g</option><option value="2">250g</option>
-              </select>
-            </div>
-            <div class="price-row"><span class="price" id="price-vegetables-25">€8.49</span></div>
-            <div class="action-container" id="action-vegetables-25"><button class="addbtn" onclick="handleInitialAdd('vegetables', 25, 'Guwar/Cluster Beans')">Add to Cart</button></div>
-          </div>
-        </div>
-        <div class="product-card " id="card-vegetables-26">
-          
-          <div>
-            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Parwar%2FPointed%20Gourd%60" alt="Parwar/Pointed Gourd`" loading="lazy"></div>
-            <div class="pname">Parwar/Pointed Gourd`</div>
-          </div>
-          <div>
-            <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('vegetables', 26, 'Parwar/Pointed Gourd`', this.value)">
-                <option value="0">1kg</option><option value="1">500g</option><option value="2">250g</option>
-              </select>
-            </div>
-            <div class="price-row"><span class="price" id="price-vegetables-26">€8.49</span></div>
-            <div class="action-container" id="action-vegetables-26"><button class="addbtn" onclick="handleInitialAdd('vegetables', 26, 'Parwar/Pointed Gourd`')">Add to Cart</button></div>
-          </div>
-        </div></div></div><div class="cat-section" id="cat-fruits"><div class="cat-head"><h3>Fresh Fruits</h3><div class="cat-line"></div></div><div class="products-grid">
-        <div class="product-card " id="card-fruits-0">
-          
-          <div>
-            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Banana" alt="Banana" loading="lazy"></div>
-            <div class="pname">Banana</div>
-          </div>
-          <div>
-            <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('fruits', 0, 'Banana', this.value)">
-                <option value="0">500g</option><option value="1">1kg</option>
-              </select>
-            </div>
-            <div class="price-row"><span class="price" id="price-fruits-0">€1.10</span></div>
-            <div class="action-container" id="action-fruits-0"><button class="addbtn" onclick="handleInitialAdd('fruits', 0, 'Banana')">Add to Cart</button></div>
-          </div>
-        </div>
-        <div class="product-card " id="card-fruits-1">
-          
-          <div>
-            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Mango%20Box" alt="Mango Box" loading="lazy"></div>
-            <div class="pname">Mango Box</div>
-          </div>
-          <div>
-            <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('fruits', 1, 'Mango Box', this.value)">
-                <option value="0">1box (4pcs)</option><option value="1">1box (6pcs)</option>
-              </select>
-            </div>
-            <div class="price-row"><span class="price" id="price-fruits-1">€6.99</span></div>
-            <div class="action-container" id="action-fruits-1"><button class="addbtn" onclick="handleInitialAdd('fruits', 1, 'Mango Box')">Add to Cart</button></div>
-          </div>
-        </div></div></div><div class="cat-section" id="cat-rice"><div class="cat-head"><h3>Rice &amp; Atta Flour</h3><div class="cat-line"></div></div><div class="products-grid">
-        <div class="product-card " id="card-rice-0">
-          
-          <div>
-            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Premium%20Idli%20Rice" alt="Premium Idli Rice" loading="lazy"></div>
-            <div class="pname">Premium Idli Rice</div>
-          </div>
-          <div>
-            <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('rice', 0, 'Premium Idli Rice', this.value)">
-                <option value="0">1kg</option><option value="1">5kg</option><option value="2">10kg</option>
-              </select>
-            </div>
-            <div class="price-row"><span class="price" id="price-rice-0">€2.49</span></div>
-            <div class="action-container" id="action-rice-0"><button class="addbtn" onclick="handleInitialAdd('rice', 0, 'Premium Idli Rice')">Add to Cart</button></div>
-          </div>
-        </div>
-        <div class="product-card " id="card-rice-1">
-          
-          <div>
-            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Aashirvaad%20Chakki%20Atta" alt="Aashirvaad Chakki Atta" loading="lazy"></div>
-            <div class="pname">Aashirvaad Chakki Atta</div>
-          </div>
-          <div>
-            <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('rice', 1, 'Aashirvaad Chakki Atta', this.value)">
-                <option value="0">1kg</option><option value="1">5kg</option><option value="2">10kg</option>
-              </select>
-            </div>
-            <div class="price-row"><span class="price" id="price-rice-1">€3.29</span></div>
-            <div class="action-container" id="action-rice-1"><button class="addbtn" onclick="handleInitialAdd('rice', 1, 'Aashirvaad Chakki Atta')">Add to Cart</button></div>
-          </div>
-        </div>
-        <div class="product-card " id="card-rice-2">
-          
-          <div>
-            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Premium%20Basmati%20Rice" alt="Premium Basmati Rice" loading="lazy"></div>
-            <div class="pname">Premium Basmati Rice</div>
-          </div>
-          <div>
-            <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('rice', 2, 'Premium Basmati Rice', this.value)">
-                <option value="0">1kg</option><option value="1">5kg</option><option value="2">10kg</option>
-              </select>
-            </div>
-            <div class="price-row"><span class="price" id="price-rice-2">€2.99</span></div>
-            <div class="action-container" id="action-rice-2"><button class="addbtn" onclick="handleInitialAdd('rice', 2, 'Premium Basmati Rice')">Add to Cart</button></div>
-          </div>
-        </div>
-        <div class="product-card " id="card-rice-3">
-          
-          <div>
-            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Ponni%20Boiled%20Rice" alt="Ponni Boiled Rice" loading="lazy"></div>
-            <div class="pname">Ponni Boiled Rice</div>
-          </div>
-          <div>
-            <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('rice', 3, 'Ponni Boiled Rice', this.value)">
-                <option value="0">5kg</option><option value="1">10kg</option><option value="2">20kg</option>
-              </select>
-            </div>
-            <div class="price-row"><span class="price" id="price-rice-3">€11.49</span></div>
-            <div class="action-container" id="action-rice-3"><button class="addbtn" onclick="handleInitialAdd('rice', 3, 'Ponni Boiled Rice')">Add to Cart</button></div>
-          </div>
-        </div></div></div><div class="cat-section" id="cat-dals"><div class="cat-head"><h3>Dals &amp; Lentils</h3><div class="cat-line"></div></div><div class="products-grid">
-        <div class="product-card " id="card-dals-0">
-          
-          <div>
-            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Toor%20Dal" alt="Toor Dal" loading="lazy"></div>
-            <div class="pname">Toor Dal</div>
-          </div>
-          <div>
-            <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('dals', 0, 'Toor Dal', this.value)">
-                <option value="0">500g</option><option value="1">1kg</option><option value="2">2kg</option>
-              </select>
-            </div>
-            <div class="price-row"><span class="price" id="price-dals-0">€1.69</span></div>
-            <div class="action-container" id="action-dals-0"><button class="addbtn" onclick="handleInitialAdd('dals', 0, 'Toor Dal')">Add to Cart</button></div>
-          </div>
-        </div>
-        <div class="product-card " id="card-dals-1">
-          
-          <div>
-            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Urad%20Dal%20Whole" alt="Urad Dal Whole" loading="lazy"></div>
-            <div class="pname">Urad Dal Whole</div>
-          </div>
-          <div>
-            <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('dals', 1, 'Urad Dal Whole', this.value)">
-                <option value="0">500g</option><option value="1">1kg</option>
-              </select>
-            </div>
-            <div class="price-row"><span class="price" id="price-dals-1">€1.89</span></div>
-            <div class="action-container" id="action-dals-1"><button class="addbtn" onclick="handleInitialAdd('dals', 1, 'Urad Dal Whole')">Add to Cart</button></div>
-          </div>
-        </div>
-        <div class="product-card " id="card-dals-2">
-          
-          <div>
-            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Chana%20Dal" alt="Chana Dal" loading="lazy"></div>
-            <div class="pname">Chana Dal</div>
-          </div>
-          <div>
-            <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('dals', 2, 'Chana Dal', this.value)">
-                <option value="0">500g</option><option value="1">1kg</option>
-              </select>
-            </div>
-            <div class="price-row"><span class="price" id="price-dals-2">€1.49</span></div>
-            <div class="action-container" id="action-dals-2"><button class="addbtn" onclick="handleInitialAdd('dals', 2, 'Chana Dal')">Add to Cart</button></div>
-          </div>
-        </div>
-        <div class="product-card " id="card-dals-3">
-          
-          <div>
-            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Moong%20Dal" alt="Moong Dal" loading="lazy"></div>
-            <div class="pname">Moong Dal</div>
-          </div>
-          <div>
-            <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('dals', 3, 'Moong Dal', this.value)">
-                <option value="0">500g</option><option value="1">1kg</option>
-              </select>
-            </div>
-            <div class="price-row"><span class="price" id="price-dals-3">€1.79</span></div>
-            <div class="action-container" id="action-dals-3"><button class="addbtn" onclick="handleInitialAdd('dals', 3, 'Moong Dal')">Add to Cart</button></div>
-          </div>
-        </div></div></div><div class="cat-section" id="cat-spices"><div class="cat-head"><h3>Spices &amp; Herbs</h3><div class="cat-line"></div></div><div class="products-grid">
-        <div class="product-card " id="card-spices-0">
-          
-          <div>
-            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Cumin%20Seeds" alt="Cumin Seeds" loading="lazy"></div>
-            <div class="pname">Cumin Seeds</div>
-          </div>
-          <div>
-            <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('spices', 0, 'Cumin Seeds', this.value)">
-                <option value="0">50g</option><option value="1">100g</option><option value="2">250g</option>
-              </select>
-            </div>
-            <div class="price-row"><span class="price" id="price-spices-0">€0.89</span></div>
-            <div class="action-container" id="action-spices-0"><button class="addbtn" onclick="handleInitialAdd('spices', 0, 'Cumin Seeds')">Add to Cart</button></div>
-          </div>
-        </div>
-        <div class="product-card " id="card-spices-1">
-          
-          <div>
-            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Mustard%20Seeds" alt="Mustard Seeds" loading="lazy"></div>
-            <div class="pname">Mustard Seeds</div>
-          </div>
-          <div>
-            <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('spices', 1, 'Mustard Seeds', this.value)">
-                <option value="0">100g</option><option value="1">200g</option><option value="2">500g</option>
-              </select>
-            </div>
-            <div class="price-row"><span class="price" id="price-spices-1">€0.69</span></div>
-            <div class="action-container" id="action-spices-1"><button class="addbtn" onclick="handleInitialAdd('spices', 1, 'Mustard Seeds')">Add to Cart</button></div>
-          </div>
-        </div>
-        <div class="product-card " id="card-spices-2">
-          
-          <div>
-            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Cardamom%20%2F%20Elaichi" alt="Cardamom / Elaichi" loading="lazy"></div>
-            <div class="pname">Cardamom / Elaichi</div>
-          </div>
-          <div>
-            <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('spices', 2, 'Cardamom / Elaichi', this.value)">
-                <option value="0">50g</option><option value="1">100g</option>
-              </select>
-            </div>
-            <div class="price-row"><span class="price" id="price-spices-2">€2.49</span></div>
-            <div class="action-container" id="action-spices-2"><button class="addbtn" onclick="handleInitialAdd('spices', 2, 'Cardamom / Elaichi')">Add to Cart</button></div>
-          </div>
-        </div></div></div><div class="cat-section" id="cat-masalas"><div class="cat-head"><h3>Masala Powders</h3><div class="cat-line"></div></div><div class="products-grid">
-        <div class="product-card " id="card-masalas-0">
-          
-          <div>
-            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Achi%20Sambar%20Powder" alt="Achi Sambar Powder" loading="lazy"></div>
-            <div class="pname">Achi Sambar Powder</div>
-          </div>
-          <div>
-            <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('masalas', 0, 'Achi Sambar Powder', this.value)">
-                <
-            <div class="img-slot"><img src="https://dummyimage.com/300x300/f1f5f9/0b4624.png&amp;text=Sakthi%20Chilli%20Powder" alt="Sakthi Chilli Powder" loading="lazy"></div>
-            <div class="pname">Sakthi Chilli Powder</div>
-          </div>
-          <div>
-            <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('masalas', 1, 'Sa
+            <label><input type="checkbox" ${item[4] ? 'checked' : ''} onchange="catalog[${ci}].items[${ii}][4]=this.checked"> OOS</label>
+            <button onclick="catalog[${ci}].items.splice(${ii},1); loadProductsTab()">×</button>
+          </div>
+        `).join('')}
+      </div>
+      <div class="admin-btn-row"><button onclick="catalog[${ci}].items.push(['New Item','1kg, 500g, 250g','','',false]); loadProductsTab()">+ Add Product</button></div>
+    </div>
+  `).join('');
+
+  html += `<div style="text-align:center; margin: 25px 0;"><button onclick="addNewCategoryPrompt()" style="background:#007BFF; color:#fff; border:none; padding:12px 24px; border-radius:8px; font-weight:700; cursor:pointer; font-size:14px;">➕ Add New Category</button></div>`;
+  body.innerHTML = html;
+}
+
+function addLocationPrompt() {
+  const name = prompt("Enter New Delivery Location Name:");
+  if(name && name.trim() !== "") {
+    const feeStr = prompt("Enter Delivery Fee:", "0.00");
+    locations.push({ name: name.trim(), fee: parseFloat(feeStr) || 0 });
+    loadProductsTab();
+  }
+}
+
+function addNewCategoryPrompt() {
+  const name = prompt("Enter New Category Name:");
+  if(name && name.trim() !== "") {
+    const id = name.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+    catalog.push({ id: id, name: name.trim(), items: [] });
+    loadProductsTab();
+  }
+}
+
+function saveCatalogAndExport(){
+  const announceField = document.getElementById('settingAnnouncementText');
+  if(announceField) {
+    storeDatabase.settings.announcementText = announceField.value;
+  }
+  
+  closeAdmin();
+  renderCatalog();
+  renderLocations();
+  
+  document.getElementById('customer-announcement').innerText = storeDatabase.settings.announcementText;
+  
+  const databaseString = JSON.stringify({ 
+    categories: catalog, 
+    locations: locations, 
+    offers: offers,
+    settings: storeDatabase.settings
+  });
+  
+  const scriptRegex = /const storeDatabase = [\s\S]*?};/;
+  let entirePageCode = document.documentElement.outerHTML;
+  entirePageCode = entirePageCode.replace(scriptRegex, `const storeDatabase = ${databaseString};`);
+  
+  const finalCleanCode = "<!DOCTYPE html>\n" + entirePageCode;
+  
+  document.getElementById('exportTextarea').value = finalCleanCode;
+  document.getElementById('adminOverlay').classList.add('show');
+  document.getElementById('exportBox').style.display = 'flex';
+  document.getElementById('adminStatus').textContent = "Clean System Code Generated! Copy and update in GitHub.";
+}
+
+function copyExportCode() {
+  const textarea = document.getElementById('exportTextarea');
+  textarea.select();
+  document.execCommand('copy');
+  alert("Done! Data saved & configuration copied! 📋\n\nPaste this complete new code inside your GitHub index.html and Save Changes.");
+}
+
+document.getElementById('customer-announcement').innerText = storeDatabase.settings.announcementText || "🔥 Special Offer: Keep ordering from our shop to get amazing discounts instantly! 🔥";
+renderCatalog();
+renderLocations();
+loadCartFromLocalStorage();
+renderProfilePage();
+</script>
+
+</body></html>
