@@ -9,6 +9,7 @@
 
 <style>
   :root {
+    color-scheme: light;
     --primary: #0B4624;
     --accent: #D4AF37;
     --accent-dark: #AA841C;
@@ -66,31 +67,32 @@
   .app-view.active-view { display: block; }
 
   .hero { background: linear-gradient(135deg, #073018 0%, #0B4624 100%); color: #fff; padding: 40px 20px; text-align: center; border-bottom: 4px solid var(--accent); }
+  .shop-badge { display: inline-block; background: var(--accent); color: var(--primary); font-weight: 800; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; padding: 7px 18px; border-radius: 20px; margin-bottom: 14px; }
   .hero h2 { font-family: 'Playfair Display', serif; font-size: 32px; margin-bottom: 10px; color: #fff; }
   .hero h2 em { color: var(--accent); font-style: normal; }
   .hero p { font-size: 14px; color: #E2E8F0; max-width: 500px; margin: 0 auto 15px; opacity: 0.9; }
   .pills { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
   .pill { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 4px 12px; border-radius: 15px; font-size: 12px; font-weight: 600; }
 
-  .search-section { max-width: 500px; margin: -22px auto 20px; padding: 0 16px; position: relative; z-index: 10; }
-  .search-box { width: 100%; padding: 14px 20px 14px 46px; border: none; border-radius: 30px; font-size: 14px; font-weight: 600; box-shadow: 0 8px 25px rgba(0,0,0,0.08); outline: none; background: #fff; color: var(--text-dark); border: 1px solid #E2E8F0; }
-  .search-section::before { content: "🔍"; position: absolute; left: 32px; top: 13px; font-size: 16px; opacity: 0.6; }
+  .search-section { max-width: 500px; margin: 0 auto; padding: 10px 16px; position: sticky; top: 72px; z-index: 999; background: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.06); }
+  .search-box { width: 100%; padding: 14px 20px 14px 46px; border: none; border-radius: 30px; font-size: 14px; font-weight: 600; box-shadow: 0 2px 8px rgba(0,0,0,0.06); outline: none; background: #fff; color: var(--text-dark); border: 1px solid #E2E8F0; }
+  .search-section::before { content: "🔍"; position: absolute; left: 32px; top: 23px; font-size: 16px; opacity: 0.6; }
 
   .front-greet-section { background: #fff; padding: 24px 16px; border-bottom: 1px solid #E2E8F0; text-align: center; }
   .front-greet-section h4 { font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--primary); margin-bottom: 16px; }
   .circle-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(85px, 1fr)); gap: 16px; justify-content: center; max-width: 900px; margin: 0 auto; }
   .circle-card { display: flex; flex-direction: column; align-items: center; text-decoration: none; cursor: pointer; transition: transform 0.2s; }
   .circle-card:hover { transform: translateY(-3px); }
-  .circle-icon-box { width: 66px; height: 66px; border-radius: 50%; background: #F8FAFC; border: 2px solid var(--accent); display: flex; align-items: center; justify-content: center; font-size: 26px; box-shadow: 0 4px 10px rgba(0,0,0,0.04); }
+  .circle-icon-box { width: 66px; height: 66px; border-radius: 16px; background: #F8FAFC; border: 2px solid var(--accent); display: flex; align-items: center; justify-content: center; font-size: 26px; box-shadow: 0 4px 10px rgba(0,0,0,0.04); overflow: hidden; }
   .circle-title { font-size: 11px; font-weight: 700; color: var(--text-dark); margin-top: 8px; text-align: center; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
-  .catnav { position: sticky; top: 72px; z-index: 1000; background: #fff; border-bottom: 1px solid #E2E8F0; overflow-x: auto; white-space: nowrap; padding: 12px 16px; display: flex; gap: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); scroll-behavior: smooth; }
+  .catnav { position: sticky; top: 137px; z-index: 1000; background: #fff; border-bottom: 1px solid #E2E8F0; overflow-x: auto; white-space: nowrap; padding: 12px 16px; display: flex; gap: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); scroll-behavior: smooth; }
   .catnav::-webkit-scrollbar { display: none; }
   .catnav a { flex-shrink: 0; background: var(--bg-light); border: 1px solid #E2E8F0; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; color: var(--text-dark); text-decoration: none; transition: all 0.2s; }
   .catnav a.active, .catnav a:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
 
   main { max-width: 1100px; margin: 0 auto; padding: 20px 16px; }
-  .cat-section { margin-bottom: 40px; scroll-margin-top: 145px; }
+  .cat-section { margin-bottom: 40px; scroll-margin-top: 195px; }
   .cat-head { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
   .cat-head h3 { font-family: 'Playfair Display', serif; font-size: 24px; color: var(--primary); font-weight: 700; }
   .cat-line { flex: 1; height: 2px; background: #E2E8F0; }
@@ -107,7 +109,7 @@
   .oos-badge { position: absolute; top: 8px; left: 8px; background: var(--danger); color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; z-index: 2; }
   .oos-card { opacity: 0.6; }
 
-  .pname { font-size: 14px; font-weight: 700; color: var(--text-dark); margin-bottom: 6px; line-height: 1.3; min-height: 36px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .pname { font-size: 14px; font-weight: 800; color: var(--text-dark); margin-bottom: 6px; line-height: 1.3; min-height: 36px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; background: linear-gradient(180deg, transparent 62%, #FFEDB3 62%); background-repeat: no-repeat; padding: 0 2px; }
   .variant-wrapper { margin-bottom: 10px; }
   .punit-select { width: 100%; padding: 6px 8px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 12px; background: #fff; color: var(--text-dark); font-weight: 500; outline: none; cursor: pointer; }
   .price-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
@@ -184,10 +186,10 @@
   .admin-body { flex: 1; overflow-y: auto; padding: 20px; max-width: 1000px; margin: 0 auto; width: 100%; }
   .admin-cat { background: #fff; border: 1px solid #E2E8F0; border-radius: 12px; padding: 16px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
   .admin-cat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid #E2E8F0; padding-bottom: 8px; }
-  .admin-cat-header input { font-size: 16px; font-weight: 700; color: var(--primary); border: 1px dashed #CBD5E1; padding: 4px 8px; border-radius: 4px; width: 40%; }
+  .admin-cat-header input { font-size: 16px; font-weight: 700; color: var(--primary); background: #fff; border: 1px dashed #CBD5E1; padding: 4px 8px; border-radius: 4px; width: 40%; }
   .admin-item-row { display: grid; grid-template-columns: 2fr 1.2fr 1.2fr 1.5fr 80px 40px; gap: 8px; margin-bottom: 10px; align-items: center; background: var(--bg-light); padding: 8px; border-radius: 6px; }
   @media (max-width: 600px) { .admin-item-row { grid-template-columns: 1fr; gap: 6px; } }
-  .admin-item-row input { padding: 8px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 13px; width: 100%; }
+  .admin-item-row input { padding: 8px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 13px; width: 100%; background: #fff; color: var(--text-dark); }
   .admin-item-row button { background: var(--danger); color: #fff; border: none; border-radius: 6px; height: 34px; font-size: 16px; cursor: pointer; }
   
   .admin-btn-row { display: flex; gap: 10px; margin-top: 10px; }
@@ -195,6 +197,11 @@
   
   .print-box-tool { background: #FFF9E6; border: 2px dashed var(--accent); padding: 15px; border-radius: 10px; margin-bottom: 20px; }
   .print-box-tool textarea { width: 100%; height: 80px; padding: 10px; border-radius: 6px; border: 1px solid #CBD5E1; margin: 8px 0; font-size: 12px; }
+
+  .save-bar { position: sticky; bottom: 0; background: #fff; border-top: 1px solid #E2E8F0; padding: 15px 20px; display: flex; flex-direction: column; gap: 10px; align-items: center; z-index: 10; }
+  .save-bar button { background: var(--primary); color: #fff; border: none; padding: 18px 24px; border-radius: 10px; font-weight: 800; cursor: pointer; font-size: 17px; width: 100%; max-width: 400px; }
+  .export-box { width: 100%; max-width: 600px; display: none; flex-direction: column; gap: 8px; margin-top: 10px; }
+  .export-box textarea { width: 100%; height: 100px; padding: 10px; font-family: monospace; font-size: 11px; }
 
   #a4InvoicePrintout { display: none; }
   @media print {
@@ -258,6 +265,7 @@
 
 <div id="view-home" class="app-view active-view">
   <section class="hero">
+    <div class="shop-badge">🛒 SNKFoods Online Shop</div>
     <h2>Authentic Indian Taste, <br><em>Delivered Fresh.</em></h2>
     <p>Premium quality grocery essentials curated for your kitchen.</p>
     <div class="pills" id="hero-pills"></div>
@@ -271,6 +279,11 @@
     <h4>Explore Our Categories</h4>
     <div class="circle-grid" id="greetCircles"></div>
   </section>
+
+  <div id="noResultsMsg" class="empty-note" style="display:none; padding: 40px 16px;">
+    😕 No products found for "<span id="noResultsQuery"></span>".<br>
+    <button onclick="requestMissingProduct()" style="margin-top:14px; background: var(--primary); color:#fff; border:none; padding:10px 22px; border-radius:8px; font-weight:700; cursor:pointer; font-size:13px;">📩 Request this product on WhatsApp</button>
+  </div>
 
   <nav class="catnav" id="catnav"></nav>
   <main id="catalog"></main>
@@ -327,6 +340,7 @@
 <div class="menu-drawer" id="menuDrawer">
   <div class="menu-drawer-head"><h3>Categories Menu</h3><button class="close" onclick="closeMenuDrawer()">×</button></div>
   <div class="menu-drawer-body" id="menuDrawerBody"></div>
+  <button class="menu-admin-btn" style="background:#FFF9E6; border-color:var(--accent); color:var(--accent-dark);" onclick="closeMenuDrawer(); openCustomerMessageBox();">📩 Message Us / Request a Product</button>
   <button class="menu-admin-btn" onclick="closeMenuDrawer(); adminLogin();">🛠️ Open Admin Portal</button>
   <div class="menu-contact-box">
     <h4>Contact Us</h4>
@@ -397,6 +411,13 @@ function getCategoryEmoji(id) {
   return maps[id] || "📦";
 }
 
+function getCategoryIconHtml(cat) {
+  if(cat.icon && typeof cat.icon === 'string' && cat.icon.trim() !== '' && (cat.icon.startsWith('data:') || cat.icon.startsWith('http'))) {
+    return `<img src="${cat.icon}" alt="${cat.name}" style="width:100%;height:100%;object-fit:cover;">`;
+  }
+  return (cat.icon && cat.icon.trim() !== '') ? cat.icon : getCategoryEmoji(cat.id);
+}
+
 function parseVariants(unitStr, priceStr) {
   const units = unitStr.split(',').map(s => s.trim());
   const prices = priceStr.split(',').map(s => parseFloat(s.trim()) || 0);
@@ -417,6 +438,7 @@ function renderLocations() {
 
 function filterProducts() {
   const query = document.getElementById('searchBar').value.toLowerCase().trim();
+  let anyMatch = false;
   catalog.forEach(cat => {
     let categoryHasMatches = false;
     cat.items.forEach(([name], itemIdx) => {
@@ -434,7 +456,94 @@ function filterProducts() {
     if(sectionEl) {
       sectionEl.style.display = (categoryHasMatches || query === "") ? 'block' : 'none';
     }
+    if(categoryHasMatches) anyMatch = true;
   });
+
+  const noResultsEl = document.getElementById('noResultsMsg');
+  const noResultsQueryEl = document.getElementById('noResultsQuery');
+  if(query !== "" && !anyMatch) {
+    if(noResultsEl) noResultsEl.style.display = 'block';
+    if(noResultsQueryEl) noResultsQueryEl.textContent = document.getElementById('searchBar').value.trim();
+    logMissedSearch(document.getElementById('searchBar').value.trim());
+  } else {
+    if(noResultsEl) noResultsEl.style.display = 'none';
+  }
+}
+
+let missedSearchTimer = null;
+function logMissedSearch(term) {
+  if(!term) return;
+  clearTimeout(missedSearchTimer);
+  missedSearchTimer = setTimeout(() => {
+    recordMissedSearch(term);
+  }, 1200);
+}
+
+function recordMissedSearch(term) {
+  const key = 'snk_missed_searches';
+  let list = [];
+  try { list = JSON.parse(localStorage.getItem(key) || '[]'); } catch(e) { list = []; }
+  const normalized = term.toLowerCase();
+  const existing = list.find(x => x.term.toLowerCase() === normalized);
+  if(existing) {
+    existing.count += 1;
+    existing.lastSearched = new Date().toISOString();
+  } else {
+    list.unshift({ term: term, count: 1, lastSearched: new Date().toISOString() });
+  }
+  list = list.slice(0, 100);
+  localStorage.setItem(key, JSON.stringify(list));
+
+  if(GOOGLE_SCRIPT_URL && GOOGLE_SCRIPT_URL !== "YOUR_APPS_SCRIPT_URL_HERE") {
+    fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type: 'missed_search', searchTerm: term, dateTime: new Date().toLocaleString('nl-NL') })
+    }).catch(err => console.log("Missed search log error: ", err));
+  }
+}
+
+function requestMissingProduct() {
+  const term = document.getElementById('searchBar').value.trim();
+  const msg = `Hello SNK Foods! 🙏\nI searched for "${term}" but couldn't find it on the website. Can you please add this product? Thank you!`;
+  window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+function openCustomerMessageBox() {
+  const msg = prompt("What would you like to tell us? (Product request, feedback, or any question)");
+  if(!msg || msg.trim() === "") return;
+  const trimmedMsg = msg.trim();
+  const waMsg = `Hello SNK Foods! 📩\nCustomer Message:\n${trimmedMsg}`;
+
+  if(GOOGLE_SCRIPT_URL && GOOGLE_SCRIPT_URL !== "YOUR_APPS_SCRIPT_URL_HERE") {
+    fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type: 'customer_message', message: trimmedMsg, dateTime: new Date().toLocaleString('nl-NL') })
+    }).catch(err => console.log("Customer message log error: ", err));
+  }
+
+  window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(waMsg)}`, '_blank');
+}
+
+function renderMissedSearchListHtml() {
+  let list = [];
+  try { list = JSON.parse(localStorage.getItem('snk_missed_searches') || '[]'); } catch(e) { list = []; }
+  if(list.length === 0) return `<div class="empty-note" style="padding:15px 0;">No missed searches recorded on this device yet.</div>`;
+  return list.map(item => `
+    <div style="display:flex; justify-content:space-between; align-items:center; background:#fff; border:1px solid #FFD5D5; padding:8px 12px; border-radius:6px; margin-bottom:6px; gap:10px;">
+      <div><b>${item.term}</b> <span style="color:var(--text-light); font-size:11px;">(searched ${item.count}x, last: ${new Date(item.lastSearched).toLocaleDateString('nl-NL')})</span></div>
+    </div>
+  `).join('');
+}
+
+function clearMissedSearches() {
+  if(confirm('Clear all recorded search requests on this device?')) {
+    localStorage.removeItem('snk_missed_searches');
+    loadProductsTab();
+  }
 }
 
 function renderCatalog(){
@@ -456,7 +565,7 @@ function renderCatalog(){
   catalog.forEach((cat, cIdx)=>{
     const circleCard = document.createElement('div');
     circleCard.className = 'circle-card';
-    circleCard.innerHTML = `<div class="circle-icon-box">${getCategoryEmoji(cat.id)}</div><div class="circle-title">${cat.name}</div>`;
+    circleCard.innerHTML = `<div class="circle-icon-box">${getCategoryIconHtml(cat)}</div><div class="circle-title">${cat.name}</div>`;
     circleCard.onclick = () => {
       switchView('home');
       setTimeout(() => {
@@ -1047,6 +1156,82 @@ function handleImageUpload(event, ci, ii) {
   reader.readAsDataURL(file);
 }
 
+function parseWeightGrams(unitStr) {
+  const s = unitStr.trim().toLowerCase();
+  const m = s.match(/^([\d.]+)\s*(kg|g|l|ml)\b/);
+  if(!m) return null;
+  const val = parseFloat(m[1]);
+  const unit = m[2];
+  if(unit === 'kg') return { type: 'weight', amount: val * 1000 };
+  if(unit === 'g') return { type: 'weight', amount: val };
+  if(unit === 'l') return { type: 'volume', amount: val * 1000 };
+  if(unit === 'ml') return { type: 'volume', amount: val };
+  return null;
+}
+
+function autoCalcVariantPrices(ci, ii) {
+  const item = catalog[ci].items[ii];
+  const variants = item[1].split(',').map(s => s.trim());
+  const parsed = variants.map(v => parseWeightGrams(v));
+  const priceParts = item[2].split(',').map(s => s.trim());
+
+  let baseIdx = parsed.findIndex((p, i) => p && p.amount === 1000 && priceParts[i] && parseFloat(priceParts[i]) > 0);
+  let basePrice;
+
+  if(baseIdx === -1) {
+    const fallbackIdx = parsed.findIndex(p => p && p.amount === 1000);
+    const labelVariant = fallbackIdx !== -1 ? variants[fallbackIdx] : variants[0];
+    const promptVal = prompt(`Enter the price for "${labelVariant}" (base variant):`, priceParts[fallbackIdx !== -1 ? fallbackIdx : 0] || '');
+    if(promptVal === null) return;
+    basePrice = parseFloat(promptVal);
+    if(isNaN(basePrice) || basePrice <= 0) { alert('Please enter a valid price.'); return; }
+    baseIdx = fallbackIdx !== -1 ? fallbackIdx : 0;
+    if(!parsed[baseIdx]) { alert('Could not detect a weight/volume unit on this variant to calculate from.'); return; }
+  } else {
+    basePrice = parseFloat(priceParts[baseIdx]);
+  }
+
+  const baseInfo = parsed[baseIdx];
+  const newPrices = variants.map((v, i) => {
+    if(i === baseIdx) return basePrice.toFixed(2);
+    if(!baseInfo || !parsed[i] || parsed[i].type !== baseInfo.type) {
+      return priceParts[i] || '';
+    }
+    const ratio = parsed[i].amount / baseInfo.amount;
+    return (basePrice * ratio).toFixed(2);
+  });
+
+  catalog[ci].items[ii][2] = newPrices.join(', ');
+  loadProductsTab();
+}
+
+function handleCategoryImageUpload(event, ci) {
+  const file = event.target.files[0];
+  if(!file) return;
+  if(!file.type.startsWith('image/')) { alert('Please select an image file.'); return; }
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = new Image();
+    img.onload = function() {
+      const MAX = 200;
+      let w = img.width, h = img.height;
+      if(w > h) { if(w > MAX){ h = Math.round(h * (MAX / w)); w = MAX; } }
+      else { if(h > MAX){ w = Math.round(w * (MAX / h)); h = MAX; } }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+      catalog[ci].icon = dataUrl;
+      loadProductsTab();
+      renderCatalog();
+    };
+    img.onerror = function() { alert('Could not read this image, please try another file.'); };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
 function loadProductsTab(){
   const body = document.getElementById('adminBody');
   
@@ -1058,6 +1243,24 @@ function loadProductsTab(){
         <button onclick="printFromPastedWhatsAppText()" style="background:#007BFF; color:#fff; border:none; padding:8px 16px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:12px;">🖨️ Parse & Print WhatsApp Invoice</button>
         <button onclick="printCurrentBasketInvoice()" style="background:var(--primary); color:#fff; border:none; padding:8px 16px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:12px;">🛒 Print Current Active Basket</button>
       </div>
+    </div>
+
+    <div class="admin-cat" style="border: 2px solid #FF6B6B; background: #FFF5F5;">
+      <div class="admin-cat-header">
+        <span style="font-size: 15px; font-weight: 800; color: #C0392B;">🔍 Customer Search Requests (products not found)</span>
+      </div>
+      <p style="font-size:11px; color:var(--text-light); margin: 6px 0 10px;">Shows product names customers searched for with zero results, recorded on <b>this device</b>. Since the site has no shared server, requests made from customer phones reach you instantly via WhatsApp instead (they get a "Request this product" button), and are also logged to your Google Sheet if connected.</p>
+      <div id="missedSearchList">${renderMissedSearchListHtml()}</div>
+      <div class="admin-btn-row"><button onclick="clearMissedSearches()" style="background:var(--danger); color:#fff;">Clear List</button></div>
+    </div>
+
+    <div class="admin-cat" style="border: 1px solid #CBD5E1; background: #F4FFF7;">
+      <div class="admin-cat-header">
+        <span style="font-size:14px; font-weight:800; color:var(--primary);">📥 Customer Messages</span>
+      </div>
+      <p style="font-size:12px; color:var(--text-dark); line-height:1.4; margin-top:5px;">
+        Customers can tap <b>"📩 Message Us / Request a Product"</b> in the menu to send you free-text requests or feedback. Every message opens WhatsApp with the text pre-filled and sent straight to <b>+31 6 85259659</b>, so you never miss one. If Google Sheets is connected, a copy is logged there too for your records.
+      </p>
     </div>
 
     <div class="admin-cat" style="border: 2px solid #007BFF; background: #F4F9FF;">
@@ -1130,16 +1333,25 @@ function loadProductsTab(){
   
   html += catalog.map((cat, ci)=>`
     <div class="admin-cat">
-      <div class="admin-cat-header">
-        <input value="${cat.name}" onchange="catalog[${ci}].name=this.value; catalog[${ci}].id=this.value.toLowerCase().replace(/[^a-z0-9]/g,'')" placeholder="Category Name">
-        <button onclick="if(confirm('Delete entire category ${cat.name}?')){catalog.splice(${ci},1); loadProductsTab()}" style="background:var(--danger); color:#fff; border:none; padding:4px 10px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:700;">Delete Category</button>
+      <div class="admin-cat-header" style="flex-wrap:wrap; gap:10px;">
+        <div style="display:flex; align-items:center; gap:8px; flex:1; min-width:200px;">
+          <div style="width:38px; height:38px; border-radius:10px; background:#F1F5F9; border:1px solid #CBD5E1; display:flex; align-items:center; justify-content:center; font-size:18px; overflow:hidden; flex-shrink:0;">${getCategoryIconHtml(cat)}</div>
+          <label style="cursor:pointer; background:var(--accent); color:var(--primary); width:30px; height:30px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0;" title="Change category picture">
+            📷<input type="file" accept="image/*" style="display:none;" onchange="handleCategoryImageUpload(event, ${ci})">
+          </label>
+          <input value="${cat.name}" onchange="catalog[${ci}].name=this.value; catalog[${ci}].id=this.value.toLowerCase().replace(/[^a-z0-9]/g,'')" placeholder="Category Name" style="flex:1; min-width:100px; width:auto;">
+        </div>
+        <button onclick="if(confirm('Delete entire category ${cat.name}?')){catalog.splice(${ci},1); loadProductsTab()}" style="background:var(--danger); color:#fff; border:none; padding:4px 10px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:700; flex-shrink:0;">Delete Category</button>
       </div>
       <div style="margin-top:10px;">
         ${cat.items.map((item, ii)=>`
           <div class="admin-item-row">
             <input value="${item[0]}" onchange="catalog[${ci}].items[${ii}][0]=this.value" placeholder="Name">
             <input value="${item[1]}" onchange="catalog[${ci}].items[${ii}][1]=this.value" placeholder="Variants">
-            <input value="${item[2]}" onchange="catalog[${ci}].items[${ii}][2]=this.value" placeholder="Prices">
+            <div style="display:flex; gap:4px; align-items:center;">
+              <input value="${item[2]}" onchange="catalog[${ci}].items[${ii}][2]=this.value" placeholder="Prices" style="flex:1; min-width:0;">
+              <button type="button" onclick="autoCalcVariantPrices(${ci}, ${ii})" title="Auto-calculate other variant prices from base price" style="background:var(--primary); color:#fff; border:none; width:32px; height:32px; border-radius:6px; font-size:14px; cursor:pointer; flex-shrink:0;">⚡</button>
+            </div>
             <div style="display:flex; gap:4px; align-items:center;">
               <input value="${(item[3] || '').length > 60 ? '(uploaded image)' : (item[3] || '')}" onchange="catalog[${ci}].items[${ii}][3]=this.value" placeholder="Image URL" style="flex:1; min-width:0;">
               <label style="cursor:pointer; background:var(--accent); color:var(--primary); width:32px; height:32px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0;" title="Upload image from your phone/computer">
@@ -1151,7 +1363,7 @@ function loadProductsTab(){
           </div>
         `).join('')}
       </div>
-      <div class="admin-btn-row"><button onclick="catalog[${ci}].items.push(['New Item','1kg','1.99','',false]); loadProductsTab()">+ Add Product</button></div>
+      <div class="admin-btn-row"><button onclick="catalog[${ci}].items.push(['New Item','1kg, 500g, 250g','','',false]); loadProductsTab()">+ Add Product</button></div>
     </div>
   `).join('');
 
