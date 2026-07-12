@@ -1540,7 +1540,7 @@ function saveCatalogAndExport(){
   
   // The exported index.html only needs category id/name (no items) - product data now lives
   // in separate small JSON files, so index.html stays small and fast to generate/edit on GitHub.
-  const slimCategories = catalog.map(cat => ({ id: cat.id, name: cat.name }));
+  const slimCategories = catalog.map(cat => ({ id: cat.id, name: cat.name, icon: cat.icon || undefined }));
   const databaseString = JSON.stringify({ 
     categories: slimCategories, 
     locations: locations, 
