@@ -226,6 +226,13 @@
 </head>
 <body>
 
+<div id="loadingOverlay" style="position:fixed; inset:0; background:#fff; z-index:5000; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px;">
+  <div style="width:44px; height:44px; border:4px solid #E2E8F0; border-top-color:var(--primary); border-radius:50%; animation: spin 0.8s linear infinite;"></div>
+  <div style="font-weight:700; color:var(--primary); font-size:14px;">Loading products...</div>
+</div>
+<style>@keyframes spin { to { transform: rotate(360deg); } }</style>
+
+
 <div class="marquee-wrapper" id="marqueeBanner">
   <div id="customer-announcement" class="marquee-text">🔥 Special Offer: Keep ordering from our shop to get amazing discounts instantly! 🔥</div>
 </div>
@@ -360,13 +367,12 @@
   <div class="admin-head"><h3>SNK Operations Control</h3><button onclick="closeAdmin()">×</button></div>
   <div class="admin-body" id="adminBody"></div>
   <div class="save-bar">
-    <button onclick="saveCatalogAndExport()">1. Save & Generate Update Code</button>
+    <button onclick="saveCatalogAndExport()">1. Save & Prepare Files to Download</button>
     <div class="export-box" id="exportBox" style="display: none;">
-      <p style="font-size:12px; color:var(--danger); font-weight:700; text-align:center;">Copy the code below and paste it completely inside GitHub index.html file!</p>
-      <textarea id="exportTextarea" readonly onclick="this.select()"></textarea>
-      <button style="background:#007BFF;" onclick="copyExportCode()">2. Copy Code to Clipboard</button>
+      <p style="font-size:12px; color:var(--danger); font-weight:700; text-align:center;">Download only the file(s) you changed, then upload them to GitHub (same file names, replacing the old ones).</p>
+      <div id="downloadFileList" style="display:flex; flex-direction:column; gap:8px; width:100%; max-height: 260px; overflow-y:auto; padding: 4px;"></div>
     </div>
-    <div id="adminStatus" style="font-weight:700; color:var(--primary); font-size:13px; margin-top:5px;">Clean System Code Generated! Copy and update in GitHub.</div>
+    <div id="adminStatus" style="font-weight:700; color:var(--primary); font-size:13px; margin-top:5px;">Clean System Files Ready! Download and update in GitHub.</div>
   </div>
 </div>
 
@@ -376,7 +382,7 @@ const WA_NUMBER = "31685259659";
 const ADMIN_PASSCODE = "snk2026";
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyIFe79oQ4BfYhtqyDzL7YErRkzoG8G0t3zJmwIdT1UaM_OohbJSGNGYs2vXx8jqyW2Ug/exec";
 
-const storeDatabase = {"categories":[{"id":"vegetables","name":"Fresh Vegetables","items":[["Onion","1kg, 5kg, 10kg","1.49, 5.99, 10.99","https://i.postimg.cc/yx2TwCSX/IMG-1455.png",false],["Tomato","500g, 1kg","1.19, 1.99","Tomato.jpg",false],["Potato","1kg, 2.5kg, 5kg","1.29, 2.99, 4.99","",false],["Green Chillies","100g, 250g, 500g","0.99, 1.99, 3.49","",false],["Sambar Onions","250g, 500g, 1kg","1.49, 2.79, 4.99","",false],["Brinjal/Eggplant","1kg, 500g, 250g","7.99, 4.00, 2.00","",false],["Bitter Gourd","1kg, 500g, 250g","7.99, 4.00, 2.00","",false],["Lvy Gourd/Tindoori","1kg, 500g, 250g","7.99, 4.00, 2.00","",false],["Garlic","1kg, 500g, 250g","3.49, 1.75, 0.87","",false],["Drumstick/Moringa","1kg, 500g, 250g","10.00, 5.00, 2.50","",false],["Onion(Red)","1kg, 500g, 250g","1.00, 0.50, 0.25","",false],["Bottle Gourd/Lauki","1kg, 500g, 250g","7.99, 4.00, 2.00","",false],["Suran","1kg, 500g, 250g","8.99, 4.50, 2.25","",false],["Curry leaves 1 pack","1 pack","2.49","",false],["Yellow Cucumber","1kg, 500g","8.99, 4.50","",false],["Ginger","1kg, 500g, 250g","8.99, 4.50, 2.25","",false],["Green Mango","1kg, 500g, 250g","7.99, 4.00, 2.00","",false],["Rettich","1kg, 500g, 250g","8.00, 4.00, 2.00","",false],["Valor papdi /Avarai","1kg, 500g, 250g","8.49, 4.25, 2.12","",false],["Okra/Bhendi","1kg, 500g, 250g","7.99, 4.00, 2.00","",false],["Mint 1pack","1 stuck","1.99","",false],["Coconut","1 pcs","2.49","",false],["Methi leaves","1 pcs","2.49","",false],["Coriander 1pcs","1stuck","2.49","",false],["Kola","1kg, 500g, 250g","8.49, 4.25, 2.12","",false],["Guwar/Cluster Beans","1kg, 500g, 250g","8.49, 4.25, 2.12","",false],["Parwar/Pointed Gourd","1kg, 500g, 250g","8.49, 4.25, 2.12","",false]]},{"id":"fruits","name":"Fresh Fruits","items":[["Banana","500g, 1kg","1.10, 1.99","",false],["Mango Box","1box (4pcs), 1box (6pcs)","6.99, 9.99","",false]]},{"id":"rice","name":"Rice & Atta Flour","items":[["Premium Idli Rice","1kg, 5kg, 10kg","2.49, 9.99, 18.99","",false],["Aashirvaad Chakki Atta","1kg, 5kg, 10kg","3.29, 14.49, 26.99","",false],["Premium Basmati Rice","1kg, 5kg, 10kg","2.99, 12.99, 24.99","",false],["Ponni Boiled Rice","5kg, 10kg, 20kg","11.49, 21.99, 41.99","",false]]},{"id":"dals","name":"Dals & Lentils","items":[["Toor Dal","500g, 1kg, 2kg","1.69, 2.99, 5.79","",false],["Urad Dal Whole","500g, 1kg","1.89, 3.49","",false],["Chana Dal","500g, 1kg","1.49, 2.69","",false],["Moong Dal","500g, 1kg","1.79, 3.29","",false]]},{"id":"spices","name":"Spices & Herbs","items":[["Cumin Seeds","50g, 100g, 250g","0.89, 1.59, 3.49","",false],["Mustard Seeds","100g, 200g, 500g","0.69, 1.19, 2.49","",false],["Cardamom / Elaichi","50g, 100g","2.49, 4.79","",false]]},{"id":"masalas","name":"Masala Powders","items":[["Achi Sambar Powder","100g, 200g, 500g","1.39, 2.49, 5.49","",false],["Sakthi Chilli Powder","100g, 200g, 500g","1.19, 1.99, 4.49","",false],["Garam Masala","100g, 250g","1.29, 2.89","",false]]},{"id":"oils","name":"Oils & Ghee","items":[["Pure Cow Ghee","200ml, 500ml, 1L","3.79, 7.99, 14.99","",false],["Idhayam Gingelly Oil","500ml, 1L","3.29, 5.99","",false],["Gold Winner Sunflower Oil","1L, 2L, 5L","2.19, 4.19, 9.99","",false]]},{"id":"dairy","name":"Dairy & Paneer","items":[["Amul Fresh Paneer","200g, 500g, 1kg","2.49, 5.49, 9.99","",false],["Set Yogurt / Curd","500g, 1kg","1.29, 1.99","",false]]},{"id":"snacks","name":"Snacks & Sweets","items":[["Grand Sweets Murukku","200g, 500g","1.79, 3.99","",false],["Madras Mixture","200g, 500g","1.79, 3.99","",false]]},{"id":"beverages","name":"Beverages & Tea","items":[["Narasu's Filter Coffee","250g, 500g","3.49, 6.49","",false],["3 Kings Assam Tea","250g, 500g","2.99, 5.49","",false]]},{"id":"pickles","name":"Pickles & Papads","items":[["Priya Mango Pickle","300g, 1kg","2.29, 6.49","",false],["Lijjat Appalam Papad","1packet, 1box","0.99, 9.49","",false]]},{"id":"instant","name":"Instant Mixes","items":[["Fresh Idli Dosa Batter","1kg, 2kg","2.99, 5.49","",false],["MTR Gulab Jamun Mix","200g, 400g","1.49, 2.79","",false]]},{"id":"frozen","name":"Frozen Foods","items":[["ID Frozen Parotta","5pcs (400g), 10pcs (800g)","2.49, 4.49","",false],["Frozen Cut Okra","400g, 1kg","1.99, 4.49","",false]]},{"id":"pooja","name":"Pooja Essentials","items":[["Pooja Camphor","1pack (50g), 1pack (100g)","1.29, 2.29","",false],["Cycle Incense Sticks","1pack, 1bundle","1.49, 4.99","",false]]}],"locations":[{"name":"Den Haag","fee":2.5},{"name":"Rotterdam","fee":5},{"name":"Delft","fee":3},{"name":"Leiden","fee":4}],"offers":[{"title":"Welcome Offer","desc":"Get a free spice pack on your first order above €25!","code":"SNKFREE"},{"title":"Weekend Delivery Deal","desc":"10% discount on delivery charges for Den Haag residents this weekend.","code":"DH10"}],"settings":{"requiredOrders":3,"loyaltyDiscount":10,"announcementText":"🔥 Special Offer: Keep ordering from our shop to get amazing discounts instantly! 🔥"}};
+const storeDatabase = {"categories":[{"id":"vegetables","name":"Fresh Vegetables"},{"id":"fruits","name":"Fresh Fruits"},{"id":"rice","name":"Rice & Atta Flour"},{"id":"dals","name":"Dals & Lentils"},{"id":"spices","name":"Spices & Herbs"},{"id":"masalas","name":"Masala Powders"},{"id":"oils","name":"Oils & Ghee"},{"id":"dairy","name":"Dairy & Paneer"},{"id":"snacks","name":"Snacks & Sweets"},{"id":"beverages","name":"Beverages & Tea"},{"id":"pickles","name":"Pickles & Papads"},{"id":"instant","name":"Instant Mixes"},{"id":"frozen","name":"Frozen Foods"},{"id":"pooja","name":"Pooja Essentials"}],"locations":[{"name":"Den Haag","fee":2.5},{"name":"Rotterdam","fee":5},{"name":"Delft","fee":3},{"name":"Leiden","fee":4}],"offers":[{"title":"Welcome Offer","desc":"Get a free spice pack on your first order above €25!","code":"SNKFREE"},{"title":"Weekend Delivery Deal","desc":"10% discount on delivery charges for Den Haag residents this weekend.","code":"DH10"}],"settings":{"requiredOrders":3,"loyaltyDiscount":10,"announcementText":"🔥 Special Offer: Keep ordering from our shop to get amazing discounts instantly! 🔥"}};
 
 let catalog = storeDatabase.categories;
 let locations = storeDatabase.locations || [];
@@ -1410,8 +1416,11 @@ function saveCatalogAndExport(){
   
   document.getElementById('customer-announcement').innerText = storeDatabase.settings.announcementText;
   
+  // The exported index.html only needs category id/name (no items) - product data now lives
+  // in separate small JSON files, so index.html stays small and fast to generate/edit on GitHub.
+  const slimCategories = catalog.map(cat => ({ id: cat.id, name: cat.name }));
   const databaseString = JSON.stringify({ 
-    categories: catalog, 
+    categories: slimCategories, 
     locations: locations, 
     offers: offers,
     settings: storeDatabase.settings
@@ -1419,7 +1428,6 @@ function saveCatalogAndExport(){
   
   // Speed optimization: these sections are fully rebuilt by JS on every page load anyway,
   // so we don't need to serialize their heavy rendered markup into the exported file.
-  // Emptying them before capturing outerHTML makes generation much faster on large catalogs.
   const dynamicIds = ['catalog', 'catnav', 'greetCircles', 'fullCategoriesGrid', 'menuDrawerBody', 'ledger', 'offersContent', 'profileContent', 'adminBody'];
   dynamicIds.forEach(id => {
     const el = document.getElementById(id);
@@ -1440,24 +1448,73 @@ function saveCatalogAndExport(){
   renderOffersPage();
   loadProductsTab();
   
-  document.getElementById('exportTextarea').value = finalCleanCode;
+  const files = [{ filename: 'index.html', content: finalCleanCode, type: 'text/html', label: '🌐 index.html (site structure/settings)' }];
+  catalog.forEach(cat => {
+    files.push({ filename: cat.id + '.json', content: JSON.stringify(cat.items), type: 'application/json', label: `📦 ${cat.name} (${cat.id}.json)` });
+  });
+  renderDownloadFileList(files);
+  
   document.getElementById('adminOverlay').classList.add('show');
   document.getElementById('exportBox').style.display = 'flex';
-  document.getElementById('adminStatus').textContent = "Clean System Code Generated! Copy and update in GitHub.";
+  document.getElementById('adminStatus').textContent = "Clean System Files Ready! Download and update in GitHub.";
 }
 
-function copyExportCode() {
-  const textarea = document.getElementById('exportTextarea');
-  textarea.select();
-  document.execCommand('copy');
-  alert("Done! Data saved & configuration copied! 📋\n\nPaste this complete new code inside your GitHub index.html and Save Changes.");
+function downloadFile(filename, content, mimeType) {
+  const blob = new Blob([content], { type: mimeType || 'application/octet-stream' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
 }
 
-document.getElementById('customer-announcement').innerText = storeDatabase.settings.announcementText || "🔥 Special Offer: Keep ordering from our shop to get amazing discounts instantly! 🔥";
-renderCatalog();
-renderLocations();
-loadCartFromLocalStorage();
-renderProfilePage();
+function renderDownloadFileList(files) {
+  const listEl = document.getElementById('downloadFileList');
+  if(!listEl) return;
+  window._snkExportFiles = files;
+  listEl.innerHTML = files.map((f, i) => `
+    <button onclick="downloadFile(window._snkExportFiles[${i}].filename, window._snkExportFiles[${i}].content, window._snkExportFiles[${i}].type)" style="background:#F1F5F9; border:1px solid #CBD5E1; color:var(--text-dark); padding:10px 14px; border-radius:8px; font-weight:700; font-size:13px; cursor:pointer; text-align:left; display:flex; justify-content:space-between; align-items:center;">
+      <span>${f.label}</span><span style="color:#007BFF; font-size:12px;">⬇ Download</span>
+    </button>
+  `).join('');
+}
+
+
+async function loadAllCategoryData() {
+  const results = await Promise.allSettled(
+    catalog.map(cat => fetch(cat.id + '.json').then(r => {
+      if(!r.ok) throw new Error('Failed to load ' + cat.id);
+      return r.json();
+    }))
+  );
+  results.forEach((res, i) => {
+    if(res.status === 'fulfilled') {
+      catalog[i].items = res.value;
+    } else {
+      catalog[i].items = [];
+      console.log('Could not load data for category:', catalog[i].id, res.reason);
+    }
+  });
+}
+
+async function initApp() {
+  catalog.forEach(cat => { cat.items = []; });
+  document.getElementById('customer-announcement').innerText = storeDatabase.settings.announcementText || "🔥 Special Offer: Keep ordering from our shop to get amazing discounts instantly! 🔥";
+  renderLocations();
+  loadCartFromLocalStorage();
+  renderProfilePage();
+
+  await loadAllCategoryData();
+
+  renderCatalog();
+  const loadingEl = document.getElementById('loadingOverlay');
+  if(loadingEl) loadingEl.style.display = 'none';
+}
+
+initApp();
 </script>
 
 </body></html>
