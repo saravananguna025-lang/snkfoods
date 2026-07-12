@@ -1606,8 +1606,9 @@ function renderDownloadFileList(files) {
 
 
 async function loadAllCategoryData() {
+  const cacheBuster = Date.now();
   const results = await Promise.allSettled(
-    catalog.map(cat => fetch(cat.id + '.json').then(r => {
+    catalog.map(cat => fetch(cat.id + '.json?t=' + cacheBuster, { cache: 'no-store' }).then(r => {
       if(!r.ok) throw new Error('Failed to load ' + cat.id);
       return r.json();
     }))
