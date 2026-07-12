@@ -179,6 +179,15 @@
 
   .admin-overlay { position: fixed; inset: 0; background: #fff; z-index: 3000; display: none; flex-direction: column; }
   .admin-overlay.show { display: flex; }
+
+  .login-modal { position: fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#fff; border-radius:16px; padding:24px; width:min(340px,90vw); z-index:3100; display:none; box-shadow:0 10px 40px rgba(0,0,0,0.25); }
+  .login-modal.show { display:block; }
+  .login-modal-inner { position:relative; }
+  .login-modal-inner label { font-size:11px; text-transform:uppercase; color:var(--text-light); font-weight:700; display:block; margin:12px 0 4px; }
+  .login-modal-inner input { width:100%; padding:11px; border:1px solid #CBD5E1; border-radius:8px; font-size:14px; background:#fff; color:var(--text-dark); }
+  .login-modal-inner button { width:100%; background:var(--primary); color:#fff; border:none; padding:13px; border-radius:8px; font-weight:700; margin-top:16px; cursor:pointer; font-size:14px; }
+  .login-modal-close { position:absolute; top:-8px; right:-8px; background:none; border:none; font-size:26px; cursor:pointer; color:var(--text-light); line-height:1; }
+  .login-msg { font-size:12px; font-weight:700; margin-top:8px; min-height:16px; text-align:center; }
   .admin-head { background: var(--primary); color: #fff; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
   .admin-head h3 { color: #fff; font-family: 'Playfair Display', serif; }
   .admin-head button { background: none; border: none; color: #fff; font-size: 28px; cursor: pointer; }
@@ -344,11 +353,33 @@
 
 <div class="overlay" id="overlay" onclick="closeAllDrawers()"></div>
 
+<div class="login-modal" id="loginModal">
+  <div class="login-modal-inner">
+    <button class="login-modal-close" onclick="closeLoginModal()">×</button>
+    <h3 style="color:var(--primary); font-family:'Playfair Display',serif; margin-bottom:6px;">Admin Login</h3>
+    <div id="loginStep1">
+      <label>Email</label>
+      <input type="email" id="loginEmail" placeholder="you@example.com" autocomplete="username">
+      <label>Password</label>
+      <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password">
+      <button onclick="requestAdminOtp()">Send OTP</button>
+      <div id="loginMsg1" class="login-msg"></div>
+      <div style="text-align:center; margin-top:10px;"><a href="#" onclick="useFallbackPasscode(); return false;" style="font-size:11px; color:var(--text-light);">Having trouble? Use passcode instead</a></div>
+    </div>
+    <div id="loginStep2" style="display:none;">
+      <p style="font-size:13px; color:var(--text-light); margin-top:8px;">OTP sent to your email. Enter it below (valid for 5 minutes):</p>
+      <label>OTP Code</label>
+      <input type="text" inputmode="numeric" id="loginOtp" placeholder="6-digit code" maxlength="6">
+      <button onclick="verifyAdminOtp()">Verify & Login</button>
+      <div id="loginMsg2" class="login-msg"></div>
+    </div>
+  </div>
+</div>
+
 <div class="menu-drawer" id="menuDrawer">
   <div class="menu-drawer-head"><h3>Categories Menu</h3><button class="close" onclick="closeMenuDrawer()">×</button></div>
   <div class="menu-drawer-body" id="menuDrawerBody"></div>
   <button class="menu-admin-btn" style="background:#FFF9E6; border-color:var(--accent); color:var(--accent-dark);" onclick="closeMenuDrawer(); openCustomerMessageBox();">📩 Message Us / Request a Product</button>
-  <button class="menu-admin-btn" onclick="closeMenuDrawer(); adminLogin();">🛠️ Open Admin Portal</button>
   <div class="menu-contact-box">
     <h4>Contact Us</h4>
     <p>Phone: +31 6 85259659</p>
@@ -359,8 +390,7 @@
 <div id="a4InvoicePrintout"></div>
 
 <footer>
-  <h4>SNK Foods Netherlands</h4>
-  <button class="admin-link" onclick="adminLogin()">Store Admin Portal</button>
+  <h4 onclick="handleFooterSecretTap()" style="cursor:default; user-select:none;">SNK Foods Netherlands</h4>
 </footer>
 
 <div class="admin-overlay" id="adminOverlay">
@@ -1128,11 +1158,103 @@ function triggerA4PrintHTML(name, addr, area, comments, tableRows, subTotal, del
   window.print();
 }
 
+let footerTapCount = 0;
+let footerTapTimer = null;
+function handleFooterSecretTap() {
+  footerTapCount++;
+  clearTimeout(footerTapTimer);
+  footerTapTimer = setTimeout(() => { footerTapCount = 0; }, 3000);
+  if(footerTapCount >= 5) {
+    footerTapCount = 0;
+    adminLogin();
+  }
+}
+
 function adminLogin(){
   const pass = prompt("Enter admin passcode:");
   if(pass === ADMIN_PASSCODE){ document.getElementById('adminOverlay').classList.add('show'); loadProductsTab(); }
   else if(pass !== null) { alert("Invalid Passcode."); }
 }
+
+function adminLoginWithOtp(){
+  document.getElementById('loginModal').classList.add('show');
+  document.getElementById('overlay').classList.add('show');
+  document.getElementById('loginStep1').style.display = 'block';
+  document.getElementById('loginStep2').style.display = 'none';
+  document.getElementById('loginEmail').value = '';
+  document.getElementById('loginPassword').value = '';
+  document.getElementById('loginOtp').value = '';
+  document.getElementById('loginMsg1').textContent = '';
+  document.getElementById('loginMsg2').textContent = '';
+}
+
+function closeLoginModal() {
+  document.getElementById('loginModal').classList.remove('show');
+  document.getElementById('overlay').classList.remove('show');
+}
+
+async function requestAdminOtp() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  const msgEl = document.getElementById('loginMsg1');
+  if(!email || !password) { msgEl.style.color = 'var(--danger)'; msgEl.textContent = 'Enter email and password.'; return; }
+  msgEl.style.color = 'var(--text-light)'; msgEl.textContent = 'Sending OTP...';
+
+  try {
+    const res = await fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ action: 'requestOtp', email: email, password: password })
+    });
+    const data = await res.json();
+    if(data.success) {
+      document.getElementById('loginStep1').style.display = 'none';
+      document.getElementById('loginStep2').style.display = 'block';
+    } else {
+      msgEl.style.color = 'var(--danger)'; msgEl.textContent = data.message || 'Invalid email or password.';
+    }
+  } catch(err) {
+    msgEl.style.color = 'var(--danger)'; msgEl.textContent = 'Could not connect. Check your Apps Script setup.';
+    console.log('OTP request error:', err);
+  }
+}
+
+async function verifyAdminOtp() {
+  const otp = document.getElementById('loginOtp').value.trim();
+  const msgEl = document.getElementById('loginMsg2');
+  if(!otp) { msgEl.style.color = 'var(--danger)'; msgEl.textContent = 'Enter the OTP.'; return; }
+  msgEl.style.color = 'var(--text-light)'; msgEl.textContent = 'Verifying...';
+
+  try {
+    const res = await fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ action: 'verifyOtp', otp: otp })
+    });
+    const data = await res.json();
+    if(data.success) {
+      closeLoginModal();
+      document.getElementById('adminOverlay').classList.add('show');
+      loadProductsTab();
+    } else {
+      msgEl.style.color = 'var(--danger)'; msgEl.textContent = data.message || 'Invalid or expired OTP.';
+    }
+  } catch(err) {
+    msgEl.style.color = 'var(--danger)'; msgEl.textContent = 'Could not connect. Try again.';
+    console.log('OTP verify error:', err);
+  }
+}
+
+function useFallbackPasscode() {
+  const pass = prompt("Enter admin passcode:");
+  if(pass === ADMIN_PASSCODE){
+    closeLoginModal();
+    document.getElementById('adminOverlay').classList.add('show');
+    loadProductsTab();
+  }
+  else if(pass !== null) { alert("Invalid Passcode."); }
+}
+
 function closeAdmin(){ document.getElementById('adminOverlay').classList.remove('show'); document.getElementById('exportBox').style.display='none'; }
 
 function handleImageUpload(event, ci, ii) {
