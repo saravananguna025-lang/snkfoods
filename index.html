@@ -411,8 +411,8 @@
   <button class="menu-admin-btn" style="background:#FFF9E6; border-color:var(--accent); color:var(--accent-dark);" onclick="closeMenuDrawer(); openCustomerMessageBox();">📩 Message Us / Request a Product</button>
   <div class="menu-contact-box">
     <h4>Contact Us</h4>
-    <p>Phone: +31 6 85259659</p>
-    <p>Open Hours: 09:00 AM - 08:00 PM</p>
+    <p id="menuContactPhone">Phone: +31 6 85259659</p>
+    <p id="menuContactHours">Open Hours: 09:00 AM - 08:00 PM</p>
   </div>
 </div>
 
@@ -448,6 +448,8 @@ let locations = storeDatabase.locations || [];
 let offers = storeDatabase.offers || [];
 storeDatabase.settings = storeDatabase.settings || { requiredOrders: 3, loyaltyDiscount: 10, freeDeliveryThreshold: 30, announcementText: "🔥 Special Offer: Keep ordering from our shop to get amazing discounts instantly! 🔥" };
 if(storeDatabase.settings.freeDeliveryThreshold === undefined) storeDatabase.settings.freeDeliveryThreshold = 30;
+if(storeDatabase.settings.contactPhone === undefined) storeDatabase.settings.contactPhone = "Phone: +31 6 85259659";
+if(storeDatabase.settings.contactHours === undefined) storeDatabase.settings.contactHours = "Open Hours: 09:00 AM - 08:00 PM";
 
 let cart = {};
 let activeCoupon = ""; 
@@ -492,7 +494,7 @@ function parseVariants(unitStr, priceStr) {
 
 function isItemOutOfStock(isOosFlag, stockMode, stockCount) {
   if(stockMode === 'count') {
-    return (parseInt(stockCount) || 0) <= 0;
+    return (parseFloat(stockCount) || 0) <= 0;
   }
   return !!isOosFlag;
 }
@@ -687,13 +689,15 @@ function renderCatalog(){
     menuBodyEl.appendChild(menuLink);
 
     let cardsHtml = '';
-    cat.items.forEach(([name, unitStr, priceStr, imgUrl, isOosFlag, stockMode, stockCount], itemIdx)=>{
+    cat.items.forEach(([name, unitStr, priceStr, imgUrl, isOosFlag, stockMode, stockCount, stockUnit], itemIdx)=>{
       const variants = parseVariants(unitStr, priceStr);
       const defaultPrice = variants[0] ? variants[0].price : 0;
       const fallbackImg = `https://dummyimage.com/300x300/f1f5f9/0b4624.png&text=${encodeURIComponent(name)}`;
       let finalImgSrc = imgUrl ? imgUrl.trim() : fallbackImg;
       const isOos = isItemOutOfStock(isOosFlag, stockMode, stockCount);
-      const lowStockNote = (stockMode === 'count' && !isOos && parseInt(stockCount) <= 5) ? `<div style="font-size:11px; color:var(--danger); font-weight:700; margin-top:2px;">Only ${parseInt(stockCount)} left!</div>` : '';
+      const stockUnitLabel = stockUnit === 'kg' ? 'kg' : 'left';
+      const lowStockThreshold = stockUnit === 'kg' ? 3 : 5;
+      const lowStockNote = (stockMode === 'count' && !isOos && parseFloat(stockCount) <= lowStockThreshold) ? `<div style="font-size:11px; color:var(--danger); font-weight:700; margin-top:2px;">Only ${parseFloat(stockCount)} ${stockUnitLabel === 'kg' ? 'kg left' : 'left'}!</div>` : '';
 
       cardsHtml += `
         <div class="product-card ${isOos ? 'oos-card' : ''}" id="card-${cat.id}-${itemIdx}">
@@ -1057,7 +1061,15 @@ async function sendOrder(){
     const cat = catalog.find(c => c.id === catId);
     const catalogItem = cat ? cat.items.find(it => it[0] === cartItem.name) : null;
     if(catalogItem && catalogItem[5] === 'count') {
-      stockCheckItems.push({ name: cartItem.name, qty: cartItem.qty });
+      const stockUnit = catalogItem[7] || 'pieces';
+      let deductQty = cartItem.qty;
+      if(stockUnit === 'kg') {
+        const weightInfo = parseWeightGrams(cartItem.unit);
+        if(weightInfo && weightInfo.type === 'weight') {
+          deductQty = (weightInfo.amount / 1000) * cartItem.qty;
+        }
+      }
+      stockCheckItems.push({ name: cartItem.name, qty: deductQty });
     }
   }
 
@@ -1604,6 +1616,7 @@ function renderAdminSlidesHtml() {
         </label>
         <input value="${s.title || ''}" onchange="heroSlides[${i}].title=this.value" placeholder="Slide title" style="flex:1; min-width:0;">
       </div>
+      <input value="${(s.image && s.image.startsWith('data:')) ? '(uploaded image)' : (s.image || '')}" onchange="heroSlides[${i}].image=this.value; loadProductsTab();" placeholder="or paste slide image URL here" style="width:100%; margin-bottom:8px; padding:6px 8px; border:1px dashed #CBD5E1; border-radius:6px; font-size:12px;">
       <input value="${s.subtitle || ''}" onchange="heroSlides[${i}].subtitle=this.value" placeholder="Slide subtitle" style="width:100%; margin-bottom:8px;">
       <button onclick="heroSlides.splice(${i},1); loadProductsTab();" style="background:var(--danger); color:#fff; border:none; padding:6px 12px; border-radius:6px; font-size:12px; cursor:pointer;">Remove Slide</button>
     </div>
@@ -1675,6 +1688,15 @@ function loadProductsTab(){
           <label style="font-size:12px; font-weight:700; color:var(--text-dark); display:block; margin-bottom:4px;">📢 Edit Live Running Announcement Text</label>
           <textarea id="settingAnnouncementText" style="width:100%; height:60px; padding:10px; border-radius:6px; border:1px solid #CBD5E1; font-size:13px; font-weight:600;" onchange="storeDatabase.settings.announcementText = this.value" placeholder="Type here to instantly change the moving announcement scroll text...">${storeDatabase.settings.announcementText || ''}</textarea>
         </div>
+
+        <div>
+          <label style="font-size:12px; font-weight:700; color:var(--text-dark); display:block; margin-bottom:4px;">📞 Contact Phone (shown in menu)</label>
+          <input id="settingContactPhone" value="${storeDatabase.settings.contactPhone || ''}" style="padding:10px; border-radius:6px; border:1px solid #CBD5E1; width:100%; font-weight:700;" onchange="storeDatabase.settings.contactPhone = this.value">
+        </div>
+        <div>
+          <label style="font-size:12px; font-weight:700; color:var(--text-dark); display:block; margin-bottom:4px;">🕒 Open Hours (shown in menu)</label>
+          <input id="settingContactHours" value="${storeDatabase.settings.contactHours || ''}" style="padding:10px; border-radius:6px; border:1px solid #CBD5E1; width:100%; font-weight:700;" onchange="storeDatabase.settings.contactHours = this.value">
+        </div>
       </div>
     </div>
 
@@ -1744,6 +1766,9 @@ function loadProductsTab(){
         </div>
         <button onclick="if(confirm('Delete entire category ${cat.name}?')){catalog.splice(${ci},1); loadProductsTab()}" style="background:var(--danger); color:#fff; border:none; padding:4px 10px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:700; flex-shrink:0;">Delete Category</button>
       </div>
+      <div style="margin:-4px 0 10px;">
+        <input value="${(cat.icon && cat.icon.startsWith('data:')) ? '(uploaded image)' : (cat.icon || '')}" onchange="catalog[${ci}].icon=this.value; loadProductsTab();" placeholder="or paste category picture URL here" style="width:100%; padding:6px 8px; border:1px dashed #CBD5E1; border-radius:6px; font-size:12px;">
+      </div>
       <div style="margin-top:10px;">
         ${cat.items.map((item, ii)=>`
           <div class="admin-item-row">
@@ -1770,11 +1795,19 @@ function loadProductsTab(){
                 <option value="count" ${item[5]==='count' ? 'selected':''}>Track quantity count</option>
               </select>
             </label>
-            ${item[5]==='count' ? `<label style="display:flex; align-items:center; gap:4px; font-weight:600;">Qty in stock: <input type="number" min="0" value="${item[6] || 0}" onchange="catalog[${ci}].items[${ii}][6]=parseInt(this.value)||0; pushStockToServer('${item[0].replace(/'/g,"\\'")}', catalog[${ci}].items[${ii}][6]);" style="width:70px; padding:4px; border-radius:4px; border:1px solid #CBD5E1;"></label>` : ''}
+            ${item[5]==='count' ? `
+              <label style="display:flex; align-items:center; gap:4px; font-weight:600;">Unit:
+                <select onchange="catalog[${ci}].items[${ii}][7]=this.value; loadProductsTab();" style="padding:4px; border-radius:4px; border:1px solid #CBD5E1; font-size:11px;">
+                  <option value="pieces" ${(!item[7] || item[7]==='pieces') ? 'selected':''}>Pieces (e.g. mango, coconut)</option>
+                  <option value="kg" ${item[7]==='kg' ? 'selected':''}>Kilograms (e.g. tomato, onion)</option>
+                </select>
+              </label>
+              <label style="display:flex; align-items:center; gap:4px; font-weight:600;">Qty in stock: <input type="number" min="0" step="${item[7]==='kg' ? '0.1' : '1'}" value="${item[6] || 0}" onchange="catalog[${ci}].items[${ii}][6]=parseFloat(this.value)||0; pushStockToServer('${item[0].replace(/'/g,"\\'")}', catalog[${ci}].items[${ii}][6]);" style="width:70px; padding:4px; border-radius:4px; border:1px solid #CBD5E1;"> ${item[7]==='kg' ? 'kg' : 'pcs'}</label>
+            ` : ''}
           </div>
         `).join('')}
       </div>
-      <div class="admin-btn-row"><button onclick="catalog[${ci}].items.push(['New Item','1kg, 500g, 250g','','',false,'manual',0]); loadProductsTab()">+ Add Product</button></div>
+      <div class="admin-btn-row"><button onclick="catalog[${ci}].items.push(['New Item','1kg, 500g, 250g','','',false,'manual',0,'pieces']); loadProductsTab()">+ Add Product</button></div>
     </div>
   `).join('');
 
@@ -1805,6 +1838,12 @@ function saveCatalogAndExport(){
   if(announceField) {
     storeDatabase.settings.announcementText = announceField.value;
   }
+  const contactPhoneField = document.getElementById('settingContactPhone');
+  if(contactPhoneField) storeDatabase.settings.contactPhone = contactPhoneField.value;
+  const contactHoursField = document.getElementById('settingContactHours');
+  if(contactHoursField) storeDatabase.settings.contactHours = contactHoursField.value;
+  document.getElementById('menuContactPhone').textContent = storeDatabase.settings.contactPhone;
+  document.getElementById('menuContactHours').textContent = storeDatabase.settings.contactHours;
   
   closeAdmin();
   renderCatalog();
@@ -1962,6 +2001,8 @@ function startCarouselAutoplay() {
 async function initApp() {
   catalog.forEach(cat => { cat.items = []; });
   document.getElementById('customer-announcement').innerText = storeDatabase.settings.announcementText || "🔥 Special Offer: Keep ordering from our shop to get amazing discounts instantly! 🔥";
+  document.getElementById('menuContactPhone').textContent = storeDatabase.settings.contactPhone;
+  document.getElementById('menuContactHours').textContent = storeDatabase.settings.contactHours;
   renderLocations();
   loadCartFromLocalStorage();
   renderProfilePage();
