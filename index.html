@@ -88,8 +88,7 @@
   .pill { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 4px 12px; border-radius: 15px; font-size: 12px; font-weight: 600; }
 
   .search-section { max-width: 500px; margin: 0 auto; padding: 10px 16px; position: sticky; top: 72px; z-index: 999; background: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.06); }
-  .search-box { width: 100%; padding: 14px 20px 14px 46px; border: none; border-radius: 30px; font-size: 14px; font-weight: 600; box-shadow: 0 2px 8px rgba(0,0,0,0.06); outline: none; background: #fff; color: var(--text-dark); border: 1px solid #E2E8F0; }
-  .search-section::before { content: "🔍"; position: absolute; left: 32px; top: 23px; font-size: 16px; opacity: 0.6; }
+  .search-box { width: 100%; padding: 14px 20px; border: none; border-radius: 30px; font-size: 14px; font-weight: 600; box-shadow: 0 2px 8px rgba(0,0,0,0.06); outline: none; background: #fff; color: var(--text-dark); border: 1px solid #E2E8F0; }
 
   .front-greet-section { background: #fff; padding: 24px 16px; border-bottom: 1px solid #E2E8F0; text-align: center; }
   .front-greet-section h4 { font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--primary); margin-bottom: 16px; }
@@ -305,8 +304,9 @@
     <div class="carousel-dots" id="carouselDots"></div>
   </div>
 
-  <div class="search-section">
-    <input type="text" id="searchBar" oninput="filterProducts()" placeholder="Search products (e.g., Onion, Rice, Ghee)..." class="search-box">
+  <div class="search-section" style="display:flex; gap:8px; align-items:center;">
+    <input type="text" id="searchBar" oninput="filterProducts()" onkeydown="if(event.key==='Enter'){ event.preventDefault(); filterProducts(); document.getElementById('searchBar').blur(); }" placeholder="Search products (e.g., Onion, Rice, Ghee)..." class="search-box" style="flex:1;">
+    <button type="button" onclick="filterProducts()" aria-label="Search" style="flex-shrink:0; width:46px; height:46px; border-radius:50%; border:none; background:var(--primary); color:#fff; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center;">🔍</button>
   </div>
 
   <section class="front-greet-section">
@@ -522,36 +522,40 @@ function renderLocations() {
 }
 
 function filterProducts() {
-  const query = document.getElementById('searchBar').value.toLowerCase().trim();
-  let anyMatch = false;
-  catalog.forEach(cat => {
-    let categoryHasMatches = false;
-    cat.items.forEach(([name], itemIdx) => {
-      const cardEl = document.getElementById(`card-${cat.id}-${itemIdx}`);
-      if(cardEl) {
-        if(name.toLowerCase().includes(query)) {
-          cardEl.style.display = 'flex';
-          categoryHasMatches = true;
-        } else {
-          cardEl.style.display = 'none';
+  try {
+    const query = document.getElementById('searchBar').value.toLowerCase().trim();
+    let anyMatch = false;
+    catalog.forEach(cat => {
+      let categoryHasMatches = false;
+      (cat.items || []).forEach(([name], itemIdx) => {
+        const cardEl = document.getElementById(`card-${cat.id}-${itemIdx}`);
+        if(cardEl && name) {
+          if(name.toLowerCase().includes(query)) {
+            cardEl.style.display = 'flex';
+            categoryHasMatches = true;
+          } else {
+            cardEl.style.display = 'none';
+          }
         }
+      });
+      const sectionEl = document.getElementById(`cat-${cat.id}`);
+      if(sectionEl) {
+        sectionEl.style.display = (categoryHasMatches || query === "") ? 'block' : 'none';
       }
+      if(categoryHasMatches) anyMatch = true;
     });
-    const sectionEl = document.getElementById(`cat-${cat.id}`);
-    if(sectionEl) {
-      sectionEl.style.display = (categoryHasMatches || query === "") ? 'block' : 'none';
-    }
-    if(categoryHasMatches) anyMatch = true;
-  });
 
-  const noResultsEl = document.getElementById('noResultsMsg');
-  const noResultsQueryEl = document.getElementById('noResultsQuery');
-  if(query !== "" && !anyMatch) {
-    if(noResultsEl) noResultsEl.style.display = 'block';
-    if(noResultsQueryEl) noResultsQueryEl.textContent = document.getElementById('searchBar').value.trim();
-    logMissedSearch(document.getElementById('searchBar').value.trim());
-  } else {
-    if(noResultsEl) noResultsEl.style.display = 'none';
+    const noResultsEl = document.getElementById('noResultsMsg');
+    const noResultsQueryEl = document.getElementById('noResultsQuery');
+    if(query !== "" && !anyMatch) {
+      if(noResultsEl) noResultsEl.style.display = 'block';
+      if(noResultsQueryEl) noResultsQueryEl.textContent = document.getElementById('searchBar').value.trim();
+      logMissedSearch(document.getElementById('searchBar').value.trim());
+    } else {
+      if(noResultsEl) noResultsEl.style.display = 'none';
+    }
+  } catch(err) {
+    console.log('Search error:', err);
   }
 }
 
@@ -1312,7 +1316,12 @@ let cachedOrders = null;
 
 function renderOrdersListHtml() {
   if(cachedOrders === null) return `<div class="empty-note" style="padding:15px 0;">Loading orders...</div>`;
-  if(cachedOrders.length === 0) return `<div class="empty-note" style="padding:15px 0;">No orders yet, or Google Sheets orders tracking isn't set up.</div>`;
+  if(cachedOrders.length === 0) {
+    if(cachedOrdersError) {
+      return `<div class="empty-note" style="padding:15px 0; color:var(--danger);">⚠️ ${cachedOrdersError}</div>`;
+    }
+    return `<div class="empty-note" style="padding:15px 0;">No orders yet.</div>`;
+  }
   const statusOptions = ['Pending','Confirmed','Preparing','Ready for Delivery','Delivered','Cancelled'];
   return cachedOrders.map(o => `
     <div style="background:#fff; border:1px solid #FFE0B2; padding:10px; border-radius:8px; margin-bottom:8px;">
@@ -1347,19 +1356,44 @@ function notifyCustomer(orderId) {
   window.open(`https://wa.me/${phoneDigits}?text=${encodeURIComponent(msg)}`, '_blank');
 }
 
+let cachedOrdersError = null;
+
 async function loadRecentOrders() {
+  cachedOrdersError = null;
   if(!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === "YOUR_APPS_SCRIPT_URL_HERE") {
     cachedOrders = [];
+    cachedOrdersError = "Google Apps Script URL isn't configured.";
     loadProductsTab();
     return;
   }
   try {
     const res = await fetch(GOOGLE_SCRIPT_URL + '?action=listOrders');
-    const data = await res.json();
-    cachedOrders = (data.success && data.orders) ? data.orders : [];
+    if(!res.ok) {
+      cachedOrdersError = `Server responded with an error (HTTP ${res.status}). Check your Apps Script deployment.`;
+      cachedOrders = [];
+      loadProductsTab();
+      return;
+    }
+    const text = await res.text();
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch(parseErr) {
+      cachedOrdersError = "Apps Script didn't return valid data — check for errors in your script (e.g. duplicate doGet, syntax error).";
+      cachedOrders = [];
+      loadProductsTab();
+      return;
+    }
+    if(data.success && data.orders) {
+      cachedOrders = data.orders;
+    } else {
+      cachedOrders = [];
+      cachedOrdersError = data.message || "Apps Script responded but didn't return an orders list. Make sure listOrders is wired into your doGet(e).";
+    }
   } catch(err) {
     console.log('Load orders error:', err);
     cachedOrders = [];
+    cachedOrdersError = "Couldn't reach the Apps Script (network/CORS error). Check the deployment is live and public.";
   }
   loadProductsTab();
 }
