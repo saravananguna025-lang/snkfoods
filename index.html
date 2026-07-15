@@ -459,12 +459,17 @@
   <div class="admin-head"><h3>SNK Operations Control</h3><button onclick="closeAdmin()">×</button></div>
   <div class="admin-body" id="adminBody"></div>
   <div class="save-bar">
-    <button onclick="saveCatalogAndExport()">1. Save & Prepare Files to Download</button>
+    <button onclick="saveCatalogAndExport()">1. Save & Prepare Files</button>
     <div class="export-box" id="exportBox" style="display: none;">
-      <p style="font-size:12px; color:var(--danger); font-weight:700; text-align:center;">Download only the file(s) you changed, then upload them to GitHub (same file names, replacing the old ones).</p>
-      <div id="downloadFileList" style="display:flex; flex-direction:column; gap:8px; width:100%; max-height: 260px; overflow-y:auto; padding: 4px;"></div>
+      <button onclick="publishLiveToGitHub()" style="background:#25D366; font-size:16px;">🚀 2. Publish Live to Website (automatic)</button>
+      <div style="display:flex; gap:6px; align-items:center; width:100%;">
+        <input type="password" id="ghTokenInput" placeholder="GitHub token (one-time setup)" style="flex:1; padding:8px 10px; border:1px solid #CBD5E1; border-radius:6px; font-size:12px;" onchange="saveGithubToken(this.value)">
+        <span style="font-size:11px; color:var(--text-light); flex-shrink:0;" title="github.com → Settings → Developer settings → Fine-grained tokens → Generate: select snkfoods repo, Contents = Read and write">ℹ️ how?</span>
+      </div>
+      <p style="font-size:11px; color:var(--text-light); text-align:center; margin:2px 0;">— or manual backup method: download & upload to GitHub yourself —</p>
+      <div id="downloadFileList" style="display:flex; flex-direction:column; gap:8px; width:100%; max-height: 200px; overflow-y:auto; padding: 4px;"></div>
     </div>
-    <div id="adminStatus" style="font-weight:700; color:var(--primary); font-size:13px; margin-top:5px;">Clean System Files Ready! Download and update in GitHub.</div>
+    <div id="adminStatus" style="font-weight:700; color:var(--primary); font-size:13px; margin-top:5px;"></div>
   </div>
 </div>
 
@@ -1851,11 +1856,11 @@ function loadProductsTab(){
 
     <div class="admin-cat" style="border: 1px solid #CBD5E1; background: #F4FFF7;">
       <div class="admin-cat-header">
-        <span style="font-size:14px; font-weight:800; color:var(--primary);">📥 Customer Messages</span>
+        <span style="font-size:14px; font-weight:800; color:var(--primary);">📥 Customer Messages Inbox</span>
+        <button onclick="loadCustomerMessages()" style="background:#007BFF; color:#fff; border:none; padding:6px 14px; border-radius:6px; font-size:12px; font-weight:700; cursor:pointer;">🔄 Refresh</button>
       </div>
-      <p style="font-size:12px; color:var(--text-dark); line-height:1.4; margin-top:5px;">
-        Customers can tap <b>"📩 Message Us / Request a Product"</b> in the menu to send you free-text requests or feedback. Every message opens WhatsApp with the text pre-filled and sent straight to <b>+31 6 85259659</b>, so you never miss one. If Google Sheets is connected, a copy is logged there too for your records.
-      </p>
+      <p style="font-size:11px; color:var(--text-light); margin: 6px 0 10px;">Messages customers send via "📩 Message Us" appear here (also sent to your WhatsApp). Requires the Messages Apps Script setup.</p>
+      <div id="customerMessagesList">${renderMessagesListHtml()}</div>
     </div>
 
     <div class="admin-cat" style="border: 2px solid #007BFF; background: #F4F9FF;">
@@ -1949,8 +1954,10 @@ function loadProductsTab(){
     </div>
   `;
   
+  html += `<div style="position:sticky; top:0; z-index:20; background:#fff; padding:10px 0; margin-bottom:5px;"><input type="text" id="adminSearchBar" oninput="filterAdminProducts(this.value)" placeholder="🔍 Search products in admin (e.g. Onion, Rice)..." style="width:100%; padding:12px 16px; border:2px solid var(--primary); border-radius:10px; font-size:14px; font-weight:600;"></div>`;
+
   html += catalog.map((cat, ci)=>`
-    <div class="admin-cat">
+    <div class="admin-cat" data-catindex="${ci}">
       <div class="admin-cat-header" style="flex-wrap:wrap; gap:10px;">
         <div style="display:flex; align-items:center; gap:8px; flex:1; min-width:200px;">
           <div style="width:38px; height:38px; border-radius:10px; background:#F1F5F9; border:1px solid #CBD5E1; display:flex; align-items:center; justify-content:center; font-size:18px; overflow:hidden; flex-shrink:0;">${getCategoryIconHtml(cat)}</div>
@@ -1964,8 +1971,11 @@ function loadProductsTab(){
       <div style="margin:-4px 0 10px;">
         <input value="${(cat.icon && cat.icon.startsWith('data:')) ? '(uploaded image)' : (cat.icon || '')}" onchange="catalog[${ci}].icon=this.value; loadProductsTab();" placeholder="or paste category picture URL here" style="width:100%; padding:6px 8px; border:1px dashed #CBD5E1; border-radius:6px; font-size:12px;">
       </div>
+      <details class="admin-cat-details">
+        <summary style="cursor:pointer; padding:10px 14px; background:var(--bg-light); border:1px solid #CBD5E1; border-radius:8px; font-weight:700; font-size:13px; color:var(--primary); user-select:none;">📦 ${cat.name} — ${cat.items.length} products (tap to open/close)</summary>
       <div style="margin-top:10px;">
         ${cat.items.map((item, ii)=>`
+          <div class="admin-prod" data-pname="${(item[0]||'').toLowerCase().replace(/"/g,'')}">
           <div class="admin-item-row">
             <input value="${item[0]}" onchange="catalog[${ci}].items[${ii}][0]=this.value" placeholder="Name">
             <input value="${item[1]}" onchange="catalog[${ci}].items[${ii}][1]=this.value" placeholder="Variants">
@@ -2014,9 +2024,11 @@ function loadProductsTab(){
             `).join('')}
             <button onclick="if(!Array.isArray(catalog[${ci}].items[${ii}][8])) catalog[${ci}].items[${ii}][8]=[]; catalog[${ci}].items[${ii}][8].push(''); loadProductsTab();" style="background:var(--primary); color:#fff; border:none; padding:5px 12px; border-radius:6px; font-size:11px; font-weight:700; cursor:pointer;">+ Add Image</button>
           </div>
+          </div>
         `).join('')}
       </div>
       <div class="admin-btn-row"><button onclick="catalog[${ci}].items.push(['New Item','1kg, 500g, 250g','','',false,'manual',0,'pieces',[]]); loadProductsTab()">+ Add Product</button></div>
+      </details>
     </div>
   `).join('');
 
@@ -2039,6 +2051,132 @@ function addNewCategoryPrompt() {
     const id = name.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
     catalog.push({ id: id, name: name.trim(), items: [] });
     loadProductsTab();
+  }
+}
+
+function filterAdminProducts(query) {
+  const q = query.toLowerCase().trim();
+  document.querySelectorAll('.admin-cat[data-catindex]').forEach(catEl => {
+    const details = catEl.querySelector('.admin-cat-details');
+    let matches = 0;
+    catEl.querySelectorAll('.admin-prod').forEach(prodEl => {
+      const name = prodEl.getAttribute('data-pname') || '';
+      const show = q === '' || name.includes(q);
+      prodEl.style.display = show ? 'block' : 'none';
+      if(show) matches++;
+    });
+    if(q === '') {
+      catEl.style.display = 'block';
+      if(details) details.open = false;
+    } else {
+      catEl.style.display = matches > 0 ? 'block' : 'none';
+      if(details) details.open = matches > 0;
+    }
+  });
+}
+
+let cachedMessages = null;
+let cachedMessagesError = null;
+
+async function loadCustomerMessages() {
+  cachedMessagesError = null;
+  if(!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === "YOUR_APPS_SCRIPT_URL_HERE") {
+    cachedMessages = [];
+    cachedMessagesError = "Apps Script URL isn't configured.";
+    loadProductsTab();
+    return;
+  }
+  try {
+    const res = await fetch(GOOGLE_SCRIPT_URL + '?action=listMessages');
+    const text = await res.text();
+    const data = JSON.parse(text);
+    if(data.success && data.messages) {
+      cachedMessages = data.messages;
+    } else {
+      cachedMessages = [];
+      cachedMessagesError = data.message || "listMessages not wired in Apps Script yet — see setup instructions.";
+    }
+  } catch(err) {
+    cachedMessages = [];
+    cachedMessagesError = "Couldn't reach Apps Script for messages.";
+  }
+  loadProductsTab();
+}
+
+function renderMessagesListHtml() {
+  if(cachedMessages === null) return `<div class="empty-note" style="padding:12px 0;">Tap Refresh to load messages.</div>`;
+  if(cachedMessages.length === 0) {
+    if(cachedMessagesError) return `<div class="empty-note" style="padding:12px 0; color:var(--danger);">⚠️ ${cachedMessagesError}</div>`;
+    return `<div class="empty-note" style="padding:12px 0;">No customer messages yet.</div>`;
+  }
+  return cachedMessages.map(m => `
+    <div style="background:#fff; border:1px solid #CBD5E1; padding:10px 12px; border-radius:8px; margin-bottom:6px;">
+      <div style="font-size:11px; color:var(--text-light); margin-bottom:4px;">${m.dateTime || ''}</div>
+      <div style="font-size:13px; font-weight:600;">${m.message || ''}</div>
+    </div>
+  `).join('');
+}
+
+// ===== GitHub Direct Publish (no manual upload needed) =====
+const GH_OWNER = 'saravananguna025-lang';
+const GH_REPO = 'snkfoods';
+const GH_BRANCH = 'main';
+
+function getGithubToken() { return localStorage.getItem('snk_gh_token') || ''; }
+
+function saveGithubToken(val) {
+  if(val && val.trim()) { localStorage.setItem('snk_gh_token', val.trim()); }
+  else { localStorage.removeItem('snk_gh_token'); }
+}
+
+function b64EncodeUnicode(str) {
+  return btoa(unescape(encodeURIComponent(str)));
+}
+
+async function publishLiveToGitHub() {
+  const token = getGithubToken();
+  const statusEl = document.getElementById('adminStatus');
+  if(!token) {
+    alert("First paste your GitHub token in the token field (one-time setup). See the instructions next to the field.");
+    return;
+  }
+  const files = window._snkExportFiles || [];
+  if(files.length === 0) { alert("First click 'Save & Prepare Files' — then publish."); return; }
+
+  statusEl.textContent = "Publishing… getting current file list from GitHub…";
+  try {
+    const headers = { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json' };
+    // Get shas for all existing root files in one call (works for large files too)
+    const listRes = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/?ref=${GH_BRANCH}`, { headers });
+    if(listRes.status === 401 || listRes.status === 403) { statusEl.textContent = "❌ Token invalid or no permission. Create a new token with Contents read/write access."; return; }
+    const listing = await listRes.json();
+    const shaMap = {};
+    (Array.isArray(listing) ? listing : []).forEach(f => { shaMap[f.name] = f.sha; });
+
+    let done = 0;
+    for(const f of files) {
+      statusEl.textContent = `Publishing ${f.filename} (${done+1}/${files.length})…`;
+      const body = {
+        message: 'Admin update: ' + f.filename + ' — ' + new Date().toLocaleString('nl-NL'),
+        content: b64EncodeUnicode(f.content),
+        branch: GH_BRANCH
+      };
+      if(shaMap[f.filename]) body.sha = shaMap[f.filename];
+      const putRes = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${f.filename}`, {
+        method: 'PUT', headers: { ...headers, 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      if(!putRes.ok) {
+        const errData = await putRes.json().catch(() => ({}));
+        statusEl.textContent = `❌ Failed on ${f.filename}: ${errData.message || putRes.status}. Other files may have published.`;
+        return;
+      }
+      done++;
+    }
+    statusEl.textContent = `✅ Published ${done} files to GitHub! Website goes live in ~1-2 minutes automatically.`;
+  } catch(err) {
+    console.log('Publish error:', err);
+    statusEl.textContent = "❌ Publish failed (network error). You can still use the Download buttons as backup.";
   }
 }
 
@@ -2101,6 +2239,8 @@ function saveCatalogAndExport(){
   
   document.getElementById('adminOverlay').classList.add('show');
   document.getElementById('exportBox').style.display = 'flex';
+  const tokenField = document.getElementById('ghTokenInput');
+  if(tokenField && getGithubToken()) tokenField.value = getGithubToken();
   document.getElementById('adminStatus').textContent = "Clean System Files Ready! Download and update in GitHub.";
 }
 
