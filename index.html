@@ -120,6 +120,8 @@
   
   .oos-badge { position: absolute; top: 8px; left: 8px; background: var(--danger); color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; z-index: 2; }
   .oos-card { opacity: 0.6; }
+  .disc-badge { position: absolute; top: 8px; right: 8px; background: #FF6B00; color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 800; z-index: 2; box-shadow: 0 2px 6px rgba(255,107,0,0.4); }
+  .old-price { text-decoration: line-through; color: var(--text-light); font-size: 12px; font-weight: 600; margin-right: 5px; }
 
   .pname { font-size: 14px; font-weight: 800; color: var(--text-dark); margin-bottom: 6px; line-height: 1.3; min-height: 36px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; background: linear-gradient(180deg, transparent 62%, #FFEDB3 62%); background-repeat: no-repeat; padding: 0 2px; }
   .variant-wrapper { margin-bottom: 10px; }
@@ -530,6 +532,23 @@ function isItemOutOfStock(isOosFlag, stockMode, stockCount) {
   return !!isOosFlag;
 }
 
+function getItemDiscount(item) {
+  const d = parseFloat(item[9]);
+  return (!isNaN(d) && d > 0 && d < 100) ? d : 0;
+}
+
+function applyDiscount(price, disc) {
+  return disc > 0 ? price * (1 - disc / 100) : price;
+}
+
+function priceDisplayHtml(price, disc) {
+  if(disc > 0) {
+    const newPrice = applyDiscount(price, disc);
+    return `<span class="old-price">€${price.toFixed(2)}</span>€${newPrice.toFixed(2)}`;
+  }
+  return `€${price.toFixed(2)}`;
+}
+
 function pushStockToServer(name, qty) {
   if(!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === "YOUR_APPS_SCRIPT_URL_HERE") return;
   fetch(GOOGLE_SCRIPT_URL, {
@@ -592,7 +611,7 @@ function pmVariantChanged() {
   const variants = parseVariants(item[1], item[2]);
   const selIdx = parseInt(document.getElementById('pmVariant').value) || 0;
   const variant = variants[selIdx];
-  document.getElementById('pmPrice').textContent = `€${variant.price.toFixed(2)}`;
+  document.getElementById('pmPrice').innerHTML = priceDisplayHtml(variant.price, getItemDiscount(item));
 
   const cardSel = document.querySelector(`#card-${catId}-${itemIdx} .punit-select`);
   if(cardSel) { cardSel.value = selIdx; syncAllCardSteppers(); }
@@ -799,9 +818,11 @@ function renderCatalog(){
     menuBodyEl.appendChild(menuLink);
 
     let cardsHtml = '';
-    cat.items.forEach(([name, unitStr, priceStr, imgUrl, isOosFlag, stockMode, stockCount, stockUnit], itemIdx)=>{
+    cat.items.forEach((itemArr, itemIdx)=>{
+      const [name, unitStr, priceStr, imgUrl, isOosFlag, stockMode, stockCount, stockUnit] = itemArr;
       const variants = parseVariants(unitStr, priceStr);
       const defaultPrice = variants[0] ? variants[0].price : 0;
+      const disc = getItemDiscount(itemArr);
       const fallbackImg = `https://dummyimage.com/300x300/f1f5f9/0b4624.png&text=${encodeURIComponent(name)}`;
       let finalImgSrc = imgUrl ? imgUrl.trim() : fallbackImg;
       const isOos = isItemOutOfStock(isOosFlag, stockMode, stockCount);
@@ -812,6 +833,7 @@ function renderCatalog(){
       cardsHtml += `
         <div class="product-card ${isOos ? 'oos-card' : ''}" id="card-${cat.id}-${itemIdx}">
           ${isOos ? `<div class="oos-badge">Out Of Stock</div>` : ''}
+          ${(!isOos && disc > 0) ? `<div class="disc-badge">-${disc}%</div>` : ''}
           <div>
             <div class="img-slot" onclick="openProductModal('${cat.id}', ${itemIdx})" style="cursor:pointer;"><img src="${finalImgSrc}" alt="${name}" loading="lazy"></div>
             <div class="pname" onclick="openProductModal('${cat.id}', ${itemIdx})" style="cursor:pointer;">${name}</div>
@@ -823,7 +845,7 @@ function renderCatalog(){
                 ${variants.map((v, idx) => `<option value="${idx}">${v.unit}</option>`).join('')}
               </select>
             </div>
-            <div class="price-row"><span class="price" id="price-${cat.id}-${itemIdx}">€${defaultPrice.toFixed(2)}</span></div>
+            <div class="price-row"><span class="price" id="price-${cat.id}-${itemIdx}">${priceDisplayHtml(defaultPrice, disc)}</span></div>
             <div class="action-container" id="action-${cat.id}-${itemIdx}">
               ${isOos ? `<button class="addbtn" disabled>Out of Stock</button>` : `<button class="addbtn" onclick="handleInitialAdd('${cat.id}', ${itemIdx}, '${name.replace(/'/g, "\\'")}')">Add to Cart</button>`}
             </div>
@@ -838,8 +860,10 @@ function renderCatalog(){
 
 function onVariantChange(catId, itemIdx, name, val) {
   const cat = catalog.find(c => c.id === catId);
-  const variants = parseVariants(cat.items[itemIdx][1], cat.items[itemIdx][2]);
-  document.getElementById(`price-${catId}-${itemIdx}`).textContent = `€${variants[val].price.toFixed(2)}`;
+  const item = cat.items[itemIdx];
+  const variants = parseVariants(item[1], item[2]);
+  const disc = getItemDiscount(item);
+  document.getElementById(`price-${catId}-${itemIdx}`).innerHTML = priceDisplayHtml(variants[val].price, disc);
   syncAllCardSteppers();
 }
 
@@ -847,10 +871,13 @@ function handleInitialAdd(catId, itemIdx, name) {
   const cat = catalog.find(c => c.id === catId);
   const cardEl = document.getElementById('card-' + catId + '-' + itemIdx);
   const selIdx = cardEl.querySelector('.punit-select').value;
-  const variants = parseVariants(cat.items[itemIdx][1], cat.items[itemIdx][2]);
+  const item = cat.items[itemIdx];
+  const variants = parseVariants(item[1], item[2]);
   const variant = variants[selIdx];
+  const disc = getItemDiscount(item);
+  const finalPrice = Math.round(applyDiscount(variant.price, disc) * 100) / 100;
   const key = `${catId}||${name}||${variant.unit}`;
-  cart[key] = { name, unit: variant.unit, price: variant.price, qty: 1 };
+  cart[key] = { name, unit: variant.unit, price: finalPrice, qty: 1 };
   
   saveCartToLocalStorage();
   syncCartTotals();
@@ -1972,6 +1999,7 @@ function loadProductsTab(){
               </label>
               <label style="display:flex; align-items:center; gap:4px; font-weight:600;">Qty in stock: <input type="number" min="0" step="${item[7]==='kg' ? '0.1' : '1'}" value="${item[6] || 0}" onchange="catalog[${ci}].items[${ii}][6]=parseFloat(this.value)||0; pushStockToServer('${item[0].replace(/'/g,"\\'")}', catalog[${ci}].items[${ii}][6]);" style="width:70px; padding:4px; border-radius:4px; border:1px solid #CBD5E1;"> ${item[7]==='kg' ? 'kg' : 'pcs'}</label>
             ` : ''}
+            <label style="display:flex; align-items:center; gap:4px; font-weight:700; color:#FF6B00;">🏷️ Discount %: <input type="number" min="0" max="99" value="${getItemDiscount(item) || ''}" placeholder="0" onchange="catalog[${ci}].items[${ii}][9]=parseFloat(this.value)||0" style="width:55px; padding:4px; border-radius:4px; border:1px solid #FFB380;"></label>
           </div>
           <div style="background:#FFFDF5; border:1px dashed var(--accent); padding:8px 10px; margin:-6px 0 12px; border-radius:6px;">
             <div style="font-size:11px; font-weight:700; color:var(--accent-dark); margin-bottom:6px;">🖼️ Extra Images (customer swipes through these in product view)</div>
