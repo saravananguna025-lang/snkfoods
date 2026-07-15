@@ -200,6 +200,23 @@
   .login-modal-inner button { width:100%; background:var(--primary); color:#fff; border:none; padding:13px; border-radius:8px; font-weight:700; margin-top:16px; cursor:pointer; font-size:14px; }
   .login-modal-close { position:absolute; top:-8px; right:-8px; background:none; border:none; font-size:26px; cursor:pointer; color:var(--text-light); line-height:1; }
   .login-msg { font-size:12px; font-weight:700; margin-top:8px; min-height:16px; text-align:center; }
+
+  .product-modal { position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:2800; display:none; align-items:flex-end; justify-content:center; }
+  .product-modal.show { display:flex; }
+  .product-modal-card { background:#fff; width:100%; max-width:520px; max-height:92vh; border-radius:20px 20px 0 0; overflow-y:auto; position:relative; animation: slideUp 0.25s ease; }
+  @keyframes slideUp { from { transform:translateY(40px); opacity:0.6; } to { transform:translateY(0); opacity:1; } }
+  @media (min-width: 600px) { .product-modal { align-items:center; } .product-modal-card { border-radius:20px; } }
+  .pm-close { position:absolute; top:10px; right:10px; z-index:5; background:rgba(0,0,0,0.45); color:#fff; border:none; width:36px; height:36px; border-radius:50%; font-size:20px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+  .pm-gallery { display:flex; overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; scrollbar-width:none; background:#F1F5F9; }
+  .pm-gallery::-webkit-scrollbar { display:none; }
+  .pm-gallery img { min-width:100%; aspect-ratio:1/1; object-fit:cover; scroll-snap-align:center; }
+  .pm-dots { display:flex; justify-content:center; gap:6px; padding:10px 0 0; }
+  .pm-dot { width:8px; height:8px; border-radius:50%; background:#CBD5E1; transition:background 0.2s; }
+  .pm-dot.active { background:var(--primary); }
+  .pm-body { padding:16px 20px 24px; }
+  .pm-name { font-size:20px; font-weight:800; color:var(--text-dark); margin-bottom:12px; }
+  .pm-body select { width:100%; padding:12px; border:1px solid #CBD5E1; border-radius:8px; font-size:14px; font-weight:600; background:#fff; color:var(--text-dark); margin-bottom:12px; }
+  .pm-price { font-size:24px; font-weight:800; color:var(--primary); margin-bottom:14px; }
   .admin-head { background: var(--primary); color: #fff; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
   .admin-head h3 { color: #fff; font-family: 'Playfair Display', serif; }
   .admin-head button { background: none; border: none; color: #fff; font-size: 28px; cursor: pointer; }
@@ -395,6 +412,20 @@
   </div>
 </div>
 
+<div class="product-modal" id="productModal" onclick="if(event.target===this) closeProductModal()">
+  <div class="product-modal-card">
+    <button class="pm-close" onclick="closeProductModal()">×</button>
+    <div class="pm-gallery" id="pmGallery" onscroll="updatePmDots()"></div>
+    <div class="pm-dots" id="pmDots"></div>
+    <div class="pm-body">
+      <div class="pm-name" id="pmName"></div>
+      <select id="pmVariant" onchange="pmVariantChanged()"></select>
+      <div class="pm-price" id="pmPrice"></div>
+      <div class="action-container" id="pmAction"></div>
+    </div>
+  </div>
+</div>
+
 <div class="login-modal" id="orderConfirmOverlay">
   <div class="login-modal-inner" style="text-align:center;">
     <div style="font-size:48px; margin-bottom:8px;">✅</div>
@@ -507,6 +538,81 @@ function pushStockToServer(name, qty) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ action: 'setStock', name: name, qty: qty })
   }).catch(err => console.log('Stock push error:', err));
+}
+
+let pmCurrent = { catId: null, itemIdx: null };
+
+function getProductImages(item) {
+  const imgs = [];
+  if(item[3] && item[3].trim() !== '') imgs.push(item[3].trim());
+  if(Array.isArray(item[8])) {
+    item[8].forEach(u => { if(u && u.trim() !== '') imgs.push(u.trim()); });
+  }
+  if(imgs.length === 0) imgs.push(`https://dummyimage.com/500x500/f1f5f9/0b4624.png&text=${encodeURIComponent(item[0])}`);
+  return imgs;
+}
+
+function openProductModal(catId, itemIdx) {
+  const cat = catalog.find(c => c.id === catId);
+  if(!cat || !cat.items[itemIdx]) return;
+  const item = cat.items[itemIdx];
+  pmCurrent = { catId, itemIdx };
+
+  const imgs = getProductImages(item);
+  document.getElementById('pmGallery').innerHTML = imgs.map(u => `<img src="${u}" alt="${item[0]}" loading="lazy">`).join('');
+  document.getElementById('pmGallery').scrollLeft = 0;
+  document.getElementById('pmDots').innerHTML = imgs.length > 1 ? imgs.map((u, i) => `<span class="pm-dot ${i===0?'active':''}"></span>`).join('') : '';
+
+  document.getElementById('pmName').textContent = item[0];
+  const variants = parseVariants(item[1], item[2]);
+  const cardSel = document.querySelector(`#card-${catId}-${itemIdx} .punit-select`);
+  const startIdx = cardSel ? parseInt(cardSel.value) || 0 : 0;
+  document.getElementById('pmVariant').innerHTML = variants.map((v, i) => `<option value="${i}" ${i===startIdx?'selected':''}>${v.unit}</option>`).join('');
+  pmVariantChanged();
+  document.getElementById('productModal').classList.add('show');
+}
+
+function closeProductModal() {
+  document.getElementById('productModal').classList.remove('show');
+}
+
+function updatePmDots() {
+  const gal = document.getElementById('pmGallery');
+  const dots = document.querySelectorAll('#pmDots .pm-dot');
+  if(dots.length === 0) return;
+  const idx = Math.round(gal.scrollLeft / gal.clientWidth);
+  dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+}
+
+function pmVariantChanged() {
+  const { catId, itemIdx } = pmCurrent;
+  const cat = catalog.find(c => c.id === catId);
+  if(!cat) return;
+  const item = cat.items[itemIdx];
+  const variants = parseVariants(item[1], item[2]);
+  const selIdx = parseInt(document.getElementById('pmVariant').value) || 0;
+  const variant = variants[selIdx];
+  document.getElementById('pmPrice').textContent = `€${variant.price.toFixed(2)}`;
+
+  const cardSel = document.querySelector(`#card-${catId}-${itemIdx} .punit-select`);
+  if(cardSel) { cardSel.value = selIdx; syncAllCardSteppers(); }
+
+  const isOos = isItemOutOfStock(item[4], item[5], item[6]);
+  const key = `${catId}||${item[0]}||${variant.unit}`;
+  const cartItem = cart[key];
+  const actionEl = document.getElementById('pmAction');
+  if(isOos) {
+    actionEl.innerHTML = `<button class="addbtn" disabled>Out of Stock</button>`;
+  } else if(cartItem && cartItem.qty > 0) {
+    actionEl.innerHTML = `
+      <div class="stepper">
+        <button class="minus" onclick="modifyCartQty('${key.replace(/'/g, "\\'")}', -1); pmVariantChanged();">−</button>
+        <span class="qty">${cartItem.qty}</span>
+        <button class="plus" onclick="modifyCartQty('${key.replace(/'/g, "\\'")}', 1); pmVariantChanged();">+</button>
+      </div>`;
+  } else {
+    actionEl.innerHTML = `<button class="addbtn" onclick="handleInitialAdd('${catId}', ${itemIdx}, '${item[0].replace(/'/g, "\\'")}'); pmVariantChanged();">Add to Cart</button>`;
+  }
 }
 
 function renderLocations() {
@@ -707,8 +813,8 @@ function renderCatalog(){
         <div class="product-card ${isOos ? 'oos-card' : ''}" id="card-${cat.id}-${itemIdx}">
           ${isOos ? `<div class="oos-badge">Out Of Stock</div>` : ''}
           <div>
-            <div class="img-slot"><img src="${finalImgSrc}" alt="${name}" loading="lazy"></div>
-            <div class="pname">${name}</div>
+            <div class="img-slot" onclick="openProductModal('${cat.id}', ${itemIdx})" style="cursor:pointer;"><img src="${finalImgSrc}" alt="${name}" loading="lazy"></div>
+            <div class="pname" onclick="openProductModal('${cat.id}', ${itemIdx})" style="cursor:pointer;">${name}</div>
             ${lowStockNote}
           </div>
           <div>
@@ -1527,6 +1633,34 @@ function handleImageUpload(event, ci, ii) {
   reader.readAsDataURL(file);
 }
 
+function handleExtraImageUpload(event, ci, ii, xi) {
+  const file = event.target.files[0];
+  if(!file) return;
+  if(!file.type.startsWith('image/')) { alert('Please select an image file.'); return; }
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = new Image();
+    img.onload = function() {
+      const MAX = 600;
+      let w = img.width, h = img.height;
+      if(w > h) { if(w > MAX){ h = Math.round(h * (MAX / w)); w = MAX; } }
+      else { if(h > MAX){ w = Math.round(w * (MAX / h)); h = MAX; } }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.75);
+
+      if(!Array.isArray(catalog[ci].items[ii][8])) catalog[ci].items[ii][8] = [];
+      catalog[ci].items[ii][8][xi] = dataUrl;
+      loadProductsTab();
+    };
+    img.onerror = function() { alert('Could not read this image, please try another file.'); };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
 function parseWeightGrams(unitStr) {
   const s = unitStr.trim().toLowerCase();
   const m = s.match(/^([\d.]+)\s*(kg|g|l|ml)\b/);
@@ -1839,9 +1973,22 @@ function loadProductsTab(){
               <label style="display:flex; align-items:center; gap:4px; font-weight:600;">Qty in stock: <input type="number" min="0" step="${item[7]==='kg' ? '0.1' : '1'}" value="${item[6] || 0}" onchange="catalog[${ci}].items[${ii}][6]=parseFloat(this.value)||0; pushStockToServer('${item[0].replace(/'/g,"\\'")}', catalog[${ci}].items[${ii}][6]);" style="width:70px; padding:4px; border-radius:4px; border:1px solid #CBD5E1;"> ${item[7]==='kg' ? 'kg' : 'pcs'}</label>
             ` : ''}
           </div>
+          <div style="background:#FFFDF5; border:1px dashed var(--accent); padding:8px 10px; margin:-6px 0 12px; border-radius:6px;">
+            <div style="font-size:11px; font-weight:700; color:var(--accent-dark); margin-bottom:6px;">🖼️ Extra Images (customer swipes through these in product view)</div>
+            ${(Array.isArray(item[8]) ? item[8] : []).map((extraUrl, xi) => `
+              <div style="display:flex; gap:4px; margin-bottom:4px; align-items:center;">
+                <input value="${extraUrl && extraUrl.startsWith('data:') ? '(uploaded image)' : (extraUrl || '')}" onchange="catalog[${ci}].items[${ii}][8][${xi}]=this.value" placeholder="Image URL" style="flex:1; min-width:0; font-size:12px; padding:6px;">
+                <label style="cursor:pointer; background:var(--accent); color:var(--primary); width:28px; height:28px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:13px; flex-shrink:0;" title="Upload image">
+                  📷<input type="file" accept="image/*" style="display:none;" onchange="handleExtraImageUpload(event, ${ci}, ${ii}, ${xi})">
+                </label>
+                <button onclick="catalog[${ci}].items[${ii}][8].splice(${xi},1); loadProductsTab();" style="background:var(--danger); color:#fff; border:none; width:28px; height:28px; border-radius:6px; font-size:14px; cursor:pointer; flex-shrink:0;">×</button>
+              </div>
+            `).join('')}
+            <button onclick="if(!Array.isArray(catalog[${ci}].items[${ii}][8])) catalog[${ci}].items[${ii}][8]=[]; catalog[${ci}].items[${ii}][8].push(''); loadProductsTab();" style="background:var(--primary); color:#fff; border:none; padding:5px 12px; border-radius:6px; font-size:11px; font-weight:700; cursor:pointer;">+ Add Image</button>
+          </div>
         `).join('')}
       </div>
-      <div class="admin-btn-row"><button onclick="catalog[${ci}].items.push(['New Item','1kg, 500g, 250g','','',false,'manual',0,'pieces']); loadProductsTab()">+ Add Product</button></div>
+      <div class="admin-btn-row"><button onclick="catalog[${ci}].items.push(['New Item','1kg, 500g, 250g','','',false,'manual',0,'pieces',[]]); loadProductsTab()">+ Add Product</button></div>
     </div>
   `).join('');
 
