@@ -765,6 +765,36 @@ function clearMissedSearches() {
   }
 }
 
+function bulkFillMissingImages(ci) {
+  const cat = catalog[ci];
+  if(!cat.icon || cat.icon.trim() === '') {
+    alert(`Please set a picture for "${cat.name}" category first (📷 button above), then use this to fill missing product images with it.`);
+    return;
+  }
+  let count = 0;
+  cat.items.forEach(item => {
+    if(!item[3] || item[3].trim() === '') { item[3] = cat.icon; count++; }
+  });
+  loadProductsTab();
+  renderCatalog();
+  alert(`Filled ${count} product images in "${cat.name}" with the category picture. Remember: replace individual products with their real photos anytime using the 📷 button on that product.`);
+}
+
+function bulkFillAllMissingImages() {
+  let totalFilled = 0, skippedCats = [];
+  catalog.forEach(cat => {
+    if(!cat.icon || cat.icon.trim() === '') { skippedCats.push(cat.name); return; }
+    cat.items.forEach(item => {
+      if(!item[3] || item[3].trim() === '') { item[3] = cat.icon; totalFilled++; }
+    });
+  });
+  loadProductsTab();
+  renderCatalog();
+  let msg = `Filled ${totalFilled} product images across all categories using their category pictures.`;
+  if(skippedCats.length > 0) msg += `\n\nSkipped (no category picture set yet): ${skippedCats.join(', ')}`;
+  alert(msg);
+}
+
 function renderCatalog(){
   const navEl = document.getElementById('catnav');
   const mainEl = document.getElementById('catalog');
@@ -1949,6 +1979,7 @@ function loadProductsTab(){
   `;
   
   html += `<div style="position:sticky; top:0; z-index:20; background:#fff; padding:10px 0; margin-bottom:5px;"><input type="text" id="adminSearchBar" oninput="filterAdminProducts(this.value)" placeholder="🔍 Search products in admin (e.g. Onion, Rice)..." style="width:100%; padding:12px 16px; border:2px solid var(--primary); border-radius:10px; font-size:14px; font-weight:600;"></div>`;
+  html += `<div style="text-align:center; margin-bottom:15px;"><button onclick="bulkFillAllMissingImages()" style="background:#FF9800; color:#fff; border:none; padding:10px 20px; border-radius:8px; font-weight:700; font-size:13px; cursor:pointer;">🖼️ Fill ALL missing product images (using each category's picture)</button></div>`;
 
   html += catalog.map((cat, ci)=>`
     <div class="admin-cat" data-catindex="${ci}">
@@ -1964,6 +1995,11 @@ function loadProductsTab(){
       </div>
       <div style="margin:-4px 0 10px;">
         <input value="${(cat.icon && cat.icon.startsWith('data:')) ? '(uploaded image)' : (cat.icon || '')}" onchange="catalog[${ci}].icon=this.value; loadProductsTab();" placeholder="or paste category picture URL here" style="width:100%; padding:6px 8px; border:1px dashed #CBD5E1; border-radius:6px; font-size:12px;">
+        ${cat.items.filter(it => !it[3] || it[3].trim()==='').length > 0 ? `
+          <button onclick="bulkFillMissingImages(${ci})" style="margin-top:6px; background:#FF9800; color:#fff; border:none; padding:6px 12px; border-radius:6px; font-size:11px; font-weight:700; cursor:pointer;">
+            🖼️ Fill ${cat.items.filter(it => !it[3] || it[3].trim()==='').length} missing product images with category picture
+          </button>
+        ` : ''}
       </div>
       <details class="admin-cat-details">
         <summary style="cursor:pointer; padding:10px 14px; background:var(--bg-light); border:1px solid #CBD5E1; border-radius:8px; font-weight:700; font-size:13px; color:var(--primary); user-select:none;">📦 ${cat.name} — ${cat.items.length} products (tap to open/close)</summary>
@@ -2189,42 +2225,21 @@ function saveCatalogAndExport(){
   closeAdmin();
   renderCatalog();
   renderLocations();
+  syncCartTotals();
   
   document.getElementById('customer-announcement').innerText = storeDatabase.settings.announcementText;
   
-  // The exported index.html only needs category id/name (no items) - product data now lives
-  // in separate small JSON files, so index.html stays small and fast to generate/edit on GitHub.
+  // ALL data now lives in settings.json (never in index.html), so future code updates
+  // to index.html can never wipe admin changes like locations/settings/offers.
   const slimCategories = catalog.map(cat => ({ id: cat.id, name: cat.name, icon: cat.icon || undefined }));
-  const databaseString = JSON.stringify({ 
+  const settingsJson = JSON.stringify({ 
     categories: slimCategories, 
     locations: locations, 
     offers: offers,
     settings: storeDatabase.settings
   });
   
-  // Speed optimization: these sections are fully rebuilt by JS on every page load anyway,
-  // so we don't need to serialize their heavy rendered markup into the exported file.
-  const dynamicIds = ['catalog', 'catnav', 'greetCircles', 'fullCategoriesGrid', 'menuDrawerBody', 'ledger', 'offersContent', 'profileContent', 'adminBody'];
-  dynamicIds.forEach(id => {
-    const el = document.getElementById(id);
-    if(el) el.innerHTML = '';
-  });
-  
-  const scriptRegex = /const storeDatabase = [\s\S]*?};/;
-  let entirePageCode = document.documentElement.outerHTML;
-  entirePageCode = entirePageCode.replace(scriptRegex, `const storeDatabase = ${databaseString};`);
-  
-  const finalCleanCode = "<!DOCTYPE html>\n" + entirePageCode;
-  
-  // Rebuild the live view again since we emptied it above
-  renderCatalog();
-  renderLocations();
-  syncCartTotals();
-  renderProfilePage();
-  renderOffersPage();
-  loadProductsTab();
-  
-  const files = [{ filename: 'index.html', content: finalCleanCode, type: 'text/html', label: '🌐 index.html (site structure/settings)' }];
+  const files = [{ filename: 'settings.json', content: settingsJson, type: 'application/json', label: '⚙️ Site Settings — locations, offers, categories (settings.json)' }];
   files.push({ filename: 'heroSlides.json', content: JSON.stringify(heroSlides), type: 'application/json', label: '🎠 Homepage Slides (heroSlides.json)' });
   catalog.forEach(cat => {
     files.push({ filename: cat.id + '.json', content: JSON.stringify(cat.items), type: 'application/json', label: `📦 ${cat.name} (${cat.id}.json)` });
@@ -2235,7 +2250,7 @@ function saveCatalogAndExport(){
   document.getElementById('exportBox').style.display = 'flex';
   const tokenField = document.getElementById('ghTokenInput');
   if(tokenField && getGithubToken()) tokenField.value = getGithubToken();
-  document.getElementById('adminStatus').textContent = "Clean System Files Ready! Download and update in GitHub.";
+  document.getElementById('adminStatus').textContent = "Data files ready! Tap Publish to go live.";
 }
 
 function downloadFile(filename, content, mimeType) {
@@ -2341,8 +2356,28 @@ function startCarouselAutoplay() {
   }, 4000);
 }
 
+async function loadSiteSettings() {
+  try {
+    const res = await fetch('settings.json?t=' + Date.now(), { cache: 'no-store' });
+    if(!res.ok) return; // no settings.json yet -> use defaults embedded in index.html
+    const data = await res.json();
+    if(data.categories && Array.isArray(data.categories)) {
+      storeDatabase.categories = data.categories;
+      catalog = storeDatabase.categories;
+    }
+    if(Array.isArray(data.locations)) locations = data.locations;
+    if(Array.isArray(data.offers)) offers = data.offers;
+    if(data.settings) storeDatabase.settings = Object.assign({}, storeDatabase.settings, data.settings);
+  } catch(err) {
+    console.log('settings.json not loaded, using built-in defaults:', err);
+  }
+}
+
 async function initApp() {
+  // 1. Load site settings (locations, offers, categories list, settings) from settings.json
+  await loadSiteSettings();
   catalog.forEach(cat => { cat.items = []; });
+
   document.getElementById('customer-announcement').innerText = storeDatabase.settings.announcementText || "🔥 Special Offer: Keep ordering from our shop to get amazing discounts instantly! 🔥";
   document.getElementById('menuContactPhone').textContent = storeDatabase.settings.contactPhone;
   document.getElementById('menuContactHours').textContent = storeDatabase.settings.contactHours;
@@ -2350,6 +2385,7 @@ async function initApp() {
   loadCartFromLocalStorage();
   renderProfilePage();
 
+  // 2. Load product data + slides
   await Promise.all([loadAllCategoryData(), loadHeroSlides()]);
 
   renderCatalog();
