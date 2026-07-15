@@ -795,6 +795,100 @@ function bulkFillAllMissingImages() {
   alert(msg);
 }
 
+// Product-name -> emoji matching (most specific keywords first, checked in order)
+const PRODUCT_EMOJI_MAP = [
+  ['banana', '🍌'], ['mango', '🥭'], ['apple', '🍎'], ['pomegranate', '🍎'], ['grape', '🍇'],
+  ['orange', '🍊'], ['sweet lime', '🍋'], ['mosambi', '🍋'], ['guava', '🍈'], ['papaya', '🍈'],
+  ['lemon', '🍋'], ['lime', '🍋'],
+  ['onion', '🧅'], ['tomato', '🍅'], ['potato', '🥔'], ['chilli', '🌶️'], ['chili', '🌶️'],
+  ['brinjal', '🍆'], ['eggplant', '🍆'], ['gourd', '🥒'], ['garlic', '🧄'], ['drumstick', '🥬'],
+  ['cucumber', '🥒'], ['ginger', '🫚'], ['okra', '🥬'], ['bhendi', '🥬'], ['coconut', '🥥'],
+  ['curry leaves', '🌿'], ['mint', '🌿'], ['methi leaves', '🌿'], ['coriander leaves', '🌿'],
+  ['cluster beans', '🫘'], ['papdi', '🫛'], ['avarai', '🫛'], ['suran', '🥔'], ['kola', '🥬'],
+  ['rice', '🍚'], ['atta', '🌾'], ['flour', '🌾'], ['puffed rice', '🍚'], ['sabudana', '⚪'],
+  ['sago', '⚪'], ['idli rava', '🍚'], ['rava', '🌾'], ['sooji', '🌾'], ['poha', '🍚'], ['vermicelli', '🍜'],
+  ['dal', '🫘'], ['lentil', '🫘'], ['chana', '🫘'], ['chickpea', '🫘'], ['rajma', '🫘'], ['kidney bean', '🫘'],
+  ['gram', '🫘'], ['urad', '🫘'], ['moong', '🫘'], ['masoor', '🫘'],
+  ['cumin', '🌰'], ['mustard seed', '🌰'], ['cardamom', '🌰'], ['pepper', '⚫'], ['salt', '🧂'],
+  ['fennel', '🌿'], ['fenugreek', '🌿'], ['coriander seed', '🌰'], ['clove', '🌰'], ['cinnamon', '🟤'],
+  ['bay leaves', '🍃'], ['star anise', '⭐'],
+  ['garam masala', '🌶️'], ['biryani masala', '🌶️'], ['sambar', '🍛'], ['rasam', '🍲'],
+  ['kitchen king', '🌶️'], ['chicken curry masala', '🌶️'], ['paneer masala', '🧀'],
+  ['chilli powder', '🌶️'], ['turmeric', '🟡'], ['chaat masala', '🌶️'], ['pav bhaji', '🍛'],
+  ['chole masala', '🌶️'], ['masala', '🌶️'],
+  ['peanut oil', '🥜'], ['mustard oil', '🛢️'], ['sesame', '🛢️'], ['gingelly', '🛢️'],
+  ['ghee', '🧈'], ['coconut oil', '🥥'], ['sunflower oil', '🛢️'], ['vanaspati', '🧈'],
+  ['groundnut oil', '🥜'], ['oil', '🛢️'],
+  ['paneer', '🧀'], ['yogurt', '🥛'], ['curd', '🥛'], ['butter', '🧈'], ['cheese', '🧀'], ['milk powder', '🥛'],
+  ['murukku', '🌀'], ['mixture', '🥨'], ['bhujia', '🥨'], ['chivda', '🥨'], ['biscuit', '🍪'],
+  ['soan papdi', '🍬'], ['banana chips', '🍌'], ['khakhra', '🫓'], ['pakoda', '🥨'], ['boondi', '🥨'],
+  ['coffee', '☕'], ['tea', '🍵'], ['horlicks', '🥤'], ['boost', '🥤'], ['badam drink', '🥤'],
+  ['pickle', '🥭'], ['papad', '🫓'], ['appalam', '🫓'], ['fryums', '🍘'],
+  ['idli', '🍥'], ['dosa', '🥞'], ['batter', '🥣'], ['gulab jamun', '🍡'], ['noodles', '🍜'],
+  ['maggi', '🍜'], ['chapati', '🫓'],
+  ['parotta', '🫓'], ['peas', '🟢'], ['samosa', '🥟'],
+  ['camphor', '🕯️'], ['incense', '🕯️'], ['agarbatti', '🕯️'], ['kumkum', '🔴'], ['cotton wick', '🧵'],
+  ['thiri', '🧵'], ['dhoop', '🕯️'], ['kolam powder', '⚪'], ['vibhuti', '⚪'], ['pooja', '🪔'],
+];
+
+function getEmojiForProduct(name) {
+  const n = name.toLowerCase();
+  for(const [keyword, emoji] of PRODUCT_EMOJI_MAP) {
+    if(n.includes(keyword)) return emoji;
+  }
+  return '🛒';
+}
+
+const ICON_BG_COLORS = ['#FFF3E0','#E8F5E9','#E3F2FD','#FCE4EC','#FFF9C4','#EDE7F6','#E0F7FA','#FBE9E7'];
+
+function generateProductIconDataUrl(name) {
+  const emoji = getEmojiForProduct(name);
+  const bg = ICON_BG_COLORS[Math.abs(name.split('').reduce((a,c)=>a+c.charCodeAt(0),0)) % ICON_BG_COLORS.length];
+  const canvas = document.createElement('canvas');
+  canvas.width = 400; canvas.height = 400;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, 400, 400);
+  ctx.font = '190px "Segoe UI Emoji", "Apple Color Emoji", sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(emoji, 200, 175);
+  ctx.fillStyle = '#0B4624';
+  ctx.font = 'bold 30px Arial';
+  const shortName = name.length > 22 ? name.slice(0, 20) + '…' : name;
+  ctx.fillText(shortName, 200, 340);
+  return canvas.toDataURL('image/jpeg', 0.85);
+}
+
+async function bulkGenerateUniqueIcons() {
+  if(!confirm('This will generate a unique icon (matching emoji) for every product that has no image yet. You can still replace any of them later with a real photo. Continue?')) return;
+  const statusEl = document.getElementById('adminStatus');
+  let toProcess = [];
+  catalog.forEach((cat, ci) => {
+    cat.items.forEach((item, ii) => {
+      if(!item[3] || item[3].trim() === '') toProcess.push({ci, ii, name: item[0]});
+    });
+  });
+  if(toProcess.length === 0) { alert('No missing product images found — everything already has an image!'); return; }
+
+  const token = getGithubToken();
+  let done = 0;
+  for(const p of toProcess) {
+    if(statusEl) statusEl.textContent = `Generating icons… ${done+1}/${toProcess.length}`;
+    const dataUrl = generateProductIconDataUrl(p.name);
+    if(token) {
+      const ghUrl = await uploadImageToGitHub(dataUrl, p.name, 'jpg');
+      catalog[p.ci].items[p.ii][3] = ghUrl || dataUrl;
+    } else {
+      catalog[p.ci].items[p.ii][3] = dataUrl;
+    }
+    done++;
+  }
+  loadProductsTab();
+  renderCatalog();
+  if(statusEl) statusEl.textContent = `✅ Generated ${done} unique product icons! Replace any with a real photo anytime using the 📷 button.`;
+}
+
 function renderCatalog(){
   const navEl = document.getElementById('catnav');
   const mainEl = document.getElementById('catalog');
@@ -1979,7 +2073,10 @@ function loadProductsTab(){
   `;
   
   html += `<div style="position:sticky; top:0; z-index:20; background:#fff; padding:10px 0; margin-bottom:5px;"><input type="text" id="adminSearchBar" oninput="filterAdminProducts(this.value)" placeholder="🔍 Search products in admin (e.g. Onion, Rice)..." style="width:100%; padding:12px 16px; border:2px solid var(--primary); border-radius:10px; font-size:14px; font-weight:600;"></div>`;
-  html += `<div style="text-align:center; margin-bottom:15px;"><button onclick="bulkFillAllMissingImages()" style="background:#FF9800; color:#fff; border:none; padding:10px 20px; border-radius:8px; font-weight:700; font-size:13px; cursor:pointer;">🖼️ Fill ALL missing product images (using each category's picture)</button></div>`;
+  html += `<div style="text-align:center; margin-bottom:15px; display:flex; flex-direction:column; gap:8px; align-items:center;">
+    <button onclick="bulkGenerateUniqueIcons()" style="background:var(--primary); color:#fff; border:none; padding:12px 22px; border-radius:8px; font-weight:700; font-size:13px; cursor:pointer;">🎨 Generate unique icon for every missing product image (recommended)</button>
+    <button onclick="bulkFillAllMissingImages()" style="background:none; color:#FF9800; border:1px solid #FF9800; padding:8px 18px; border-radius:8px; font-weight:700; font-size:12px; cursor:pointer;">🖼️ Or: fill with category picture instead</button>
+  </div>`;
 
   html += catalog.map((cat, ci)=>`
     <div class="admin-cat" data-catindex="${ci}">
