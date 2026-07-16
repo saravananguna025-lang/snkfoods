@@ -123,7 +123,7 @@
   .disc-badge { position: absolute; top: 8px; right: 8px; background: #FF6B00; color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 800; z-index: 2; box-shadow: 0 2px 6px rgba(255,107,0,0.4); }
   .old-price { text-decoration: line-through; color: var(--text-light); font-size: 12px; font-weight: 600; margin-right: 5px; }
 
-  .pname { font-size: 14px; font-weight: 800; color: var(--text-dark); margin-bottom: 6px; line-height: 1.3; min-height: 36px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; background: linear-gradient(180deg, transparent 62%, #FFEDB3 62%); background-repeat: no-repeat; padding: 0 2px; }
+  .pname { font-size: 14px; font-weight: 800; color: var(--text-dark); margin-bottom: 6px; line-height: 1.3; min-height: 36px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .variant-wrapper { margin-bottom: 10px; }
   .punit-select { width: 100%; padding: 6px 8px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 12px; background: #fff; color: var(--text-dark); font-weight: 500; outline: none; cursor: pointer; }
   .price-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
@@ -377,7 +377,8 @@
       <label>Mobile Phone Number</label><input id="cphone" type="tel" placeholder="e.g. +31 6 12345678">
       <label>Complete Address</label><input id="caddr" placeholder="Street name, house number, postcode">
       <label>Review / Special Comments</label><textarea id="ccomments" placeholder="Custom requests..."></textarea>
-      <button class="send-btn" id="sendBtn" onclick="sendOrder()" disabled>📲 Send Order to WhatsApp</button>
+      <button class="send-btn" id="sendBtn" onclick="sendOrder(true)" disabled>📲 Send Order to WhatsApp</button>
+      <button class="send-btn" id="sendBtnNoWa" onclick="sendOrder(false)" disabled style="background:var(--primary); box-shadow:0 4px 12px rgba(11,70,36,0.2);">📩 Send Order (I don't have WhatsApp)</button>
     </div>
   </div>
 </div>
@@ -444,8 +445,7 @@
   <button class="menu-admin-btn" style="background:#FFF9E6; border-color:var(--accent); color:var(--accent-dark);" onclick="closeMenuDrawer(); openCustomerMessageBox();">📩 Message Us / Request a Product</button>
   <div class="menu-contact-box">
     <h4>Contact Us</h4>
-    <p id="menuContactPhone">Phone: +31 6 85259659</p>
-    <p id="menuContactHours">Open Hours: 09:00 AM - 08:00 PM</p>
+    <p id="menuContactPhone" style="white-space:pre-wrap;">Phone: +31 6 85259659</p>
   </div>
 </div>
 
@@ -486,8 +486,11 @@ let locations = storeDatabase.locations || [];
 let offers = storeDatabase.offers || [];
 storeDatabase.settings = storeDatabase.settings || { requiredOrders: 3, loyaltyDiscount: 10, freeDeliveryThreshold: 30, announcementText: "🔥 Special Offer: Keep ordering from our shop to get amazing discounts instantly! 🔥" };
 if(storeDatabase.settings.freeDeliveryThreshold === undefined) storeDatabase.settings.freeDeliveryThreshold = 30;
-if(storeDatabase.settings.contactPhone === undefined) storeDatabase.settings.contactPhone = "Phone: +31 6 85259659";
-if(storeDatabase.settings.contactHours === undefined) storeDatabase.settings.contactHours = "Open Hours: 09:00 AM - 08:00 PM";
+if(storeDatabase.settings.contactInfo === undefined) {
+  const oldPhone = storeDatabase.settings.contactPhone || "Phone: +31 6 85259659";
+  const oldHours = storeDatabase.settings.contactHours || "Open Hours: 09:00 AM - 08:00 PM";
+  storeDatabase.settings.contactInfo = oldPhone + "\n" + oldHours;
+}
 
 let cart = {};
 let activeCoupon = ""; 
@@ -535,6 +538,17 @@ function isItemOutOfStock(isOosFlag, stockMode, stockCount) {
     return (parseFloat(stockCount) || 0) <= 0;
   }
   return !!isOosFlag;
+}
+
+// For products where each package size (variant) is tracked separately, e.g. rice sold as
+// individual 1kg/5kg/10kg bags rather than loose weight.
+function isVariantOutOfStock(item, variantIdx) {
+  const stockMode = item[5];
+  if(stockMode === 'perVariant') {
+    const arr = item[10] || [];
+    return (parseFloat(arr[variantIdx]) || 0) <= 0;
+  }
+  return isItemOutOfStock(item[4], stockMode, item[6]);
 }
 
 function getItemDiscount(item) {
@@ -621,7 +635,7 @@ function pmVariantChanged() {
   const cardSel = document.querySelector(`#card-${catId}-${itemIdx} .punit-select`);
   if(cardSel) { cardSel.value = selIdx; syncAllCardSteppers(); }
 
-  const isOos = isItemOutOfStock(item[4], item[5], item[6]);
+  const isOos = isVariantOutOfStock(item, selIdx);
   const key = `${catId}||${item[0]}||${variant.unit}`;
   const cartItem = cart[key];
   const actionEl = document.getElementById('pmAction');
@@ -954,10 +968,11 @@ function renderCatalog(){
       const disc = getItemDiscount(itemArr);
       const fallbackImg = `https://dummyimage.com/300x300/f1f5f9/0b4624.png&text=${encodeURIComponent(name)}`;
       let finalImgSrc = imgUrl ? imgUrl.trim() : fallbackImg;
-      const isOos = isItemOutOfStock(isOosFlag, stockMode, stockCount);
+      const isOos = isVariantOutOfStock(itemArr, 0);
       const stockUnitLabel = stockUnit === 'kg' ? 'kg' : 'left';
       const lowStockThreshold = stockUnit === 'kg' ? 3 : 5;
       const lowStockNote = (stockMode === 'count' && !isOos && parseFloat(stockCount) <= lowStockThreshold) ? `<div style="font-size:11px; color:var(--danger); font-weight:700; margin-top:2px;">Only ${parseFloat(stockCount)} ${stockUnitLabel === 'kg' ? 'kg left' : 'left'}!</div>` : '';
+      const perVariantNote = (stockMode === 'perVariant') ? `<div style="font-size:11px; color:var(--text-light); margin-top:2px;" id="pvnote-${cat.id}-${itemIdx}">${isOos ? '' : (parseFloat((itemArr[10]||[])[0]) <= 3 ? `Only ${parseFloat((itemArr[10]||[])[0])} bags left!` : '')}</div>` : '';
 
       cardsHtml += `
         <div class="product-card ${isOos ? 'oos-card' : ''}" id="card-${cat.id}-${itemIdx}">
@@ -967,6 +982,7 @@ function renderCatalog(){
             <div class="img-slot" onclick="openProductModal('${cat.id}', ${itemIdx})" style="cursor:pointer;"><img src="${finalImgSrc}" alt="${name}" loading="lazy"></div>
             <div class="pname" onclick="openProductModal('${cat.id}', ${itemIdx})" style="cursor:pointer;">${name}</div>
             ${lowStockNote}
+            ${perVariantNote}
           </div>
           <div>
             <div class="variant-wrapper">
@@ -992,7 +1008,34 @@ function onVariantChange(catId, itemIdx, name, val) {
   const item = cat.items[itemIdx];
   const variants = parseVariants(item[1], item[2]);
   const disc = getItemDiscount(item);
-  document.getElementById(`price-${catId}-${itemIdx}`).innerHTML = priceDisplayHtml(variants[val].price, disc);
+  const selIdx = parseInt(val);
+  document.getElementById(`price-${catId}-${itemIdx}`).innerHTML = priceDisplayHtml(variants[selIdx].price, disc);
+
+  if(item[5] === 'perVariant') {
+    const isOos = isVariantOutOfStock(item, selIdx);
+    const cardEl = document.getElementById(`card-${catId}-${itemIdx}`);
+    const actionEl = document.getElementById(`action-${catId}-${itemIdx}`);
+    const noteEl = document.getElementById(`pvnote-${catId}-${itemIdx}`);
+    if(cardEl) cardEl.classList.toggle('oos-card', isOos);
+    const existingBadge = cardEl ? cardEl.querySelector('.oos-badge') : null;
+    if(isOos && !existingBadge && cardEl) cardEl.insertAdjacentHTML('afterbegin', `<div class="oos-badge">Out Of Stock</div>`);
+    if(!isOos && existingBadge) existingBadge.remove();
+    if(actionEl) {
+      const cartKey = `${catId}||${name}||${variants[selIdx].unit}`;
+      const cartItem = cart[cartKey];
+      if(isOos) {
+        actionEl.innerHTML = `<button class="addbtn" disabled>Out of Stock</button>`;
+      } else if(cartItem && cartItem.qty > 0) {
+        actionEl.innerHTML = `<div class="stepper"><button class="minus" onclick="modifyCartQty('${cartKey.replace(/'/g,"\\'")}', -1)">−</button><span class="qty">${cartItem.qty}</span><button class="plus" onclick="modifyCartQty('${cartKey.replace(/'/g,"\\'")}', 1)">+</button></div>`;
+      } else {
+        actionEl.innerHTML = `<button class="addbtn" onclick="handleInitialAdd('${catId}', ${itemIdx}, '${name.replace(/'/g,"\\'")}')">Add to Cart</button>`;
+      }
+    }
+    if(noteEl) {
+      const stockVal = parseFloat((item[10]||[])[selIdx]);
+      noteEl.textContent = (!isOos && stockVal <= 3) ? `Only ${stockVal} bags left!` : '';
+    }
+  }
   syncAllCardSteppers();
 }
 
@@ -1001,6 +1044,7 @@ function handleInitialAdd(catId, itemIdx, name) {
   const cardEl = document.getElementById('card-' + catId + '-' + itemIdx);
   const selIdx = cardEl.querySelector('.punit-select').value;
   const item = cat.items[itemIdx];
+  if(isVariantOutOfStock(item, parseInt(selIdx))) { alert('Sorry, this size just went out of stock.'); onVariantChange(catId, itemIdx, name, selIdx); return; }
   const variants = parseVariants(item[1], item[2]);
   const variant = variants[selIdx];
   const disc = getItemDiscount(item);
@@ -1069,7 +1113,7 @@ function syncAllCardSteppers() {
           </div>`;
       } else {
         const itemArr = cat.items[itemIdx];
-        const isOos = isItemOutOfStock(itemArr[4], itemArr[5], itemArr[6]);
+        const isOos = isVariantOutOfStock(itemArr, parseInt(selIdx));
         if (isOos) {
           actionContainer.innerHTML = `<button class="addbtn" disabled>Out of Stock</button>`;
         } else {
@@ -1138,9 +1182,11 @@ function renderLedger(){
   if(entries.length === 0){
     ledgerEl.innerHTML = `<div class="empty-note">Your shopping basket is empty.</div>`;
     document.getElementById('sendBtn').disabled = true;
+    document.getElementById('sendBtnNoWa').disabled = true;
     return;
   }
   document.getElementById('sendBtn').disabled = false;
+  document.getElementById('sendBtnNoWa').disabled = false;
   let subTotal = 0, html = '';
   
   entries.forEach(([key, item])=>{
@@ -1307,7 +1353,8 @@ function openMenuDrawer(){ document.getElementById('menuDrawer').classList.add('
 function closeMenuDrawer(){ document.getElementById('menuDrawer').classList.remove('open'); document.getElementById('overlay').classList.remove('show'); document.body.classList.remove('menu-open'); }
 function closeAllDrawers(){ closeMenuDrawer(); }
 
-async function sendOrder(){
+async function sendOrder(viaWhatsApp){
+  if(viaWhatsApp === undefined) viaWhatsApp = true;
   const items = Object.values(cart);
   const areaIdx = document.getElementById('area').value;
   const name = document.getElementById('cname').value.trim();
@@ -1336,13 +1383,21 @@ async function sendOrder(){
         }
       }
       stockCheckItems.push({ name: cartItem.name, qty: deductQty });
+    } else if(catalogItem && catalogItem[5] === 'perVariant') {
+      const variants = parseVariants(catalogItem[1], catalogItem[2]);
+      const vIdx = variants.findIndex(v => v.unit === cartItem.unit);
+      if(vIdx !== -1) {
+        stockCheckItems.push({ name: cartItem.name + '||' + cartItem.unit, qty: cartItem.qty });
+      }
     }
   }
 
   const sendBtnEl = document.getElementById('sendBtn');
+  const sendBtnNoWaEl = document.getElementById('sendBtnNoWa');
+  const btnDefaultText = { sendBtn: '📲 Send Order to WhatsApp', sendBtnNoWa: "📩 Send Order (I don't have WhatsApp)" };
   if(stockCheckItems.length > 0 && GOOGLE_SCRIPT_URL && GOOGLE_SCRIPT_URL !== "YOUR_APPS_SCRIPT_URL_HERE") {
-    sendBtnEl.disabled = true;
-    sendBtnEl.textContent = 'Checking stock...';
+    sendBtnEl.disabled = true; sendBtnNoWaEl.disabled = true;
+    sendBtnEl.textContent = 'Checking stock...'; sendBtnNoWaEl.textContent = 'Checking stock...';
     try {
       const stockRes = await fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
@@ -1353,16 +1408,16 @@ async function sendOrder(){
       if(!stockData.success) {
         const outOfStockNames = (stockData.details || []).filter(d => !d.ok).map(d => d.name).join(', ');
         alert(`Sorry, some items just sold out: ${outOfStockNames || 'please check your cart'}. Please remove them and try again.`);
-        sendBtnEl.disabled = false;
-        sendBtnEl.textContent = '📲 Send Order to WhatsApp';
+        sendBtnEl.disabled = false; sendBtnNoWaEl.disabled = false;
+        sendBtnEl.textContent = btnDefaultText.sendBtn; sendBtnNoWaEl.textContent = btnDefaultText.sendBtnNoWa;
         loadAllCategoryData().then(renderCatalog);
         return;
       }
     } catch(err) {
       console.log('Stock check error:', err);
     }
-    sendBtnEl.disabled = false;
-    sendBtnEl.textContent = '📲 Send Order to WhatsApp';
+    sendBtnEl.disabled = false; sendBtnNoWaEl.disabled = false;
+    sendBtnEl.textContent = btnDefaultText.sendBtn; sendBtnNoWaEl.textContent = btnDefaultText.sendBtnNoWa;
   }
   
   const locObj = locations[parseInt(areaIdx)];
@@ -1406,7 +1461,8 @@ async function sendOrder(){
       tax: `€${taxAmount.toFixed(2)}`,
       deliveryFee: `€${deliveryFee.toFixed(2)}`,
       total: `€${grandTotal.toFixed(2)}`,
-      notes: comments
+      notes: comments,
+      viaWhatsApp: viaWhatsApp
     };
 
     fetch(GOOGLE_SCRIPT_URL, {
@@ -1434,7 +1490,9 @@ async function sendOrder(){
   document.getElementById('promoCodeInput').value = "";
   document.getElementById('promoMsg').textContent = "";
   
-  window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`,'_blank');
+  if(viaWhatsApp) {
+    window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`,'_blank');
+  }
 
   cart = {};
   saveCartToLocalStorage();
@@ -2007,13 +2065,9 @@ function loadProductsTab(){
           <textarea id="settingAnnouncementText" style="width:100%; height:60px; padding:10px; border-radius:6px; border:1px solid #CBD5E1; font-size:13px; font-weight:600;" onchange="storeDatabase.settings.announcementText = this.value" placeholder="Type here to instantly change the moving announcement scroll text...">${storeDatabase.settings.announcementText || ''}</textarea>
         </div>
 
-        <div>
-          <label style="font-size:12px; font-weight:700; color:var(--text-dark); display:block; margin-bottom:4px;">📞 Contact Phone (shown in menu)</label>
-          <input id="settingContactPhone" value="${storeDatabase.settings.contactPhone || ''}" style="padding:10px; border-radius:6px; border:1px solid #CBD5E1; width:100%; font-weight:700;" onchange="storeDatabase.settings.contactPhone = this.value">
-        </div>
-        <div>
-          <label style="font-size:12px; font-weight:700; color:var(--text-dark); display:block; margin-bottom:4px;">🕒 Open Hours (shown in menu)</label>
-          <input id="settingContactHours" value="${storeDatabase.settings.contactHours || ''}" style="padding:10px; border-radius:6px; border:1px solid #CBD5E1; width:100%; font-weight:700;" onchange="storeDatabase.settings.contactHours = this.value">
+        <div style="grid-column: span 2;">
+          <label style="font-size:12px; font-weight:700; color:var(--text-dark); display:block; margin-bottom:4px;">📇 Contact Info (shown in menu — address, phone, email, anything you like, one per line)</label>
+          <textarea id="settingContactInfo" style="width:100%; height:90px; padding:10px; border-radius:6px; border:1px solid #CBD5E1; font-size:13px; font-weight:600;" onchange="storeDatabase.settings.contactInfo = this.value" placeholder="e.g.&#10;Phone: +31 6 85259659&#10;Email: info@snkfoods.nl&#10;Address: Street name, house number, city&#10;Open Hours: 09:00 AM - 08:00 PM">${storeDatabase.settings.contactInfo || ''}</textarea>
         </div>
       </div>
     </div>
@@ -2116,7 +2170,7 @@ function loadProductsTab(){
                 📷<input type="file" accept="image/*" style="display:none;" onchange="handleImageUpload(event, ${ci}, ${ii})">
               </label>
             </div>
-            <label><input type="checkbox" ${item[4] ? 'checked' : ''} ${item[5]==='count' ? 'disabled' : ''} onchange="catalog[${ci}].items[${ii}][4]=this.checked"> OOS</label>
+            <label><input type="checkbox" ${item[4] ? 'checked' : ''} ${(item[5]==='count'||item[5]==='perVariant') ? 'disabled' : ''} onchange="catalog[${ci}].items[${ii}][4]=this.checked"> OOS</label>
             <button onclick="catalog[${ci}].items.splice(${ii},1); loadProductsTab()">×</button>
           </div>
           <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center; background:#F8FAFC; padding:6px 10px; margin:-6px 0 10px; border-radius:0 0 6px 6px; font-size:12px;">
@@ -2124,7 +2178,8 @@ function loadProductsTab(){
               Stock:
               <select onchange="catalog[${ci}].items[${ii}][5]=this.value; loadProductsTab();" style="padding:4px; border-radius:4px; border:1px solid #CBD5E1; font-size:11px;">
                 <option value="manual" ${(!item[5] || item[5]==='manual') ? 'selected':''}>Manual OOS toggle</option>
-                <option value="count" ${item[5]==='count' ? 'selected':''}>Track quantity count</option>
+                <option value="count" ${item[5]==='count' ? 'selected':''}>Track total quantity (loose weight)</option>
+                <option value="perVariant" ${item[5]==='perVariant' ? 'selected':''}>Track per package size (bags/boxes)</option>
               </select>
             </label>
             ${item[5]==='count' ? `
@@ -2138,6 +2193,16 @@ function loadProductsTab(){
             ` : ''}
             <label style="display:flex; align-items:center; gap:4px; font-weight:700; color:#FF6B00;">🏷️ Discount %: <input type="number" min="0" max="99" value="${getItemDiscount(item) || ''}" placeholder="0" onchange="catalog[${ci}].items[${ii}][9]=parseFloat(this.value)||0" style="width:55px; padding:4px; border-radius:4px; border:1px solid #FFB380;"></label>
           </div>
+          ${item[5]==='perVariant' ? `
+          <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center; background:#F0F7FF; border:1px dashed #90CAF9; padding:8px 10px; margin:-6px 0 12px; border-radius:6px;">
+            <div style="font-size:11px; font-weight:700; color:#1565C0; width:100%;">📦 Stock count per package size — how many bags/boxes of each size do you have?</div>
+            ${parseVariants(item[1], item[2]).map((v, vi) => `
+              <label style="display:flex; align-items:center; gap:4px; font-weight:600; font-size:12px;">${v.unit}:
+                <input type="number" min="0" step="1" value="${(item[10]||[])[vi] || 0}" onchange="if(!Array.isArray(catalog[${ci}].items[${ii}][10])) catalog[${ci}].items[${ii}][10]=[]; catalog[${ci}].items[${ii}][10][${vi}]=parseFloat(this.value)||0; pushStockToServer('${item[0].replace(/'/g,"\\'")}||${v.unit.replace(/'/g,"\\'")}', catalog[${ci}].items[${ii}][10][${vi}]);" style="width:60px; padding:4px; border-radius:4px; border:1px solid #90CAF9;"> bags
+              </label>
+            `).join('')}
+          </div>
+          ` : ''}
           <div style="background:#FFFDF5; border:1px dashed var(--accent); padding:8px 10px; margin:-6px 0 12px; border-radius:6px;">
             <div style="font-size:11px; font-weight:700; color:var(--accent-dark); margin-bottom:6px;">🖼️ Extra Images (customer swipes through these in product view)</div>
             ${(Array.isArray(item[8]) ? item[8] : []).map((extraUrl, xi) => `
@@ -2154,7 +2219,7 @@ function loadProductsTab(){
           </div>
         `).join('')}
       </div>
-      <div class="admin-btn-row"><button onclick="catalog[${ci}].items.push(['New Item','1kg, 500g, 250g','','',false,'manual',0,'pieces',[]]); loadProductsTab()">+ Add Product</button></div>
+      <div class="admin-btn-row"><button onclick="catalog[${ci}].items.push(['New Item','1kg, 500g, 250g','','',false,'manual',0,'pieces',[],0,[]]); loadProductsTab()">+ Add Product</button></div>
       </details>
     </div>
   `).join('');
@@ -2312,12 +2377,9 @@ function saveCatalogAndExport(){
   if(announceField) {
     storeDatabase.settings.announcementText = announceField.value;
   }
-  const contactPhoneField = document.getElementById('settingContactPhone');
-  if(contactPhoneField) storeDatabase.settings.contactPhone = contactPhoneField.value;
-  const contactHoursField = document.getElementById('settingContactHours');
-  if(contactHoursField) storeDatabase.settings.contactHours = contactHoursField.value;
-  document.getElementById('menuContactPhone').textContent = storeDatabase.settings.contactPhone;
-  document.getElementById('menuContactHours').textContent = storeDatabase.settings.contactHours;
+  const contactInfoField = document.getElementById('settingContactInfo');
+  if(contactInfoField) storeDatabase.settings.contactInfo = contactInfoField.value;
+  document.getElementById('menuContactPhone').textContent = storeDatabase.settings.contactInfo;
   
   closeAdmin();
   renderCatalog();
@@ -2476,8 +2538,7 @@ async function initApp() {
   catalog.forEach(cat => { cat.items = []; });
 
   document.getElementById('customer-announcement').innerText = storeDatabase.settings.announcementText || "🔥 Special Offer: Keep ordering from our shop to get amazing discounts instantly! 🔥";
-  document.getElementById('menuContactPhone').textContent = storeDatabase.settings.contactPhone;
-  document.getElementById('menuContactHours').textContent = storeDatabase.settings.contactHours;
+  document.getElementById('menuContactPhone').textContent = storeDatabase.settings.contactInfo;
   renderLocations();
   loadCartFromLocalStorage();
   renderProfilePage();
