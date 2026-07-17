@@ -2195,9 +2195,9 @@ function loadProductsTab(){
           <div class="admin-prod" data-pname="${(item[0]||'').toLowerCase().replace(/"/g,'')}">
           <div class="admin-item-row">
             <input value="${item[0]}" onchange="catalog[${ci}].items[${ii}][0]=this.value" placeholder="Name">
-            <input value="${item[1]}" onchange="catalog[${ci}].items[${ii}][1]=this.value" placeholder="Variants">
+            <input value="${item[1]}" onchange="catalog[${ci}].items[${ii}][1]=this.value" placeholder="e.g. 1kg, 500g or 1 bunch, 2 bunch">
             <div style="display:flex; gap:4px; align-items:center;">
-              <input value="${item[2]}" onchange="catalog[${ci}].items[${ii}][2]=this.value" placeholder="Prices" style="flex:1; min-width:0;">
+              <input value="${item[2]}" onchange="catalog[${ci}].items[${ii}][2]=this.value" placeholder="Use . for decimals: 3.49, 1.75" style="flex:1; min-width:0;">
               <button type="button" onclick="autoCalcVariantPrices(${ci}, ${ii})" title="Auto-calculate other variant prices from base price" style="background:var(--primary); color:#fff; border:none; width:32px; height:32px; border-radius:6px; font-size:14px; cursor:pointer; flex-shrink:0;">⚡</button>
             </div>
             <div style="display:flex; gap:4px; align-items:center;">
