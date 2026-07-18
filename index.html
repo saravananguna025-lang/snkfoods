@@ -410,7 +410,9 @@
       <select id="area" onchange="syncCartTotals()"></select>
       <label>Your Full Name</label><input id="cname" placeholder="Enter your name">
       <label>Mobile Phone Number</label><input id="cphone" type="tel" placeholder="e.g. +31 6 12345678">
-      <label>Complete Address</label><input id="caddr" placeholder="Street name, house number, postcode">
+      <label>Email (only needed if you don't use WhatsApp)</label><input id="cemail" type="email" placeholder="you@example.com">
+      <label>Street Name and House Number</label><input id="caddr" placeholder="e.g. Miquelstraat 101">
+      <label>Postcode</label><input id="cpostcode" placeholder="e.g. 2522 KM">
       <label>Review / Special Comments</label><textarea id="ccomments" placeholder="Custom requests..."></textarea>
       <button class="send-btn" id="sendBtn" onclick="sendOrder(true)" disabled>📲 Send Order to WhatsApp</button>
       <button class="send-btn" id="sendBtnNoWa" onclick="sendOrder(false)" disabled style="background:var(--primary); box-shadow:0 4px 12px rgba(11,70,36,0.2);">📩 Send Order (I don't have WhatsApp)</button>
@@ -938,6 +940,30 @@ async function bulkGenerateUniqueIcons() {
   if(statusEl) statusEl.textContent = `✅ Generated ${done} unique product icons! Replace any with a real photo anytime using the 📷 button.`;
 }
 
+let categoryScrollObserver = null;
+
+function setupCategoryScrollSpy() {
+  if(categoryScrollObserver) { categoryScrollObserver.disconnect(); categoryScrollObserver = null; }
+  const sections = document.querySelectorAll('#catalog .cat-section');
+  if(sections.length === 0) return;
+
+  categoryScrollObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting) {
+        const catId = entry.target.id.replace('cat-', '');
+        document.querySelectorAll('.catnav a').forEach(a => a.classList.remove('active'));
+        const navLink = document.querySelector(`.catnav a[data-id="${catId}"]`);
+        if(navLink) {
+          navLink.classList.add('active');
+          navLink.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }
+      }
+    });
+  }, { rootMargin: '-150px 0px -70% 0px', threshold: 0 });
+
+  sections.forEach(sec => categoryScrollObserver.observe(sec));
+}
+
 function renderCatalog(){
   const navEl = document.getElementById('catnav');
   const mainEl = document.getElementById('catalog');
@@ -1036,6 +1062,7 @@ function renderCatalog(){
   });
 
   syncCartTotals();
+  setupCategoryScrollSpy();
 }
 
 function onVariantChange(catId, itemIdx, name, val) {
@@ -1282,7 +1309,12 @@ function isUserLoggedIn() {
 }
 
 function handlePhoneLogin() {
+  const name = document.getElementById('userNameInput').value.trim();
   const phone = document.getElementById('userPhoneInput').value.trim();
+  if(!name) {
+    alert("Please enter your name!");
+    return;
+  }
   if(!phone || phone.length < 8) {
     alert("Please enter a valid phone number!");
     return;
@@ -1290,6 +1322,7 @@ function handlePhoneLogin() {
   const randomId = Math.floor(1000 + Math.random() * 9000);
   const membershipCode = `SNK-MEMBER-${randomId}`;
   
+  localStorage.setItem('snk_user_name', name);
   localStorage.setItem('snk_user_phone', phone);
   localStorage.setItem('snk_user_code', membershipCode);
   if(!localStorage.getItem('snk_order_count')) {
@@ -1297,10 +1330,11 @@ function handlePhoneLogin() {
   }
   
   switchView('home');
-  alert(`Login Successful! 🎉\nYour Premium Customer Code: ${membershipCode}`);
+  alert(`Welcome ${name}! 🎉\nYour Premium Customer Code: ${membershipCode}\n\n🎁 Check the Offers tab — you've unlocked a coupon for your first order!`);
 }
 
 function handleLogout() {
+  localStorage.removeItem('snk_user_name');
   localStorage.removeItem('snk_user_phone');
   localStorage.removeItem('snk_user_code');
   switchView('home');
@@ -1313,13 +1347,14 @@ function renderProfilePage() {
 
   if(isUserLoggedIn()) {
     tabTitle.textContent = "Profile";
+    const uname = localStorage.getItem('snk_user_name') || 'Member';
     const phone = localStorage.getItem('snk_user_phone');
     const code = localStorage.getItem('snk_user_code');
     const orderCount = localStorage.getItem('snk_order_count') || '0';
     target.innerHTML = `
       <div class="auth-card">
         <div style="font-size:40px; margin-bottom:10px;">👑</div>
-        <h3>Welcome Premium Member!</h3>
+        <h3>Welcome, ${uname}!</h3>
         <p style="color:var(--text-light); margin-bottom:8px;">Registered Phone: <b>${phone}</b></p>
         <p style="font-size:13px; color:var(--primary); font-weight:700; margin-bottom:15px;">Your Total Orders: ${orderCount}</p>
         <div class="member-badge">Your Exclusive Code: <br><span style="color:var(--accent-dark); font-size:20px;">${code}</span></div>
@@ -1332,12 +1367,19 @@ function renderProfilePage() {
       <div class="auth-card">
         <div style="font-size:40px; margin-bottom:10px;">🔐</div>
         <h3>Unlock Exclusive Member Offers</h3>
-        <p style="color:var(--text-light); font-size:13px; margin-bottom:20px;">Enter your phone number to generate an instant premium membership code.</p>
+        <p style="color:var(--text-light); font-size:13px; margin-bottom:16px;">Log in with just your name and number to unlock member offers.</p>
+        <div style="background:#FFF9E6; border:1px dashed var(--accent); border-radius:8px; padding:10px; margin-bottom:16px; font-size:12px; font-weight:700; color:var(--accent-dark);">
+          🎁 Get a coupon for your first order when you log in!
+        </div>
+        <div class="auth-input-group">
+          <label>Your Name</label>
+          <input type="text" id="userNameInput" class="auth-input" placeholder="e.g. Priya Kumar">
+        </div>
         <div class="auth-input-group">
           <label>Mobile Phone Number</label>
           <input type="tel" id="userPhoneInput" class="auth-input" placeholder="e.g. +31 6 85259659">
         </div>
-        <button class="auth-btn" onclick="handlePhoneLogin()">Generate Membership Code & Login</button>
+        <button class="auth-btn" onclick="handlePhoneLogin()">Login & Get My Coupon</button>
       </div>`;
   }
 }
@@ -1394,12 +1436,16 @@ async function sendOrder(viaWhatsApp){
   const areaIdx = document.getElementById('area').value;
   const name = document.getElementById('cname').value.trim();
   const phone = document.getElementById('cphone').value.trim();
+  const email = document.getElementById('cemail').value.trim();
   const addr = document.getElementById('caddr').value.trim();
+  const postcode = document.getElementById('cpostcode').value.trim();
   const comments = document.getElementById('ccomments').value.trim() || "None";
   
   if(!areaIdx) { alert("Please select your Delivery Destination location!"); return; }
   if(!name || !addr) { alert("Please enter Name and Address."); return; }
-  if(!phone) { alert("Please enter your mobile phone number so we can notify you about your order!"); return; }
+  if(!postcode) { alert("Please enter your Postcode."); return; }
+  if(viaWhatsApp && !phone) { alert("Please enter your mobile phone number so we can notify you about your order!"); return; }
+  if(!viaWhatsApp && !email) { alert("Please enter your email address — since you're not using WhatsApp, we'll send order status updates to your email."); return; }
 
   // Check & reserve stock for quantity-tracked items so two customers can't both buy the last units
   const stockCheckItems = [];
@@ -1486,8 +1532,10 @@ async function sendOrder(viaWhatsApp){
       status: 'Pending',
       memberCode: mCode,
       phone: phone,
+      email: email,
       name: name,
       address: addr,
+      postcode: postcode,
       location: areaName,
       items: items.map(it => `${it.name} (${it.unit}) x${it.qty}`).join(', '),
       itemsDetailed: items.map(it => ({ name: it.name, unit: it.unit, qty: it.qty })),
@@ -1512,7 +1560,7 @@ async function sendOrder(viaWhatsApp){
   if(activeCoupon) {
     msg += `Promo Applied: ${activeCoupon} (-€${discountAmount.toFixed(2)})\n`;
   }
-  msg += `BTW (9%): €${taxAmount.toFixed(2)}\nDelivery Charge (${areaName}): €${deliveryFee.toFixed(2)}\nTotal Amount: €${grandTotal.toFixed(2)}\n\nDelivery to: ${areaName}\nName: ${name}\nAddress: ${addr}\nNotes: ${comments}`;
+  msg += `BTW (9%): €${taxAmount.toFixed(2)}\nDelivery Charge (${areaName}): €${deliveryFee.toFixed(2)}\nTotal Amount: €${grandTotal.toFixed(2)}\n\nDelivery to: ${areaName}\nName: ${name}\nAddress: ${addr}, ${postcode}\nNotes: ${comments}`;
   
   let currentCount = parseInt(localStorage.getItem('snk_order_count') || '0');
   if(activeCoupon === "LOYAL4") {
@@ -1534,7 +1582,9 @@ async function sendOrder(viaWhatsApp){
   syncCartTotals();
   document.getElementById('cname').value = '';
   document.getElementById('cphone').value = '';
+  document.getElementById('cemail').value = '';
   document.getElementById('caddr').value = '';
+  document.getElementById('cpostcode').value = '';
   document.getElementById('ccomments').value = '';
   showOrderConfirmation();
 }
@@ -1691,8 +1741,10 @@ function renderOrdersListHtml() {
           ${statusOptions.map(s => `<option value="${s}" ${o.status===s?'selected':''}>${s}</option>`).join('')}
         </select>
       </div>
-      <div style="margin-top:8px; text-align:right;">
-        <button onclick="notifyCustomer('${(o.orderId||'').replace(/'/g,"\\'")}')" style="background:#25D366; color:#fff; border:none; padding:6px 12px; border-radius:6px; font-size:11px; font-weight:700; cursor:pointer;">📲 Notify Customer</button>
+      <div style="margin-top:8px; text-align:right; display:flex; gap:6px; justify-content:flex-end; flex-wrap:wrap;">
+        ${o.phone ? `<button onclick="notifyCustomer('${(o.orderId||'').replace(/'/g,"\\'")}')" style="background:#25D366; color:#fff; border:none; padding:6px 12px; border-radius:6px; font-size:11px; font-weight:700; cursor:pointer;">📲 WhatsApp Update</button>` : ''}
+        ${o.email ? `<button onclick="emailNotifyCustomer('${(o.orderId||'').replace(/'/g,"\\'")}')" style="background:#1976D2; color:#fff; border:none; padding:6px 12px; border-radius:6px; font-size:11px; font-weight:700; cursor:pointer;">📧 Email Update</button>` : ''}
+        ${!o.phone && !o.email ? `<span style="font-size:11px; color:var(--text-light);">No contact info saved</span>` : ''}
       </div>
     </div>
   `).join('');
@@ -1710,6 +1762,25 @@ function notifyCustomer(orderId) {
     msg = `Hello ${order.name || ''}! 👋\nUpdate on your SNK Foods order (${order.orderId}): status is now "${order.status || 'being processed'}". Thank you for your patience!`;
   }
   window.open(`https://wa.me/${phoneDigits}?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+async function emailNotifyCustomer(orderId) {
+  const order = (cachedOrders || []).find(o => o.orderId === orderId);
+  if(!order || !order.email) { alert('No email saved for this order.'); return; }
+  if(!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === "YOUR_APPS_SCRIPT_URL_HERE") { alert('Apps Script not configured.'); return; }
+  try {
+    const res = await fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ action: 'sendStatusEmail', orderId: order.orderId, email: order.email, name: order.name, status: order.status })
+    });
+    const data = await res.json();
+    if(data.success) alert('Email sent to customer!');
+    else alert('Could not send email: ' + (data.message || 'unknown error'));
+  } catch(err) {
+    console.log('Email notify error:', err);
+    alert('Could not send email (network error).');
+  }
 }
 
 let cachedOrdersError = null;
