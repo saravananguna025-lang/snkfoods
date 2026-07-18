@@ -459,7 +459,7 @@
     <div class="pm-dots" id="pmDots"></div>
     <div class="pm-body">
       <div class="pm-name" id="pmName"></div>
-      <select id="pmVariant" onchange="pmVariantChanged()"></select>
+      <select id="pmVariant" onchange="pmVariantChanged(); this.blur();"></select>
       <div class="pm-price" id="pmPrice"></div>
       <div class="action-container" id="pmAction"></div>
     </div>
@@ -700,6 +700,16 @@ function renderLocations() {
     selectEl.innerHTML = `<option value="" disabled selected>--- Choose Delivery Location ---</option>` + 
                          locations.map((loc, idx) => `<option value="${idx}">${loc.name} (+€${loc.fee.toFixed(2)})</option>`).join('');
   }
+}
+
+function clearSearchAndGoTo(catId) {
+  const searchBar = document.getElementById('searchBar');
+  if(searchBar && searchBar.value.trim() !== '') {
+    searchBar.value = '';
+    filterProducts();
+  }
+  const el = document.getElementById(`cat-${catId}`);
+  if(el) el.scrollIntoView({ behavior: 'smooth' });
 }
 
 function filterProducts() {
@@ -987,7 +997,7 @@ function renderCatalog(){
     circleCard.onclick = () => {
       switchView('home');
       setTimeout(() => {
-        document.getElementById(`cat-${cat.id}`).scrollIntoView({ behavior: 'smooth' });
+        clearSearchAndGoTo(cat.id);
       }, 100);
     };
     circlesEl.appendChild(circleCard);
@@ -996,7 +1006,7 @@ function renderCatalog(){
     fullCircleCard.onclick = () => {
       switchView('home');
       setTimeout(() => {
-        document.getElementById(`cat-${cat.id}`).scrollIntoView({ behavior: 'smooth' });
+        clearSearchAndGoTo(cat.id);
       }, 150);
     };
     fullGridEl.appendChild(fullCircleCard);
@@ -1010,7 +1020,7 @@ function renderCatalog(){
       e.preventDefault();
       document.querySelectorAll('.catnav a').forEach(a => a.classList.remove('active'));
       navLink.classList.add('active');
-      document.getElementById(`cat-${cat.id}`).scrollIntoView({ behavior: 'smooth' });
+      clearSearchAndGoTo(cat.id);
     };
     navEl.appendChild(navLink);
 
@@ -1018,7 +1028,7 @@ function renderCatalog(){
     menuLink.href = `#cat-${cat.id}`;
     menuLink.className = 'menu-cat-link';
     menuLink.textContent = cat.name;
-    menuLink.onclick = (e) => { e.preventDefault(); closeMenuDrawer(); switchView('home'); document.getElementById(`cat-${cat.id}`).scrollIntoView({ behavior: 'smooth' }); };
+    menuLink.onclick = (e) => { e.preventDefault(); closeMenuDrawer(); switchView('home'); clearSearchAndGoTo(cat.id); };
     menuBodyEl.appendChild(menuLink);
 
     let cardsHtml = '';
@@ -1047,7 +1057,7 @@ function renderCatalog(){
           </div>
           <div>
             <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('${cat.id}', ${itemIdx}, '${name.replace(/'/g, "\\'")}', this.value)">
+              <select class="punit-select" onchange="onVariantChange('${cat.id}', ${itemIdx}, '${name.replace(/'/g, "\\'")}', this.value); this.blur();">
                 ${variants.map((v, idx) => `<option value="${idx}">${v.unit}</option>`).join('')}
               </select>
             </div>
