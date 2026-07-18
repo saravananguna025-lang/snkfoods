@@ -1111,6 +1111,35 @@ function onVariantChange(catId, itemIdx, name, val) {
   syncAllCardSteppers();
 }
 
+function getMaxCartQtyForVariant(catId, name, unit) {
+  const cat = catalog.find(c => c.id === catId);
+  const item = cat ? cat.items.find(it => it[0] === name) : null;
+  if(!item) return Infinity;
+  const stockMode = item[5];
+  if(stockMode === 'count') {
+    const stockCount = parseFloat(item[6]) || 0;
+    const stockUnit = item[7] || 'pieces';
+    if(stockUnit === 'kg') {
+      const weightInfo = parseWeightGrams(unit);
+      if(weightInfo && weightInfo.type === 'weight') {
+        const kgPerUnit = weightInfo.amount / 1000;
+        if(kgPerUnit <= 0) return Infinity;
+        return Math.floor(stockCount / kgPerUnit + 1e-9);
+      }
+      return Infinity;
+    }
+    return Math.floor(stockCount);
+  }
+  if(stockMode === 'perVariant') {
+    const variants = parseVariants(item[1], item[2]);
+    const vIdx = variants.findIndex(v => v.unit === unit);
+    if(vIdx === -1) return Infinity;
+    const arr = item[10] || [];
+    return Math.floor(parseFloat(arr[vIdx]) || 0);
+  }
+  return Infinity; // manual mode - only binary in/out of stock, no quantity cap
+}
+
 function handleInitialAdd(catId, itemIdx, name) {
   const cat = catalog.find(c => c.id === catId);
   const cardEl = document.getElementById('card-' + catId + '-' + itemIdx);
@@ -1119,6 +1148,8 @@ function handleInitialAdd(catId, itemIdx, name) {
   if(isVariantOutOfStock(item, parseInt(selIdx))) { alert('Sorry, this size just went out of stock.'); onVariantChange(catId, itemIdx, name, selIdx); return; }
   const variants = parseVariants(item[1], item[2]);
   const variant = variants[selIdx];
+  const maxQty = getMaxCartQtyForVariant(catId, name, variant.unit);
+  if(maxQty < 1) { alert(`Sorry, only limited stock left for ${name} (${variant.unit}) — not enough for a full unit.`); onVariantChange(catId, itemIdx, name, selIdx); return; }
   const disc = getItemDiscount(item);
   const finalPrice = Math.round(applyDiscount(variant.price, disc) * 100) / 100;
   const key = `${catId}||${name}||${variant.unit}`;
@@ -1130,6 +1161,14 @@ function handleInitialAdd(catId, itemIdx, name) {
 
 function modifyCartQty(key, delta) {
   if (!cart[key]) return;
+  if(delta > 0) {
+    const catId = key.split('||')[0];
+    const maxQty = getMaxCartQtyForVariant(catId, cart[key].name, cart[key].unit);
+    if(cart[key].qty + delta > maxQty) {
+      alert(`Sorry, only ${maxQty} ${cart[key].unit} available in stock for ${cart[key].name}.`);
+      return;
+    }
+  }
   cart[key].qty += delta;
   if (cart[key].qty <= 0) {
     delete cart[key];
