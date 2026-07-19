@@ -2213,6 +2213,8 @@ function loadProductsTab(){
   const body = document.getElementById('adminBody');
   const existingSearchEl = document.getElementById('adminSearchBar');
   const adminSearchQuery = existingSearchEl ? existingSearchEl.value : '';
+  const isSearchActive = adminSearchQuery.trim() !== '';
+  adminLastRenderWasSearchMode = isSearchActive;
   const searchHadFocus = existingSearchEl && document.activeElement === existingSearchEl;
   const searchCursorPos = existingSearchEl ? existingSearchEl.selectionStart : null;
   
@@ -2370,7 +2372,7 @@ function loadProductsTab(){
         <summary style="cursor:pointer; padding:10px 14px; background:var(--bg-light); border:1px solid #CBD5E1; border-radius:8px; font-weight:700; font-size:13px; color:var(--primary); user-select:none;">📦 ${cat.name} — ${cat.items.length} products (tap to open/close)</summary>
       <div style="margin-top:10px;">
         ${(() => {
-          const pageSize = adminShowAllForSearch ? Infinity : 15;
+          const pageSize = isSearchActive ? Infinity : 15;
           const currentPage = adminCategoryPage[cat.id] || 0;
           const totalPages = Math.max(1, Math.ceil(cat.items.length / pageSize));
           const startIdx = currentPage * pageSize;
@@ -2454,8 +2456,8 @@ function loadProductsTab(){
   html += `<div style="text-align:center; margin: 25px 0;"><button onclick="addNewCategoryPrompt()" style="background:#007BFF; color:#fff; border:none; padding:12px 24px; border-radius:8px; font-weight:700; cursor:pointer; font-size:14px;">➕ Add New Category</button></div>`;
   body.innerHTML = html;
 
-  if(adminSearchQuery && adminSearchQuery.trim() !== '') {
-    filterAdminProducts(adminSearchQuery);
+  if(isSearchActive) {
+    applyAdminSearchFilter(adminSearchQuery);
   }
   if(searchHadFocus) {
     const newSearchEl = document.getElementById('adminSearchBar');
@@ -2484,17 +2486,10 @@ function addNewCategoryPrompt() {
   }
 }
 
-let adminShowAllForSearch = false;
+let adminLastRenderWasSearchMode = false;
 
-function filterAdminProducts(query) {
+function applyAdminSearchFilter(query) {
   const q = query.toLowerCase().trim();
-  const shouldShowAll = q !== '';
-  if(shouldShowAll !== adminShowAllForSearch) {
-    adminShowAllForSearch = shouldShowAll;
-    loadProductsTab();
-    const sb = document.getElementById('adminSearchBar');
-    if(sb) { sb.focus(); sb.value = query; sb.setSelectionRange(query.length, query.length); }
-  }
   document.querySelectorAll('.admin-cat[data-catindex]').forEach(catEl => {
     const details = catEl.querySelector('.admin-cat-details');
     let matches = 0;
@@ -2512,6 +2507,18 @@ function filterAdminProducts(query) {
       if(details) details.open = matches > 0;
     }
   });
+}
+
+function filterAdminProducts(query) {
+  const isSearchActive = query.trim() !== '';
+  if(isSearchActive !== adminLastRenderWasSearchMode) {
+    // Switching between paginated view and full-list search view needs a rebuild
+    // (loadProductsTab will itself call applyAdminSearchFilter using this same live value)
+    loadProductsTab();
+    return;
+  }
+  // Already rendered in the right mode - just show/hide, no rebuild needed
+  applyAdminSearchFilter(query);
 }
 
 let cachedMessages = null;
