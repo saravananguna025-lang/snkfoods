@@ -2211,6 +2211,10 @@ function renderAdminSlidesHtml() {
 
 function loadProductsTab(){
   const body = document.getElementById('adminBody');
+  const existingSearchEl = document.getElementById('adminSearchBar');
+  const adminSearchQuery = existingSearchEl ? existingSearchEl.value : '';
+  const searchHadFocus = existingSearchEl && document.activeElement === existingSearchEl;
+  const searchCursorPos = existingSearchEl ? existingSearchEl.selectionStart : null;
   
   let html = `
     <div class="print-box-tool">
@@ -2336,7 +2340,7 @@ function loadProductsTab(){
     </div>
   `;
   
-  html += `<div style="position:sticky; top:0; z-index:20; background:#fff; padding:10px 0; margin-bottom:5px;"><input type="text" id="adminSearchBar" oninput="filterAdminProducts(this.value)" placeholder="🔍 Search products in admin (e.g. Onion, Rice)..." style="width:100%; padding:12px 16px; border:2px solid var(--primary); border-radius:10px; font-size:14px; font-weight:600;"></div>`;
+  html += `<div style="position:sticky; top:0; z-index:20; background:#fff; padding:10px 0; margin-bottom:5px;"><input type="text" id="adminSearchBar" value="${(adminSearchQuery || '').replace(/"/g, '&quot;')}" oninput="filterAdminProducts(this.value)" placeholder="🔍 Search products in admin (e.g. Onion, Rice)..." style="width:100%; padding:12px 16px; border:2px solid var(--primary); border-radius:10px; font-size:14px; font-weight:600;"></div>`;
   html += `<div style="text-align:center; margin-bottom:15px; display:flex; flex-direction:column; gap:8px; align-items:center;">
     <button onclick="bulkGenerateUniqueIcons()" style="background:var(--primary); color:#fff; border:none; padding:12px 22px; border-radius:8px; font-weight:700; font-size:13px; cursor:pointer;">🎨 Generate unique icon for every missing product image (recommended)</button>
     <button onclick="bulkFillAllMissingImages()" style="background:none; color:#FF9800; border:1px solid #FF9800; padding:8px 18px; border-radius:8px; font-weight:700; font-size:12px; cursor:pointer;">🖼️ Or: fill with category picture instead</button>
@@ -2449,6 +2453,17 @@ function loadProductsTab(){
 
   html += `<div style="text-align:center; margin: 25px 0;"><button onclick="addNewCategoryPrompt()" style="background:#007BFF; color:#fff; border:none; padding:12px 24px; border-radius:8px; font-weight:700; cursor:pointer; font-size:14px;">➕ Add New Category</button></div>`;
   body.innerHTML = html;
+
+  if(adminSearchQuery && adminSearchQuery.trim() !== '') {
+    filterAdminProducts(adminSearchQuery);
+  }
+  if(searchHadFocus) {
+    const newSearchEl = document.getElementById('adminSearchBar');
+    if(newSearchEl) {
+      newSearchEl.focus();
+      if(searchCursorPos !== null) newSearchEl.setSelectionRange(searchCursorPos, searchCursorPos);
+    }
+  }
 }
 
 function addLocationPrompt() {
