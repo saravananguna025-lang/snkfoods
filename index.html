@@ -140,6 +140,9 @@
 
   main { max-width: 1100px; margin: 0 auto; padding: 20px 16px; }
   .cat-section { margin-bottom: 40px; scroll-margin-top: 195px; }
+  .cat-pagination { display:flex; justify-content:center; gap:8px; margin-top:18px; flex-wrap:wrap; }
+  .cat-pagination button { min-width:38px; height:38px; border:1px solid #E2E8F0; background:#fff; border-radius:8px; font-weight:700; font-size:14px; color:var(--text-dark); cursor:pointer; }
+  .cat-pagination button.active-page { background:var(--primary); color:#fff; border-color:var(--primary); }
   .cat-head { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
   .cat-head h3 { font-family: 'Playfair Display', serif; font-size: 24px; color: var(--primary); font-weight: 700; }
   .cat-line { flex: 1; height: 2px; background: #E2E8F0; }
@@ -702,6 +705,16 @@ function renderLocations() {
   }
 }
 
+const PRODUCTS_PER_PAGE = 12;
+let categoryPages = {};
+
+function goToCategoryPage(catId, page) {
+  categoryPages[catId] = page;
+  renderCatalog();
+  const el = document.getElementById(`cat-${catId}`);
+  if(el) el.scrollIntoView({ behavior: 'smooth' });
+}
+
 function clearSearchAndGoTo(catId) {
   const searchBar = document.getElementById('searchBar');
   if(searchBar && searchBar.value.trim() !== '') {
@@ -715,6 +728,13 @@ function clearSearchAndGoTo(catId) {
 function filterProducts() {
   try {
     const query = document.getElementById('searchBar').value.toLowerCase().trim();
+    // During search, render ALL products (all pages) so search covers everything;
+    // when cleared, go back to paginated view.
+    const needAll = query !== '';
+    if(needAll !== (window._renderAllMode === true)) {
+      window._renderAllMode = needAll;
+      renderCatalog();
+    }
     let anyMatch = false;
     catalog.forEach(cat => {
       let categoryHasMatches = false;
@@ -980,6 +1000,8 @@ function renderCatalog(){
   const menuBodyEl = document.getElementById('menuDrawerBody');
   const circlesEl = document.getElementById('greetCircles');
   const fullGridEl = document.getElementById('fullCategoriesGrid');
+  const searchBarEl = document.getElementById('searchBar');
+  const isSearchActive = searchBarEl && searchBarEl.value.trim() !== '';
   
   if(!navEl || !mainEl || !menuBodyEl || !circlesEl || !fullGridEl) return;
   
@@ -1032,7 +1054,15 @@ function renderCatalog(){
     menuBodyEl.appendChild(menuLink);
 
     let cardsHtml = '';
-    cat.items.forEach((itemArr, itemIdx)=>{
+    const showAll = window._renderAllMode === true;
+    const totalPages = Math.ceil(cat.items.length / PRODUCTS_PER_PAGE);
+    let currentPage = categoryPages[cat.id] || 1;
+    if(currentPage > totalPages) currentPage = totalPages || 1;
+    const startIdx = showAll ? 0 : (currentPage - 1) * PRODUCTS_PER_PAGE;
+    const endIdx = showAll ? cat.items.length : Math.min(startIdx + PRODUCTS_PER_PAGE, cat.items.length);
+
+    cat.items.slice(startIdx, endIdx).forEach((itemArr, sliceIdx)=>{
+      const itemIdx = startIdx + sliceIdx; // keep original index so cart/stock functions stay correct
       const [name, unitStr, priceStr, imgUrl, isOosFlag, stockMode, stockCount, stockUnit] = itemArr;
       const variants = parseVariants(unitStr, priceStr);
       const defaultPrice = variants[0] ? variants[0].price : 0;
@@ -1068,7 +1098,17 @@ function renderCatalog(){
           </div>
         </div>`;
     });
-    mainEl.innerHTML += `<div class="cat-section" id="cat-${cat.id}"><div class="cat-head"><h3>${cat.name}</h3><div class="cat-line"></div></div><div class="products-grid">${cardsHtml}</div></div>`;
+    let paginationHtml = '';
+    if(!showAll && totalPages > 1) {
+      paginationHtml = `<div class="cat-pagination">`;
+      if(currentPage > 1) paginationHtml += `<button onclick="goToCategoryPage('${cat.id}', ${currentPage - 1})">‹</button>`;
+      for(let p = 1; p <= totalPages; p++) {
+        paginationHtml += `<button class="${p === currentPage ? 'active-page' : ''}" onclick="goToCategoryPage('${cat.id}', ${p})">${p}</button>`;
+      }
+      if(currentPage < totalPages) paginationHtml += `<button onclick="goToCategoryPage('${cat.id}', ${currentPage + 1})">›</button>`;
+      paginationHtml += `</div>`;
+    }
+    mainEl.innerHTML += `<div class="cat-section" id="cat-${cat.id}"><div class="cat-head"><h3>${cat.name}</h3><div class="cat-line"></div></div><div class="products-grid">${cardsHtml}</div>${paginationHtml}</div>`;
   });
 
   syncCartTotals();
@@ -1330,24 +1370,30 @@ function renderLedger(){
     discountAmount = subTotal * loyaltyDiscountPercent; 
   }
   let finalSub = Math.max(0, subTotal - discountAmount);
-  let taxAmount = finalSub * 0.09;
 
   const freeDeliveryThreshold = parseFloat(storeDatabase.settings.freeDeliveryThreshold || 0);
   const deliveryWaived = freeDeliveryThreshold > 0 && subTotal >= freeDeliveryThreshold;
   if(deliveryWaived) deliveryFee = 0;
 
-  let grandTotal = finalSub + taxAmount + deliveryFee;
+  // Dutch supermarket model: prices are BTW-inclusive. Total = goods + delivery;
+  // BTW shown as "waarvan" (included), computed at 9% from the inclusive amount.
+  let grandTotal = finalSub + deliveryFee;
+  let taxAmount = grandTotal * 9 / 109;
 
   html += `
     <div class="ltotal-box">
-      <div class="subrow"><span>Subtotal</span><span>€${subTotal.toFixed(2)}</span></div>
-      ${activeCoupon ? `<div class="subrow" style="color:green; font-weight:700;"><span>Promo Discount (${activeCoupon})</span><span>-€${discountAmount.toFixed(2)}</span></div>` : ''}
-      <div class="subrow"><span>BTW / Tax (9%)</span><span>€${taxAmount.toFixed(2)}</span></div>
+      <div class="subrow"><span>Subtotaal</span><span>€${subTotal.toFixed(2)}</span></div>
+      ${activeCoupon ? `<div class="subrow" style="color:green; font-weight:700;"><span>Korting (${activeCoupon})</span><span>-€${discountAmount.toFixed(2)}</span></div>` : ''}
       ${deliveryWaived
-        ? `<div class="subrow" style="color:green; font-weight:700;"><span>🎉 Free Delivery (order over €${freeDeliveryThreshold.toFixed(2)})</span><span>€0.00</span></div>`
-        : `<div class="subrow"><span>Delivery Fee (${deliveryName})</span><span>€${deliveryFee.toFixed(2)}</span></div>${freeDeliveryThreshold > 0 && deliveryName !== "Not Selected" ? `<div class="subrow" style="color:var(--accent-dark); font-size:11px;"><span>Add €${(freeDeliveryThreshold - subTotal).toFixed(2)} more for free delivery!</span><span></span></div>` : ''}`
+        ? `<div class="subrow" style="color:green; font-weight:700;"><span>🎉 Gratis bezorging (order over €${freeDeliveryThreshold.toFixed(2)})</span><span>€0.00</span></div>`
+        : `<div class="subrow"><span>Bezorgkosten (${deliveryName})</span><span>€${deliveryFee.toFixed(2)}</span></div>${freeDeliveryThreshold > 0 && deliveryName !== "Not Selected" ? `
+          <div class="subrow" style="color:var(--accent-dark); font-size:11px; margin-top:4px;"><span>Add €${(freeDeliveryThreshold - subTotal).toFixed(2)} more for free delivery!</span><span></span></div>
+          <div style="width:100%; height:8px; background:#E2E8F0; border-radius:10px; overflow:hidden; margin-top:4px;">
+            <div style="width:${Math.min(100, (subTotal/freeDeliveryThreshold)*100).toFixed(0)}%; height:100%; background:linear-gradient(90deg, var(--accent), var(--primary));"></div>
+          </div>` : ''}`
       }
-      <div class="ltotal"><span>Total Amount</span><span>€${grandTotal.toFixed(2)}</span></div>
+      <div class="ltotal"><span>Totaal</span><span>€${grandTotal.toFixed(2)}</span></div>
+      <div class="subrow" style="font-size:11px; margin-top:4px;"><span>Waarvan BTW (9%)</span><span>€${taxAmount.toFixed(2)}</span></div>
     </div>`;
     
   ledgerEl.innerHTML = html;
@@ -1563,13 +1609,13 @@ async function sendOrder(viaWhatsApp){
     discountAmount = subTotal * loyaltyDiscountPercent;
   }
   let finalSub = Math.max(0, subTotal - discountAmount);
-  let taxAmount = finalSub * 0.09;
 
   const freeDeliveryThreshold = parseFloat(storeDatabase.settings.freeDeliveryThreshold || 0);
   const deliveryWaived = freeDeliveryThreshold > 0 && subTotal >= freeDeliveryThreshold;
   if(deliveryWaived) deliveryFee = 0;
 
-  let grandTotal = finalSub + taxAmount + deliveryFee;
+  let grandTotal = finalSub + deliveryFee;
+  let taxAmount = grandTotal * 9 / 109;
   
   const mCode = localStorage.getItem('snk_user_code') || "Non-Member";
   const orderId = 'ORD-' + Date.now();
@@ -1712,8 +1758,8 @@ function triggerA4PrintHTML(name, addr, area, comments, tableRows, subTotal, del
     discountAmount = subTotal * loyaltyDiscountPercent;
   }
   let finalSub = Math.max(0, subTotal - discountAmount);
-  let taxAmount = finalSub * 0.09;
-  let grandTotal = finalSub + taxAmount + deliveryFee;
+  let grandTotal = finalSub + deliveryFee;
+  let taxAmount = grandTotal * 9 / 109;
   let today = new Date().toLocaleDateString('nl-NL');
 
   document.getElementById('a4InvoicePrintout').innerHTML = `
@@ -1745,9 +1791,9 @@ function triggerA4PrintHTML(name, addr, area, comments, tableRows, subTotal, del
     <div class="inv-summary">
       <div class="inv-sum-row"><span>Subtotal Goods:</span><span>€${subTotal.toFixed(2)}</span></div>
       ${activeCoupon ? `<div class="inv-sum-row" style="color:green; font-weight:bold;"><span>Discount (${activeCoupon}):</span><span>-€${discountAmount.toFixed(2)}</span></div>` : ''}
-      <div class="inv-sum-row"><span>BTW / Tax (9%):</span><span>€${taxAmount.toFixed(2)}</span></div>
       <div class="inv-sum-row"><span>Delivery Service Charge:</span><span>€${deliveryFee.toFixed(2)}</span></div>
       <div class="inv-total-row"><span>Total Payable:</span><span>€${grandTotal.toFixed(2)}</span></div>
+      <div class="inv-sum-row" style="font-size:12px; color:#666;"><span>(Waarvan BTW / of which VAT 9%):</span><span>€${taxAmount.toFixed(2)}</span></div>
     </div>
     <div class="inv-footer"><p>Thank you for shopping with SNK Foods!</p></div>
   `;
@@ -1767,6 +1813,14 @@ function handleFooterSecretTap() {
 }
 
 let adminOpenCategories = new Set();
+let adminCategoryPage = {};
+
+function changeAdminPage(catId, newPage) {
+  if(newPage < 0) return;
+  adminCategoryPage[catId] = newPage;
+  adminOpenCategories.add(catalog.findIndex(c => c.id === catId));
+  loadProductsTab();
+}
 let cachedOrders = null;
 
 function renderOrdersListHtml() {
@@ -2311,7 +2365,13 @@ function loadProductsTab(){
       <details class="admin-cat-details" ${adminOpenCategories.has(ci) ? 'open' : ''} ontoggle="if(this.open){adminOpenCategories.add(${ci});}else{adminOpenCategories.delete(${ci});}">
         <summary style="cursor:pointer; padding:10px 14px; background:var(--bg-light); border:1px solid #CBD5E1; border-radius:8px; font-weight:700; font-size:13px; color:var(--primary); user-select:none;">📦 ${cat.name} — ${cat.items.length} products (tap to open/close)</summary>
       <div style="margin-top:10px;">
-        ${cat.items.map((item, ii)=>`
+        ${(() => {
+          const pageSize = adminShowAllForSearch ? Infinity : 15;
+          const currentPage = adminCategoryPage[cat.id] || 0;
+          const totalPages = Math.max(1, Math.ceil(cat.items.length / pageSize));
+          const startIdx = currentPage * pageSize;
+          const pageEntries = cat.items.map((it, i) => ({ it, i })).slice(startIdx, startIdx + pageSize);
+          return pageEntries.map(({ it: item, i: ii })=>`
           <div class="admin-prod" data-pname="${(item[0]||'').toLowerCase().replace(/"/g,'')}">
           <div class="admin-item-row">
             <input value="${item[0]}" onchange="catalog[${ci}].items[${ii}][0]=this.value" placeholder="Name">
@@ -2373,7 +2433,14 @@ function loadProductsTab(){
             <button onclick="if(!Array.isArray(catalog[${ci}].items[${ii}][8])) catalog[${ci}].items[${ii}][8]=[]; catalog[${ci}].items[${ii}][8].push(''); loadProductsTab();" style="background:var(--primary); color:#fff; border:none; padding:5px 12px; border-radius:6px; font-size:11px; font-weight:700; cursor:pointer;">+ Add Image</button>
           </div>
           </div>
-        `).join('')}
+        `).join('') + (totalPages > 1 ? `
+          <div style="display:flex; justify-content:center; align-items:center; gap:8px; margin:12px 0; flex-wrap:wrap;">
+            <button onclick="changeAdminPage('${cat.id}', ${currentPage-1})" ${currentPage===0?'disabled':''} style="padding:6px 12px; border-radius:6px; border:1px solid #CBD5E1; background:${currentPage===0?'#F1F5F9':'#fff'}; cursor:${currentPage===0?'default':'pointer'}; font-size:12px; font-weight:700;">‹ Prev</button>
+            <span style="font-size:12px; font-weight:700; color:var(--text-light);">Page ${currentPage+1} of ${totalPages}</span>
+            <button onclick="changeAdminPage('${cat.id}', ${currentPage+1})" ${currentPage>=totalPages-1?'disabled':''} style="padding:6px 12px; border-radius:6px; border:1px solid #CBD5E1; background:${currentPage>=totalPages-1?'#F1F5F9':'#fff'}; cursor:${currentPage>=totalPages-1?'default':'pointer'}; font-size:12px; font-weight:700;">Next ›</button>
+          </div>
+        ` : '');
+        })()}
       </div>
       <div class="admin-btn-row"><button onclick="catalog[${ci}].items.push(['New Item','1kg, 500g, 250g','','',false,'manual',0,'pieces',[],0,[]]); loadProductsTab()">+ Add Product</button></div>
       </details>
@@ -2402,8 +2469,17 @@ function addNewCategoryPrompt() {
   }
 }
 
+let adminShowAllForSearch = false;
+
 function filterAdminProducts(query) {
   const q = query.toLowerCase().trim();
+  const shouldShowAll = q !== '';
+  if(shouldShowAll !== adminShowAllForSearch) {
+    adminShowAllForSearch = shouldShowAll;
+    loadProductsTab();
+    const sb = document.getElementById('adminSearchBar');
+    if(sb) { sb.focus(); sb.value = query; sb.setSelectionRange(query.length, query.length); }
+  }
   document.querySelectorAll('.admin-cat[data-catindex]').forEach(catEl => {
     const details = catEl.querySelector('.admin-cat-details');
     let matches = 0;
