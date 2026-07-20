@@ -522,7 +522,7 @@ const WA_NUMBER = "31685259659";
 const ADMIN_PASSCODE = "snk2026";
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyIFe79oQ4BfYhtqyDzL7YErRkzoG8G0t3zJmwIdT1UaM_OohbJSGNGYs2vXx8jqyW2Ug/exec";
 
-const storeDatabase = {"categories":[{"id":"vegetables","name":"Fresh Vegetables"},{"id":"fruits","name":"Fresh Fruits"},{"id":"rice","name":"Rice & Atta Flour"},{"id":"dals","name":"Dals & Lentils"},{"id":"spices","name":"Spices & Herbs"},{"id":"masalas","name":"Masala Powders"},{"id":"oils","name":"Oils & Ghee"},{"id":"dairy","name":"Dairy & Paneer"},{"id":"snacks","name":"Snacks & Sweets"},{"id":"beverages","name":"Beverages & Tea"},{"id":"pickles","name":"Pickles & Papads"},{"id":"instant","name":"Instant Mixes"},{"id":"frozen","name":"Frozen Foods"},{"id":"pooja","name":"Pooja Essentials"}],"locations":[{"name":"Den Haag","fee":2.5},{"name":"Rotterdam","fee":5},{"name":"Delft","fee":3},{"name":"Leiden","fee":4}],"offers":[{"title":"Welcome Offer","desc":"Get a free spice pack on your first order above €25!","code":"SNKFREE"},{"title":"Weekend Delivery Deal","desc":"10% discount on delivery charges for Den Haag residents this weekend.","code":"DH10"}],"settings":{"requiredOrders":3,"loyaltyDiscount":10,"announcementText":"🔥 Special Offer: Keep ordering from our shop to get amazing discounts instantly! 🔥"}};
+const storeDatabase = {"categories":[{"id":"vegetables","name":"Fresh Vegetables"},{"id":"fruits","name":"Fresh Fruits"},{"id":"rice","name":"Rice & Atta Flour"},{"id":"dals","name":"Dals & Lentils"},{"id":"spices","name":"Spices & Herbs"},{"id":"masalas","name":"Masala Powders"},{"id":"oils","name":"Oils & Ghee"},{"id":"dairy","name":"Dairy & Paneer"},{"id":"snacks","name":"Snacks & Sweets"},{"id":"beverages","name":"Beverages & Tea"},{"id":"pickles","name":"Pickles & Papads"},{"id":"instant","name":"Instant Mixes"},{"id":"frozen","name":"Frozen Foods"},{"id":"pooja","name":"Pooja Essentials"}],"locations":[{"name":"Den Haag","fee":2.5},{"name":"Rotterdam","fee":5},{"name":"Delft","fee":3},{"name":"Leiden","fee":4}],"offers":[{"title":"Welcome Offer","desc":"Get a free spice pack on your first order above €25!","code":"SNKFREE","firstOrderOnly":true},{"title":"Weekend Delivery Deal","desc":"10% discount on delivery charges for Den Haag residents this weekend.","code":"DH10"}],"settings":{"requiredOrders":3,"loyaltyDiscount":10,"announcementText":"🔥 Special Offer: Keep ordering from our shop to get amazing discounts instantly! 🔥"}};
 
 let catalog = storeDatabase.categories;
 let locations = storeDatabase.locations || [];
@@ -1293,7 +1293,20 @@ function syncCartTotals(){
   syncAllCardSteppers();
 }
 
-function applyPromoCode() {
+async function checkFirstOrderEligibility(phone) {
+  if(!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === "YOUR_APPS_SCRIPT_URL_HERE") return true; // can't verify, allow it
+  try {
+    const res = await fetch(GOOGLE_SCRIPT_URL + '?action=checkFirstOrder&phone=' + encodeURIComponent(phone));
+    const text = await res.text();
+    const data = JSON.parse(text);
+    return data.isFirstOrder !== false; // default to allowing if unclear
+  } catch(err) {
+    console.log('checkFirstOrderEligibility error:', err);
+    return true; // fail open - don't block a real customer over a network hiccup
+  }
+}
+
+async function applyPromoCode() {
   const input = document.getElementById('promoCodeInput').value.trim().toUpperCase();
   const msgEl = document.getElementById('promoMsg');
   
@@ -1318,6 +1331,26 @@ function applyPromoCode() {
   
   const validOffer = offers.find(o => o.code && o.code.toUpperCase() === input);
   if(validOffer) {
+    if(validOffer.firstOrderOnly) {
+      const phone = document.getElementById('cphone') ? document.getElementById('cphone').value.trim() : (localStorage.getItem('snk_user_phone') || '');
+      if(!phone) {
+        activeCoupon = "";
+        msgEl.style.color = "var(--danger)";
+        msgEl.textContent = "Please enter your phone number first, then apply this code. 📱";
+        syncCartTotals();
+        return;
+      }
+      msgEl.style.color = "var(--text-light)";
+      msgEl.textContent = "Checking eligibility...";
+      const eligible = await checkFirstOrderEligibility(phone);
+      if(!eligible) {
+        activeCoupon = "";
+        msgEl.style.color = "var(--danger)";
+        msgEl.textContent = "This code is for first-time customers only — looks like you've ordered with us before! ❌";
+        syncCartTotals();
+        return;
+      }
+    }
     activeCoupon = input;
     msgEl.style.color = "green";
     msgEl.textContent = `Coupon "${input}" Applied! (${loyaltyDiscount}% Off Subtotal) 🎉`;
@@ -1438,6 +1471,65 @@ function handleLogout() {
   switchView('home');
 }
 
+let cachedMyOrders = null;
+let cachedMyOrdersError = null;
+
+async function loadMyOrders() {
+  const phone = localStorage.getItem('snk_user_phone');
+  if(!phone) return;
+  cachedMyOrdersError = null;
+  if(!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === "YOUR_APPS_SCRIPT_URL_HERE") {
+    cachedMyOrders = [];
+    cachedMyOrdersError = "Order tracking isn't set up yet.";
+    renderMyOrdersSection();
+    return;
+  }
+  try {
+    const res = await fetch(GOOGLE_SCRIPT_URL + '?action=listOrdersByPhone&phone=' + encodeURIComponent(phone));
+    const text = await res.text();
+    const data = JSON.parse(text);
+    if(data.success && data.orders) {
+      cachedMyOrders = data.orders;
+    } else {
+      cachedMyOrders = [];
+      cachedMyOrdersError = data.message || "Couldn't load your orders yet.";
+    }
+  } catch(err) {
+    cachedMyOrders = [];
+    cachedMyOrdersError = "Couldn't reach the server. Check your connection.";
+    console.log('loadMyOrders error:', err);
+  }
+  renderMyOrdersSection();
+}
+
+function getOrderStatusColor(status) {
+  const map = { 'Pending': '#FF9800', 'Confirmed': '#2196F3', 'Preparing': '#9C27B0', 'Ready for Delivery': '#00BCD4', 'Delivered': '#4CAF50', 'Cancelled': '#F44336' };
+  return map[status] || '#607D8B';
+}
+
+function renderMyOrdersListHtml() {
+  if(cachedMyOrders === null) return `<div class="empty-note" style="padding:12px 0; font-size:13px;">Loading your orders...</div>`;
+  if(cachedMyOrders.length === 0) {
+    if(cachedMyOrdersError) return `<div class="empty-note" style="padding:12px 0; font-size:12px; color:var(--danger);">⚠️ ${cachedMyOrdersError}</div>`;
+    return `<div class="empty-note" style="padding:12px 0; font-size:13px;">No orders yet. Start shopping!</div>`;
+  }
+  return cachedMyOrders.map(o => `
+    <div style="background:#fff; border:1px solid #E2E8F0; border-radius:10px; padding:12px; margin-bottom:10px;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px; margin-bottom:6px;">
+        <span style="font-size:11px; color:var(--text-light);">${o.date || ''} · ${o.orderId || ''}</span>
+        <span style="background:${getOrderStatusColor(o.status)}; color:#fff; padding:3px 10px; border-radius:12px; font-size:11px; font-weight:700; white-space:nowrap; flex-shrink:0;">${o.status || 'Pending'}</span>
+      </div>
+      <div style="font-size:13px; color:var(--text-dark); margin-bottom:4px;">${o.items || ''}</div>
+      <div style="font-size:14px; font-weight:800; color:var(--primary);">${o.total || ''}</div>
+    </div>
+  `).join('');
+}
+
+function renderMyOrdersSection() {
+  const el = document.getElementById('myOrdersList');
+  if(el) el.innerHTML = renderMyOrdersListHtml();
+}
+
 function renderProfilePage() {
   const target = document.getElementById('profileContent');
   const tabTitle = document.getElementById('profileTabText');
@@ -1450,15 +1542,24 @@ function renderProfilePage() {
     const code = localStorage.getItem('snk_user_code');
     const orderCount = localStorage.getItem('snk_order_count') || '0';
     target.innerHTML = `
-      <div class="auth-card">
-        <div style="font-size:40px; margin-bottom:10px;">👑</div>
-        <h3>Welcome, ${uname}!</h3>
-        <p style="color:var(--text-light); margin-bottom:8px;">Registered Phone: <b>${phone}</b></p>
-        <p style="font-size:13px; color:var(--primary); font-weight:700; margin-bottom:15px;">Your Total Orders: ${orderCount}</p>
-        <div class="member-badge">Your Exclusive Code: <br><span style="color:var(--accent-dark); font-size:20px;">${code}</span></div>
-        <p style="font-size:12px; color:var(--text-light); margin-bottom:15px;">Use this code to claim special privileges during support or orders.</p>
-        <button class="auth-btn" style="background:var(--danger);" onclick="handleLogout()">⚠️ Logout from Account</button>
+      <div class="auth-card" style="text-align:left;">
+        <div style="text-align:center;">
+          <div style="font-size:40px; margin-bottom:10px;">👑</div>
+          <h3>Welcome, ${uname}!</h3>
+          <p style="color:var(--text-light); margin-bottom:8px;">Registered Phone: <b>${phone}</b></p>
+          <p style="font-size:13px; color:var(--primary); font-weight:700; margin-bottom:15px;">Your Total Orders: ${orderCount}</p>
+          <div class="member-badge">Your Exclusive Code: <br><span style="color:var(--accent-dark); font-size:20px;">${code}</span></div>
+        </div>
+        <div style="margin-top:20px; border-top:1px dashed #CBD5E1; padding-top:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <h4 style="color:var(--primary); font-size:15px; margin:0;">📦 My Orders</h4>
+            <button onclick="loadMyOrders()" style="background:#007BFF; color:#fff; border:none; padding:6px 12px; border-radius:6px; font-size:11px; font-weight:700; cursor:pointer;">🔄 Refresh</button>
+          </div>
+          <div id="myOrdersList">${renderMyOrdersListHtml()}</div>
+        </div>
+        <button class="auth-btn" style="background:var(--danger); margin-top:16px;" onclick="handleLogout()">⚠️ Logout from Account</button>
       </div>`;
+    loadMyOrders();
   } else {
     tabTitle.textContent = "Login";
     target.innerHTML = `
@@ -2322,6 +2423,9 @@ function loadProductsTab(){
               <input style="font-family:monospace; font-weight:700;" value="${of.code || ''}" onchange="offers[${oi}].code=this.value" placeholder="Coupon Code (Optional)">
               <button onclick="offers.splice(${oi},1); loadProductsTab();" style="background:var(--danger); color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-weight:bold;">Remove</button>
             </div>
+            <label style="font-size:12px; font-weight:600; color:var(--text-dark); display:flex; align-items:center; gap:6px;">
+              <input type="checkbox" ${of.firstOrderOnly ? 'checked' : ''} onchange="offers[${oi}].firstOrderOnly=this.checked"> 🔒 First order only (one-time use per phone number)
+            </label>
           </div>
         `).join('')}
       </div>
