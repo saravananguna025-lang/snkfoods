@@ -144,6 +144,9 @@
   main { max-width: 1100px; margin: 0 auto; padding: 20px 16px; }
   .cat-section { margin-bottom: 40px; scroll-margin-top: 195px; }
   .cat-pagination { display:flex; justify-content:center; gap:8px; margin-top:18px; flex-wrap:wrap; }
+
+  @keyframes btnFlashPulse { 0% { filter: brightness(1); transform: scale(1); } 40% { filter: brightness(1.6); transform: scale(0.94); } 100% { filter: brightness(1); transform: scale(1); } }
+  .btn-flashing { animation: btnFlashPulse 0.4s ease; }
   .cat-pagination button { min-width:38px; height:38px; border:1px solid #E2E8F0; background:#fff; border-radius:8px; font-weight:700; font-size:14px; color:var(--text-dark); cursor:pointer; }
   .cat-pagination button.active-page { background:var(--primary); color:#fff; border-color:var(--primary); }
   .cat-head { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
@@ -433,6 +436,19 @@
   </div>
 </div>
 
+<div id="view-myorders" class="app-view">
+  <div class="view-container">
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px;">
+      <button onclick="switchView('profile')" style="background:none; border:none; font-size:22px; cursor:pointer; color:var(--primary); padding:0;">←</button>
+      <h2 class="page-title" style="margin:0;">My Orders</h2>
+    </div>
+    <div style="text-align:right; margin-bottom:12px;">
+      <button onclick="flashButton(this); loadMyOrders();" style="background:#007BFF; color:#fff; border:none; padding:8px 16px; border-radius:6px; font-size:12px; font-weight:700; cursor:pointer;">🔄 Refresh</button>
+    </div>
+    <div id="myOrdersFullList"></div>
+  </div>
+</div>
+
 <div class="overlay" id="overlay" onclick="closeAllDrawers()"></div>
 
 <div class="login-modal" id="loginModal">
@@ -538,6 +554,14 @@ if(storeDatabase.settings.contactInfo === undefined) {
 let cart = {};
 let activeCoupon = ""; 
 
+function flashButton(btn) {
+  if(!btn) return;
+  btn.classList.remove('btn-flashing');
+  void btn.offsetWidth; // force reflow so animation restarts even if clicked repeatedly
+  btn.classList.add('btn-flashing');
+  setTimeout(() => btn.classList.remove('btn-flashing'), 450);
+}
+
 function switchView(viewId) {
   document.querySelectorAll('.app-view').forEach(view => view.classList.remove('active-view'));
   document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
@@ -552,6 +576,7 @@ function switchView(viewId) {
   
   if(viewId === 'profile') renderProfilePage();
   if(viewId === 'offers') renderOffersPage();
+  if(viewId === 'myorders') loadMyOrders();
 }
 
 function getCategoryEmoji(id) {
@@ -1526,7 +1551,7 @@ function renderMyOrdersListHtml() {
 }
 
 function renderMyOrdersSection() {
-  const el = document.getElementById('myOrdersList');
+  const el = document.getElementById('myOrdersFullList');
   if(el) el.innerHTML = renderMyOrdersListHtml();
 }
 
@@ -1550,16 +1575,12 @@ function renderProfilePage() {
           <p style="font-size:13px; color:var(--primary); font-weight:700; margin-bottom:15px;">Your Total Orders: ${orderCount}</p>
           <div class="member-badge">Your Exclusive Code: <br><span style="color:var(--accent-dark); font-size:20px;">${code}</span></div>
         </div>
-        <div style="margin-top:20px; border-top:1px dashed #CBD5E1; padding-top:16px;">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-            <h4 style="color:var(--primary); font-size:15px; margin:0;">📦 My Orders</h4>
-            <button onclick="loadMyOrders()" style="background:#007BFF; color:#fff; border:none; padding:6px 12px; border-radius:6px; font-size:11px; font-weight:700; cursor:pointer;">🔄 Refresh</button>
-          </div>
-          <div id="myOrdersList">${renderMyOrdersListHtml()}</div>
+        <div onclick="switchView('myorders')" style="margin-top:20px; border-top:1px dashed #CBD5E1; padding-top:16px; display:flex; justify-content:space-between; align-items:center; cursor:pointer;">
+          <h4 style="color:var(--primary); font-size:15px; margin:0;">📦 My Orders</h4>
+          <span style="color:var(--text-light); font-size:18px;">›</span>
         </div>
         <button class="auth-btn" style="background:var(--danger); margin-top:16px;" onclick="handleLogout()">⚠️ Logout from Account</button>
       </div>`;
-    loadMyOrders();
   } else {
     tabTitle.textContent = "Login";
     target.innerHTML = `
@@ -2335,7 +2356,7 @@ function loadProductsTab(){
     <div class="admin-cat" style="border: 2px solid #FF9800; background: #FFF8E1;">
       <div class="admin-cat-header">
         <span style="font-size: 15px; font-weight: 800; color: #E65100;">📋 Recent Orders</span>
-        <button onclick="loadRecentOrders()" style="background:#FF9800; color:#fff; border:none; padding:4px 10px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:700;">🔄 Refresh</button>
+        <button onclick="flashButton(this); loadRecentOrders();" style="background:#FF9800; color:#fff; border:none; padding:4px 10px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:700;">🔄 Refresh</button>
       </div>
       <p style="font-size:11px; color:var(--text-light); margin: 6px 0 10px;">Shows your most recent orders with a status dropdown you can update (Pending, Confirmed, Preparing, Out for Delivery, Delivered, Cancelled). Requires the Orders Apps Script setup — see setup guide.</p>
       <div id="ordersList">${renderOrdersListHtml()}</div>
@@ -2353,7 +2374,7 @@ function loadProductsTab(){
     <div class="admin-cat" style="border: 1px solid #CBD5E1; background: #F4FFF7;">
       <div class="admin-cat-header">
         <span style="font-size:14px; font-weight:800; color:var(--primary);">📥 Customer Messages Inbox</span>
-        <button onclick="loadCustomerMessages()" style="background:#007BFF; color:#fff; border:none; padding:6px 14px; border-radius:6px; font-size:12px; font-weight:700; cursor:pointer;">🔄 Refresh</button>
+        <button onclick="flashButton(this); loadCustomerMessages();" style="background:#007BFF; color:#fff; border:none; padding:6px 14px; border-radius:6px; font-size:12px; font-weight:700; cursor:pointer;">🔄 Refresh</button>
       </div>
       <p style="font-size:11px; color:var(--text-light); margin: 6px 0 10px;">Messages customers send via "📩 Message Us" appear here (also sent to your WhatsApp). Requires the Messages Apps Script setup.</p>
       <div id="customerMessagesList">${renderMessagesListHtml()}</div>
