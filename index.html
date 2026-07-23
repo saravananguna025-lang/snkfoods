@@ -31,9 +31,9 @@
   "priceRange": "€€",
   "address": {
     "@type": "PostalAddress",
-    "streetAddress": "Miquelstraat 101",
+    "streetAddress": "REPLACE_WITH_YOUR_STREET_AND_NUMBER",
     "addressLocality": "Den Haag",
-    "postalCode": "2522 KM",
+    "postalCode": "REPLACE_WITH_POSTCODE",
     "addressCountry": "NL"
   },
   "areaServed": ["Den Haag", "Rotterdam", "Delft", "Leiden", "Alphen aan den Rijn"],
@@ -2005,6 +2005,24 @@ function handleFooterSecretTap() {
 let adminOpenCategories = new Set();
 let adminCategoryPage = {};
 
+function moveProductUp(ci, ii) {
+  if(ii <= 0) return;
+  const items = catalog[ci].items;
+  const temp = items[ii - 1];
+  items[ii - 1] = items[ii];
+  items[ii] = temp;
+  loadProductsTab();
+}
+
+function moveProductDown(ci, ii) {
+  const items = catalog[ci].items;
+  if(ii >= items.length - 1) return;
+  const temp = items[ii + 1];
+  items[ii + 1] = items[ii];
+  items[ii] = temp;
+  loadProductsTab();
+}
+
 function changeAdminPage(catId, newPage) {
   if(newPage < 0) return;
   adminCategoryPage[catId] = newPage;
@@ -2038,9 +2056,38 @@ function renderOrdersListHtml() {
         ${o.phone ? `<button onclick="notifyCustomer('${(o.orderId||'').replace(/'/g,"\\'")}')" style="background:#25D366; color:#fff; border:none; padding:6px 12px; border-radius:6px; font-size:11px; font-weight:700; cursor:pointer;">📲 WhatsApp Update</button>` : ''}
         ${o.email ? `<button onclick="emailNotifyCustomer('${(o.orderId||'').replace(/'/g,"\\'")}')" style="background:#1976D2; color:#fff; border:none; padding:6px 12px; border-radius:6px; font-size:11px; font-weight:700; cursor:pointer;">📧 Email Update</button>` : ''}
         ${!o.phone && !o.email ? `<span style="font-size:11px; color:var(--text-light);">No contact info saved</span>` : ''}
+        <button onclick="deleteOrder('${(o.orderId||'').replace(/'/g,"\\'")}')" style="background:var(--danger); color:#fff; border:none; padding:6px 12px; border-radius:6px; font-size:11px; font-weight:700; cursor:pointer;">🗑️ Delete</button>
       </div>
     </div>
   `).join('');
+}
+
+async function deleteOrder(orderId) {
+  const order = (cachedOrders || []).find(o => o.orderId === orderId);
+  const label = order ? `${order.name || 'this order'} (${orderId})` : orderId;
+  if(!confirm(`Delete order ${label}? This cannot be undone.`)) return;
+
+  if(!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === "YOUR_APPS_SCRIPT_URL_HERE") {
+    alert('Apps Script not configured — cannot delete on the server.');
+    return;
+  }
+  try {
+    const res = await fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ action: 'deleteOrder', orderId: orderId })
+    });
+    const data = await res.json();
+    if(data.success) {
+      cachedOrders = (cachedOrders || []).filter(o => o.orderId !== orderId);
+      loadProductsTab();
+    } else {
+      alert('Could not delete: ' + (data.message || 'unknown error'));
+    }
+  } catch(err) {
+    console.log('deleteOrder error:', err);
+    alert('Could not reach the server to delete this order.');
+  }
 }
 
 function notifyCustomer(orderId) {
@@ -2578,6 +2625,13 @@ function loadProductsTab(){
           }
           return pageEntries.map(({ it: item, i: ii })=>`
           <div class="admin-prod" data-pname="${(item[0]||'').toLowerCase().replace(/"/g,'')}">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+            <span style="font-size:11px; color:var(--text-light); font-weight:600;">Position ${ii+1} of ${cat.items.length}</span>
+            <div style="display:flex; gap:4px;">
+              <button onclick="moveProductUp(${ci}, ${ii})" ${ii===0?'disabled':''} title="Move up (shows earlier)" style="background:#F1F5F9; border:1px solid #CBD5E1; width:30px; height:26px; border-radius:4px; cursor:pointer; font-size:13px; font-weight:700;">↑</button>
+              <button onclick="moveProductDown(${ci}, ${ii})" ${ii===cat.items.length-1?'disabled':''} title="Move down (shows later)" style="background:#F1F5F9; border:1px solid #CBD5E1; width:30px; height:26px; border-radius:4px; cursor:pointer; font-size:13px; font-weight:700;">↓</button>
+            </div>
+          </div>
           <div class="admin-item-row">
             <input value="${item[0]}" onchange="catalog[${ci}].items[${ii}][0]=this.value" placeholder="Name">
             <input value="${item[1]}" onchange="catalog[${ci}].items[${ii}][1]=this.value" placeholder="e.g. 1kg, 500g or 1 bunch, 2 bunch">
