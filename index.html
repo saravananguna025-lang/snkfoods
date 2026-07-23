@@ -275,6 +275,16 @@
   .admin-item-row { display: grid; grid-template-columns: 2fr 1.2fr 1.2fr 1.5fr 80px 40px; gap: 8px; margin-bottom: 10px; align-items: center; background: var(--bg-light); padding: 8px; border-radius: 6px; }
   @media (max-width: 600px) { .admin-item-row { grid-template-columns: 1fr; gap: 6px; } }
   .admin-item-row input { padding: 8px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 13px; width: 100%; background: #fff; color: var(--text-dark); }
+
+  .reorder-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; touch-action: none; }
+  .reorder-row { display: flex; align-items: center; gap: 10px; background: #fff; border: 1px solid #CBD5E1; border-radius: 8px; padding: 10px 12px; transition: transform 0.15s ease, box-shadow 0.15s ease; }
+  .reorder-row.dragging-row { opacity: 0.4; }
+  .reorder-row.drop-target-above { box-shadow: 0 -3px 0 var(--primary); }
+  .reorder-row.drop-target-below { box-shadow: 0 3px 0 var(--primary); }
+  .reorder-handle { font-size: 18px; color: var(--text-light); cursor: grab; padding: 4px 8px; user-select: none; touch-action: none; }
+  .reorder-pos { background: var(--primary); color: #fff; font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 10px; flex-shrink: 0; min-width: 30px; text-align: center; }
+  .reorder-name { font-size: 13px; font-weight: 600; color: var(--text-dark); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  #dragPositionBadge { position: fixed; z-index: 5000; background: var(--primary); color: #fff; font-weight: 800; font-size: 14px; padding: 8px 16px; border-radius: 20px; pointer-events: none; box-shadow: 0 4px 12px rgba(0,0,0,0.3); display: none; transform: translate(-50%, -140%); }
   .admin-item-row button { background: var(--danger); color: #fff; border: none; border-radius: 6px; height: 34px; font-size: 16px; cursor: pointer; }
   
   .admin-btn-row { display: flex; gap: 10px; margin-top: 10px; }
@@ -528,6 +538,7 @@
 </div>
 
 <div id="a4InvoicePrintout"></div>
+<div id="dragPositionBadge"></div>
 
 <footer>
   <h4 onclick="handleFooterSecretTap()" style="cursor:default; user-select:none;">SNK Foods Netherlands</h4>
@@ -2005,6 +2016,92 @@ function handleFooterSecretTap() {
 let adminOpenCategories = new Set();
 let adminCategoryPage = {};
 
+let reorderModeCategories = new Set();
+
+function toggleReorderMode(catId) {
+  if(reorderModeCategories.has(catId)) reorderModeCategories.delete(catId);
+  else reorderModeCategories.add(catId);
+  const ci = catalog.findIndex(c => c.id === catId);
+  if(ci !== -1) adminOpenCategories.add(ci);
+  loadProductsTab();
+}
+
+let productDragState = null;
+
+function startProductDrag(ev, ci, ii) {
+  ev.preventDefault();
+  const row = ev.currentTarget.closest('.reorder-row');
+  const container = document.getElementById(`reorderList-${catalog[ci].id}`);
+  if(!row || !container) return;
+  const allRows = Array.from(container.querySelectorAll('.reorder-row'));
+
+  productDragState = {
+    ci, startIndex: ii, currentIndex: ii,
+    row, container, allRows
+  };
+
+  row.classList.add('dragging-row');
+
+  const badge = document.getElementById('dragPositionBadge');
+  badge.style.display = 'block';
+  badge.textContent = `Position ${ii + 1}`;
+  badge.style.left = ev.clientX + 'px';
+  badge.style.top = ev.clientY + 'px';
+
+  document.addEventListener('pointermove', onProductDragMove);
+  document.addEventListener('pointerup', onProductDragEnd);
+  document.addEventListener('pointercancel', onProductDragEnd);
+}
+
+function onProductDragMove(ev) {
+  if(!productDragState) return;
+  ev.preventDefault();
+  const badge = document.getElementById('dragPositionBadge');
+  badge.style.left = ev.clientX + 'px';
+  badge.style.top = ev.clientY + 'px';
+
+  const { allRows } = productDragState;
+  const y = ev.clientY;
+  let targetIndex = allRows.length - 1;
+
+  allRows.forEach(r => r.classList.remove('drop-target-above', 'drop-target-below'));
+
+  for(let i = 0; i < allRows.length; i++) {
+    const rect = allRows[i].getBoundingClientRect();
+    const mid = rect.top + rect.height / 2;
+    if(y < mid) { targetIndex = i; break; }
+  }
+
+  productDragState.currentIndex = targetIndex;
+  badge.textContent = `Position ${targetIndex + 1}`;
+
+  if(allRows[targetIndex] && allRows[targetIndex] !== productDragState.row) {
+    allRows[targetIndex].classList.add(targetIndex < productDragState.startIndex ? 'drop-target-above' : 'drop-target-below');
+  }
+}
+
+function onProductDragEnd(ev) {
+  if(!productDragState) return;
+  const { ci, startIndex, currentIndex, row, allRows } = productDragState;
+
+  document.getElementById('dragPositionBadge').style.display = 'none';
+  row.classList.remove('dragging-row');
+  allRows.forEach(r => r.classList.remove('drop-target-above', 'drop-target-below'));
+
+  document.removeEventListener('pointermove', onProductDragMove);
+  document.removeEventListener('pointerup', onProductDragEnd);
+  document.removeEventListener('pointercancel', onProductDragEnd);
+
+  if(currentIndex !== startIndex && currentIndex >= 0) {
+    const items = catalog[ci].items;
+    const [moved] = items.splice(startIndex, 1);
+    items.splice(currentIndex, 0, moved);
+  }
+
+  productDragState = null;
+  loadProductsTab();
+}
+
 function moveProductUp(ci, ii) {
   if(ii <= 0) return;
   const items = catalog[ci].items;
@@ -2611,7 +2708,20 @@ function loadProductsTab(){
       <details class="admin-cat-details" ${adminOpenCategories.has(ci) ? 'open' : ''} ontoggle="if(this.open){adminOpenCategories.add(${ci});}else{adminOpenCategories.delete(${ci});}">
         <summary style="cursor:pointer; padding:10px 14px; background:var(--bg-light); border:1px solid #CBD5E1; border-radius:8px; font-weight:700; font-size:13px; color:var(--primary); user-select:none;">📦 ${cat.name} — ${cat.items.length} products (tap to open/close)</summary>
       <div style="margin-top:10px;">
-        ${(() => {
+        <button onclick="toggleReorderMode('${cat.id}')" style="width:100%; margin-bottom:10px; background:${reorderModeCategories.has(cat.id) ? 'var(--danger)' : '#6C63FF'}; color:#fff; border:none; padding:10px; border-radius:8px; font-weight:700; font-size:13px; cursor:pointer;">
+          ${reorderModeCategories.has(cat.id) ? '✅ Done Reordering' : '🔀 Reorder Products (drag to move)'}
+        </button>
+        ${reorderModeCategories.has(cat.id) ? `
+        <div id="reorderList-${cat.id}" class="reorder-list">
+          ${cat.items.map((item, ii) => `
+            <div class="reorder-row" data-ci="${ci}" data-index="${ii}">
+              <span class="reorder-handle" onpointerdown="startProductDrag(event, ${ci}, ${ii})">☰</span>
+              <span class="reorder-pos" id="reorderPos-${ci}-${ii}">#${ii + 1}</span>
+              <span class="reorder-name">${item[0] || '(unnamed)'}</span>
+            </div>
+          `).join('')}
+        </div>
+        ` : (() => {
           const pageSize = 15;
           const currentPage = adminCategoryPage[cat.id] || 0;
           let pageEntries, totalPages;
