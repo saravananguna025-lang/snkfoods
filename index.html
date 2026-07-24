@@ -276,8 +276,8 @@
   @media (max-width: 600px) { .admin-item-row { grid-template-columns: 1fr; gap: 6px; } }
   .admin-item-row input { padding: 8px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 13px; width: 100%; background: #fff; color: var(--text-dark); }
 
-  .reorder-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; touch-action: none; }
-  .reorder-row { display: flex; align-items: center; gap: 10px; background: #fff; border: 1px solid #CBD5E1; border-radius: 8px; padding: 10px 12px; transition: transform 0.15s ease, box-shadow 0.15s ease; }
+  .reorder-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+  .reorder-row { display: flex; align-items: center; gap: 10px; background: #fff; border: 1px solid #CBD5E1; border-radius: 8px; padding: 10px 12px; transition: transform 0.15s ease, box-shadow 0.15s ease; touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
   .reorder-row.dragging-row { opacity: 0.4; }
   .reorder-row.drop-target-above { box-shadow: 0 -3px 0 var(--primary); }
   .reorder-row.drop-target-below { box-shadow: 0 3px 0 var(--primary); }
@@ -2030,6 +2030,10 @@ let productDragState = null;
 
 function startProductDrag(ev, ci, ii) {
   ev.preventDefault();
+  if(window.getSelection) {
+    const sel = window.getSelection();
+    if(sel && sel.removeAllRanges) sel.removeAllRanges();
+  }
   const row = ev.currentTarget.closest('.reorder-row');
   const container = document.getElementById(`reorderList-${catalog[ci].id}`);
   if(!row || !container) return;
