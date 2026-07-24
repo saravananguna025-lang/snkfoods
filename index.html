@@ -646,6 +646,10 @@ function isVariantOutOfStock(item, variantIdx) {
     const arr = item[10] || [];
     return (parseFloat(arr[variantIdx]) || 0) <= 0;
   }
+  if(stockMode === 'manualPerVariant') {
+    const arr = item[11] || [];
+    return !!arr[variantIdx];
+  }
   return isItemOutOfStock(item[4], stockMode, item[6]);
 }
 
@@ -1224,7 +1228,7 @@ function onVariantChange(catId, itemIdx, name, val) {
   const selIdx = parseInt(val);
   document.getElementById(`price-${catId}-${itemIdx}`).innerHTML = priceDisplayHtml(variants[selIdx].price, disc);
 
-  if(item[5] === 'perVariant') {
+  if(item[5] === 'perVariant' || item[5] === 'manualPerVariant') {
     const isOos = isVariantOutOfStock(item, selIdx);
     const cardEl = document.getElementById(`card-${catId}-${itemIdx}`);
     const actionEl = document.getElementById(`action-${catId}-${itemIdx}`);
@@ -1244,7 +1248,7 @@ function onVariantChange(catId, itemIdx, name, val) {
         actionEl.innerHTML = `<button class="addbtn" onclick="handleInitialAdd('${catId}', ${itemIdx}, '${name.replace(/'/g,"\\'")}')">Add to Cart</button>`;
       }
     }
-    if(noteEl) {
+    if(noteEl && item[5] === 'perVariant') {
       const stockVal = parseFloat((item[10]||[])[selIdx]);
       noteEl.textContent = (!isOos && stockVal <= 3) ? `Only ${stockVal} bags left!` : '';
     }
@@ -2759,14 +2763,15 @@ function loadProductsTab(){
                 📷<input type="file" accept="image/*" style="display:none;" onchange="handleImageUpload(event, ${ci}, ${ii})">
               </label>
             </div>
-            <label><input type="checkbox" ${item[4] ? 'checked' : ''} ${(item[5]==='count'||item[5]==='perVariant') ? 'disabled' : ''} onchange="catalog[${ci}].items[${ii}][4]=this.checked"> OOS</label>
+            <label><input type="checkbox" ${item[4] ? 'checked' : ''} ${(item[5]==='count'||item[5]==='perVariant'||item[5]==='manualPerVariant') ? 'disabled' : ''} onchange="catalog[${ci}].items[${ii}][4]=this.checked"> OOS</label>
             <button onclick="catalog[${ci}].items.splice(${ii},1); loadProductsTab()">×</button>
           </div>
           <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center; background:#F8FAFC; padding:6px 10px; margin:-6px 0 10px; border-radius:0 0 6px 6px; font-size:12px;">
             <label style="display:flex; align-items:center; gap:4px; font-weight:600; color:var(--text-light);">
               Stock:
               <select onchange="catalog[${ci}].items[${ii}][5]=this.value; loadProductsTab();" style="padding:4px; border-radius:4px; border:1px solid #CBD5E1; font-size:11px;">
-                <option value="manual" ${(!item[5] || item[5]==='manual') ? 'selected':''}>Manual OOS toggle</option>
+                <option value="manual" ${(!item[5] || item[5]==='manual') ? 'selected':''}>Manual OOS toggle (whole product)</option>
+                <option value="manualPerVariant" ${item[5]==='manualPerVariant' ? 'selected':''}>⭐ Manual OOS — each size separately (recommended)</option>
                 <option value="count" ${item[5]==='count' ? 'selected':''}>Track total quantity (loose weight)</option>
                 <option value="perVariant" ${item[5]==='perVariant' ? 'selected':''}>Track per package size (bags/boxes)</option>
               </select>
@@ -2782,6 +2787,16 @@ function loadProductsTab(){
             ` : ''}
             <label style="display:flex; align-items:center; gap:4px; font-weight:700; color:#FF6B00;">🏷️ Discount %: <input type="number" min="0" max="99" value="${getItemDiscount(item) || ''}" placeholder="0" onchange="catalog[${ci}].items[${ii}][9]=parseFloat(this.value)||0" style="width:55px; padding:4px; border-radius:4px; border:1px solid #FFB380;"></label>
           </div>
+          ${item[5]==='manualPerVariant' ? `
+          <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center; background:#FFF3F0; border:1px dashed #FFAB91; padding:8px 10px; margin:-6px 0 12px; border-radius:6px;">
+            <div style="font-size:11px; font-weight:700; color:#BF360C; width:100%;">⭐ Mark which sizes are out of stock — each size is independent</div>
+            ${parseVariants(item[1], item[2]).map((v, vi) => `
+              <label style="display:flex; align-items:center; gap:5px; font-weight:600; font-size:12px; background:#fff; padding:5px 10px; border-radius:6px; border:1px solid #FFCCBC;">
+                <input type="checkbox" ${(item[11]||[])[vi] ? 'checked' : ''} onchange="if(!Array.isArray(catalog[${ci}].items[${ii}][11])) catalog[${ci}].items[${ii}][11]=[]; catalog[${ci}].items[${ii}][11][${vi}]=this.checked;"> ${v.unit} — Out of Stock
+              </label>
+            `).join('')}
+          </div>
+          ` : ''}
           ${item[5]==='perVariant' ? `
           <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center; background:#F0F7FF; border:1px dashed #90CAF9; padding:8px 10px; margin:-6px 0 12px; border-radius:6px;">
             <div style="font-size:11px; font-weight:700; color:#1565C0; width:100%;">📦 Stock count per package size — how many bags/boxes of each size do you have?</div>
@@ -2815,7 +2830,7 @@ function loadProductsTab(){
         ` : '');
         })()}
       </div>
-      <div class="admin-btn-row"><button onclick="catalog[${ci}].items.push(['New Item','1kg, 500g, 250g','','',false,'manual',0,'pieces',[],0,[]]); loadProductsTab()">+ Add Product</button></div>
+      <div class="admin-btn-row"><button onclick="catalog[${ci}].items.push(['New Item','1kg, 500g, 250g','','',false,'manual',0,'pieces',[],0,[],[]]); loadProductsTab()">+ Add Product</button></div>
       </details>
     </div>
   `).join('');
