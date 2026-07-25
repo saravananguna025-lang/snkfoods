@@ -2756,7 +2756,7 @@ function loadProductsTab(){
             <input value="${item[1]}" onchange="catalog[${ci}].items[${ii}][1]=this.value" placeholder="e.g. 1kg, 500g or 1 bunch, 2 bunch">
             <div style="display:flex; gap:4px; align-items:center;">
               <input value="${item[2]}" onchange="catalog[${ci}].items[${ii}][2]=this.value" placeholder="Use . for decimals: 3.49, 1.75" style="flex:1; min-width:0;">
-              <button type="button" onclick="autoCalcVariantPrices(${ci}, ${ii})" title="Auto-calculate other variant prices from base price" style="background:var(--primary); color:#fff; border:none; width:32px; height:32px; border-radius:6px; font-size:14px; cursor:pointer; flex-shrink:0;">⚡</button>
+              <button type="button" onclick="flashButton(this); autoCalcVariantPrices(${ci}, ${ii})" title="Tap to auto-calculate the other sizes from whichever price you've filled in" style="background:var(--primary); color:#fff; border:none; width:32px; height:32px; border-radius:6px; font-size:14px; cursor:pointer; flex-shrink:0;">⚡</button>
             </div>
             <div style="display:flex; gap:4px; align-items:center;">
               <input value="${(item[3] || '').length > 60 ? '(uploaded image)' : (item[3] || '')}" onchange="catalog[${ci}].items[${ii}][3]=this.value" placeholder="Image URL" style="flex:1; min-width:0;">
