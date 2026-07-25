@@ -2479,17 +2479,18 @@ function autoCalcVariantPrices(ci, ii) {
   const parsed = variants.map(v => parseWeightGrams(v));
   const priceParts = item[2].split(',').map(s => s.trim());
 
-  let baseIdx = parsed.findIndex((p, i) => p && p.amount === 1000 && priceParts[i] && parseFloat(priceParts[i]) > 0);
+  // Use whichever variant ALREADY has a valid price typed in as the base —
+  // could be 250g, 500g, 1kg, anything — no longer forced to be 1kg.
+  let baseIdx = parsed.findIndex((p, i) => p && priceParts[i] && parseFloat(priceParts[i]) > 0);
   let basePrice;
 
   if(baseIdx === -1) {
-    const fallbackIdx = parsed.findIndex(p => p && p.amount === 1000);
-    const labelVariant = fallbackIdx !== -1 ? variants[fallbackIdx] : variants[0];
-    const promptVal = prompt(`Enter the price for "${labelVariant}" (base variant):`, priceParts[fallbackIdx !== -1 ? fallbackIdx : 0] || '');
+    const labelVariant = variants[0];
+    const promptVal = prompt(`Enter the price for "${labelVariant}" — the other sizes will be calculated from this:`, priceParts[0] || '');
     if(promptVal === null) return;
     basePrice = parseFloat(promptVal);
     if(isNaN(basePrice) || basePrice <= 0) { alert('Please enter a valid price.'); return; }
-    baseIdx = fallbackIdx !== -1 ? fallbackIdx : 0;
+    baseIdx = 0;
     if(!parsed[baseIdx]) { alert('Could not detect a weight/volume unit on this variant to calculate from.'); return; }
   } else {
     basePrice = parseFloat(priceParts[baseIdx]);
