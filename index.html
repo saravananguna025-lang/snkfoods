@@ -565,6 +565,8 @@
 
 <script>
 const WA_NUMBER = "31685259659";
+// ⚠️ IMPORTANT: Change this to your own strong passcode (mix letters/numbers/symbols, 10+ characters).
+// Avoid business name + year (easy to guess). Example format: Sn@kF00d#2026!
 const ADMIN_PASSCODE = "snk2026";
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyIFe79oQ4BfYhtqyDzL7YErRkzoG8G0t3zJmwIdT1UaM_OohbJSGNGYs2vXx8jqyW2Ug/exec";
 
@@ -629,6 +631,16 @@ function parseVariants(unitStr, priceStr) {
   const units = unitStr.split(',').map(s => s.trim());
   const prices = priceStr.split(',').map(s => parseFloat(s.trim()) || 0);
   return units.map((u, i) => ({ unit: u, price: prices[i] || prices[0] || 0 }));
+}
+
+function escapeHtml(str) {
+  if(str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 }
 
 function isItemOutOfStock(isOosFlag, stockMode, stockCount) {
@@ -731,7 +743,7 @@ function openOrderDetailModal(order, opts) {
   document.getElementById('odMeta').textContent = metaParts.join(' · ');
 
   const statusRow = document.getElementById('odStatusRow');
-  statusRow.innerHTML = `<span style="background:${getOrderStatusColor(order.status)}; color:#fff; padding:5px 14px; border-radius:14px; font-size:12px; font-weight:700;">${order.status || 'Pending'}</span>`;
+  statusRow.innerHTML = `<span style="background:${getOrderStatusColor(order.status)}; color:#fff; padding:5px 14px; border-radius:14px; font-size:12px; font-weight:700;">${escapeHtml(order.status || 'Pending')}</span>`;
 
   const items = parseOrderItemsString(order.items);
   const itemsListEl = document.getElementById('odItemsList');
@@ -740,7 +752,7 @@ function openOrderDetailModal(order, opts) {
   } else {
     itemsListEl.innerHTML = items.map(line => `
       <div style="display:flex; align-items:center; gap:8px; background:var(--bg-light); padding:10px 12px; border-radius:8px; font-size:13px; color:var(--text-dark);">
-        <span style="color:var(--primary);">•</span> ${line}
+        <span style="color:var(--primary);">•</span> ${escapeHtml(line)}
       </div>
     `).join('');
   }
@@ -749,7 +761,7 @@ function openOrderDetailModal(order, opts) {
 
   const extraEl = document.getElementById('odExtraInfo');
   let extraHtml = opts.extraHtml || '';
-  if(order.phone) extraHtml += `<div style="font-size:12px; color:var(--text-light); margin-top:4px;">📞 ${order.phone}</div>`;
+  if(order.phone) extraHtml += `<div style="font-size:12px; color:var(--text-light); margin-top:4px;">📞 ${escapeHtml(order.phone)}</div>`;
   extraEl.innerHTML = extraHtml;
 
   document.getElementById('orderDetailModal').classList.add('show');
@@ -939,7 +951,7 @@ function renderMissedSearchListHtml() {
   if(list.length === 0) return `<div class="empty-note" style="padding:15px 0;">No missed searches recorded on this device yet.</div>`;
   return list.map(item => `
     <div style="display:flex; justify-content:space-between; align-items:center; background:#fff; border:1px solid #FFD5D5; padding:8px 12px; border-radius:6px; margin-bottom:6px; gap:10px;">
-      <div><b>${item.term}</b> <span style="color:var(--text-light); font-size:11px;">(searched ${item.count}x, last: ${new Date(item.lastSearched).toLocaleDateString('nl-NL')})</span></div>
+      <div><b>${escapeHtml(item.term)}</b> <span style="color:var(--text-light); font-size:11px;">(searched ${item.count}x, last: ${new Date(item.lastSearched).toLocaleDateString('nl-NL')})</span></div>
     </div>
   `).join('');
 }
@@ -1618,12 +1630,12 @@ function renderMyOrdersListHtml() {
   return cachedMyOrders.map((o, oi) => `
     <div onclick="openOrderDetailModal(cachedMyOrders[${oi}])" style="background:#fff; border:1px solid #E2E8F0; border-radius:10px; padding:12px; margin-bottom:10px; cursor:pointer;">
       <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px; margin-bottom:6px;">
-        <span style="font-size:11px; color:var(--text-light);">${o.date || ''} · ${o.orderId || ''}</span>
-        <span style="background:${getOrderStatusColor(o.status)}; color:#fff; padding:3px 10px; border-radius:12px; font-size:11px; font-weight:700; white-space:nowrap; flex-shrink:0;">${o.status || 'Pending'}</span>
+        <span style="font-size:11px; color:var(--text-light);">${escapeHtml(o.date || '')} · ${escapeHtml(o.orderId || '')}</span>
+        <span style="background:${getOrderStatusColor(o.status)}; color:#fff; padding:3px 10px; border-radius:12px; font-size:11px; font-weight:700; white-space:nowrap; flex-shrink:0;">${escapeHtml(o.status || 'Pending')}</span>
       </div>
-      <div style="font-size:13px; color:var(--text-dark); margin-bottom:4px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${o.items || ''}</div>
+      <div style="font-size:13px; color:var(--text-dark); margin-bottom:4px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${escapeHtml(o.items || '')}</div>
       <div style="display:flex; justify-content:space-between; align-items:center;">
-        <span style="font-size:14px; font-weight:800; color:var(--primary);">${o.total || ''}</span>
+        <span style="font-size:14px; font-weight:800; color:var(--primary);">${escapeHtml(o.total || '')}</span>
         <span style="font-size:11px; color:#007BFF; font-weight:700;">View details ›</span>
       </div>
     </div>
@@ -1650,7 +1662,7 @@ function renderProfilePage() {
       <div class="auth-card" style="text-align:left;">
         <div style="text-align:center;">
           <div style="font-size:40px; margin-bottom:10px;">👑</div>
-          <h3>Welcome, ${uname}!</h3>
+          <h3>Welcome, ${escapeHtml(uname)}!</h3>
           <p style="color:var(--text-light); margin-bottom:8px;">Registered Phone: <b>${phone}</b></p>
           <p style="font-size:13px; color:var(--primary); font-weight:700; margin-bottom:15px;">Your Total Orders: ${orderCount}</p>
           <div class="member-badge">Your Exclusive Code: <br><span style="color:var(--accent-dark); font-size:20px;">${code}</span></div>
@@ -2149,9 +2161,9 @@ function renderOrdersListHtml() {
     <div style="background:#fff; border:1px solid #FFE0B2; padding:10px; border-radius:8px; margin-bottom:8px;">
       <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
         <div onclick="openOrderDetailModal(cachedOrders[${oi}], {customerName: cachedOrders[${oi}].name})" style="flex:1; min-width:0; cursor:pointer;">
-          <b>${o.name || 'Unknown'}</b> <span style="color:var(--text-light); font-size:11px;">(${o.orderId || ''})</span>
-          <div style="font-size:12px; color:var(--text-light); margin-top:2px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${o.items || ''}</div>
-          <div style="font-size:12px; font-weight:700; margin-top:4px;">Total: ${o.total || ''} <span style="color:#007BFF; font-weight:700;">· View details ›</span></div>
+          <b>${escapeHtml(o.name || 'Unknown')}</b> <span style="color:var(--text-light); font-size:11px;">(${escapeHtml(o.orderId || '')})</span>
+          <div style="font-size:12px; color:var(--text-light); margin-top:2px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${escapeHtml(o.items || '')}</div>
+          <div style="font-size:12px; font-weight:700; margin-top:4px;">Total: ${escapeHtml(o.total || '')} <span style="color:#007BFF; font-weight:700;">· View details ›</span></div>
         </div>
         <select onchange="updateOrderStatus('${(o.orderId||'').replace(/'/g,"\\'")}', this.value)" style="padding:6px; border-radius:6px; border:1px solid #CBD5E1; font-size:12px; font-weight:700; flex-shrink:0;">
           ${statusOptions.map(s => `<option value="${s}" ${o.status===s?'selected':''}>${s}</option>`).join('')}
@@ -2286,9 +2298,29 @@ async function updateOrderStatus(orderId, status) {
 }
 
 function adminLogin(){
+  const lockUntil = parseInt(sessionStorage.getItem('snk_admin_lock_until') || '0');
+  if(Date.now() < lockUntil) {
+    const secondsLeft = Math.ceil((lockUntil - Date.now()) / 1000);
+    alert(`Too many wrong attempts. Please wait ${secondsLeft} seconds before trying again.`);
+    return;
+  }
   const pass = prompt("Enter admin passcode:");
-  if(pass === ADMIN_PASSCODE){ document.getElementById('adminOverlay').classList.add('show'); loadProductsTab(); loadRecentOrders(); }
-  else if(pass !== null) { alert("Invalid Passcode."); }
+  if(pass === null) return;
+  if(pass === ADMIN_PASSCODE){
+    sessionStorage.removeItem('snk_admin_fail_count');
+    sessionStorage.removeItem('snk_admin_lock_until');
+    document.getElementById('adminOverlay').classList.add('show'); loadProductsTab(); loadRecentOrders();
+  } else {
+    const fails = parseInt(sessionStorage.getItem('snk_admin_fail_count') || '0') + 1;
+    sessionStorage.setItem('snk_admin_fail_count', fails.toString());
+    if(fails >= 3) {
+      const lockSeconds = Math.min(30 * Math.pow(2, fails - 3), 600); // 30s, 60s, 120s... capped at 10min
+      sessionStorage.setItem('snk_admin_lock_until', (Date.now() + lockSeconds * 1000).toString());
+      alert(`Invalid Passcode. Too many attempts — locked for ${lockSeconds} seconds.`);
+    } else {
+      alert("Invalid Passcode.");
+    }
+  }
 }
 
 function adminLoginWithOtp(){
@@ -2940,8 +2972,8 @@ function renderMessagesListHtml() {
   }
   return cachedMessages.map(m => `
     <div style="background:#fff; border:1px solid #CBD5E1; padding:10px 12px; border-radius:8px; margin-bottom:6px;">
-      <div style="font-size:11px; color:var(--text-light); margin-bottom:4px;">${m.dateTime || ''}</div>
-      <div style="font-size:13px; font-weight:600;">${m.message || ''}</div>
+      <div style="font-size:11px; color:var(--text-light); margin-bottom:4px;">${escapeHtml(m.dateTime || '')}</div>
+      <div style="font-size:13px; font-weight:600;">${escapeHtml(m.message || '')}</div>
     </div>
   `).join('');
 }
