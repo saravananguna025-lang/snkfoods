@@ -2025,7 +2025,7 @@ function handleFooterSecretTap() {
   footerTapTimer = setTimeout(() => { footerTapCount = 0; }, 3000);
   if(footerTapCount >= 5) {
     footerTapCount = 0;
-    adminLogin();
+    adminLoginWithOtp();
   }
 }
 
@@ -2345,6 +2345,14 @@ async function requestAdminOtp() {
   const password = document.getElementById('loginPassword').value;
   const msgEl = document.getElementById('loginMsg1');
   if(!email || !password) { msgEl.style.color = 'var(--danger)'; msgEl.textContent = 'Enter email and password.'; return; }
+
+  const cooldownUntil = parseInt(sessionStorage.getItem('snk_otp_request_cooldown') || '0');
+  if(Date.now() < cooldownUntil) {
+    const secondsLeft = Math.ceil((cooldownUntil - Date.now()) / 1000);
+    msgEl.style.color = 'var(--danger)'; msgEl.textContent = `Please wait ${secondsLeft}s before requesting another OTP.`;
+    return;
+  }
+
   msgEl.style.color = 'var(--text-light)'; msgEl.textContent = 'Sending OTP...';
 
   try {
@@ -2355,9 +2363,11 @@ async function requestAdminOtp() {
     });
     const data = await res.json();
     if(data.success) {
+      sessionStorage.setItem('snk_otp_request_cooldown', (Date.now() + 20000).toString());
       document.getElementById('loginStep1').style.display = 'none';
       document.getElementById('loginStep2').style.display = 'block';
     } else {
+      sessionStorage.setItem('snk_otp_request_cooldown', (Date.now() + 10000).toString());
       msgEl.style.color = 'var(--danger)'; msgEl.textContent = data.message || 'Invalid email or password.';
     }
   } catch(err) {
@@ -2370,6 +2380,14 @@ async function verifyAdminOtp() {
   const otp = document.getElementById('loginOtp').value.trim();
   const msgEl = document.getElementById('loginMsg2');
   if(!otp) { msgEl.style.color = 'var(--danger)'; msgEl.textContent = 'Enter the OTP.'; return; }
+
+  const lockUntil = parseInt(sessionStorage.getItem('snk_otp_lock_until') || '0');
+  if(Date.now() < lockUntil) {
+    const secondsLeft = Math.ceil((lockUntil - Date.now()) / 1000);
+    msgEl.style.color = 'var(--danger)'; msgEl.textContent = `Too many attempts. Wait ${secondsLeft}s or request a new OTP.`;
+    return;
+  }
+
   msgEl.style.color = 'var(--text-light)'; msgEl.textContent = 'Verifying...';
 
   try {
@@ -2380,11 +2398,21 @@ async function verifyAdminOtp() {
     });
     const data = await res.json();
     if(data.success) {
+      sessionStorage.removeItem('snk_otp_fail_count');
+      sessionStorage.removeItem('snk_otp_lock_until');
       closeLoginModal();
       document.getElementById('adminOverlay').classList.add('show');
       loadProductsTab();
+      loadRecentOrders();
     } else {
-      msgEl.style.color = 'var(--danger)'; msgEl.textContent = data.message || 'Invalid or expired OTP.';
+      const fails = parseInt(sessionStorage.getItem('snk_otp_fail_count') || '0') + 1;
+      sessionStorage.setItem('snk_otp_fail_count', fails.toString());
+      if(fails >= 5) {
+        sessionStorage.setItem('snk_otp_lock_until', (Date.now() + 60000).toString());
+        msgEl.style.color = 'var(--danger)'; msgEl.textContent = 'Too many wrong OTP attempts. Locked for 60 seconds.';
+      } else {
+        msgEl.style.color = 'var(--danger)'; msgEl.textContent = data.message || 'Invalid or expired OTP.';
+      }
     }
   } catch(err) {
     msgEl.style.color = 'var(--danger)'; msgEl.textContent = 'Could not connect. Try again.';
@@ -2393,13 +2421,32 @@ async function verifyAdminOtp() {
 }
 
 function useFallbackPasscode() {
+  const lockUntil = parseInt(sessionStorage.getItem('snk_admin_lock_until') || '0');
+  if(Date.now() < lockUntil) {
+    const secondsLeft = Math.ceil((lockUntil - Date.now()) / 1000);
+    alert(`Too many wrong attempts. Please wait ${secondsLeft} seconds before trying again.`);
+    return;
+  }
   const pass = prompt("Enter admin passcode:");
+  if(pass === null) return;
   if(pass === ADMIN_PASSCODE){
+    sessionStorage.removeItem('snk_admin_fail_count');
+    sessionStorage.removeItem('snk_admin_lock_until');
     closeLoginModal();
     document.getElementById('adminOverlay').classList.add('show');
     loadProductsTab();
+    loadRecentOrders();
+  } else {
+    const fails = parseInt(sessionStorage.getItem('snk_admin_fail_count') || '0') + 1;
+    sessionStorage.setItem('snk_admin_fail_count', fails.toString());
+    if(fails >= 3) {
+      const lockSeconds = Math.min(30 * Math.pow(2, fails - 3), 600);
+      sessionStorage.setItem('snk_admin_lock_until', (Date.now() + lockSeconds * 1000).toString());
+      alert(`Invalid Passcode. Too many attempts — locked for ${lockSeconds} seconds.`);
+    } else {
+      alert("Invalid Passcode.");
+    }
   }
-  else if(pass !== null) { alert("Invalid Passcode."); }
 }
 
 function closeAdmin(){ document.getElementById('adminOverlay').classList.remove('show'); document.getElementById('exportBox').style.display='none'; }
