@@ -945,10 +945,31 @@ function openCustomerMessageBox() {
   window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(waMsg)}`, '_blank');
 }
 
+function toggleCatAllowedLocation(ci, locName, checked) {
+  if(!Array.isArray(catalog[ci].allowedLocations)) catalog[ci].allowedLocations = [];
+  if(checked) {
+    if(!catalog[ci].allowedLocations.includes(locName)) catalog[ci].allowedLocations.push(locName);
+  } else {
+    catalog[ci].allowedLocations = catalog[ci].allowedLocations.filter(l => l !== locName);
+  }
+}
+
+let missedSearchSortBy = 'recent';
+
+function refreshMissedSearchList() {
+  const listEl = document.getElementById('missedSearchList');
+  if(listEl) listEl.innerHTML = renderMissedSearchListHtml();
+}
+
 function renderMissedSearchListHtml() {
   let list = [];
   try { list = JSON.parse(localStorage.getItem('snk_missed_searches') || '[]'); } catch(e) { list = []; }
   if(list.length === 0) return `<div class="empty-note" style="padding:15px 0;">No missed searches recorded on this device yet.</div>`;
+  list = list.slice().sort((a, b) => {
+    if(missedSearchSortBy === 'term') return a.term.localeCompare(b.term);
+    if(missedSearchSortBy === 'count') return (b.count || 0) - (a.count || 0);
+    return new Date(b.lastSearched) - new Date(a.lastSearched); // recent
+  });
   return list.map(item => `
     <div style="display:flex; justify-content:space-between; align-items:center; background:#fff; border:1px solid #FFD5D5; padding:8px 12px; border-radius:6px; margin-bottom:6px; gap:10px;">
       <div><b>${escapeHtml(item.term)}</b> <span style="color:var(--text-light); font-size:11px;">(searched ${item.count}x, last: ${new Date(item.lastSearched).toLocaleDateString('nl-NL')})</span></div>
@@ -1225,7 +1246,16 @@ function renderCatalog(){
       if(currentPage < totalPages) paginationHtml += `<button onclick="goToCategoryPage('${cat.id}', ${currentPage + 1})">›</button>`;
       paginationHtml += `</div>`;
     }
-    mainEl.innerHTML += `<div class="cat-section" id="cat-${cat.id}"><div class="cat-head"><h3>${cat.name}</h3><div class="cat-line"></div></div><div class="products-grid">${cardsHtml}</div>${paginationHtml}</div>`;
+    const hasLocRestriction = Array.isArray(cat.allowedLocations) && cat.allowedLocations.length > 0;
+    const hasDeliveryNote = cat.deliveryNote && cat.deliveryNote.trim() !== '';
+    let restrictionBoxHtml = '';
+    if(hasLocRestriction || hasDeliveryNote) {
+      restrictionBoxHtml = `<div style="background:#FFF8E1; border:1px solid #FFD54F; border-radius:8px; padding:8px 12px; margin:-8px 0 14px; font-size:12px; font-weight:700; color:#7A5A00; display:flex; flex-direction:column; gap:2px;">
+        ${hasLocRestriction ? `<span>📍 Delivery available only in: ${cat.allowedLocations.map(l=>escapeHtml(l)).join(', ')}</span>` : ''}
+        ${hasDeliveryNote ? `<span>🗓️ ${escapeHtml(cat.deliveryNote)}</span>` : ''}
+      </div>`;
+    }
+    mainEl.innerHTML += `<div class="cat-section" id="cat-${cat.id}"><div class="cat-head"><h3>${cat.name}</h3><div class="cat-line"></div></div>${restrictionBoxHtml}<div class="products-grid">${cardsHtml}</div>${paginationHtml}</div>`;
   });
 
   syncCartTotals();
@@ -1299,6 +1329,16 @@ function getMaxCartQtyForVariant(catId, name, unit) {
 
 function handleInitialAdd(catId, itemIdx, name) {
   const cat = catalog.find(c => c.id === catId);
+  if(Array.isArray(cat.allowedLocations) && cat.allowedLocations.length > 0) {
+    const areaSelectEl = document.getElementById('area');
+    if(areaSelectEl && areaSelectEl.value !== "") {
+      const chosenLoc = locations[parseInt(areaSelectEl.value)];
+      if(chosenLoc && !cat.allowedLocations.includes(chosenLoc.name)) {
+        alert(`Sorry, ${name} delivers only to ${cat.allowedLocations.join(', ')}. Your selected location is ${chosenLoc.name}.`);
+        return;
+      }
+    }
+  }
   const cardEl = document.getElementById('card-' + catId + '-' + itemIdx);
   const selIdx = cardEl.querySelector('.punit-select').value;
   const item = cat.items[itemIdx];
@@ -1754,6 +1794,23 @@ async function sendOrder(viaWhatsApp){
   const comments = document.getElementById('ccomments').value.trim() || "None";
   
   if(!areaIdx) { alert("Please select your Delivery Destination location!"); return; }
+
+  // Category-level location restriction check (e.g. Briyani only delivers to Den Haag)
+  const chosenLocObjForCheck = locations[parseInt(areaIdx)];
+  const chosenLocName = chosenLocObjForCheck ? chosenLocObjForCheck.name : "";
+  const blockedProductNames = [];
+  for(const key in cart) {
+    const catId = key.split('||')[0];
+    const cat = catalog.find(c => c.id === catId);
+    if(cat && Array.isArray(cat.allowedLocations) && cat.allowedLocations.length > 0 && !cat.allowedLocations.includes(chosenLocName)) {
+      blockedProductNames.push(cart[key].name);
+    }
+  }
+  if(blockedProductNames.length > 0) {
+    alert(`Sorry, these items only deliver to ${[...new Set(catalog.filter(c=>Array.isArray(c.allowedLocations)&&c.allowedLocations.length>0).flatMap(c=>c.allowedLocations))].join(', ')}: ${blockedProductNames.join(', ')}.\n\nPlease either change your delivery location or remove these items from your basket.`);
+    return;
+  }
+
   if(!name || !addr) { alert("Please enter Name and Address."); return; }
   if(!postcode) { alert("Please enter your Postcode."); return; }
   if(viaWhatsApp && !phone) { alert("Please enter your mobile phone number so we can notify you about your order!"); return; }
@@ -2664,6 +2721,14 @@ function loadProductsTab(){
         <span style="font-size: 15px; font-weight: 800; color: #C0392B;">🔍 Customer Search Requests (products not found)</span>
       </div>
       <p style="font-size:11px; color:var(--text-light); margin: 6px 0 10px;">Shows product names customers searched for with zero results, recorded on <b>this device</b>. Since the site has no shared server, requests made from customer phones reach you instantly via WhatsApp instead (they get a "Request this product" button), and are also logged to your Google Sheet if connected.</p>
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+        <label style="font-size:11px; font-weight:700; color:var(--text-dark);">Sort by:</label>
+        <select id="missedSearchSort" onchange="missedSearchSortBy=this.value; refreshMissedSearchList();" style="padding:6px 10px; border-radius:6px; border:1px solid #CBD5E1; font-size:12px; font-weight:600;">
+          <option value="term" ${missedSearchSortBy==='term'?'selected':''}>Product Name (A-Z)</option>
+          <option value="count" ${missedSearchSortBy==='count'?'selected':''}>Times Searched (High-Low)</option>
+          <option value="recent" ${missedSearchSortBy==='recent'?'selected':''}>Last Searched (Recent first)</option>
+        </select>
+      </div>
       <div id="missedSearchList">${renderMissedSearchListHtml()}</div>
       <div class="admin-btn-row"><button onclick="clearMissedSearches()" style="background:var(--danger); color:#fff;">Clear List</button></div>
     </div>
@@ -2792,6 +2857,18 @@ function loadProductsTab(){
             🖼️ Fill ${cat.items.filter(it => !it[3] || it[3].trim()==='').length} missing product images with category picture
           </button>
         ` : ''}
+        <div style="margin-top:8px; background:#FFF8E1; border:1px solid #FFD54F; border-radius:8px; padding:8px 10px;">
+          <div style="font-size:11px; font-weight:800; color:#7A5A00; margin-bottom:6px;">🚚 Delivery Restrictions (optional)</div>
+          <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:6px;">
+            ${locations.map((loc, li) => `
+              <label style="font-size:11px; font-weight:600; display:flex; align-items:center; gap:4px; cursor:pointer;">
+                <input type="checkbox" ${(Array.isArray(cat.allowedLocations) && cat.allowedLocations.includes(loc.name)) ? 'checked' : ''} onchange="toggleCatAllowedLocation(${ci}, '${loc.name.replace(/'/g,"\\'")}', this.checked)"> ${loc.name}
+              </label>
+            `).join('')}
+          </div>
+          <small style="color:#7A5A00; font-size:10px; display:block; margin-bottom:6px;">Tick locations this category can deliver to. Leave all unticked = delivers everywhere. Add more locations anytime in the Locations tab.</small>
+          <input value="${cat.deliveryNote || ''}" onchange="catalog[${ci}].deliveryNote=this.value;" placeholder="e.g. Delivery only on Saturday & Sunday" style="width:100%; padding:6px 8px; border:1px dashed #CBD5E1; border-radius:6px; font-size:12px;">
+        </div>
       </div>
       <details class="admin-cat-details" ${adminOpenCategories.has(ci) ? 'open' : ''} ontoggle="if(this.open){adminOpenCategories.add(${ci});}else{adminOpenCategories.delete(${ci});}">
         <summary style="cursor:pointer; padding:10px 14px; background:var(--bg-light); border:1px solid #CBD5E1; border-radius:8px; font-weight:700; font-size:13px; color:var(--primary); user-select:none;">📦 ${cat.name} — ${cat.items.length} products (tap to open/close)</summary>
@@ -3106,7 +3183,7 @@ function saveCatalogAndExport(){
   
   // ALL data now lives in settings.json (never in index.html), so future code updates
   // to index.html can never wipe admin changes like locations/settings/offers.
-  const slimCategories = catalog.map(cat => ({ id: cat.id, name: cat.name, icon: cat.icon || undefined }));
+  const slimCategories = catalog.map(cat => ({ id: cat.id, name: cat.name, icon: cat.icon || undefined, allowedLocations: (Array.isArray(cat.allowedLocations) && cat.allowedLocations.length > 0) ? cat.allowedLocations : undefined, deliveryNote: (cat.deliveryNote && cat.deliveryNote.trim() !== '') ? cat.deliveryNote : undefined }));
   const settingsJson = JSON.stringify({ 
     categories: slimCategories, 
     locations: locations, 
