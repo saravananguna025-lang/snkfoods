@@ -570,6 +570,58 @@ const WA_NUMBER = "31685259659";
 const ADMIN_PASSCODE = "snk2026";
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyIFe79oQ4BfYhtqyDzL7YErRkzoG8G0t3zJmwIdT1UaM_OohbJSGNGYs2vXx8jqyW2Ug/exec";
 
+// ===== Visitor tracking (live count / today's count) + abandoned checkout tracking =====
+function getVisitorSessionId() {
+  let sid = localStorage.getItem('snk_session_id');
+  if(!sid) {
+    sid = 'S-' + Date.now() + '-' + Math.random().toString(36).slice(2, 10);
+    localStorage.setItem('snk_session_id', sid);
+  }
+  return sid;
+}
+
+function sendVisitorPing() {
+  if(!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === "YOUR_APPS_SCRIPT_URL_HERE") return;
+  fetch(GOOGLE_SCRIPT_URL, {
+    method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify({ action: 'visitorPing', sessionId: getVisitorSessionId(), ts: new Date().toISOString() })
+  }).catch(()=>{});
+}
+
+function startVisitorTracking() {
+  sendVisitorPing();
+  setInterval(sendVisitorPing, 25000);
+  document.addEventListener('visibilitychange', () => { if(document.visibilityState === 'visible') sendVisitorPing(); });
+}
+
+let checkoutStartLogged = false;
+function trackCheckoutStarted() {
+  if(!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === "YOUR_APPS_SCRIPT_URL_HERE") return;
+  const items = Object.values(cart);
+  if(items.length === 0) return;
+  checkoutStartLogged = true;
+  const cartSummary = items.map(it => `${it.name} (${it.unit}) x${it.qty}`).join(', ');
+  fetch(GOOGLE_SCRIPT_URL, {
+    method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify({
+      action: 'checkoutStarted', sessionId: getVisitorSessionId(),
+      cartSummary, name: (document.getElementById('cname')||{}).value || '',
+      phone: (document.getElementById('cphone')||{}).value || '',
+      ts: new Date().toISOString()
+    })
+  }).catch(()=>{});
+}
+
+function trackCheckoutCompleted() {
+  if(!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === "YOUR_APPS_SCRIPT_URL_HERE" || !checkoutStartLogged) return;
+  checkoutStartLogged = false;
+  fetch(GOOGLE_SCRIPT_URL, {
+    method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify({ action: 'checkoutCompleted', sessionId: getVisitorSessionId(), ts: new Date().toISOString() })
+  }).catch(()=>{});
+}
+// ===== End visitor tracking =====
+
 const storeDatabase = {"categories":[{"id":"vegetables","name":"Fresh Vegetables"},{"id":"fruits","name":"Fresh Fruits"},{"id":"rice","name":"Rice & Atta Flour"},{"id":"dals","name":"Dals & Lentils"},{"id":"spices","name":"Spices & Herbs"},{"id":"masalas","name":"Masala Powders"},{"id":"oils","name":"Oils & Ghee"},{"id":"dairy","name":"Dairy & Paneer"},{"id":"snacks","name":"Snacks & Sweets"},{"id":"beverages","name":"Beverages & Tea"},{"id":"pickles","name":"Pickles & Papads"},{"id":"instant","name":"Instant Mixes"},{"id":"frozen","name":"Frozen Foods"},{"id":"pooja","name":"Pooja Essentials"}],"locations":[{"name":"Den Haag","fee":2.5},{"name":"Rotterdam","fee":5},{"name":"Delft","fee":3},{"name":"Leiden","fee":4}],"offers":[{"title":"Welcome Offer","desc":"Get a free spice pack on your first order above €25!","code":"SNKFREE","firstOrderOnly":true},{"title":"Weekend Delivery Deal","desc":"10% discount on delivery charges for Den Haag residents this weekend.","code":"DH10"}],"settings":{"requiredOrders":3,"loyaltyDiscount":10,"announcementText":"🔥 Special Offer: Keep ordering from our shop to get amazing discounts instantly! 🔥"}};
 
 let catalog = storeDatabase.categories;
@@ -609,6 +661,7 @@ function switchView(viewId) {
   if(viewId === 'profile') renderProfilePage();
   if(viewId === 'offers') renderOffersPage();
   if(viewId === 'myorders') loadMyOrders();
+  if(viewId === 'basket') trackCheckoutStarted();
 }
 
 function getCategoryEmoji(id) {
@@ -1946,6 +1999,8 @@ async function sendOrder(viaWhatsApp){
     window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`,'_blank');
   }
 
+  trackCheckoutCompleted();
+
   cart = {};
   saveCartToLocalStorage();
   syncCartTotals();
@@ -2299,6 +2354,102 @@ async function emailNotifyCustomer(orderId) {
 
 let cachedOrdersError = null;
 
+let cachedVisitorStats = null;
+let cachedVisitorStatsError = null;
+let visitorStatsPollTimer = null;
+
+function renderVisitorStatsHtml() {
+  if(cachedVisitorStatsError) {
+    return `<div class="empty-note" style="padding:10px 0; color:var(--danger);">⚠️ ${escapeHtml(cachedVisitorStatsError)}</div>`;
+  }
+  if(!cachedVisitorStats) {
+    return `<div class="empty-note" style="padding:10px 0;">Tap 🔄 Refresh to load visitor stats.</div>`;
+  }
+  return `
+    <div style="display:flex; gap:12px;">
+      <div style="flex:1; background:#fff; border:1px solid #C8E6C9; border-radius:8px; padding:14px; text-align:center;">
+        <div style="font-size:26px; font-weight:900; color:#2E7D32;">🟢 ${cachedVisitorStats.live}</div>
+        <div style="font-size:11px; font-weight:700; color:var(--text-light); margin-top:2px;">Live right now</div>
+      </div>
+      <div style="flex:1; background:#fff; border:1px solid #C8E6C9; border-radius:8px; padding:14px; text-align:center;">
+        <div style="font-size:26px; font-weight:900; color:#2E7D32;">📅 ${cachedVisitorStats.today}</div>
+        <div style="font-size:11px; font-weight:700; color:var(--text-light); margin-top:2px;">Visited today</div>
+      </div>
+    </div>`;
+}
+
+async function loadVisitorStats() {
+  cachedVisitorStatsError = null;
+  if(!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === "YOUR_APPS_SCRIPT_URL_HERE") {
+    cachedVisitorStatsError = "Google Apps Script URL isn't configured.";
+    loadProductsTab();
+    return;
+  }
+  try {
+    const res = await fetch(GOOGLE_SCRIPT_URL + '?action=getVisitorStats');
+    const text = await res.text();
+    let data;
+    try { data = JSON.parse(text); } catch(e) {
+      cachedVisitorStatsError = "Apps Script didn't return valid data — make sure getVisitorStats is added to your script.";
+      loadProductsTab(); return;
+    }
+    if(data.success) {
+      cachedVisitorStats = { live: data.live || 0, today: data.today || 0 };
+    } else {
+      cachedVisitorStatsError = data.message || "Apps Script responded but no visitor stats returned.";
+    }
+  } catch(err) {
+    cachedVisitorStatsError = "Couldn't reach the Apps Script (network/CORS error).";
+  }
+  loadProductsTab();
+}
+
+let cachedAbandonedCheckouts = [];
+let cachedAbandonedCheckoutsError = null;
+
+function renderAbandonedCheckoutListHtml() {
+  if(cachedAbandonedCheckoutsError) {
+    return `<div class="empty-note" style="padding:10px 0; color:var(--danger);">⚠️ ${escapeHtml(cachedAbandonedCheckoutsError)}</div>`;
+  }
+  if(!cachedAbandonedCheckouts || cachedAbandonedCheckouts.length === 0) {
+    return `<div class="empty-note" style="padding:10px 0;">No abandoned checkouts recorded, or tap 🔄 Refresh to load.</div>`;
+  }
+  return cachedAbandonedCheckouts.map(row => `
+    <div style="background:#fff; border:1px solid #D8D5FF; padding:10px 12px; border-radius:6px; margin-bottom:8px;">
+      <div style="font-weight:700; font-size:13px; color:var(--primary);">${escapeHtml(row.name || 'Unknown name')} ${row.phone ? '· ' + escapeHtml(row.phone) : ''}</div>
+      <div style="font-size:11px; color:var(--text-light); margin-top:3px;">${escapeHtml(row.cartSummary || '')}</div>
+      <div style="font-size:10px; color:var(--text-light); margin-top:3px;">Reached billing: ${row.startedAt ? new Date(row.startedAt).toLocaleString('nl-NL') : ''}</div>
+      ${row.phone ? `<a href="https://wa.me/${row.phone.replace(/[^0-9]/g,'')}" target="_blank" style="font-size:11px; color:#25D366; font-weight:700; display:inline-block; margin-top:4px;">💬 Message on WhatsApp</a>` : ''}
+    </div>
+  `).join('');
+}
+
+async function loadAbandonedCheckouts() {
+  cachedAbandonedCheckoutsError = null;
+  if(!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === "YOUR_APPS_SCRIPT_URL_HERE") {
+    cachedAbandonedCheckoutsError = "Google Apps Script URL isn't configured.";
+    loadProductsTab();
+    return;
+  }
+  try {
+    const res = await fetch(GOOGLE_SCRIPT_URL + '?action=getAbandonedCheckouts');
+    const text = await res.text();
+    let data;
+    try { data = JSON.parse(text); } catch(e) {
+      cachedAbandonedCheckoutsError = "Apps Script didn't return valid data — make sure getAbandonedCheckouts is added to your script.";
+      loadProductsTab(); return;
+    }
+    if(data.success) {
+      cachedAbandonedCheckouts = data.rows || [];
+    } else {
+      cachedAbandonedCheckoutsError = data.message || "Apps Script responded but no data returned.";
+    }
+  } catch(err) {
+    cachedAbandonedCheckoutsError = "Couldn't reach the Apps Script (network/CORS error).";
+  }
+  loadProductsTab();
+}
+
 async function loadRecentOrders() {
   cachedOrdersError = null;
   if(!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === "YOUR_APPS_SCRIPT_URL_HERE") {
@@ -2366,7 +2517,7 @@ function adminLogin(){
   if(pass === ADMIN_PASSCODE){
     sessionStorage.removeItem('snk_admin_fail_count');
     sessionStorage.removeItem('snk_admin_lock_until');
-    document.getElementById('adminOverlay').classList.add('show'); loadProductsTab(); loadRecentOrders();
+    document.getElementById('adminOverlay').classList.add('show'); loadProductsTab(); loadRecentOrders(); loadVisitorStats(); loadAbandonedCheckouts(); startVisitorStatsPolling();
   } else {
     const fails = parseInt(sessionStorage.getItem('snk_admin_fail_count') || '0') + 1;
     sessionStorage.setItem('snk_admin_fail_count', fails.toString());
@@ -2461,6 +2612,9 @@ async function verifyAdminOtp() {
       document.getElementById('adminOverlay').classList.add('show');
       loadProductsTab();
       loadRecentOrders();
+      loadVisitorStats();
+      loadAbandonedCheckouts();
+      startVisitorStatsPolling();
     } else {
       const fails = parseInt(sessionStorage.getItem('snk_otp_fail_count') || '0') + 1;
       sessionStorage.setItem('snk_otp_fail_count', fails.toString());
@@ -2493,6 +2647,9 @@ function useFallbackPasscode() {
     document.getElementById('adminOverlay').classList.add('show');
     loadProductsTab();
     loadRecentOrders();
+    loadVisitorStats();
+    loadAbandonedCheckouts();
+    startVisitorStatsPolling();
   } else {
     const fails = parseInt(sessionStorage.getItem('snk_admin_fail_count') || '0') + 1;
     sessionStorage.setItem('snk_admin_fail_count', fails.toString());
@@ -2506,7 +2663,14 @@ function useFallbackPasscode() {
   }
 }
 
-function closeAdmin(){ document.getElementById('adminOverlay').classList.remove('show'); document.getElementById('exportBox').style.display='none'; }
+function startVisitorStatsPolling() {
+  clearInterval(visitorStatsPollTimer);
+  visitorStatsPollTimer = setInterval(() => {
+    if(document.getElementById('adminOverlay').classList.contains('show')) loadVisitorStats();
+  }, 20000);
+}
+
+function closeAdmin(){ document.getElementById('adminOverlay').classList.remove('show'); document.getElementById('exportBox').style.display='none'; clearInterval(visitorStatsPollTimer); }
 
 // Shared image pipeline: compress (WebP if supported, 900px) then upload to GitHub images/ folder.
 // Falls back to embedding base64 if no GitHub token is set.
@@ -2714,6 +2878,24 @@ function loadProductsTab(){
       </div>
       <p style="font-size:11px; color:var(--text-light); margin: 6px 0 10px;">Shows your most recent orders with a status dropdown you can update (Pending, Confirmed, Preparing, Out for Delivery, Delivered, Cancelled). Requires the Orders Apps Script setup — see setup guide.</p>
       <div id="ordersList">${renderOrdersListHtml()}</div>
+    </div>
+
+    <div class="admin-cat" style="border: 2px solid #4CAF50; background: #F1F8F0;">
+      <div class="admin-cat-header">
+        <span style="font-size: 15px; font-weight: 800; color: #2E7D32;">👥 Website Visitors</span>
+        <button onclick="flashButton(this); loadVisitorStats();" style="background:#4CAF50; color:#fff; border:none; padding:4px 10px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:700;">🔄 Refresh</button>
+      </div>
+      <p style="font-size:11px; color:var(--text-light); margin: 6px 0 10px;">Live count auto-refreshes every 20 seconds. Requires the Visitor Tracking Apps Script setup — see setup guide.</p>
+      <div id="visitorStatsBox">${renderVisitorStatsHtml()}</div>
+    </div>
+
+    <div class="admin-cat" style="border: 2px solid #6C63FF; background: #F5F4FF;">
+      <div class="admin-cat-header">
+        <span style="font-size: 15px; font-weight: 800; color: #4B3FCC;">🛒 Reached Billing But Didn't Order</span>
+        <button onclick="flashButton(this); loadAbandonedCheckouts();" style="background:#6C63FF; color:#fff; border:none; padding:4px 10px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:700;">🔄 Refresh</button>
+      </div>
+      <p style="font-size:11px; color:var(--text-light); margin: 6px 0 10px;">Customers who opened the basket/billing page with items but never completed the order. Requires the Visitor Tracking Apps Script setup.</p>
+      <div id="abandonedCheckoutList">${renderAbandonedCheckoutListHtml()}</div>
     </div>
 
     <div class="admin-cat" style="border: 2px solid #FF6B6B; background: #FFF5F5;">
@@ -3343,6 +3525,7 @@ async function initApp() {
   renderCarousel();
   const loadingEl = document.getElementById('loadingOverlay');
   if(loadingEl) loadingEl.style.display = 'none';
+  startVisitorTracking();
 }
 
 initApp();
