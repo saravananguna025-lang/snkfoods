@@ -3529,6 +3529,12 @@ async function initApp() {
 }
 
 initApp();
+
+if(window.location.hash === '#admin') {
+  window.addEventListener('load', () => {
+    setTimeout(() => { adminLoginWithOtp(); }, 300);
+  });
+}
 </script>
 
 </body></html>
