@@ -2414,11 +2414,17 @@ function renderVisitorStatsHtml() {
     </div>`;
 }
 
+function updateAdminBox(boxId, html) {
+  const box = document.getElementById(boxId);
+  if(box) { box.innerHTML = html; return true; }
+  return false;
+}
+
 async function loadVisitorStats() {
   cachedVisitorStatsError = null;
   if(!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === "YOUR_APPS_SCRIPT_URL_HERE") {
     cachedVisitorStatsError = "Google Apps Script URL isn't configured.";
-    loadProductsTab();
+    updateAdminBox('visitorStatsBox', renderVisitorStatsHtml());
     return;
   }
   try {
@@ -2427,7 +2433,7 @@ async function loadVisitorStats() {
     let data;
     try { data = JSON.parse(text); } catch(e) {
       cachedVisitorStatsError = "Apps Script didn't return valid data — make sure getVisitorStats is added to your script.";
-      loadProductsTab(); return;
+      updateAdminBox('visitorStatsBox', renderVisitorStatsHtml()); return;
     }
     if(data.success) {
       cachedVisitorStats = { live: data.live || 0, today: data.today || 0 };
@@ -2437,7 +2443,7 @@ async function loadVisitorStats() {
   } catch(err) {
     cachedVisitorStatsError = "Couldn't reach the Apps Script (network/CORS error).";
   }
-  loadProductsTab();
+  updateAdminBox('visitorStatsBox', renderVisitorStatsHtml());
 }
 
 let cachedAbandonedCheckouts = [];
@@ -2464,7 +2470,7 @@ async function loadAbandonedCheckouts() {
   cachedAbandonedCheckoutsError = null;
   if(!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === "YOUR_APPS_SCRIPT_URL_HERE") {
     cachedAbandonedCheckoutsError = "Google Apps Script URL isn't configured.";
-    loadProductsTab();
+    updateAdminBox('abandonedCheckoutList', renderAbandonedCheckoutListHtml());
     return;
   }
   try {
@@ -2473,7 +2479,7 @@ async function loadAbandonedCheckouts() {
     let data;
     try { data = JSON.parse(text); } catch(e) {
       cachedAbandonedCheckoutsError = "Apps Script didn't return valid data — make sure getAbandonedCheckouts is added to your script.";
-      loadProductsTab(); return;
+      updateAdminBox('abandonedCheckoutList', renderAbandonedCheckoutListHtml()); return;
     }
     if(data.success) {
       cachedAbandonedCheckouts = data.rows || [];
@@ -2483,7 +2489,7 @@ async function loadAbandonedCheckouts() {
   } catch(err) {
     cachedAbandonedCheckoutsError = "Couldn't reach the Apps Script (network/CORS error).";
   }
-  loadProductsTab();
+  updateAdminBox('abandonedCheckoutList', renderAbandonedCheckoutListHtml());
 }
 
 async function loadRecentOrders() {
@@ -2491,7 +2497,7 @@ async function loadRecentOrders() {
   if(!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === "YOUR_APPS_SCRIPT_URL_HERE") {
     cachedOrders = [];
     cachedOrdersError = "Google Apps Script URL isn't configured.";
-    loadProductsTab();
+    updateAdminBox('ordersList', renderOrdersListHtml());
     return;
   }
   try {
@@ -2499,7 +2505,7 @@ async function loadRecentOrders() {
     if(!res.ok) {
       cachedOrdersError = `Server responded with an error (HTTP ${res.status}). Check your Apps Script deployment.`;
       cachedOrders = [];
-      loadProductsTab();
+      updateAdminBox('ordersList', renderOrdersListHtml());
       return;
     }
     const text = await res.text();
@@ -2509,7 +2515,7 @@ async function loadRecentOrders() {
     } catch(parseErr) {
       cachedOrdersError = "Apps Script didn't return valid data — check for errors in your script (e.g. duplicate doGet, syntax error).";
       cachedOrders = [];
-      loadProductsTab();
+      updateAdminBox('ordersList', renderOrdersListHtml());
       return;
     }
     if(data.success && data.orders) {
@@ -2523,7 +2529,7 @@ async function loadRecentOrders() {
     cachedOrders = [];
     cachedOrdersError = "Couldn't reach the Apps Script (network/CORS error). Check the deployment is live and public.";
   }
-  loadProductsTab();
+  updateAdminBox('ordersList', renderOrdersListHtml());
 }
 
 async function updateOrderStatus(orderId, status) {
@@ -2553,7 +2559,8 @@ function adminLogin(){
   if(pass === ADMIN_PASSCODE){
     sessionStorage.removeItem('snk_admin_fail_count');
     sessionStorage.removeItem('snk_admin_lock_until');
-    document.getElementById('adminOverlay').classList.add('show'); loadProductsTab(); loadRecentOrders(); loadVisitorStats(); loadAbandonedCheckouts(); startVisitorStatsPolling();
+    localStorage.setItem('snk_admin_trusted', '1');
+    grantAdminAccess();
   } else {
     const fails = parseInt(sessionStorage.getItem('snk_admin_fail_count') || '0') + 1;
     sessionStorage.setItem('snk_admin_fail_count', fails.toString());
@@ -3144,10 +3151,10 @@ function loadProductsTab(){
             </div>
           </div>
           <div class="admin-item-row">
-            <input value="${item[0]}" onchange="catalog[${ci}].items[${ii}][0]=this.value" placeholder="Name">
-            <input value="${item[1]}" onchange="catalog[${ci}].items[${ii}][1]=this.value" placeholder="e.g. 1kg, 500g or 1 bunch, 2 bunch">
+            <input value="${item[0]}" oninput="catalog[${ci}].items[${ii}][0]=this.value" placeholder="Name">
+            <input value="${item[1]}" oninput="catalog[${ci}].items[${ii}][1]=this.value" placeholder="e.g. 1kg, 500g or 1 bunch, 2 bunch">
             <div style="display:flex; gap:4px; align-items:center;">
-              <input value="${item[2]}" onchange="catalog[${ci}].items[${ii}][2]=this.value" placeholder="Use . for decimals: 3.49, 1.75" style="flex:1; min-width:0;">
+              <input value="${item[2]}" oninput="catalog[${ci}].items[${ii}][2]=this.value" placeholder="Use . for decimals: 3.49, 1.75" style="flex:1; min-width:0;">
               <button type="button" onclick="flashButton(this); autoCalcVariantPrices(${ci}, ${ii})" title="Tap to auto-calculate the other sizes from whichever price you've filled in" style="background:var(--primary); color:#fff; border:none; width:32px; height:32px; border-radius:6px; font-size:14px; cursor:pointer; flex-shrink:0;">⚡</button>
             </div>
             <div style="display:flex; gap:4px; align-items:center;">
