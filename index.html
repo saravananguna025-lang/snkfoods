@@ -553,7 +553,7 @@
 </footer>
 
 <div class="admin-overlay" id="adminOverlay">
-  <div class="admin-head"><h3>SNK Operations Control</h3><button onclick="closeAdmin()">×</button></div>
+  <div class="admin-head"><h3>SNK Operations Control</h3><button onclick="adminLogout()" style="background:var(--danger, #e11d48); color:#fff; font-size:12px; font-weight:700; border:none; padding:6px 12px; border-radius:6px; margin-right:8px; cursor:pointer;">🔒 Logout</button><button onclick="closeAdmin()">×</button></div>
   <div class="admin-body" id="adminBody"></div>
   <div class="save-bar">
     <button onclick="saveCatalogAndExport()">1. Save & Prepare Files</button>
@@ -2568,6 +2568,10 @@ function adminLogin(){
 }
 
 function adminLoginWithOtp(){
+  if(isAdminDeviceTrusted()) {
+    grantAdminAccess();
+    return;
+  }
   document.getElementById('loginModal').classList.add('show');
   document.getElementById('overlay').classList.add('show');
   document.getElementById('loginStep1').style.display = 'block';
@@ -2620,6 +2624,19 @@ async function requestAdminOtp() {
   }
 }
 
+function grantAdminAccess(){
+  document.getElementById('adminOverlay').classList.add('show');
+  loadProductsTab();
+  loadRecentOrders();
+  loadVisitorStats();
+  loadAbandonedCheckouts();
+  startVisitorStatsPolling();
+}
+
+function isAdminDeviceTrusted() {
+  return localStorage.getItem('snk_admin_trusted') === '1';
+}
+
 async function verifyAdminOtp() {
   const otp = document.getElementById('loginOtp').value.trim();
   const msgEl = document.getElementById('loginMsg2');
@@ -2644,13 +2661,9 @@ async function verifyAdminOtp() {
     if(data.success) {
       sessionStorage.removeItem('snk_otp_fail_count');
       sessionStorage.removeItem('snk_otp_lock_until');
+      localStorage.setItem('snk_admin_trusted', '1');
       closeLoginModal();
-      document.getElementById('adminOverlay').classList.add('show');
-      loadProductsTab();
-      loadRecentOrders();
-      loadVisitorStats();
-      loadAbandonedCheckouts();
-      startVisitorStatsPolling();
+      grantAdminAccess();
     } else {
       const fails = parseInt(sessionStorage.getItem('snk_otp_fail_count') || '0') + 1;
       sessionStorage.setItem('snk_otp_fail_count', fails.toString());
@@ -2679,13 +2692,9 @@ function useFallbackPasscode() {
   if(pass === ADMIN_PASSCODE){
     sessionStorage.removeItem('snk_admin_fail_count');
     sessionStorage.removeItem('snk_admin_lock_until');
+    localStorage.setItem('snk_admin_trusted', '1');
     closeLoginModal();
-    document.getElementById('adminOverlay').classList.add('show');
-    loadProductsTab();
-    loadRecentOrders();
-    loadVisitorStats();
-    loadAbandonedCheckouts();
-    startVisitorStatsPolling();
+    grantAdminAccess();
   } else {
     const fails = parseInt(sessionStorage.getItem('snk_admin_fail_count') || '0') + 1;
     sessionStorage.setItem('snk_admin_fail_count', fails.toString());
@@ -2707,6 +2716,12 @@ function startVisitorStatsPolling() {
 }
 
 function closeAdmin(){ document.getElementById('adminOverlay').classList.remove('show'); document.getElementById('exportBox').style.display='none'; clearInterval(visitorStatsPollTimer); }
+
+function adminLogout(){
+  if(!confirm('Log out of admin panel? You will need email, password & OTP to log in again on this device.')) return;
+  localStorage.removeItem('snk_admin_trusted');
+  closeAdmin();
+}
 
 // Shared image pipeline: compress (WebP if supported, 900px) then upload to GitHub images/ folder.
 // Falls back to embedding base64 if no GitHub token is set.
