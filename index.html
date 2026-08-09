@@ -3411,6 +3411,27 @@ async function publishLiveToGitHub() {
   }
 }
 
+function getBrandKey(name) {
+  if(!name) return '';
+  const parenMatch = name.match(/\(([^)]+)\)\s*$/);
+  if(parenMatch) return parenMatch[1].trim().toLowerCase();
+  if(name.startsWith('India Gate')) return 'india gate';
+  return name.split(' ')[0].toLowerCase();
+}
+
+function regroupCategoryByBrand(cat) {
+  const brandOrder = [];
+  const groups = {};
+  cat.items.forEach(item => {
+    const key = getBrandKey(item[0]);
+    if(!groups[key]) { groups[key] = []; brandOrder.push(key); }
+    groups[key].push(item);
+  });
+  const regrouped = [];
+  brandOrder.forEach(key => regrouped.push(...groups[key]));
+  cat.items = regrouped;
+}
+
 function saveCatalogAndExport(){
   const announceField = document.getElementById('settingAnnouncementText');
   if(announceField) {
@@ -3419,7 +3440,9 @@ function saveCatalogAndExport(){
   const contactInfoField = document.getElementById('settingContactInfo');
   if(contactInfoField) storeDatabase.settings.contactInfo = contactInfoField.value;
   document.getElementById('menuContactPhone').textContent = storeDatabase.settings.contactInfo;
-  
+
+  catalog.forEach(cat => regroupCategoryByBrand(cat));
+
   closeAdmin();
   renderCatalog();
   renderLocations();
