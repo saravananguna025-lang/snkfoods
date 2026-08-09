@@ -1264,15 +1264,18 @@ function renderCatalog(){
       const itemIdx = startIdx + sliceIdx; // keep original index so cart/stock functions stay correct
       const [name, unitStr, priceStr, imgUrl, isOosFlag, stockMode, stockCount, stockUnit] = itemArr;
       const variants = parseVariants(unitStr, priceStr);
-      const defaultPrice = variants[0] ? variants[0].price : 0;
+      let defaultVariantIdx = variants.findIndex((v, vIdx) => !isVariantOutOfStock(itemArr, vIdx));
+      const allVariantsOos = defaultVariantIdx === -1;
+      if(allVariantsOos) defaultVariantIdx = 0;
+      const defaultPrice = variants[defaultVariantIdx] ? variants[defaultVariantIdx].price : 0;
       const disc = getItemDiscount(itemArr);
       const fallbackImg = `https://dummyimage.com/300x300/f1f5f9/0b4624.png&text=${encodeURIComponent(name)}`;
       let finalImgSrc = imgUrl ? imgUrl.trim() : fallbackImg;
-      const isOos = isVariantOutOfStock(itemArr, 0);
+      const isOos = allVariantsOos;
       const stockUnitLabel = stockUnit === 'kg' ? 'kg' : 'left';
       const lowStockThreshold = stockUnit === 'kg' ? 3 : 5;
       const lowStockNote = (stockMode === 'count' && !isOos && parseFloat(stockCount) <= lowStockThreshold) ? `<div style="font-size:11px; color:var(--danger); font-weight:700; margin-top:2px;">Only ${parseFloat(stockCount)} ${stockUnitLabel === 'kg' ? 'kg left' : 'left'}!</div>` : '';
-      const perVariantNote = (stockMode === 'perVariant') ? `<div style="font-size:11px; color:var(--text-light); margin-top:2px;" id="pvnote-${cat.id}-${itemIdx}">${isOos ? '' : (parseFloat((itemArr[10]||[])[0]) <= 3 ? `Only ${parseFloat((itemArr[10]||[])[0])} bags left!` : '')}</div>` : '';
+      const perVariantNote = (stockMode === 'perVariant') ? `<div style="font-size:11px; color:var(--text-light); margin-top:2px;" id="pvnote-${cat.id}-${itemIdx}">${isOos ? '' : (parseFloat((itemArr[10]||[])[defaultVariantIdx]) <= 3 ? `Only ${parseFloat((itemArr[10]||[])[defaultVariantIdx])} bags left!` : '')}</div>` : '';
 
       cardsHtml += `
         <div class="product-card ${isOos ? 'oos-card' : ''}" id="card-${cat.id}-${itemIdx}">
@@ -1287,7 +1290,7 @@ function renderCatalog(){
           <div>
             <div class="variant-wrapper">
               <select class="punit-select" onchange="onVariantChange('${cat.id}', ${itemIdx}, '${name.replace(/'/g, "\\'")}', this.value); this.blur();">
-                ${variants.map((v, idx) => `<option value="${idx}">${v.unit}</option>`).join('')}
+                ${variants.map((v, idx) => `<option value="${idx}" ${idx===defaultVariantIdx?'selected':''}>${v.unit}</option>`).join('')}
               </select>
             </div>
             <div class="price-row"><span class="price" id="price-${cat.id}-${itemIdx}">${priceDisplayHtml(defaultPrice, disc)}</span></div>
