@@ -2273,6 +2273,17 @@ function onProductDragEnd(ev) {
   loadProductsTab();
 }
 
+function moveProductToPosition(ci, currentIndex, newPosStr) {
+  const items = catalog[ci].items;
+  let newIndex = parseInt(newPosStr) - 1;
+  if(isNaN(newIndex)) { loadProductsTab(); return; }
+  newIndex = Math.max(0, Math.min(items.length - 1, newIndex));
+  if(newIndex === currentIndex) { loadProductsTab(); return; }
+  const [moved] = items.splice(currentIndex, 1);
+  items.splice(newIndex, 0, moved);
+  loadProductsTab();
+}
+
 function moveProductUp(ci, ii) {
   if(ii <= 0) return;
   const items = catalog[ci].items;
@@ -3127,7 +3138,7 @@ function loadProductsTab(){
           ${cat.items.map((item, ii) => `
             <div class="reorder-row" data-ci="${ci}" data-index="${ii}">
               <span class="reorder-handle" onpointerdown="startProductDrag(event, ${ci}, ${ii})">☰</span>
-              <span class="reorder-pos" id="reorderPos-${ci}-${ii}">#${ii + 1}</span>
+              <input type="number" class="reorder-pos-input" id="reorderPos-${ci}-${ii}" value="${ii + 1}" min="1" max="${cat.items.length}" onchange="moveProductToPosition(${ci}, ${ii}, this.value)" onclick="this.select()" style="width:52px; text-align:center; font-weight:800; font-size:13px; color:#fff; background:var(--primary); border:none; border-radius:14px; padding:6px 4px;">
               <span class="reorder-name">${item[0] || '(unnamed)'}</span>
             </div>
           `).join('')}
