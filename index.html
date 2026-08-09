@@ -428,6 +428,14 @@
       
       <label>Delivery Destination</label>
       <select id="area" onchange="syncCartTotals()"></select>
+      <div id="deliveryDayContainer" style="display:none;">
+        <label>Preferred Delivery Day <span style="color:var(--danger, #e11d48);">*</span></label>
+        <select id="deliveryDay">
+          <option value="">Select a day...</option>
+          <option value="Saturday">Saturday</option>
+          <option value="Sunday">Sunday</option>
+        </select>
+      </div>
       <label>Your Full Name</label><input id="cname" placeholder="Enter your name">
       <label>Mobile Phone Number</label><input id="cphone" type="tel" placeholder="e.g. +31 6 12345678">
       <label>Email (only needed if you don't use WhatsApp)</label><input id="cemail" type="email" placeholder="you@example.com">
@@ -1485,6 +1493,26 @@ function syncAllCardSteppers() {
   });
 }
 
+function cartHasDayRestrictedItems() {
+  for(const key in cart) {
+    const catId = key.split('||')[0];
+    const cat = catalog.find(c => c.id === catId);
+    if(cat && cat.dayRestricted) return true;
+  }
+  return false;
+}
+
+function updateDeliveryDayVisibility() {
+  const containerEl = document.getElementById('deliveryDayContainer');
+  if(!containerEl) return;
+  if(cartHasDayRestrictedItems()) {
+    containerEl.style.display = 'block';
+  } else {
+    containerEl.style.display = 'none';
+    document.getElementById('deliveryDay').value = '';
+  }
+}
+
 function syncCartTotals(){
   const items = Object.values(cart);
   const totalCount = items.reduce((sum, i)=> sum + i.qty, 0);
@@ -1498,6 +1526,7 @@ function syncCartTotals(){
   }
   renderLedger();
   syncAllCardSteppers();
+  updateDeliveryDayVisibility();
 }
 
 async function checkFirstOrderEligibility(phone) {
@@ -1864,6 +1893,12 @@ async function sendOrder(viaWhatsApp){
     return;
   }
 
+  let deliveryDay = "";
+  if(cartHasDayRestrictedItems()) {
+    deliveryDay = document.getElementById('deliveryDay').value;
+    if(!deliveryDay) { alert("Please select your preferred delivery day (Saturday or Sunday) for the Briyani/day-restricted items in your cart."); return; }
+  }
+
   if(!name || !addr) { alert("Please enter Name and Address."); return; }
   if(!postcode) { alert("Please enter your Postcode."); return; }
   if(viaWhatsApp && !phone) { alert("Please enter your mobile phone number so we can notify you about your order!"); return; }
@@ -1959,6 +1994,7 @@ async function sendOrder(viaWhatsApp){
       address: addr,
       postcode: postcode,
       location: areaName,
+      deliveryDay: deliveryDay || "N/A",
       items: items.map(it => `${it.name} (${it.unit}) x${it.qty}`).join(', '),
       itemsDetailed: items.map(it => ({ name: it.name, unit: it.unit, qty: it.qty })),
       subtotal: `€${subTotal.toFixed(2)}`,
@@ -1982,7 +2018,7 @@ async function sendOrder(viaWhatsApp){
   if(activeCoupon) {
     msg += `Promo Applied: ${activeCoupon} (-€${discountAmount.toFixed(2)})\n`;
   }
-  msg += `BTW (9%): €${taxAmount.toFixed(2)}\nDelivery Charge (${areaName}): €${deliveryFee.toFixed(2)}\nTotal Amount: €${grandTotal.toFixed(2)}\n\nDelivery to: ${areaName}\nName: ${name}\nAddress: ${addr}, ${postcode}\nNotes: ${comments}`;
+  msg += `BTW (9%): €${taxAmount.toFixed(2)}\nDelivery Charge (${areaName}): €${deliveryFee.toFixed(2)}\nTotal Amount: €${grandTotal.toFixed(2)}\n\nDelivery to: ${areaName}${deliveryDay ? `\nPreferred Delivery Day: ${deliveryDay}` : ''}\nName: ${name}\nAddress: ${addr}, ${postcode}\nNotes: ${comments}`;
   
   let currentCount = parseInt(localStorage.getItem('snk_order_count') || '0');
   if(activeCoupon === "LOYAL4") {
@@ -3050,6 +3086,9 @@ function loadProductsTab(){
           </div>
           <small style="color:#7A5A00; font-size:10px; display:block; margin-bottom:6px;">Tick locations this category can deliver to. Leave all unticked = delivers everywhere. Add more locations anytime in the Locations tab.</small>
           <input value="${cat.deliveryNote || ''}" onchange="catalog[${ci}].deliveryNote=this.value;" placeholder="e.g. Delivery only on Saturday & Sunday" style="width:100%; padding:6px 8px; border:1px dashed #CBD5E1; border-radius:6px; font-size:12px;">
+          <label style="font-size:11px; font-weight:600; display:flex; align-items:center; gap:4px; cursor:pointer; margin-top:6px;">
+            <input type="checkbox" ${cat.dayRestricted ? 'checked' : ''} onchange="catalog[${ci}].dayRestricted=this.checked;"> Ask customer to pick delivery day (Saturday/Sunday) at checkout
+          </label>
         </div>
       </div>
       <details class="admin-cat-details" ${adminOpenCategories.has(ci) ? 'open' : ''} ontoggle="if(this.open){adminOpenCategories.add(${ci});}else{adminOpenCategories.delete(${ci});}">
@@ -3365,7 +3404,7 @@ function saveCatalogAndExport(){
   
   // ALL data now lives in settings.json (never in index.html), so future code updates
   // to index.html can never wipe admin changes like locations/settings/offers.
-  const slimCategories = catalog.map(cat => ({ id: cat.id, name: cat.name, icon: cat.icon || undefined, allowedLocations: (Array.isArray(cat.allowedLocations) && cat.allowedLocations.length > 0) ? cat.allowedLocations : undefined, deliveryNote: (cat.deliveryNote && cat.deliveryNote.trim() !== '') ? cat.deliveryNote : undefined }));
+  const slimCategories = catalog.map(cat => ({ id: cat.id, name: cat.name, icon: cat.icon || undefined, allowedLocations: (Array.isArray(cat.allowedLocations) && cat.allowedLocations.length > 0) ? cat.allowedLocations : undefined, deliveryNote: (cat.deliveryNote && cat.deliveryNote.trim() !== '') ? cat.deliveryNote : undefined, dayRestricted: cat.dayRestricted ? true : undefined }));
   const settingsJson = JSON.stringify({ 
     categories: slimCategories, 
     locations: locations, 
