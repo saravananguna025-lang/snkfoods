@@ -2468,16 +2468,47 @@ async function loadVisitorStats() {
 let cachedAbandonedCheckouts = [];
 let cachedAbandonedCheckoutsError = null;
 
+function getDismissedAbandonedKeys() {
+  try { return JSON.parse(localStorage.getItem('snk_dismissed_abandoned') || '[]'); } catch(e) { return []; }
+}
+
+function abandonedRowKey(row) {
+  return (row.startedAt || '') + '|' + (row.phone || '') + '|' + (row.name || '');
+}
+
+function dismissAbandonedCheckout(key) {
+  const dismissed = getDismissedAbandonedKeys();
+  if(!dismissed.includes(key)) dismissed.push(key);
+  localStorage.setItem('snk_dismissed_abandoned', JSON.stringify(dismissed));
+  updateAdminBox('abandonedCheckoutList', renderAbandonedCheckoutListHtml());
+}
+
+function clearAllAbandonedCheckouts() {
+  if(!cachedAbandonedCheckouts || cachedAbandonedCheckouts.length === 0) return;
+  if(!confirm('Clear all ' + cachedAbandonedCheckouts.length + ' abandoned checkout entries from this list? (Hides them on this device; they still exist in your Google Sheet.)')) return;
+  const dismissed = getDismissedAbandonedKeys();
+  cachedAbandonedCheckouts.forEach(row => {
+    const key = abandonedRowKey(row);
+    if(!dismissed.includes(key)) dismissed.push(key);
+  });
+  localStorage.setItem('snk_dismissed_abandoned', JSON.stringify(dismissed));
+  updateAdminBox('abandonedCheckoutList', renderAbandonedCheckoutListHtml());
+}
+
 function renderAbandonedCheckoutListHtml() {
   if(cachedAbandonedCheckoutsError) {
     return `<div class="empty-note" style="padding:10px 0; color:var(--danger);">⚠️ ${escapeHtml(cachedAbandonedCheckoutsError)}</div>`;
   }
-  if(!cachedAbandonedCheckouts || cachedAbandonedCheckouts.length === 0) {
+  const dismissed = getDismissedAbandonedKeys();
+  const visibleRows = (cachedAbandonedCheckouts || []).filter(row => !dismissed.includes(abandonedRowKey(row)));
+  if(visibleRows.length === 0) {
     return `<div class="empty-note" style="padding:10px 0;">No abandoned checkouts recorded, or tap 🔄 Refresh to load.</div>`;
   }
-  return cachedAbandonedCheckouts.map(row => `
-    <div style="background:#fff; border:1px solid #D8D5FF; padding:10px 12px; border-radius:6px; margin-bottom:8px;">
-      <div style="font-weight:700; font-size:13px; color:var(--primary);">${escapeHtml(row.name || 'Unknown name')} ${row.phone ? '· ' + escapeHtml(row.phone) : ''}</div>
+  return `<div style="text-align:right; margin-bottom:8px;"><button onclick="clearAllAbandonedCheckouts()" style="background:var(--danger); color:#fff; border:none; padding:5px 12px; border-radius:6px; font-size:11px; font-weight:700; cursor:pointer;">🗑️ Clear All</button></div>` +
+  visibleRows.map(row => `
+    <div style="background:#fff; border:1px solid #D8D5FF; padding:10px 12px; border-radius:6px; margin-bottom:8px; position:relative;">
+      <button onclick="dismissAbandonedCheckout('${abandonedRowKey(row).replace(/'/g,"\\'")}')" title="Dismiss" style="position:absolute; top:8px; right:8px; background:#F1F5F9; border:1px solid #CBD5E1; width:24px; height:24px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:700; color:var(--text-light);">×</button>
+      <div style="font-weight:700; font-size:13px; color:var(--primary); padding-right:28px;">${escapeHtml(row.name || 'Unknown name')} ${row.phone ? '· ' + escapeHtml(row.phone) : ''}</div>
       <div style="font-size:11px; color:var(--text-light); margin-top:3px;">${escapeHtml(row.cartSummary || '')}</div>
       <div style="font-size:10px; color:var(--text-light); margin-top:3px;">Reached billing: ${row.startedAt ? new Date(row.startedAt).toLocaleString('nl-NL') : ''}</div>
       ${row.phone ? `<a href="https://wa.me/${row.phone.replace(/[^0-9]/g,'')}" target="_blank" style="font-size:11px; color:#25D366; font-weight:700; display:inline-block; margin-top:4px;">💬 Message on WhatsApp</a>` : ''}
@@ -2943,6 +2974,61 @@ function switchAdminTab(tabName) {
   if(body) body.scrollTop = 0;
 }
 
+function computeOutOfStockReport() {
+  const report = [];
+  catalog.forEach(cat => {
+    (cat.items || []).forEach((item) => {
+      const stockMode = item[5];
+      const variants = parseVariants(item[1] || '', item[2] || '');
+      if(stockMode === 'perVariant' || stockMode === 'manualPerVariant') {
+        const oosVariants = variants.filter((v, vi) => isVariantOutOfStock(item, vi)).map(v => v.unit);
+        if(oosVariants.length > 0) {
+          report.push({
+            catName: cat.name, catId: cat.id, itemName: item[0] || '(unnamed)',
+            oosLabel: oosVariants.length === variants.length ? 'ALL sizes' : oosVariants.join(', ')
+          });
+        }
+      } else {
+        if(isItemOutOfStock(item[4], stockMode, item[6])) {
+          report.push({ catName: cat.name, catId: cat.id, itemName: item[0] || '(unnamed)', oosLabel: 'ALL sizes' });
+        }
+      }
+    });
+  });
+  return report;
+}
+
+function jumpToProductInAdmin(name) {
+  switchAdminTab('products');
+  const searchEl = document.getElementById('adminSearchBar');
+  if(searchEl) {
+    searchEl.value = name;
+    filterAdminProducts(name);
+    searchEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function renderOutOfStockReportHtml() {
+  const report = computeOutOfStockReport();
+  if(report.length === 0) {
+    return `<div class="empty-note" style="padding:10px 0;">🎉 Nothing out of stock right now!</div>`;
+  }
+  const byCategory = {};
+  report.forEach(r => { if(!byCategory[r.catName]) byCategory[r.catName] = []; byCategory[r.catName].push(r); });
+  return `<div style="font-size:11px; color:var(--text-light); margin-bottom:10px;">${report.length} item${report.length===1?'':'s'} need restocking. Tap any item to jump to it and toggle stock.</div>` +
+    Object.keys(byCategory).map(catName => `
+      <div style="margin-bottom:12px;">
+        <div style="font-weight:800; font-size:12px; color:#C0392B; margin-bottom:6px;">${escapeHtml(catName)} (${byCategory[catName].length})</div>
+        ${byCategory[catName].map(r => `
+          <div onclick="jumpToProductInAdmin('${(r.itemName||'').replace(/'/g,"\\'")}')" style="cursor:pointer; display:flex; justify-content:space-between; align-items:center; background:#FFF5F5; border:1px solid #FFD5D5; padding:8px 10px; border-radius:6px; margin-bottom:6px;">
+            <span style="font-size:12px; font-weight:600; color:var(--text-dark);">${escapeHtml(r.itemName)}</span>
+            <span style="font-size:11px; color:#C0392B; font-weight:700; flex-shrink:0; margin-left:8px;">${escapeHtml(r.oosLabel)}</span>
+          </div>
+        `).join('')}
+      </div>
+    `).join('');
+}
+
 function loadProductsTab(){
   const body = document.getElementById('adminBody');
   const existingSearchEl = document.getElementById('adminSearchBar');
@@ -2978,6 +3064,14 @@ function loadProductsTab(){
       </div>
       <p style="font-size:11px; color:var(--text-light); margin: 6px 0 10px;">Shows your most recent orders with a status dropdown you can update (Pending, Confirmed, Preparing, Out for Delivery, Delivered, Cancelled). Requires the Orders Apps Script setup — see setup guide.</p>
       <div id="ordersList">${renderOrdersListHtml()}</div>
+    </div>
+
+    <div class="admin-cat" style="border: 2px solid #C0392B; background: #FFF5F5;">
+      <div class="admin-cat-header">
+        <span style="font-size: 15px; font-weight: 800; color: #C0392B;">📦 Out of Stock — Restock List</span>
+      </div>
+      <p style="font-size:11px; color:var(--text-light); margin: 6px 0 10px;">Every product (or size) currently marked out of stock, across all categories — a quick shopping list for what to restock.</p>
+      <div id="outOfStockReportBox">${renderOutOfStockReportHtml()}</div>
     </div>
 
     <div class="admin-cat" style="border: 2px solid #4CAF50; background: #F1F8F0;">
