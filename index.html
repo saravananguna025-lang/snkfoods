@@ -1683,34 +1683,112 @@ function isUserLoggedIn() {
   return localStorage.getItem('snk_user_phone') !== null;
 }
 
-function handlePhoneLogin() {
+async function requestCustomerOtp(evt) {
   const name = document.getElementById('userNameInput').value.trim();
   const phone = document.getElementById('userPhoneInput').value.trim();
-  if(!name) {
-    alert("Please enter your name!");
+  const email = document.getElementById('userEmailInput').value.trim();
+  const msgEl = document.getElementById('custLoginMsg1');
+  msgEl.textContent = '';
+
+  if(!name) { msgEl.textContent = 'Please enter your name.'; return; }
+  if(!phone || phone.length < 8) { msgEl.textContent = 'Please enter a valid phone number.'; return; }
+  if(!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { msgEl.textContent = 'Please enter a valid email address.'; return; }
+
+  const cooldownUntil = parseInt(sessionStorage.getItem('snk_cust_otp_cooldown') || '0');
+  if(Date.now() < cooldownUntil) {
+    const secondsLeft = Math.ceil((cooldownUntil - Date.now()) / 1000);
+    msgEl.textContent = `Please wait ${secondsLeft}s before requesting another code.`;
     return;
   }
-  if(!phone || phone.length < 8) {
-    alert("Please enter a valid phone number!");
+
+  const btn = evt ? evt.target : null;
+  if(btn) { btn.disabled = true; btn.textContent = 'Sending...'; }
+
+  try {
+    const res = await fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ action: 'requestCustomerOtp', email: email })
+    });
+    const data = await res.json();
+    if(data.success) {
+      sessionStorage.setItem('snk_cust_otp_cooldown', (Date.now() + 20000).toString());
+      sessionStorage.setItem('snk_cust_pending_name', name);
+      sessionStorage.setItem('snk_cust_pending_phone', phone);
+      sessionStorage.setItem('snk_cust_pending_email', email);
+      document.getElementById('custLoginEmailShown').textContent = email;
+      document.getElementById('custLoginStep1').style.display = 'none';
+      document.getElementById('custLoginStep2').style.display = 'block';
+    } else {
+      msgEl.textContent = data.message || 'Could not send code. Try again.';
+    }
+  } catch(err) {
+    msgEl.textContent = 'Could not connect. Check your internet and try again.';
+    console.log('requestCustomerOtp error:', err);
+  } finally {
+    if(btn) { btn.disabled = false; btn.textContent = 'Send Login Code'; }
+  }
+}
+
+async function verifyCustomerOtp() {
+  const otp = document.getElementById('custOtpInput').value.trim();
+  const email = sessionStorage.getItem('snk_cust_pending_email');
+  const msgEl = document.getElementById('custLoginMsg2');
+  msgEl.textContent = '';
+  if(!otp) { msgEl.textContent = 'Enter the code.'; return; }
+  if(!email) { msgEl.textContent = 'Session expired, please start again.'; return; }
+
+  const lockUntil = parseInt(sessionStorage.getItem('snk_cust_otp_lock_until') || '0');
+  if(Date.now() < lockUntil) {
+    const secondsLeft = Math.ceil((lockUntil - Date.now()) / 1000);
+    msgEl.textContent = `Too many attempts. Wait ${secondsLeft}s or request a new code.`;
     return;
   }
-  const randomId = Math.floor(1000 + Math.random() * 9000);
-  const membershipCode = `SNK-MEMBER-${randomId}`;
-  
-  localStorage.setItem('snk_user_name', name);
-  localStorage.setItem('snk_user_phone', phone);
-  localStorage.setItem('snk_user_code', membershipCode);
-  if(!localStorage.getItem('snk_order_count')) {
-    localStorage.setItem('snk_order_count', '0'); 
+
+  try {
+    const res = await fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ action: 'verifyCustomerOtp', email: email, otp: otp })
+    });
+    const data = await res.json();
+    if(data.success) {
+      sessionStorage.removeItem('snk_cust_otp_fail_count');
+      sessionStorage.removeItem('snk_cust_otp_lock_until');
+      const name = sessionStorage.getItem('snk_cust_pending_name') || 'Member';
+      const phone = sessionStorage.getItem('snk_cust_pending_phone') || '';
+      const randomId = Math.floor(1000 + Math.random() * 9000);
+      const membershipCode = `SNK-MEMBER-${randomId}`;
+      localStorage.setItem('snk_user_name', name);
+      localStorage.setItem('snk_user_phone', phone);
+      localStorage.setItem('snk_user_email', email);
+      localStorage.setItem('snk_user_code', membershipCode);
+      if(!localStorage.getItem('snk_order_count')) localStorage.setItem('snk_order_count', '0');
+      sessionStorage.removeItem('snk_cust_pending_name');
+      sessionStorage.removeItem('snk_cust_pending_phone');
+      sessionStorage.removeItem('snk_cust_pending_email');
+      switchView('home');
+      alert(`Welcome ${name}! 🎉\nYour Premium Customer Code: ${membershipCode}\n\n🎁 Check the Offers tab — you've unlocked a coupon for your first order!`);
+    } else {
+      const fails = parseInt(sessionStorage.getItem('snk_cust_otp_fail_count') || '0') + 1;
+      sessionStorage.setItem('snk_cust_otp_fail_count', fails.toString());
+      if(fails >= 5) {
+        sessionStorage.setItem('snk_cust_otp_lock_until', (Date.now() + 60000).toString());
+        msgEl.textContent = 'Too many wrong attempts. Locked for 60 seconds.';
+      } else {
+        msgEl.textContent = data.message || 'Incorrect or expired code.';
+      }
+    }
+  } catch(err) {
+    msgEl.textContent = 'Could not connect. Try again.';
+    console.log('verifyCustomerOtp error:', err);
   }
-  
-  switchView('home');
-  alert(`Welcome ${name}! 🎉\nYour Premium Customer Code: ${membershipCode}\n\n🎁 Check the Offers tab — you've unlocked a coupon for your first order!`);
 }
 
 function handleLogout() {
   localStorage.removeItem('snk_user_name');
   localStorage.removeItem('snk_user_phone');
+  localStorage.removeItem('snk_user_email');
   localStorage.removeItem('snk_user_code');
   switchView('home');
 }
@@ -1809,19 +1887,36 @@ function renderProfilePage() {
       <div class="auth-card">
         <div style="font-size:40px; margin-bottom:10px;">🔐</div>
         <h3>Unlock Exclusive Member Offers</h3>
-        <p style="color:var(--text-light); font-size:13px; margin-bottom:16px;">Log in with just your name and number to unlock member offers.</p>
+        <p style="color:var(--text-light); font-size:13px; margin-bottom:16px;">Log in with your details — we'll email you a one-time code to confirm it's you.</p>
         <div style="background:#FFF9E6; border:1px dashed var(--accent); border-radius:8px; padding:10px; margin-bottom:16px; font-size:12px; font-weight:700; color:var(--accent-dark);">
           🎁 Get a coupon for your first order when you log in!
         </div>
-        <div class="auth-input-group">
-          <label>Your Name</label>
-          <input type="text" id="userNameInput" class="auth-input" placeholder="e.g. Priya Kumar">
+        <div id="custLoginStep1">
+          <div class="auth-input-group">
+            <label>Your Name</label>
+            <input type="text" id="userNameInput" class="auth-input" placeholder="e.g. Priya Kumar">
+          </div>
+          <div class="auth-input-group">
+            <label>Mobile Phone Number</label>
+            <input type="tel" id="userPhoneInput" class="auth-input" placeholder="e.g. +31 6 85259659">
+          </div>
+          <div class="auth-input-group">
+            <label>Email Address</label>
+            <input type="email" id="userEmailInput" class="auth-input" placeholder="e.g. priya@example.com" autocomplete="email">
+          </div>
+          <p id="custLoginMsg1" style="color:var(--danger); font-size:12px; margin:4px 0;"></p>
+          <button class="auth-btn" onclick="requestCustomerOtp(event)">Send Login Code</button>
         </div>
-        <div class="auth-input-group">
-          <label>Mobile Phone Number</label>
-          <input type="tel" id="userPhoneInput" class="auth-input" placeholder="e.g. +31 6 85259659">
+        <div id="custLoginStep2" style="display:none;">
+          <p style="font-size:13px; color:var(--text-dark); margin-bottom:10px;">Enter the 6-digit code we emailed to <b id="custLoginEmailShown"></b>.</p>
+          <div class="auth-input-group">
+            <label>Login Code</label>
+            <input type="text" inputmode="numeric" id="custOtpInput" class="auth-input" placeholder="6-digit code" maxlength="6">
+          </div>
+          <p id="custLoginMsg2" style="color:var(--danger); font-size:12px; margin:4px 0;"></p>
+          <button class="auth-btn" onclick="verifyCustomerOtp()">Verify & Login</button>
+          <button onclick="document.getElementById('custLoginStep2').style.display='none'; document.getElementById('custLoginStep1').style.display='block';" style="background:none; border:none; color:var(--text-light); font-size:12px; margin-top:10px; cursor:pointer; text-decoration:underline;">← Change details</button>
         </div>
-        <button class="auth-btn" onclick="handlePhoneLogin()">Login & Get My Coupon</button>
       </div>`;
   }
 }
