@@ -474,7 +474,8 @@
         </select>
       </div>
       <label>Your Full Name</label><input id="cname" placeholder="Enter your name">
-      <label>Mobile Phone Number</label><input id="cphone" type="tel" placeholder="e.g. +31 6 12345678">
+      <label>Mobile Phone Number</label><input id="cphone" type="tel" placeholder="e.g. +31 6 12345678" onblur="checkAutoFirstOrderDiscount()">
+      <p id="firstOrderMsg" style="font-size:12px; font-weight:700; margin:2px 0 0;"></p>
       <label>Email (only needed if you don't use WhatsApp)</label><input id="cemail" type="email" placeholder="you@example.com">
       <label>Street Name and House Number</label><input id="caddr" placeholder="e.g. Miquelstraat 101">
       <label>Postcode</label><input id="cpostcode" placeholder="e.g. 2522 KM">
@@ -696,6 +697,26 @@ if(storeDatabase.settings.contactInfo === undefined) {
 
 let cart = {};
 let activeCoupon = ""; 
+let isFirstOrderCustomer = null; // null = not yet checked, true/false = result
+const AUTO_FIRST_ORDER_DISCOUNT_PERCENT = 5;
+
+async function checkAutoFirstOrderDiscount() {
+  const phoneEl = document.getElementById('cphone');
+  const msgEl = document.getElementById('firstOrderMsg');
+  const phone = phoneEl ? phoneEl.value.trim() : '';
+  if(!phone || phone.length < 8) { isFirstOrderCustomer = null; if(msgEl) msgEl.textContent = ''; syncCartTotals(); return; }
+  if(msgEl) { msgEl.style.color = 'var(--text-light)'; msgEl.textContent = 'Checking for first-order discount...'; }
+  isFirstOrderCustomer = await checkFirstOrderEligibility(phone);
+  if(msgEl) {
+    if(isFirstOrderCustomer) {
+      msgEl.style.color = 'green';
+      msgEl.textContent = `🎉 Welcome! ${AUTO_FIRST_ORDER_DISCOUNT_PERCENT}% First Order Discount applied automatically!`;
+    } else {
+      msgEl.textContent = '';
+    }
+  }
+  syncCartTotals();
+}
 
 function flashButton(btn) {
   if(!btn) return;
@@ -1691,9 +1712,14 @@ function renderLedger(){
   }
 
   let discountAmount = 0;
+  let discountLabel = "";
   if(activeCoupon) {
     const loyaltyDiscountPercent = parseFloat(storeDatabase.settings.loyaltyDiscount || 10) / 100;
-    discountAmount = subTotal * loyaltyDiscountPercent; 
+    discountAmount = subTotal * loyaltyDiscountPercent;
+    discountLabel = activeCoupon;
+  } else if(isFirstOrderCustomer) {
+    discountAmount = subTotal * (AUTO_FIRST_ORDER_DISCOUNT_PERCENT / 100);
+    discountLabel = "First Order " + AUTO_FIRST_ORDER_DISCOUNT_PERCENT + "% Off";
   }
   let finalSub = Math.max(0, subTotal - discountAmount);
 
@@ -1701,15 +1727,14 @@ function renderLedger(){
   const deliveryWaived = freeDeliveryThreshold > 0 && subTotal >= freeDeliveryThreshold;
   if(deliveryWaived) deliveryFee = 0;
 
-  // Dutch supermarket model: prices are BTW-inclusive. Total = goods + delivery;
-  // BTW shown as "waarvan" (included), computed at 9% from the inclusive amount.
-  let grandTotal = finalSub + deliveryFee;
-  let taxAmount = grandTotal * 9 / 109;
+  // BTW (9%) is added on top of the discounted subtotal, then delivery added.
+  let taxAmount = finalSub * 0.09;
+  let grandTotal = finalSub + taxAmount + deliveryFee;
 
   html += `
     <div class="ltotal-box">
       <div class="subrow"><span>Subtotaal</span><span>€${subTotal.toFixed(2)}</span></div>
-      ${activeCoupon ? `<div class="subrow" style="color:green; font-weight:700;"><span>Korting (${activeCoupon})</span><span>-€${discountAmount.toFixed(2)}</span></div>` : ''}
+      ${discountLabel ? `<div class="subrow" style="color:green; font-weight:700;"><span>Korting (${discountLabel})</span><span>-€${discountAmount.toFixed(2)}</span></div>` : ''}
       ${deliveryWaived
         ? `<div class="subrow" style="color:green; font-weight:700;"><span>🎉 Gratis bezorging (order over €${freeDeliveryThreshold.toFixed(2)})</span><span>€0.00</span></div>`
         : `<div class="subrow"><span>Bezorgkosten (${deliveryName})</span><span>€${deliveryFee.toFixed(2)}</span></div>${freeDeliveryThreshold > 0 && deliveryName !== "Not Selected" ? `
@@ -2115,9 +2140,14 @@ async function sendOrder(viaWhatsApp){
   let lines = items.map((it, i)=>{ subTotal += it.qty * it.price; return `${i+1}. ${it.name} (${it.unit}) x${it.qty} - €${(it.qty*it.price).toFixed(2)}`; }).join('\n');
   
   let discountAmount = 0;
+  let discountLabel = "";
   if(activeCoupon) {
     const loyaltyDiscountPercent = parseFloat(storeDatabase.settings.loyaltyDiscount || 10) / 100;
     discountAmount = subTotal * loyaltyDiscountPercent;
+    discountLabel = activeCoupon;
+  } else if(isFirstOrderCustomer) {
+    discountAmount = subTotal * (AUTO_FIRST_ORDER_DISCOUNT_PERCENT / 100);
+    discountLabel = "First Order " + AUTO_FIRST_ORDER_DISCOUNT_PERCENT + "% Off";
   }
   let finalSub = Math.max(0, subTotal - discountAmount);
 
@@ -2125,8 +2155,8 @@ async function sendOrder(viaWhatsApp){
   const deliveryWaived = freeDeliveryThreshold > 0 && subTotal >= freeDeliveryThreshold;
   if(deliveryWaived) deliveryFee = 0;
 
-  let grandTotal = finalSub + deliveryFee;
-  let taxAmount = grandTotal * 9 / 109;
+  let taxAmount = finalSub * 0.09;
+  let grandTotal = finalSub + taxAmount + deliveryFee;
   
   const mCode = localStorage.getItem('snk_user_code') || "Non-Member";
   const orderId = 'ORD-' + Date.now();
@@ -2164,8 +2194,8 @@ async function sendOrder(viaWhatsApp){
   }
   
   let msg = `Hello SNK Foods!\nNew Order (Member Code: ${mCode} | Phone: ${phone}):\n\n${lines}\n\nSubtotal: €${subTotal.toFixed(2)}\n`;
-  if(activeCoupon) {
-    msg += `Promo Applied: ${activeCoupon} (-€${discountAmount.toFixed(2)})\n`;
+  if(discountLabel) {
+    msg += `Promo Applied: ${discountLabel} (-€${discountAmount.toFixed(2)})\n`;
   }
   msg += `BTW (9%): €${taxAmount.toFixed(2)}\nDelivery Charge (${areaName}): €${deliveryFee.toFixed(2)}\nTotal Amount: €${grandTotal.toFixed(2)}\n\nDelivery to: ${areaName}${deliveryDay ? `\nPreferred Delivery Day: ${deliveryDay}` : ''}\nName: ${name}\nAddress: ${addr}, ${postcode}\nNotes: ${comments}`;
   
@@ -2177,8 +2207,10 @@ async function sendOrder(viaWhatsApp){
   }
   
   activeCoupon = ""; 
+  isFirstOrderCustomer = null;
   document.getElementById('promoCodeInput').value = "";
   document.getElementById('promoMsg').textContent = "";
+  if(document.getElementById('firstOrderMsg')) document.getElementById('firstOrderMsg').textContent = "";
   
   if(viaWhatsApp) {
     window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`,'_blank');
@@ -2267,13 +2299,18 @@ function printFromPastedWhatsAppText() {
 
 function triggerA4PrintHTML(name, addr, area, comments, tableRows, subTotal, deliveryFee) {
   let discountAmount = 0;
+  let discountLabel = "";
   if(activeCoupon) {
     const loyaltyDiscountPercent = parseFloat(storeDatabase.settings.loyaltyDiscount || 10) / 100;
     discountAmount = subTotal * loyaltyDiscountPercent;
+    discountLabel = activeCoupon;
+  } else if(isFirstOrderCustomer) {
+    discountAmount = subTotal * (AUTO_FIRST_ORDER_DISCOUNT_PERCENT / 100);
+    discountLabel = "First Order " + AUTO_FIRST_ORDER_DISCOUNT_PERCENT + "% Off";
   }
   let finalSub = Math.max(0, subTotal - discountAmount);
-  let grandTotal = finalSub + deliveryFee;
-  let taxAmount = grandTotal * 9 / 109;
+  let taxAmount = finalSub * 0.09;
+  let grandTotal = finalSub + taxAmount + deliveryFee;
   let today = new Date().toLocaleDateString('nl-NL');
 
   document.getElementById('a4InvoicePrintout').innerHTML = `
@@ -2304,7 +2341,7 @@ function triggerA4PrintHTML(name, addr, area, comments, tableRows, subTotal, del
     </table>
     <div class="inv-summary">
       <div class="inv-sum-row"><span>Subtotal Goods:</span><span>€${subTotal.toFixed(2)}</span></div>
-      ${activeCoupon ? `<div class="inv-sum-row" style="color:green; font-weight:bold;"><span>Discount (${activeCoupon}):</span><span>-€${discountAmount.toFixed(2)}</span></div>` : ''}
+      ${discountLabel ? `<div class="inv-sum-row" style="color:green; font-weight:bold;"><span>Discount (${discountLabel}):</span><span>-€${discountAmount.toFixed(2)}</span></div>` : ''}
       <div class="inv-sum-row"><span>Delivery Service Charge:</span><span>€${deliveryFee.toFixed(2)}</span></div>
       <div class="inv-total-row"><span>Total Payable:</span><span>€${grandTotal.toFixed(2)}</span></div>
       <div class="inv-sum-row" style="font-size:12px; color:#666;"><span>(Waarvan BTW / of which VAT 9%):</span><span>€${taxAmount.toFixed(2)}</span></div>
