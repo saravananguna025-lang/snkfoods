@@ -1308,9 +1308,20 @@ function backToAllCategories(){
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-const MIXED_PER_PAGE = 4;
-const MIXED_MAX_PAGES = 6;
+const MIXED_POOL_SIZE = 48;
+const MIXED_MAX_PAGES = 8;
 const MIXED_INTERVAL = 4500;
+
+/* How many cards fit on one "page" of the feed - measured from the real grid width,
+   so a laptop shows a full row instead of 4 lonely cards. Always 2 rows. */
+function mixedPerPage(){
+  const grid = document.getElementById('mixedFeedGrid');
+  const w = (grid && grid.clientWidth) ? grid.clientWidth : window.innerWidth;
+  let cols;
+  if(window.innerWidth <= 400) cols = 2;                       // phone: 2 up (matches .products-grid)
+  else cols = Math.max(2, Math.min(8, Math.floor((w + 16) / 186)));
+  return cols * 2;
+}
 let mixedFeedPool = [];
 let mixedFeedPage = 0;
 let mixedFeedTimer = null;
@@ -1329,12 +1340,12 @@ function buildMixedFeedPool(){
     const j = Math.floor(Math.random() * (i + 1));
     [all[i], all[j]] = [all[j], all[i]];
   }
-  mixedFeedPool = all.slice(0, MIXED_PER_PAGE * MIXED_MAX_PAGES);
+  mixedFeedPool = all.slice(0, MIXED_POOL_SIZE);
   mixedFeedPage = 0;
 }
 
 function mixedFeedTotalPages(){
-  return Math.max(1, Math.ceil(mixedFeedPool.length / MIXED_PER_PAGE));
+  return Math.min(MIXED_MAX_PAGES, Math.max(1, Math.ceil(mixedFeedPool.length / mixedPerPage())));
 }
 
 function renderMixedFeedPage(){
@@ -1343,8 +1354,9 @@ function renderMixedFeedPage(){
   if(!grid || !dots) return;
   const total = mixedFeedTotalPages();
   if(mixedFeedPage >= total) mixedFeedPage = 0;
-  const start = mixedFeedPage * MIXED_PER_PAGE;
-  grid.innerHTML = mixedFeedPool.slice(start, start + MIXED_PER_PAGE)
+  const perPage = mixedPerPage();
+  const start = mixedFeedPage * perPage;
+  grid.innerHTML = mixedFeedPool.slice(start, start + perPage)
     .map(e => buildProductCardHtml(e.cat, e.itemArr, e.itemIdx)).join('');
   dots.innerHTML = Array.from({length: total}, (_, i) =>
     `<span class="${i === mixedFeedPage ? 'on' : ''}" onclick="mixedFeedGoTo(${i})"></span>`).join('');
@@ -1400,6 +1412,15 @@ function wireMixedFeedGestures(){
   }, {passive:true});
   sec.addEventListener('mousedown', pauseMixedFeed);
 }
+
+let mixedResizeTimer = null;
+window.addEventListener('resize', () => {
+  clearTimeout(mixedResizeTimer);
+  mixedResizeTimer = setTimeout(() => {
+    const sec = document.getElementById('mixedFeedSection');
+    if(sec && sec.style.display !== 'none') renderMixedFeedPage();
+  }, 200);
+});
 
 function refreshMixedFeed(show){
   const sec = document.getElementById('mixedFeedSection');
@@ -1471,6 +1492,8 @@ function renderCatalog(){
     return;
   }
 
+  const isFocused = !!focusedCategoryId && !isSearchActive;
+
   catalog.forEach((cat, cIdx)=>{
     const circleCard = document.createElement('div');
     circleCard.className = 'circle-card';
@@ -1486,7 +1509,7 @@ function renderCatalog(){
     navLink.href = `#cat-${cat.id}`;
     navLink.textContent = cat.name;
     navLink.setAttribute('data-id', cat.id);
-    if(cIdx === 0) navLink.classList.add('active');
+    if(isFocused ? (cat.id === focusedCategoryId) : (cIdx === 0)) navLink.classList.add('active');
     navLink.onclick = (e) => {
       e.preventDefault();
       document.querySelectorAll('.catnav a').forEach(a => a.classList.remove('active'));
@@ -1504,7 +1527,6 @@ function renderCatalog(){
   });
 
   // Drill-down: when one category is focused, only that category's section is built
-  const isFocused = !!focusedCategoryId && !isSearchActive;
   const catsToRender = isFocused ? catalog.filter(c => c.id === focusedCategoryId) : catalog;
 
   if(isFocused){
@@ -1558,7 +1580,11 @@ function renderCatalog(){
 
   const greetSection = circlesEl.closest('section');
   if(greetSection) greetSection.style.display = isFocused ? 'none' : '';
-  navEl.style.display = isFocused ? 'none' : '';
+  navEl.style.display = '';   // category strip stays visible while browsing one category
+  if(isFocused){
+    const activeLink = navEl.querySelector(`a[data-id="${focusedCategoryId}"]`);
+    if(activeLink && activeLink.scrollIntoView) activeLink.scrollIntoView({ block:'nearest', inline:'center' });
+  }
   refreshMixedFeed(!isFocused && !isSearchActive);
 
   syncCartTotals();
