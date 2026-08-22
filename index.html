@@ -10,7 +10,6 @@
 <meta name="description" content="SNK Foods — online Indian grocery store delivering rice, dal, spices, masalas, ghee, snacks and fresh vegetables across Den Haag, Rotterdam, Delft, Leiden and Alphen aan den Rijn. Order via WhatsApp for fast home delivery.">
 <meta name="keywords" content="Indian grocery Netherlands, Indian supermarket Den Haag, Indian kruidenier, Indian grocery delivery Rotterdam, Tamil grocery store, basmati rice online, Indian spices Netherlands, SNK Foods, Indiase kruidenier Den Haag">
 <meta name="robots" content="index, follow">
-<meta name="msvalidate.01" content="504ABA35B04DC6D2998316FF0FFE5D9C" />
 <link rel="canonical" href="https://snkfood.nl/">
 
 <!-- Open Graph (how the site looks when shared on WhatsApp/Facebook/Instagram) -->
@@ -106,6 +105,35 @@
   .app-view.active-view { display: block; }
 
   .hero { background: linear-gradient(135deg, #073018 0%, #0B4624 100%); color: #fff; padding: 40px 20px; text-align: center; border-bottom: 4px solid var(--accent); }
+  @keyframes codGlow {
+    0%, 100% { box-shadow: 0 0 8px 2px rgba(255,215,0,0.5), 0 4px 14px rgba(0,0,0,0.25); }
+    50% { box-shadow: 0 0 22px 8px rgba(255,215,0,0.9), 0 4px 14px rgba(0,0,0,0.25); }
+  }
+  @keyframes codFlash {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.55; }
+  }
+  .cod-banner {
+    background: linear-gradient(90deg, #B8860B, #FFD700, #B8860B);
+    background-size: 200% auto;
+    color: #1a1300;
+    font-weight: 900;
+    text-align: center;
+    padding: 12px 16px;
+    font-size: 15px;
+    letter-spacing: 0.3px;
+    animation: codGlow 1.6s ease-in-out infinite;
+    border-top: 2px solid #7a5c00;
+    border-bottom: 2px solid #7a5c00;
+  }
+  .cod-banner .bolt { animation: codFlash 0.9s ease-in-out infinite; }
+  .wa-group-btn {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    background: #25D366; color: #fff; font-weight: 800; font-size: 14px;
+    padding: 12px 20px; margin: 14px auto 0; max-width: 340px;
+    border-radius: 30px; text-decoration: none;
+    box-shadow: 0 4px 14px rgba(37,211,102,0.45);
+  }
   .shop-badge { display: inline-block; background: var(--accent); color: var(--primary); font-weight: 800; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; padding: 7px 18px; border-radius: 20px; margin-bottom: 14px; }
 
   .hero-carousel { position: relative; max-width: 900px; margin: 0 auto; overflow: hidden; background: #F1F5F9; border-bottom: 3px solid var(--accent); box-shadow: 0 4px 24px rgba(212,175,55,0.35); }
@@ -154,6 +182,17 @@
   .cat-head h3 { font-family: 'Playfair Display', serif; font-size: 24px; color: var(--primary); font-weight: 700; }
   .cat-line { flex: 1; height: 2px; background: #E2E8F0; }
   
+  .cat-count-pill { background: var(--primary); color:#fff; font-size:12px; font-weight:800; padding:3px 10px; border-radius:20px; flex-shrink:0; }
+  .cat-pages-pill { background:#FFF3CD; color:#8A6100; border:1px solid #FFD54F; font-size:11px; font-weight:800; padding:3px 10px; border-radius:20px; flex-shrink:0; white-space:nowrap; }
+  .cat-pagination-wrap { margin-top: 20px; padding: 14px; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 12px; }
+  .cat-page-label { text-align:center; font-size:13px; color: var(--text-light); font-weight:600; margin-bottom:10px; }
+  .cat-page-label b { color: var(--primary); }
+  .cat-more-btn { display:block; width:100%; background: var(--primary); color:#fff; border:none; padding:13px 16px; border-radius:10px; font-weight:800; font-size:14px; cursor:pointer; margin-bottom:12px; }
+  .cat-pagination button[disabled] { opacity:.35; cursor:default; }
+  .mixed-feed-head { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:14px; }
+  .mixed-dots { display:flex; justify-content:center; gap:7px; margin-top:14px; }
+  .mixed-dots span { width:8px; height:8px; border-radius:50%; background:#CBD5E1; cursor:pointer; transition:all .25s; }
+  .mixed-dots span.on { background: var(--primary); width:22px; border-radius:5px; }
   .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 16px; }
   @media (max-width: 400px) { .products-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; } }
 
@@ -270,6 +309,11 @@
   .admin-head button { background: none; border: none; color: #fff; font-size: 28px; cursor: pointer; }
   
   .admin-body { flex: 1; overflow-y: auto; padding: 20px; max-width: 1000px; margin: 0 auto; width: 100%; }
+  .admin-tabnav { position: sticky; top: 0; z-index: 30; background: #fff; display: flex; gap: 6px; padding: 10px 0; margin: -20px -20px 16px; padding-left: 20px; padding-right: 20px; border-bottom: 2px solid #E2E8F0; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .admin-tab-btn { flex-shrink: 0; background: #F1F5F9; color: var(--text-dark); border: none; padding: 10px 16px; border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; white-space: nowrap; }
+  .admin-tab-btn.admin-tab-active { background: var(--primary); color: #fff; }
+  .admin-tab-panel { animation: adminTabFadeIn 0.15s ease; }
+  @keyframes adminTabFadeIn { from { opacity: 0.4; } to { opacity: 1; } }
   .admin-cat { background: #fff; border: 1px solid #E2E8F0; border-radius: 12px; padding: 16px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
   .admin-cat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid #E2E8F0; padding-bottom: 8px; }
   .admin-cat-header input { font-size: 16px; font-weight: 700; color: var(--primary); background: #fff; border: 1px dashed #CBD5E1; padding: 4px 8px; border-radius: 4px; width: 40%; }
@@ -333,6 +377,8 @@
   <div id="customer-announcement" class="marquee-text">🔥 Special Offer: Keep ordering from our shop to get amazing discounts instantly! 🔥</div>
 </div>
 
+<div class="cod-banner"><span class="bolt">⚡</span> PAY AFTER DELIVERY — Order Now, Pay When You Receive! No Advance Payment Needed <span class="bolt">⚡</span></div>
+
 <header>
   <div class="header-left">
     <button class="menu-toggle" onclick="openMenuDrawer()">☰</button>
@@ -372,6 +418,7 @@
     <h2>Authentic Indian Taste, <br><em>Delivered Fresh.</em></h2>
     <p>Premium quality grocery essentials curated for your kitchen.</p>
     <div class="pills" id="hero-pills"></div>
+    <a class="wa-group-btn" href="https://chat.whatsapp.com/DMUhskyzpl35oUhIJQkajl?s=sw&amp;p=i&amp;mlu=0&amp;ilr=0&amp;amv=0" target="_blank" rel="noopener">📲 Join Our WhatsApp Group for Updates</a>
   </section>
 
   <div class="hero-carousel" id="heroCarousel">
@@ -383,6 +430,15 @@
     <input type="text" id="searchBar" oninput="filterProducts()" onkeydown="if(event.key==='Enter'){ event.preventDefault(); filterProducts(); document.getElementById('searchBar').blur(); }" placeholder="Search products (e.g., Onion, Rice, Ghee)..." class="search-box" style="flex:1;">
     <button type="button" onclick="filterProducts()" aria-label="Search" style="flex-shrink:0; width:46px; height:46px; border-radius:50%; border:none; background:var(--primary); color:#fff; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center;">🔍</button>
   </div>
+
+  <section class="front-greet-section" id="mixedFeedSection" style="display:none;">
+    <div class="mixed-feed-head">
+      <h4 style="margin:0;">✨ Picked For You</h4>
+      <button onclick="mixedFeedNext(true)" style="background:none; border:1px solid #CBD5E1; color:var(--primary); padding:6px 12px; border-radius:20px; font-size:12px; font-weight:700; cursor:pointer;">Shuffle ↻</button>
+    </div>
+    <div class="products-grid" id="mixedFeedGrid"></div>
+    <div class="mixed-dots" id="mixedFeedDots"></div>
+  </section>
 
   <section class="front-greet-section">
     <h4>Explore Our Categories</h4>
@@ -429,8 +485,17 @@
       
       <label>Delivery Destination</label>
       <select id="area" onchange="syncCartTotals()"></select>
+      <div id="deliveryDayContainer" style="display:none;">
+        <label>Preferred Delivery Day <span style="color:var(--danger, #e11d48);">*</span></label>
+        <select id="deliveryDay">
+          <option value="">Select a day...</option>
+          <option value="Saturday">Saturday</option>
+          <option value="Sunday">Sunday</option>
+        </select>
+      </div>
       <label>Your Full Name</label><input id="cname" placeholder="Enter your name">
-      <label>Mobile Phone Number</label><input id="cphone" type="tel" placeholder="e.g. +31 6 12345678">
+      <label>Mobile Phone Number</label><input id="cphone" type="tel" placeholder="e.g. +31 6 12345678" onblur="checkAutoFirstOrderDiscount()">
+      <p id="firstOrderMsg" style="font-size:12px; font-weight:700; margin:2px 0 0;"></p>
       <label>Email (only needed if you don't use WhatsApp)</label><input id="cemail" type="email" placeholder="you@example.com">
       <label>Street Name and House Number</label><input id="caddr" placeholder="e.g. Miquelstraat 101">
       <label>Postcode</label><input id="cpostcode" placeholder="e.g. 2522 KM">
@@ -543,10 +608,24 @@
 
 <footer>
   <h4 onclick="handleFooterSecretTap()" style="cursor:default; user-select:none;">SNK Foods Netherlands</h4>
+  <div style="display:flex; justify-content:center; gap:16px; margin-top:12px;">
+    <a href="https://www.facebook.com/share/19CDa4LPwN/?mibextid=wwXIfr" target="_blank" rel="noopener" aria-label="SNK Foods on Facebook" style="display:inline-flex; align-items:center; justify-content:center; width:38px; height:38px; border-radius:50%; background:#1877F2;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94z"/></svg>
+    </a>
+    <a href="https://www.instagram.com/snkfood.nl" target="_blank" rel="noopener" aria-label="SNK Foods on Instagram" style="display:inline-flex; align-items:center; justify-content:center; width:38px; height:38px; border-radius:50%; background:radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="#fff" stroke="none"/></svg>
+    </a>
+    <a href="https://wa.me/31685259659" target="_blank" rel="noopener" aria-label="SNK Foods on WhatsApp" style="display:inline-flex; align-items:center; justify-content:center; width:38px; height:38px; border-radius:50%; background:#25D366;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M12.04 2c-5.5 0-9.96 4.46-9.96 9.96 0 1.76.46 3.48 1.34 4.99L2 22l5.2-1.36a9.94 9.94 0 0 0 4.84 1.23h.01c5.5 0 9.96-4.46 9.96-9.96S17.55 2 12.04 2zm5.83 14.2c-.24.68-1.4 1.3-1.93 1.34-.5.05-1.13.07-1.82-.11-.42-.11-.96-.31-1.65-.6-2.9-1.25-4.79-4.15-4.94-4.35-.14-.19-1.18-1.57-1.18-3 0-1.42.75-2.12 1.02-2.41.27-.29.58-.36.78-.36.19 0 .39 0 .56.01.18.01.42-.07.65.5.24.58.82 2 .89 2.15.07.14.12.31.02.5-.09.19-.14.31-.28.48-.14.16-.29.36-.42.48-.14.14-.28.29-.12.56.16.28.72 1.19 1.55 1.93 1.06.94 1.96 1.24 2.24 1.38.28.14.44.12.6-.07.16-.19.68-.79.87-1.06.19-.27.37-.22.63-.13.26.09 1.66.78 1.94.93.28.14.47.21.53.33.07.12.07.68-.17 1.36z"/></svg>
+    </a>
+    <a href="mailto:info@snkfood.nl" target="_blank" rel="noopener" aria-label="Email SNK Foods" style="display:inline-flex; align-items:center; justify-content:center; width:38px; height:38px; border-radius:50%; background:var(--primary);">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>
+    </a>
+  </div>
 </footer>
 
 <div class="admin-overlay" id="adminOverlay">
-  <div class="admin-head"><h3>SNK Operations Control</h3><button onclick="closeAdmin()">×</button></div>
+  <div class="admin-head"><h3>SNK Operations Control</h3><button onclick="adminLogout()" style="background:var(--danger, #e11d48); color:#fff; font-size:12px; font-weight:700; border:none; padding:6px 12px; border-radius:6px; margin-right:8px; cursor:pointer;">🔒 Logout</button><button onclick="closeAdmin()">×</button></div>
   <div class="admin-body" id="adminBody"></div>
   <div class="save-bar">
     <button onclick="saveCatalogAndExport()">1. Save & Prepare Files</button>
@@ -571,6 +650,58 @@ const WA_NUMBER = "31685259659";
 const ADMIN_PASSCODE = "snk2026";
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyIFe79oQ4BfYhtqyDzL7YErRkzoG8G0t3zJmwIdT1UaM_OohbJSGNGYs2vXx8jqyW2Ug/exec";
 
+// ===== Visitor tracking (live count / today's count) + abandoned checkout tracking =====
+function getVisitorSessionId() {
+  let sid = localStorage.getItem('snk_session_id');
+  if(!sid) {
+    sid = 'S-' + Date.now() + '-' + Math.random().toString(36).slice(2, 10);
+    localStorage.setItem('snk_session_id', sid);
+  }
+  return sid;
+}
+
+function sendVisitorPing() {
+  if(!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === "YOUR_APPS_SCRIPT_URL_HERE") return;
+  fetch(GOOGLE_SCRIPT_URL, {
+    method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify({ action: 'visitorPing', sessionId: getVisitorSessionId(), ts: new Date().toISOString() })
+  }).catch(()=>{});
+}
+
+function startVisitorTracking() {
+  sendVisitorPing();
+  setInterval(sendVisitorPing, 25000);
+  document.addEventListener('visibilitychange', () => { if(document.visibilityState === 'visible') sendVisitorPing(); });
+}
+
+let checkoutStartLogged = false;
+function trackCheckoutStarted() {
+  if(!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === "YOUR_APPS_SCRIPT_URL_HERE") return;
+  const items = Object.values(cart);
+  if(items.length === 0) return;
+  checkoutStartLogged = true;
+  const cartSummary = items.map(it => `${it.name} (${it.unit}) x${it.qty}`).join(', ');
+  fetch(GOOGLE_SCRIPT_URL, {
+    method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify({
+      action: 'checkoutStarted', sessionId: getVisitorSessionId(),
+      cartSummary, name: (document.getElementById('cname')||{}).value || '',
+      phone: (document.getElementById('cphone')||{}).value || '',
+      ts: new Date().toISOString()
+    })
+  }).catch(()=>{});
+}
+
+function trackCheckoutCompleted() {
+  if(!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === "YOUR_APPS_SCRIPT_URL_HERE" || !checkoutStartLogged) return;
+  checkoutStartLogged = false;
+  fetch(GOOGLE_SCRIPT_URL, {
+    method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify({ action: 'checkoutCompleted', sessionId: getVisitorSessionId(), ts: new Date().toISOString() })
+  }).catch(()=>{});
+}
+// ===== End visitor tracking =====
+
 const storeDatabase = {"categories":[{"id":"vegetables","name":"Fresh Vegetables"},{"id":"fruits","name":"Fresh Fruits"},{"id":"rice","name":"Rice & Atta Flour"},{"id":"dals","name":"Dals & Lentils"},{"id":"spices","name":"Spices & Herbs"},{"id":"masalas","name":"Masala Powders"},{"id":"oils","name":"Oils & Ghee"},{"id":"dairy","name":"Dairy & Paneer"},{"id":"snacks","name":"Snacks & Sweets"},{"id":"beverages","name":"Beverages & Tea"},{"id":"pickles","name":"Pickles & Papads"},{"id":"instant","name":"Instant Mixes"},{"id":"frozen","name":"Frozen Foods"},{"id":"pooja","name":"Pooja Essentials"}],"locations":[{"name":"Den Haag","fee":2.5},{"name":"Rotterdam","fee":5},{"name":"Delft","fee":3},{"name":"Leiden","fee":4}],"offers":[{"title":"Welcome Offer","desc":"Get a free spice pack on your first order above €25!","code":"SNKFREE","firstOrderOnly":true},{"title":"Weekend Delivery Deal","desc":"10% discount on delivery charges for Den Haag residents this weekend.","code":"DH10"}],"settings":{"requiredOrders":3,"loyaltyDiscount":10,"announcementText":"🔥 Special Offer: Keep ordering from our shop to get amazing discounts instantly! 🔥"}};
 
 let catalog = storeDatabase.categories;
@@ -586,6 +717,26 @@ if(storeDatabase.settings.contactInfo === undefined) {
 
 let cart = {};
 let activeCoupon = ""; 
+let isFirstOrderCustomer = null; // null = not yet checked, true/false = result
+const AUTO_FIRST_ORDER_DISCOUNT_PERCENT = 5;
+
+async function checkAutoFirstOrderDiscount() {
+  const phoneEl = document.getElementById('cphone');
+  const msgEl = document.getElementById('firstOrderMsg');
+  const phone = phoneEl ? phoneEl.value.trim() : '';
+  if(!phone || phone.length < 8) { isFirstOrderCustomer = null; if(msgEl) msgEl.textContent = ''; syncCartTotals(); return; }
+  if(msgEl) { msgEl.style.color = 'var(--text-light)'; msgEl.textContent = 'Checking for first-order discount...'; }
+  isFirstOrderCustomer = await checkFirstOrderEligibility(phone);
+  if(msgEl) {
+    if(isFirstOrderCustomer) {
+      msgEl.style.color = 'green';
+      msgEl.textContent = `🎉 Welcome! ${AUTO_FIRST_ORDER_DISCOUNT_PERCENT}% First Order Discount applied automatically!`;
+    } else {
+      msgEl.textContent = '';
+    }
+  }
+  syncCartTotals();
+}
 
 function flashButton(btn) {
   if(!btn) return;
@@ -595,7 +746,11 @@ function flashButton(btn) {
   setTimeout(() => btn.classList.remove('btn-flashing'), 450);
 }
 
-function switchView(viewId) {
+function switchView(viewId, keepFocus) {
+  if(viewId === 'home' && !keepFocus && focusedCategoryId !== null){
+    focusedCategoryId = null;
+    renderCatalog();
+  }
   document.querySelectorAll('.app-view').forEach(view => view.classList.remove('active-view'));
   document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
   
@@ -610,6 +765,7 @@ function switchView(viewId) {
   if(viewId === 'profile') renderProfilePage();
   if(viewId === 'offers') renderOffersPage();
   if(viewId === 'myorders') loadMyOrders();
+  if(viewId === 'basket') trackCheckoutStarted();
 }
 
 function getCategoryEmoji(id) {
@@ -946,10 +1102,31 @@ function openCustomerMessageBox() {
   window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(waMsg)}`, '_blank');
 }
 
+function toggleCatAllowedLocation(ci, locName, checked) {
+  if(!Array.isArray(catalog[ci].allowedLocations)) catalog[ci].allowedLocations = [];
+  if(checked) {
+    if(!catalog[ci].allowedLocations.includes(locName)) catalog[ci].allowedLocations.push(locName);
+  } else {
+    catalog[ci].allowedLocations = catalog[ci].allowedLocations.filter(l => l !== locName);
+  }
+}
+
+let missedSearchSortBy = 'recent';
+
+function refreshMissedSearchList() {
+  const listEl = document.getElementById('missedSearchList');
+  if(listEl) listEl.innerHTML = renderMissedSearchListHtml();
+}
+
 function renderMissedSearchListHtml() {
   let list = [];
   try { list = JSON.parse(localStorage.getItem('snk_missed_searches') || '[]'); } catch(e) { list = []; }
   if(list.length === 0) return `<div class="empty-note" style="padding:15px 0;">No missed searches recorded on this device yet.</div>`;
+  list = list.slice().sort((a, b) => {
+    if(missedSearchSortBy === 'term') return a.term.localeCompare(b.term);
+    if(missedSearchSortBy === 'count') return (b.count || 0) - (a.count || 0);
+    return new Date(b.lastSearched) - new Date(a.lastSearched); // recent
+  });
   return list.map(item => `
     <div style="display:flex; justify-content:space-between; align-items:center; background:#fff; border:1px solid #FFD5D5; padding:8px 12px; border-radius:6px; margin-bottom:6px; gap:10px;">
       <div><b>${escapeHtml(item.term)}</b> <span style="color:var(--text-light); font-size:11px;">(searched ${item.count}x, last: ${new Date(item.lastSearched).toLocaleDateString('nl-NL')})</span></div>
@@ -1112,6 +1289,191 @@ function setupCategoryScrollSpy() {
   sections.forEach(sec => categoryScrollObserver.observe(sec));
 }
 
+
+/* ================= Category drill-down + "Picked For You" mixed feed ================= */
+let focusedCategoryId = null;
+
+function openCategoryView(catId){
+  const sb = document.getElementById('searchBar');
+  if(sb && sb.value.trim() !== ''){ sb.value = ''; filterProducts(); }
+  focusedCategoryId = catId;
+  switchView('home', true);
+  renderCatalog();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function backToAllCategories(){
+  focusedCategoryId = null;
+  renderCatalog();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+const MIXED_POOL_SIZE = 48;
+const MIXED_MAX_PAGES = 8;
+const MIXED_INTERVAL = 4500;
+
+/* How many cards fit on one "page" of the feed - measured from the real grid width,
+   so a laptop shows a full row instead of 4 lonely cards. Always 2 rows. */
+function mixedPerPage(){
+  const grid = document.getElementById('mixedFeedGrid');
+  const w = (grid && grid.clientWidth) ? grid.clientWidth : window.innerWidth;
+  let cols;
+  if(window.innerWidth <= 400) cols = 2;                       // phone: 2 up (matches .products-grid)
+  else cols = Math.max(2, Math.min(8, Math.floor((w + 16) / 186)));
+  return cols * 2;
+}
+let mixedFeedPool = [];
+let mixedFeedPage = 0;
+let mixedFeedTimer = null;
+let mixedFeedResumeTimer = null;
+
+function buildMixedFeedPool(){
+  const all = [];
+  catalog.forEach(cat => {
+    (cat.items || []).forEach((itemArr, itemIdx) => {
+      const variants = parseVariants(itemArr[1], itemArr[2]);
+      const anyInStock = variants.some((v, vIdx) => !isVariantOutOfStock(itemArr, vIdx));
+      if(anyInStock) all.push({ cat, itemArr, itemIdx });
+    });
+  });
+  for(let i = all.length - 1; i > 0; i--){        // Fisher-Yates shuffle
+    const j = Math.floor(Math.random() * (i + 1));
+    [all[i], all[j]] = [all[j], all[i]];
+  }
+  mixedFeedPool = all.slice(0, MIXED_POOL_SIZE);
+  mixedFeedPage = 0;
+}
+
+function mixedFeedTotalPages(){
+  return Math.min(MIXED_MAX_PAGES, Math.max(1, Math.ceil(mixedFeedPool.length / mixedPerPage())));
+}
+
+function renderMixedFeedPage(){
+  const grid = document.getElementById('mixedFeedGrid');
+  const dots = document.getElementById('mixedFeedDots');
+  if(!grid || !dots) return;
+  const total = mixedFeedTotalPages();
+  if(mixedFeedPage >= total) mixedFeedPage = 0;
+  const perPage = mixedPerPage();
+  const start = mixedFeedPage * perPage;
+  grid.innerHTML = mixedFeedPool.slice(start, start + perPage)
+    .map(e => buildProductCardHtml(e.cat, e.itemArr, e.itemIdx)).join('');
+  dots.innerHTML = Array.from({length: total}, (_, i) =>
+    `<span class="${i === mixedFeedPage ? 'on' : ''}" onclick="mixedFeedGoTo(${i})"></span>`).join('');
+  syncCartTotals();
+}
+
+function mixedFeedGoTo(i){
+  mixedFeedPage = i;
+  renderMixedFeedPage();
+  pauseMixedFeed();
+}
+
+function mixedFeedNext(reshuffle){
+  if(reshuffle){ buildMixedFeedPool(); }
+  else { mixedFeedPage = (mixedFeedPage + 1) % mixedFeedTotalPages(); }
+  renderMixedFeedPage();
+  if(reshuffle) pauseMixedFeed();
+}
+
+function startMixedFeedAuto(){
+  clearInterval(mixedFeedTimer);
+  mixedFeedTimer = setInterval(() => {
+    const sec = document.getElementById('mixedFeedSection');
+    if(!sec || sec.style.display === 'none') return;
+    if(document.hidden) return;
+    if(!document.getElementById('view-home').classList.contains('active-view')) return;
+    mixedFeedPage = (mixedFeedPage + 1) % mixedFeedTotalPages();
+    renderMixedFeedPage();
+  }, MIXED_INTERVAL);
+}
+
+function pauseMixedFeed(){
+  clearInterval(mixedFeedTimer);
+  clearTimeout(mixedFeedResumeTimer);
+  mixedFeedResumeTimer = setTimeout(startMixedFeedAuto, 9000);   // resume after user stops touching
+}
+
+function wireMixedFeedGestures(){
+  const sec = document.getElementById('mixedFeedSection');
+  if(!sec || sec._gesturesWired) return;
+  sec._gesturesWired = true;
+  let x0 = null;
+  sec.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; pauseMixedFeed(); }, {passive:true});
+  sec.addEventListener('touchend', e => {
+    if(x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0;
+    if(Math.abs(dx) > 45){
+      const total = mixedFeedTotalPages();
+      mixedFeedPage = dx < 0 ? (mixedFeedPage + 1) % total : (mixedFeedPage - 1 + total) % total;
+      renderMixedFeedPage();
+    }
+    x0 = null;
+  }, {passive:true});
+  sec.addEventListener('mousedown', pauseMixedFeed);
+}
+
+let mixedResizeTimer = null;
+window.addEventListener('resize', () => {
+  clearTimeout(mixedResizeTimer);
+  mixedResizeTimer = setTimeout(() => {
+    const sec = document.getElementById('mixedFeedSection');
+    if(sec && sec.style.display !== 'none') renderMixedFeedPage();
+  }, 200);
+});
+
+function refreshMixedFeed(show){
+  const sec = document.getElementById('mixedFeedSection');
+  if(!sec) return;
+  if(!show){ sec.style.display = 'none'; clearInterval(mixedFeedTimer); return; }
+  if(!mixedFeedPool.length) buildMixedFeedPool();
+  if(!mixedFeedPool.length){ sec.style.display = 'none'; return; }
+  sec.style.display = '';
+  renderMixedFeedPage();
+  wireMixedFeedGestures();
+  startMixedFeedAuto();
+}
+
+function buildProductCardHtml(cat, itemArr, itemIdx){
+      const [name, unitStr, priceStr, imgUrl, isOosFlag, stockMode, stockCount, stockUnit] = itemArr;
+      const variants = parseVariants(unitStr, priceStr);
+      let defaultVariantIdx = variants.findIndex((v, vIdx) => !isVariantOutOfStock(itemArr, vIdx));
+      const allVariantsOos = defaultVariantIdx === -1;
+      if(allVariantsOos) defaultVariantIdx = 0;
+      const defaultPrice = variants[defaultVariantIdx] ? variants[defaultVariantIdx].price : 0;
+      const disc = getItemDiscount(itemArr);
+      const fallbackImg = `https://dummyimage.com/300x300/f1f5f9/0b4624.png&text=${encodeURIComponent(name)}`;
+      let finalImgSrc = imgUrl ? imgUrl.trim() : fallbackImg;
+      const isOos = allVariantsOos;
+      const stockUnitLabel = stockUnit === 'kg' ? 'kg' : 'left';
+      const lowStockThreshold = stockUnit === 'kg' ? 3 : 5;
+      const lowStockNote = (stockMode === 'count' && !isOos && parseFloat(stockCount) <= lowStockThreshold) ? `<div style="font-size:11px; color:var(--danger); font-weight:700; margin-top:2px;">Only ${parseFloat(stockCount)} ${stockUnitLabel === 'kg' ? 'kg left' : 'left'}!</div>` : '';
+      const perVariantNote = (stockMode === 'perVariant') ? `<div style="font-size:11px; color:var(--text-light); margin-top:2px;" id="pvnote-${cat.id}-${itemIdx}">${isOos ? '' : (parseFloat((itemArr[10]||[])[defaultVariantIdx]) <= 3 ? `Only ${parseFloat((itemArr[10]||[])[defaultVariantIdx])} bags left!` : '')}</div>` : '';
+
+      return `
+        <div class="product-card ${isOos ? 'oos-card' : ''}" id="card-${cat.id}-${itemIdx}">
+          ${isOos ? `<div class="oos-badge">Out Of Stock</div>` : ''}
+          ${(!isOos && disc > 0) ? `<div class="disc-badge">-${disc}%</div>` : ''}
+          <div>
+            <div class="img-slot" onclick="openProductModal('${cat.id}', ${itemIdx})" style="cursor:pointer;"><img src="${finalImgSrc}" alt="${name}" loading="lazy"></div>
+            <div class="pname" onclick="openProductModal('${cat.id}', ${itemIdx})" style="cursor:pointer;">${name}</div>
+            ${lowStockNote}
+            ${perVariantNote}
+          </div>
+          <div>
+            <div class="variant-wrapper">
+              <select class="punit-select" onchange="onVariantChange('${cat.id}', ${itemIdx}, '${name.replace(/'/g, "\\'")}', this.value); this.blur();">
+                ${variants.map((v, idx) => `<option value="${idx}" ${idx===defaultVariantIdx?'selected':''}>${v.unit}</option>`).join('')}
+              </select>
+            </div>
+            <div class="price-row"><span class="price" id="price-${cat.id}-${itemIdx}">${priceDisplayHtml(defaultPrice, disc)}</span></div>
+            <div class="action-container" id="action-${cat.id}-${itemIdx}">
+              ${isOos ? `<button class="addbtn" disabled>Out of Stock</button>` : `<button class="addbtn" onclick="handleInitialAdd('${cat.id}', ${itemIdx}, '${name.replace(/'/g, "\\'")}')">Add to Cart</button>`}
+            </div>
+          </div>
+        </div>`;
+}
+
 function renderCatalog(){
   const navEl = document.getElementById('catnav');
   const mainEl = document.getElementById('catalog');
@@ -1130,37 +1492,29 @@ function renderCatalog(){
     return;
   }
 
+  const isFocused = !!focusedCategoryId && !isSearchActive;
+
   catalog.forEach((cat, cIdx)=>{
     const circleCard = document.createElement('div');
     circleCard.className = 'circle-card';
     circleCard.innerHTML = `<div class="circle-icon-box">${getCategoryIconHtml(cat)}</div><div class="circle-title">${cat.name}</div>`;
-    circleCard.onclick = () => {
-      switchView('home');
-      setTimeout(() => {
-        clearSearchAndGoTo(cat.id);
-      }, 100);
-    };
+    circleCard.onclick = () => openCategoryView(cat.id);
     circlesEl.appendChild(circleCard);
 
     const fullCircleCard = circleCard.cloneNode(true);
-    fullCircleCard.onclick = () => {
-      switchView('home');
-      setTimeout(() => {
-        clearSearchAndGoTo(cat.id);
-      }, 150);
-    };
+    fullCircleCard.onclick = () => openCategoryView(cat.id);
     fullGridEl.appendChild(fullCircleCard);
 
     const navLink = document.createElement('a');
     navLink.href = `#cat-${cat.id}`;
     navLink.textContent = cat.name;
     navLink.setAttribute('data-id', cat.id);
-    if(cIdx === 0) navLink.classList.add('active');
+    if(isFocused ? (cat.id === focusedCategoryId) : (cIdx === 0)) navLink.classList.add('active');
     navLink.onclick = (e) => {
       e.preventDefault();
       document.querySelectorAll('.catnav a').forEach(a => a.classList.remove('active'));
       navLink.classList.add('active');
-      clearSearchAndGoTo(cat.id);
+      openCategoryView(cat.id);
     };
     navEl.appendChild(navLink);
 
@@ -1168,9 +1522,22 @@ function renderCatalog(){
     menuLink.href = `#cat-${cat.id}`;
     menuLink.className = 'menu-cat-link';
     menuLink.textContent = cat.name;
-    menuLink.onclick = (e) => { e.preventDefault(); closeMenuDrawer(); switchView('home'); clearSearchAndGoTo(cat.id); };
+    menuLink.onclick = (e) => { e.preventDefault(); closeMenuDrawer(); openCategoryView(cat.id); };
     menuBodyEl.appendChild(menuLink);
+  });
 
+  // Drill-down: when one category is focused, only that category's section is built
+  const catsToRender = isFocused ? catalog.filter(c => c.id === focusedCategoryId) : catalog;
+
+  if(isFocused){
+    const fc = catsToRender[0];
+    mainEl.innerHTML += `<div style="display:flex; align-items:center; gap:10px; margin-bottom:18px;">
+      <button onclick="backToAllCategories()" style="background:#F1F5F9; color:var(--primary); border:1px solid #CBD5E1; padding:10px 16px; border-radius:10px; font-weight:700; font-size:14px; cursor:pointer;">← All categories</button>
+      <span style="font-size:13px; color:var(--text-light); font-weight:600;">${fc ? fc.items.length + ' products' : ''}</span>
+    </div>`;
+  }
+
+  catsToRender.forEach((cat)=>{
     let cardsHtml = '';
     const showAll = window._renderAllMode === true;
     const totalPages = Math.ceil(cat.items.length / PRODUCTS_PER_PAGE);
@@ -1180,54 +1547,45 @@ function renderCatalog(){
     const endIdx = showAll ? cat.items.length : Math.min(startIdx + PRODUCTS_PER_PAGE, cat.items.length);
 
     cat.items.slice(startIdx, endIdx).forEach((itemArr, sliceIdx)=>{
-      const itemIdx = startIdx + sliceIdx; // keep original index so cart/stock functions stay correct
-      const [name, unitStr, priceStr, imgUrl, isOosFlag, stockMode, stockCount, stockUnit] = itemArr;
-      const variants = parseVariants(unitStr, priceStr);
-      const defaultPrice = variants[0] ? variants[0].price : 0;
-      const disc = getItemDiscount(itemArr);
-      const fallbackImg = `https://dummyimage.com/300x300/f1f5f9/0b4624.png&text=${encodeURIComponent(name)}`;
-      let finalImgSrc = imgUrl ? imgUrl.trim() : fallbackImg;
-      const isOos = isVariantOutOfStock(itemArr, 0);
-      const stockUnitLabel = stockUnit === 'kg' ? 'kg' : 'left';
-      const lowStockThreshold = stockUnit === 'kg' ? 3 : 5;
-      const lowStockNote = (stockMode === 'count' && !isOos && parseFloat(stockCount) <= lowStockThreshold) ? `<div style="font-size:11px; color:var(--danger); font-weight:700; margin-top:2px;">Only ${parseFloat(stockCount)} ${stockUnitLabel === 'kg' ? 'kg left' : 'left'}!</div>` : '';
-      const perVariantNote = (stockMode === 'perVariant') ? `<div style="font-size:11px; color:var(--text-light); margin-top:2px;" id="pvnote-${cat.id}-${itemIdx}">${isOos ? '' : (parseFloat((itemArr[10]||[])[0]) <= 3 ? `Only ${parseFloat((itemArr[10]||[])[0])} bags left!` : '')}</div>` : '';
-
-      cardsHtml += `
-        <div class="product-card ${isOos ? 'oos-card' : ''}" id="card-${cat.id}-${itemIdx}">
-          ${isOos ? `<div class="oos-badge">Out Of Stock</div>` : ''}
-          ${(!isOos && disc > 0) ? `<div class="disc-badge">-${disc}%</div>` : ''}
-          <div>
-            <div class="img-slot" onclick="openProductModal('${cat.id}', ${itemIdx})" style="cursor:pointer;"><img src="${finalImgSrc}" alt="${name}" loading="lazy"></div>
-            <div class="pname" onclick="openProductModal('${cat.id}', ${itemIdx})" style="cursor:pointer;">${name}</div>
-            ${lowStockNote}
-            ${perVariantNote}
-          </div>
-          <div>
-            <div class="variant-wrapper">
-              <select class="punit-select" onchange="onVariantChange('${cat.id}', ${itemIdx}, '${name.replace(/'/g, "\\'")}', this.value); this.blur();">
-                ${variants.map((v, idx) => `<option value="${idx}">${v.unit}</option>`).join('')}
-              </select>
-            </div>
-            <div class="price-row"><span class="price" id="price-${cat.id}-${itemIdx}">${priceDisplayHtml(defaultPrice, disc)}</span></div>
-            <div class="action-container" id="action-${cat.id}-${itemIdx}">
-              ${isOos ? `<button class="addbtn" disabled>Out of Stock</button>` : `<button class="addbtn" onclick="handleInitialAdd('${cat.id}', ${itemIdx}, '${name.replace(/'/g, "\\'")}')">Add to Cart</button>`}
-            </div>
-          </div>
-        </div>`;
+      cardsHtml += buildProductCardHtml(cat, itemArr, startIdx + sliceIdx);
     });
     let paginationHtml = '';
     if(!showAll && totalPages > 1) {
-      paginationHtml = `<div class="cat-pagination">`;
-      if(currentPage > 1) paginationHtml += `<button onclick="goToCategoryPage('${cat.id}', ${currentPage - 1})">‹</button>`;
+      const remaining = cat.items.length - endIdx;
+      const nextChunk = Math.min(PRODUCTS_PER_PAGE, remaining);
+      paginationHtml = `<div class="cat-pagination-wrap">`;
+      paginationHtml += `<div class="cat-page-label">Showing <b>${startIdx + 1}–${endIdx}</b> of <b>${cat.items.length}</b> &nbsp;·&nbsp; Page <b>${currentPage}</b> of <b>${totalPages}</b></div>`;
+      if(remaining > 0){
+        paginationHtml += `<button class="cat-more-btn" onclick="goToCategoryPage('${cat.id}', ${currentPage + 1})">Show next ${nextChunk} products in ${escapeHtml(cat.name)} &nbsp;›</button>`;
+      }
+      paginationHtml += `<div class="cat-pagination">`;
+      paginationHtml += `<button ${currentPage === 1 ? 'disabled' : ''} onclick="goToCategoryPage('${cat.id}', ${currentPage - 1})">‹</button>`;
       for(let p = 1; p <= totalPages; p++) {
         paginationHtml += `<button class="${p === currentPage ? 'active-page' : ''}" onclick="goToCategoryPage('${cat.id}', ${p})">${p}</button>`;
       }
-      if(currentPage < totalPages) paginationHtml += `<button onclick="goToCategoryPage('${cat.id}', ${currentPage + 1})">›</button>`;
-      paginationHtml += `</div>`;
+      paginationHtml += `<button ${currentPage === totalPages ? 'disabled' : ''} onclick="goToCategoryPage('${cat.id}', ${currentPage + 1})">›</button>`;
+      paginationHtml += `</div></div>`;
     }
-    mainEl.innerHTML += `<div class="cat-section" id="cat-${cat.id}"><div class="cat-head"><h3>${cat.name}</h3><div class="cat-line"></div></div><div class="products-grid">${cardsHtml}</div>${paginationHtml}</div>`;
+    const hasLocRestriction = Array.isArray(cat.allowedLocations) && cat.allowedLocations.length > 0;
+    const hasDeliveryNote = cat.deliveryNote && cat.deliveryNote.trim() !== '';
+    let restrictionBoxHtml = '';
+    if(hasLocRestriction || hasDeliveryNote) {
+      restrictionBoxHtml = `<div style="background:#FFF8E1; border:1px solid #FFD54F; border-radius:8px; padding:8px 12px; margin:-8px 0 14px; font-size:12px; font-weight:700; color:#7A5A00; display:flex; flex-direction:column; gap:2px;">
+        ${hasLocRestriction ? `<span>📍 Delivery available only in: ${cat.allowedLocations.map(l=>escapeHtml(l)).join(', ')}</span>` : ''}
+        ${hasDeliveryNote ? `<span>🗓️ ${escapeHtml(cat.deliveryNote)}</span>` : ''}
+      </div>`;
+    }
+    mainEl.innerHTML += `<div class="cat-section" id="cat-${cat.id}"><div class="cat-head"><h3>${cat.name}</h3><span class="cat-count-pill">${cat.items.length}</span><div class="cat-line"></div>${(!showAll && totalPages > 1) ? `<span class="cat-pages-pill">${totalPages} pages</span>` : ''}</div>${restrictionBoxHtml}<div class="products-grid">${cardsHtml}</div>${paginationHtml}</div>`;
   });
+
+  const greetSection = circlesEl.closest('section');
+  if(greetSection) greetSection.style.display = isFocused ? 'none' : '';
+  navEl.style.display = '';   // category strip stays visible while browsing one category
+  if(isFocused){
+    const activeLink = navEl.querySelector(`a[data-id="${focusedCategoryId}"]`);
+    if(activeLink && activeLink.scrollIntoView) activeLink.scrollIntoView({ block:'nearest', inline:'center' });
+  }
+  refreshMixedFeed(!isFocused && !isSearchActive);
 
   syncCartTotals();
   setupCategoryScrollSpy();
@@ -1300,6 +1658,16 @@ function getMaxCartQtyForVariant(catId, name, unit) {
 
 function handleInitialAdd(catId, itemIdx, name) {
   const cat = catalog.find(c => c.id === catId);
+  if(Array.isArray(cat.allowedLocations) && cat.allowedLocations.length > 0) {
+    const areaSelectEl = document.getElementById('area');
+    if(areaSelectEl && areaSelectEl.value !== "") {
+      const chosenLoc = locations[parseInt(areaSelectEl.value)];
+      if(chosenLoc && !cat.allowedLocations.includes(chosenLoc.name)) {
+        alert(`Sorry, ${name} delivers only to ${cat.allowedLocations.join(', ')}. Your selected location is ${chosenLoc.name}.`);
+        return;
+      }
+    }
+  }
   const cardEl = document.getElementById('card-' + catId + '-' + itemIdx);
   const selIdx = cardEl.querySelector('.punit-select').value;
   const item = cat.items[itemIdx];
@@ -1393,6 +1761,26 @@ function syncAllCardSteppers() {
   });
 }
 
+function cartHasDayRestrictedItems() {
+  for(const key in cart) {
+    const catId = key.split('||')[0];
+    const cat = catalog.find(c => c.id === catId);
+    if(cat && cat.dayRestricted) return true;
+  }
+  return false;
+}
+
+function updateDeliveryDayVisibility() {
+  const containerEl = document.getElementById('deliveryDayContainer');
+  if(!containerEl) return;
+  if(cartHasDayRestrictedItems()) {
+    containerEl.style.display = 'block';
+  } else {
+    containerEl.style.display = 'none';
+    document.getElementById('deliveryDay').value = '';
+  }
+}
+
 function syncCartTotals(){
   const items = Object.values(cart);
   const totalCount = items.reduce((sum, i)=> sum + i.qty, 0);
@@ -1406,6 +1794,7 @@ function syncCartTotals(){
   }
   renderLedger();
   syncAllCardSteppers();
+  updateDeliveryDayVisibility();
 }
 
 async function checkFirstOrderEligibility(phone) {
@@ -1516,9 +1905,14 @@ function renderLedger(){
   }
 
   let discountAmount = 0;
+  let discountLabel = "";
   if(activeCoupon) {
     const loyaltyDiscountPercent = parseFloat(storeDatabase.settings.loyaltyDiscount || 10) / 100;
-    discountAmount = subTotal * loyaltyDiscountPercent; 
+    discountAmount = subTotal * loyaltyDiscountPercent;
+    discountLabel = activeCoupon;
+  } else if(isFirstOrderCustomer) {
+    discountAmount = subTotal * (AUTO_FIRST_ORDER_DISCOUNT_PERCENT / 100);
+    discountLabel = "First Order " + AUTO_FIRST_ORDER_DISCOUNT_PERCENT + "% Off";
   }
   let finalSub = Math.max(0, subTotal - discountAmount);
 
@@ -1526,15 +1920,14 @@ function renderLedger(){
   const deliveryWaived = freeDeliveryThreshold > 0 && subTotal >= freeDeliveryThreshold;
   if(deliveryWaived) deliveryFee = 0;
 
-  // Dutch supermarket model: prices are BTW-inclusive. Total = goods + delivery;
-  // BTW shown as "waarvan" (included), computed at 9% from the inclusive amount.
-  let grandTotal = finalSub + deliveryFee;
-  let taxAmount = grandTotal * 9 / 109;
+  // BTW (9%) is added on top of the discounted subtotal, then delivery added.
+  let taxAmount = finalSub * 0.09;
+  let grandTotal = finalSub + taxAmount + deliveryFee;
 
   html += `
     <div class="ltotal-box">
       <div class="subrow"><span>Subtotaal</span><span>€${subTotal.toFixed(2)}</span></div>
-      ${activeCoupon ? `<div class="subrow" style="color:green; font-weight:700;"><span>Korting (${activeCoupon})</span><span>-€${discountAmount.toFixed(2)}</span></div>` : ''}
+      ${discountLabel ? `<div class="subrow" style="color:green; font-weight:700;"><span>Korting (${discountLabel})</span><span>-€${discountAmount.toFixed(2)}</span></div>` : ''}
       ${deliveryWaived
         ? `<div class="subrow" style="color:green; font-weight:700;"><span>🎉 Gratis bezorging (order over €${freeDeliveryThreshold.toFixed(2)})</span><span>€0.00</span></div>`
         : `<div class="subrow"><span>Bezorgkosten (${deliveryName})</span><span>€${deliveryFee.toFixed(2)}</span></div>${freeDeliveryThreshold > 0 && deliveryName !== "Not Selected" ? `
@@ -1554,34 +1947,112 @@ function isUserLoggedIn() {
   return localStorage.getItem('snk_user_phone') !== null;
 }
 
-function handlePhoneLogin() {
+async function requestCustomerOtp(evt) {
   const name = document.getElementById('userNameInput').value.trim();
   const phone = document.getElementById('userPhoneInput').value.trim();
-  if(!name) {
-    alert("Please enter your name!");
+  const email = document.getElementById('userEmailInput').value.trim();
+  const msgEl = document.getElementById('custLoginMsg1');
+  msgEl.textContent = '';
+
+  if(!name) { msgEl.textContent = 'Please enter your name.'; return; }
+  if(!phone || phone.length < 8) { msgEl.textContent = 'Please enter a valid phone number.'; return; }
+  if(!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { msgEl.textContent = 'Please enter a valid email address.'; return; }
+
+  const cooldownUntil = parseInt(sessionStorage.getItem('snk_cust_otp_cooldown') || '0');
+  if(Date.now() < cooldownUntil) {
+    const secondsLeft = Math.ceil((cooldownUntil - Date.now()) / 1000);
+    msgEl.textContent = `Please wait ${secondsLeft}s before requesting another code.`;
     return;
   }
-  if(!phone || phone.length < 8) {
-    alert("Please enter a valid phone number!");
+
+  const btn = evt ? evt.target : null;
+  if(btn) { btn.disabled = true; btn.textContent = 'Sending...'; }
+
+  try {
+    const res = await fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ action: 'requestCustomerOtp', email: email })
+    });
+    const data = await res.json();
+    if(data.success) {
+      sessionStorage.setItem('snk_cust_otp_cooldown', (Date.now() + 20000).toString());
+      sessionStorage.setItem('snk_cust_pending_name', name);
+      sessionStorage.setItem('snk_cust_pending_phone', phone);
+      sessionStorage.setItem('snk_cust_pending_email', email);
+      document.getElementById('custLoginEmailShown').textContent = email;
+      document.getElementById('custLoginStep1').style.display = 'none';
+      document.getElementById('custLoginStep2').style.display = 'block';
+    } else {
+      msgEl.textContent = data.message || 'Could not send code. Try again.';
+    }
+  } catch(err) {
+    msgEl.textContent = 'Could not connect. Check your internet and try again.';
+    console.log('requestCustomerOtp error:', err);
+  } finally {
+    if(btn) { btn.disabled = false; btn.textContent = 'Send Login Code'; }
+  }
+}
+
+async function verifyCustomerOtp() {
+  const otp = document.getElementById('custOtpInput').value.trim();
+  const email = sessionStorage.getItem('snk_cust_pending_email');
+  const msgEl = document.getElementById('custLoginMsg2');
+  msgEl.textContent = '';
+  if(!otp) { msgEl.textContent = 'Enter the code.'; return; }
+  if(!email) { msgEl.textContent = 'Session expired, please start again.'; return; }
+
+  const lockUntil = parseInt(sessionStorage.getItem('snk_cust_otp_lock_until') || '0');
+  if(Date.now() < lockUntil) {
+    const secondsLeft = Math.ceil((lockUntil - Date.now()) / 1000);
+    msgEl.textContent = `Too many attempts. Wait ${secondsLeft}s or request a new code.`;
     return;
   }
-  const randomId = Math.floor(1000 + Math.random() * 9000);
-  const membershipCode = `SNK-MEMBER-${randomId}`;
-  
-  localStorage.setItem('snk_user_name', name);
-  localStorage.setItem('snk_user_phone', phone);
-  localStorage.setItem('snk_user_code', membershipCode);
-  if(!localStorage.getItem('snk_order_count')) {
-    localStorage.setItem('snk_order_count', '0'); 
+
+  try {
+    const res = await fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ action: 'verifyCustomerOtp', email: email, otp: otp })
+    });
+    const data = await res.json();
+    if(data.success) {
+      sessionStorage.removeItem('snk_cust_otp_fail_count');
+      sessionStorage.removeItem('snk_cust_otp_lock_until');
+      const name = sessionStorage.getItem('snk_cust_pending_name') || 'Member';
+      const phone = sessionStorage.getItem('snk_cust_pending_phone') || '';
+      const randomId = Math.floor(1000 + Math.random() * 9000);
+      const membershipCode = `SNK-MEMBER-${randomId}`;
+      localStorage.setItem('snk_user_name', name);
+      localStorage.setItem('snk_user_phone', phone);
+      localStorage.setItem('snk_user_email', email);
+      localStorage.setItem('snk_user_code', membershipCode);
+      if(!localStorage.getItem('snk_order_count')) localStorage.setItem('snk_order_count', '0');
+      sessionStorage.removeItem('snk_cust_pending_name');
+      sessionStorage.removeItem('snk_cust_pending_phone');
+      sessionStorage.removeItem('snk_cust_pending_email');
+      switchView('home');
+      alert(`Welcome ${name}! 🎉\nYour Premium Customer Code: ${membershipCode}\n\n🎁 Check the Offers tab — you've unlocked a coupon for your first order!`);
+    } else {
+      const fails = parseInt(sessionStorage.getItem('snk_cust_otp_fail_count') || '0') + 1;
+      sessionStorage.setItem('snk_cust_otp_fail_count', fails.toString());
+      if(fails >= 5) {
+        sessionStorage.setItem('snk_cust_otp_lock_until', (Date.now() + 60000).toString());
+        msgEl.textContent = 'Too many wrong attempts. Locked for 60 seconds.';
+      } else {
+        msgEl.textContent = data.message || 'Incorrect or expired code.';
+      }
+    }
+  } catch(err) {
+    msgEl.textContent = 'Could not connect. Try again.';
+    console.log('verifyCustomerOtp error:', err);
   }
-  
-  switchView('home');
-  alert(`Welcome ${name}! 🎉\nYour Premium Customer Code: ${membershipCode}\n\n🎁 Check the Offers tab — you've unlocked a coupon for your first order!`);
 }
 
 function handleLogout() {
   localStorage.removeItem('snk_user_name');
   localStorage.removeItem('snk_user_phone');
+  localStorage.removeItem('snk_user_email');
   localStorage.removeItem('snk_user_code');
   switchView('home');
 }
@@ -1680,19 +2151,36 @@ function renderProfilePage() {
       <div class="auth-card">
         <div style="font-size:40px; margin-bottom:10px;">🔐</div>
         <h3>Unlock Exclusive Member Offers</h3>
-        <p style="color:var(--text-light); font-size:13px; margin-bottom:16px;">Log in with just your name and number to unlock member offers.</p>
+        <p style="color:var(--text-light); font-size:13px; margin-bottom:16px;">Log in with your details — we'll email you a one-time code to confirm it's you.</p>
         <div style="background:#FFF9E6; border:1px dashed var(--accent); border-radius:8px; padding:10px; margin-bottom:16px; font-size:12px; font-weight:700; color:var(--accent-dark);">
           🎁 Get a coupon for your first order when you log in!
         </div>
-        <div class="auth-input-group">
-          <label>Your Name</label>
-          <input type="text" id="userNameInput" class="auth-input" placeholder="e.g. Priya Kumar">
+        <div id="custLoginStep1">
+          <div class="auth-input-group">
+            <label>Your Name</label>
+            <input type="text" id="userNameInput" class="auth-input" placeholder="e.g. Priya Kumar">
+          </div>
+          <div class="auth-input-group">
+            <label>Mobile Phone Number</label>
+            <input type="tel" id="userPhoneInput" class="auth-input" placeholder="e.g. +31 6 85259659">
+          </div>
+          <div class="auth-input-group">
+            <label>Email Address</label>
+            <input type="email" id="userEmailInput" class="auth-input" placeholder="e.g. priya@example.com" autocomplete="email">
+          </div>
+          <p id="custLoginMsg1" style="color:var(--danger); font-size:12px; margin:4px 0;"></p>
+          <button class="auth-btn" onclick="requestCustomerOtp(event)">Send Login Code</button>
         </div>
-        <div class="auth-input-group">
-          <label>Mobile Phone Number</label>
-          <input type="tel" id="userPhoneInput" class="auth-input" placeholder="e.g. +31 6 85259659">
+        <div id="custLoginStep2" style="display:none;">
+          <p style="font-size:13px; color:var(--text-dark); margin-bottom:10px;">Enter the 6-digit code we emailed to <b id="custLoginEmailShown"></b>.</p>
+          <div class="auth-input-group">
+            <label>Login Code</label>
+            <input type="text" inputmode="numeric" id="custOtpInput" class="auth-input" placeholder="6-digit code" maxlength="6">
+          </div>
+          <p id="custLoginMsg2" style="color:var(--danger); font-size:12px; margin:4px 0;"></p>
+          <button class="auth-btn" onclick="verifyCustomerOtp()">Verify & Login</button>
+          <button onclick="document.getElementById('custLoginStep2').style.display='none'; document.getElementById('custLoginStep1').style.display='block';" style="background:none; border:none; color:var(--text-light); font-size:12px; margin-top:10px; cursor:pointer; text-decoration:underline;">← Change details</button>
         </div>
-        <button class="auth-btn" onclick="handlePhoneLogin()">Login & Get My Coupon</button>
       </div>`;
   }
 }
@@ -1755,6 +2243,29 @@ async function sendOrder(viaWhatsApp){
   const comments = document.getElementById('ccomments').value.trim() || "None";
   
   if(!areaIdx) { alert("Please select your Delivery Destination location!"); return; }
+
+  // Category-level location restriction check (e.g. Briyani only delivers to Den Haag)
+  const chosenLocObjForCheck = locations[parseInt(areaIdx)];
+  const chosenLocName = chosenLocObjForCheck ? chosenLocObjForCheck.name : "";
+  const blockedProductNames = [];
+  for(const key in cart) {
+    const catId = key.split('||')[0];
+    const cat = catalog.find(c => c.id === catId);
+    if(cat && Array.isArray(cat.allowedLocations) && cat.allowedLocations.length > 0 && !cat.allowedLocations.includes(chosenLocName)) {
+      blockedProductNames.push(cart[key].name);
+    }
+  }
+  if(blockedProductNames.length > 0) {
+    alert(`Sorry, these items only deliver to ${[...new Set(catalog.filter(c=>Array.isArray(c.allowedLocations)&&c.allowedLocations.length>0).flatMap(c=>c.allowedLocations))].join(', ')}: ${blockedProductNames.join(', ')}.\n\nPlease either change your delivery location or remove these items from your basket.`);
+    return;
+  }
+
+  let deliveryDay = "";
+  if(cartHasDayRestrictedItems()) {
+    deliveryDay = document.getElementById('deliveryDay').value;
+    if(!deliveryDay) { alert("Please select your preferred delivery day (Saturday or Sunday) for the Briyani/day-restricted items in your cart."); return; }
+  }
+
   if(!name || !addr) { alert("Please enter Name and Address."); return; }
   if(!postcode) { alert("Please enter your Postcode."); return; }
   if(viaWhatsApp && !phone) { alert("Please enter your mobile phone number so we can notify you about your order!"); return; }
@@ -1822,9 +2333,14 @@ async function sendOrder(viaWhatsApp){
   let lines = items.map((it, i)=>{ subTotal += it.qty * it.price; return `${i+1}. ${it.name} (${it.unit}) x${it.qty} - €${(it.qty*it.price).toFixed(2)}`; }).join('\n');
   
   let discountAmount = 0;
+  let discountLabel = "";
   if(activeCoupon) {
     const loyaltyDiscountPercent = parseFloat(storeDatabase.settings.loyaltyDiscount || 10) / 100;
     discountAmount = subTotal * loyaltyDiscountPercent;
+    discountLabel = activeCoupon;
+  } else if(isFirstOrderCustomer) {
+    discountAmount = subTotal * (AUTO_FIRST_ORDER_DISCOUNT_PERCENT / 100);
+    discountLabel = "First Order " + AUTO_FIRST_ORDER_DISCOUNT_PERCENT + "% Off";
   }
   let finalSub = Math.max(0, subTotal - discountAmount);
 
@@ -1832,8 +2348,8 @@ async function sendOrder(viaWhatsApp){
   const deliveryWaived = freeDeliveryThreshold > 0 && subTotal >= freeDeliveryThreshold;
   if(deliveryWaived) deliveryFee = 0;
 
-  let grandTotal = finalSub + deliveryFee;
-  let taxAmount = grandTotal * 9 / 109;
+  let taxAmount = finalSub * 0.09;
+  let grandTotal = finalSub + taxAmount + deliveryFee;
   
   const mCode = localStorage.getItem('snk_user_code') || "Non-Member";
   const orderId = 'ORD-' + Date.now();
@@ -1850,6 +2366,7 @@ async function sendOrder(viaWhatsApp){
       address: addr,
       postcode: postcode,
       location: areaName,
+      deliveryDay: deliveryDay || "N/A",
       items: items.map(it => `${it.name} (${it.unit}) x${it.qty}`).join(', '),
       itemsDetailed: items.map(it => ({ name: it.name, unit: it.unit, qty: it.qty })),
       subtotal: `€${subTotal.toFixed(2)}`,
@@ -1870,10 +2387,10 @@ async function sendOrder(viaWhatsApp){
   }
   
   let msg = `Hello SNK Foods!\nNew Order (Member Code: ${mCode} | Phone: ${phone}):\n\n${lines}\n\nSubtotal: €${subTotal.toFixed(2)}\n`;
-  if(activeCoupon) {
-    msg += `Promo Applied: ${activeCoupon} (-€${discountAmount.toFixed(2)})\n`;
+  if(discountLabel) {
+    msg += `Promo Applied: ${discountLabel} (-€${discountAmount.toFixed(2)})\n`;
   }
-  msg += `BTW (9%): €${taxAmount.toFixed(2)}\nDelivery Charge (${areaName}): €${deliveryFee.toFixed(2)}\nTotal Amount: €${grandTotal.toFixed(2)}\n\nDelivery to: ${areaName}\nName: ${name}\nAddress: ${addr}, ${postcode}\nNotes: ${comments}`;
+  msg += `BTW (9%): €${taxAmount.toFixed(2)}\nDelivery Charge (${areaName}): €${deliveryFee.toFixed(2)}\nTotal Amount: €${grandTotal.toFixed(2)}\n\nDelivery to: ${areaName}${deliveryDay ? `\nPreferred Delivery Day: ${deliveryDay}` : ''}\nName: ${name}\nAddress: ${addr}, ${postcode}\nNotes: ${comments}`;
   
   let currentCount = parseInt(localStorage.getItem('snk_order_count') || '0');
   if(activeCoupon === "LOYAL4") {
@@ -1883,12 +2400,16 @@ async function sendOrder(viaWhatsApp){
   }
   
   activeCoupon = ""; 
+  isFirstOrderCustomer = null;
   document.getElementById('promoCodeInput').value = "";
   document.getElementById('promoMsg').textContent = "";
+  if(document.getElementById('firstOrderMsg')) document.getElementById('firstOrderMsg').textContent = "";
   
   if(viaWhatsApp) {
     window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`,'_blank');
   }
+
+  trackCheckoutCompleted();
 
   cart = {};
   saveCartToLocalStorage();
@@ -1971,13 +2492,18 @@ function printFromPastedWhatsAppText() {
 
 function triggerA4PrintHTML(name, addr, area, comments, tableRows, subTotal, deliveryFee) {
   let discountAmount = 0;
+  let discountLabel = "";
   if(activeCoupon) {
     const loyaltyDiscountPercent = parseFloat(storeDatabase.settings.loyaltyDiscount || 10) / 100;
     discountAmount = subTotal * loyaltyDiscountPercent;
+    discountLabel = activeCoupon;
+  } else if(isFirstOrderCustomer) {
+    discountAmount = subTotal * (AUTO_FIRST_ORDER_DISCOUNT_PERCENT / 100);
+    discountLabel = "First Order " + AUTO_FIRST_ORDER_DISCOUNT_PERCENT + "% Off";
   }
   let finalSub = Math.max(0, subTotal - discountAmount);
-  let grandTotal = finalSub + deliveryFee;
-  let taxAmount = grandTotal * 9 / 109;
+  let taxAmount = finalSub * 0.09;
+  let grandTotal = finalSub + taxAmount + deliveryFee;
   let today = new Date().toLocaleDateString('nl-NL');
 
   document.getElementById('a4InvoicePrintout').innerHTML = `
@@ -2008,7 +2534,7 @@ function triggerA4PrintHTML(name, addr, area, comments, tableRows, subTotal, del
     </table>
     <div class="inv-summary">
       <div class="inv-sum-row"><span>Subtotal Goods:</span><span>€${subTotal.toFixed(2)}</span></div>
-      ${activeCoupon ? `<div class="inv-sum-row" style="color:green; font-weight:bold;"><span>Discount (${activeCoupon}):</span><span>-€${discountAmount.toFixed(2)}</span></div>` : ''}
+      ${discountLabel ? `<div class="inv-sum-row" style="color:green; font-weight:bold;"><span>Discount (${discountLabel}):</span><span>-€${discountAmount.toFixed(2)}</span></div>` : ''}
       <div class="inv-sum-row"><span>Delivery Service Charge:</span><span>€${deliveryFee.toFixed(2)}</span></div>
       <div class="inv-total-row"><span>Total Payable:</span><span>€${grandTotal.toFixed(2)}</span></div>
       <div class="inv-sum-row" style="font-size:12px; color:#666;"><span>(Waarvan BTW / of which VAT 9%):</span><span>€${taxAmount.toFixed(2)}</span></div>
@@ -2032,6 +2558,70 @@ function handleFooterSecretTap() {
 
 let adminOpenCategories = new Set();
 let adminCategoryPage = {};
+
+/* ---- Category grid navigation state ----
+   adminOpenCatIndex : null = show the category GRID, number = that one category is open
+   adminCatDirty     : true = there are edits in the open category that haven't been "Saved" yet
+   adminCatSnapshot  : deep copy taken when a category is opened, so Back can truly discard   */
+let adminOpenCatIndex = null;
+let adminCatDirty = false;
+let adminCatSnapshot = null;
+
+function openAdminCategory(ci){
+  adminOpenCatIndex = ci;
+  adminCatDirty = false;
+  adminCatSnapshot = JSON.parse(JSON.stringify(catalog[ci]));
+  adminOpenCategories.add(ci);
+  loadProductsTab();
+  const b = document.getElementById('adminBody');
+  if(b) b.scrollTop = 0;
+}
+
+function saveAdminCategory(){
+  adminCatDirty = false;
+  adminCatSnapshot = null;
+  adminOpenCatIndex = null;
+  loadProductsTab();
+  showAdminToast('✅ Saved. Tap "Publish Live" when you\'re ready to put it on the website.');
+}
+
+function backToAdminGrid(){
+  if(adminCatDirty){
+    const keep = confirm('⚠️ You have unsaved changes in this category.\n\nOK = go back and THROW AWAY the changes\nCancel = stay here (then tap 💾 Save)');
+    if(!keep) return;
+    if(adminCatSnapshot && adminOpenCatIndex !== null) catalog[adminOpenCatIndex] = adminCatSnapshot;
+  }
+  adminCatDirty = false;
+  adminCatSnapshot = null;
+  adminOpenCatIndex = null;
+  loadProductsTab();
+}
+
+function closeAdminFromCategory(){
+  if(adminCatDirty){
+    const leave = confirm('⚠️ You have unsaved changes in this category.\n\nOK = close admin and THROW AWAY the changes\nCancel = stay here (then tap 💾 Save)');
+    if(!leave) return;
+    if(adminCatSnapshot && adminOpenCatIndex !== null) catalog[adminOpenCatIndex] = adminCatSnapshot;
+  }
+  adminCatDirty = false;
+  adminCatSnapshot = null;
+  adminOpenCatIndex = null;
+  closeAdmin();
+}
+
+function showAdminToast(msg){
+  let t = document.getElementById('adminToast');
+  if(!t){
+    t = document.createElement('div');
+    t.id = 'adminToast';
+    t.style.cssText = 'position:fixed; left:50%; bottom:28px; transform:translateX(-50%); background:#0F172A; color:#fff; padding:12px 20px; border-radius:10px; font-size:13px; font-weight:600; z-index:99999; max-width:88%; text-align:center; box-shadow:0 6px 20px rgba(0,0,0,.28); opacity:0; transition:opacity .25s;';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  requestAnimationFrame(()=>{ t.style.opacity = '1'; });
+  clearTimeout(t._hideTimer);
+  t._hideTimer = setTimeout(()=>{ t.style.opacity = '0'; }, 3200);
+}
 
 let reorderModeCategories = new Set();
 
@@ -2123,8 +2713,21 @@ function onProductDragEnd(ev) {
   loadProductsTab();
 }
 
+function moveProductToPosition(ci, currentIndex, newPosStr) {
+  adminCatDirty = true;
+  const items = catalog[ci].items;
+  let newIndex = parseInt(newPosStr) - 1;
+  if(isNaN(newIndex)) { loadProductsTab(); return; }
+  newIndex = Math.max(0, Math.min(items.length - 1, newIndex));
+  if(newIndex === currentIndex) { loadProductsTab(); return; }
+  const [moved] = items.splice(currentIndex, 1);
+  items.splice(newIndex, 0, moved);
+  loadProductsTab();
+}
+
 function moveProductUp(ci, ii) {
   if(ii <= 0) return;
+  adminCatDirty = true;
   const items = catalog[ci].items;
   const temp = items[ii - 1];
   items[ii - 1] = items[ii];
@@ -2135,6 +2738,7 @@ function moveProductUp(ci, ii) {
 function moveProductDown(ci, ii) {
   const items = catalog[ci].items;
   if(ii >= items.length - 1) return;
+  adminCatDirty = true;
   const temp = items[ii + 1];
   items[ii + 1] = items[ii];
   items[ii] = temp;
@@ -2243,12 +2847,145 @@ async function emailNotifyCustomer(orderId) {
 
 let cachedOrdersError = null;
 
+let cachedVisitorStats = null;
+let cachedVisitorStatsError = null;
+let visitorStatsPollTimer = null;
+
+function renderVisitorStatsHtml() {
+  if(cachedVisitorStatsError) {
+    return `<div class="empty-note" style="padding:10px 0; color:var(--danger);">⚠️ ${escapeHtml(cachedVisitorStatsError)}</div>`;
+  }
+  if(!cachedVisitorStats) {
+    return `<div class="empty-note" style="padding:10px 0;">Tap 🔄 Refresh to load visitor stats.</div>`;
+  }
+  return `
+    <div style="display:flex; gap:12px;">
+      <div style="flex:1; background:#fff; border:1px solid #C8E6C9; border-radius:8px; padding:14px; text-align:center;">
+        <div style="font-size:26px; font-weight:900; color:#2E7D32;">🟢 ${cachedVisitorStats.live}</div>
+        <div style="font-size:11px; font-weight:700; color:var(--text-light); margin-top:2px;">Live right now</div>
+      </div>
+      <div style="flex:1; background:#fff; border:1px solid #C8E6C9; border-radius:8px; padding:14px; text-align:center;">
+        <div style="font-size:26px; font-weight:900; color:#2E7D32;">📅 ${cachedVisitorStats.today}</div>
+        <div style="font-size:11px; font-weight:700; color:var(--text-light); margin-top:2px;">Visited today</div>
+      </div>
+    </div>`;
+}
+
+function updateAdminBox(boxId, html) {
+  const box = document.getElementById(boxId);
+  if(box) { box.innerHTML = html; return true; }
+  return false;
+}
+
+async function loadVisitorStats() {
+  cachedVisitorStatsError = null;
+  if(!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === "YOUR_APPS_SCRIPT_URL_HERE") {
+    cachedVisitorStatsError = "Google Apps Script URL isn't configured.";
+    updateAdminBox('visitorStatsBox', renderVisitorStatsHtml());
+    return;
+  }
+  try {
+    const res = await fetch(GOOGLE_SCRIPT_URL + '?action=getVisitorStats');
+    const text = await res.text();
+    let data;
+    try { data = JSON.parse(text); } catch(e) {
+      cachedVisitorStatsError = "Apps Script didn't return valid data — make sure getVisitorStats is added to your script.";
+      updateAdminBox('visitorStatsBox', renderVisitorStatsHtml()); return;
+    }
+    if(data.success) {
+      cachedVisitorStats = { live: data.live || 0, today: data.today || 0 };
+    } else {
+      cachedVisitorStatsError = data.message || "Apps Script responded but no visitor stats returned.";
+    }
+  } catch(err) {
+    cachedVisitorStatsError = "Couldn't reach the Apps Script (network/CORS error).";
+  }
+  updateAdminBox('visitorStatsBox', renderVisitorStatsHtml());
+}
+
+let cachedAbandonedCheckouts = [];
+let cachedAbandonedCheckoutsError = null;
+
+function getDismissedAbandonedKeys() {
+  try { return JSON.parse(localStorage.getItem('snk_dismissed_abandoned') || '[]'); } catch(e) { return []; }
+}
+
+function abandonedRowKey(row) {
+  return (row.startedAt || '') + '|' + (row.phone || '') + '|' + (row.name || '');
+}
+
+function dismissAbandonedCheckout(key) {
+  const dismissed = getDismissedAbandonedKeys();
+  if(!dismissed.includes(key)) dismissed.push(key);
+  localStorage.setItem('snk_dismissed_abandoned', JSON.stringify(dismissed));
+  updateAdminBox('abandonedCheckoutList', renderAbandonedCheckoutListHtml());
+}
+
+function clearAllAbandonedCheckouts() {
+  if(!cachedAbandonedCheckouts || cachedAbandonedCheckouts.length === 0) return;
+  if(!confirm('Clear all ' + cachedAbandonedCheckouts.length + ' abandoned checkout entries from this list? (Hides them on this device; they still exist in your Google Sheet.)')) return;
+  const dismissed = getDismissedAbandonedKeys();
+  cachedAbandonedCheckouts.forEach(row => {
+    const key = abandonedRowKey(row);
+    if(!dismissed.includes(key)) dismissed.push(key);
+  });
+  localStorage.setItem('snk_dismissed_abandoned', JSON.stringify(dismissed));
+  updateAdminBox('abandonedCheckoutList', renderAbandonedCheckoutListHtml());
+}
+
+function renderAbandonedCheckoutListHtml() {
+  if(cachedAbandonedCheckoutsError) {
+    return `<div class="empty-note" style="padding:10px 0; color:var(--danger);">⚠️ ${escapeHtml(cachedAbandonedCheckoutsError)}</div>`;
+  }
+  const dismissed = getDismissedAbandonedKeys();
+  const visibleRows = (cachedAbandonedCheckouts || []).filter(row => !dismissed.includes(abandonedRowKey(row)));
+  if(visibleRows.length === 0) {
+    return `<div class="empty-note" style="padding:10px 0;">No abandoned checkouts recorded, or tap 🔄 Refresh to load.</div>`;
+  }
+  return `<div style="text-align:right; margin-bottom:8px;"><button onclick="clearAllAbandonedCheckouts()" style="background:var(--danger); color:#fff; border:none; padding:5px 12px; border-radius:6px; font-size:11px; font-weight:700; cursor:pointer;">🗑️ Clear All</button></div>` +
+  visibleRows.map(row => `
+    <div style="background:#fff; border:1px solid #D8D5FF; padding:10px 12px; border-radius:6px; margin-bottom:8px; position:relative;">
+      <button onclick="dismissAbandonedCheckout('${abandonedRowKey(row).replace(/'/g,"\\'")}')" title="Dismiss" style="position:absolute; top:8px; right:8px; background:#F1F5F9; border:1px solid #CBD5E1; width:24px; height:24px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:700; color:var(--text-light);">×</button>
+      <div style="font-weight:700; font-size:13px; color:var(--primary); padding-right:28px;">${escapeHtml(row.name || 'Unknown name')} ${row.phone ? '· ' + escapeHtml(row.phone) : ''}</div>
+      <div style="font-size:11px; color:var(--text-light); margin-top:3px;">${escapeHtml(row.cartSummary || '')}</div>
+      <div style="font-size:10px; color:var(--text-light); margin-top:3px;">Reached billing: ${row.startedAt ? new Date(row.startedAt).toLocaleString('nl-NL') : ''}</div>
+      ${row.phone ? `<a href="https://wa.me/${row.phone.replace(/[^0-9]/g,'')}" target="_blank" style="font-size:11px; color:#25D366; font-weight:700; display:inline-block; margin-top:4px;">💬 Message on WhatsApp</a>` : ''}
+    </div>
+  `).join('');
+}
+
+async function loadAbandonedCheckouts() {
+  cachedAbandonedCheckoutsError = null;
+  if(!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === "YOUR_APPS_SCRIPT_URL_HERE") {
+    cachedAbandonedCheckoutsError = "Google Apps Script URL isn't configured.";
+    updateAdminBox('abandonedCheckoutList', renderAbandonedCheckoutListHtml());
+    return;
+  }
+  try {
+    const res = await fetch(GOOGLE_SCRIPT_URL + '?action=getAbandonedCheckouts');
+    const text = await res.text();
+    let data;
+    try { data = JSON.parse(text); } catch(e) {
+      cachedAbandonedCheckoutsError = "Apps Script didn't return valid data — make sure getAbandonedCheckouts is added to your script.";
+      updateAdminBox('abandonedCheckoutList', renderAbandonedCheckoutListHtml()); return;
+    }
+    if(data.success) {
+      cachedAbandonedCheckouts = data.rows || [];
+    } else {
+      cachedAbandonedCheckoutsError = data.message || "Apps Script responded but no data returned.";
+    }
+  } catch(err) {
+    cachedAbandonedCheckoutsError = "Couldn't reach the Apps Script (network/CORS error).";
+  }
+  updateAdminBox('abandonedCheckoutList', renderAbandonedCheckoutListHtml());
+}
+
 async function loadRecentOrders() {
   cachedOrdersError = null;
   if(!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === "YOUR_APPS_SCRIPT_URL_HERE") {
     cachedOrders = [];
     cachedOrdersError = "Google Apps Script URL isn't configured.";
-    loadProductsTab();
+    updateAdminBox('ordersList', renderOrdersListHtml());
     return;
   }
   try {
@@ -2256,7 +2993,7 @@ async function loadRecentOrders() {
     if(!res.ok) {
       cachedOrdersError = `Server responded with an error (HTTP ${res.status}). Check your Apps Script deployment.`;
       cachedOrders = [];
-      loadProductsTab();
+      updateAdminBox('ordersList', renderOrdersListHtml());
       return;
     }
     const text = await res.text();
@@ -2266,7 +3003,7 @@ async function loadRecentOrders() {
     } catch(parseErr) {
       cachedOrdersError = "Apps Script didn't return valid data — check for errors in your script (e.g. duplicate doGet, syntax error).";
       cachedOrders = [];
-      loadProductsTab();
+      updateAdminBox('ordersList', renderOrdersListHtml());
       return;
     }
     if(data.success && data.orders) {
@@ -2280,7 +3017,7 @@ async function loadRecentOrders() {
     cachedOrders = [];
     cachedOrdersError = "Couldn't reach the Apps Script (network/CORS error). Check the deployment is live and public.";
   }
-  loadProductsTab();
+  updateAdminBox('ordersList', renderOrdersListHtml());
 }
 
 async function updateOrderStatus(orderId, status) {
@@ -2310,7 +3047,8 @@ function adminLogin(){
   if(pass === ADMIN_PASSCODE){
     sessionStorage.removeItem('snk_admin_fail_count');
     sessionStorage.removeItem('snk_admin_lock_until');
-    document.getElementById('adminOverlay').classList.add('show'); loadProductsTab(); loadRecentOrders();
+    localStorage.setItem('snk_admin_trusted', '1');
+    grantAdminAccess();
   } else {
     const fails = parseInt(sessionStorage.getItem('snk_admin_fail_count') || '0') + 1;
     sessionStorage.setItem('snk_admin_fail_count', fails.toString());
@@ -2325,6 +3063,10 @@ function adminLogin(){
 }
 
 function adminLoginWithOtp(){
+  if(isAdminDeviceTrusted()) {
+    grantAdminAccess();
+    return;
+  }
   document.getElementById('loginModal').classList.add('show');
   document.getElementById('overlay').classList.add('show');
   document.getElementById('loginStep1').style.display = 'block';
@@ -2377,6 +3119,19 @@ async function requestAdminOtp() {
   }
 }
 
+function grantAdminAccess(){
+  document.getElementById('adminOverlay').classList.add('show');
+  loadProductsTab();
+  loadRecentOrders();
+  loadVisitorStats();
+  loadAbandonedCheckouts();
+  startVisitorStatsPolling();
+}
+
+function isAdminDeviceTrusted() {
+  return localStorage.getItem('snk_admin_trusted') === '1';
+}
+
 async function verifyAdminOtp() {
   const otp = document.getElementById('loginOtp').value.trim();
   const msgEl = document.getElementById('loginMsg2');
@@ -2401,10 +3156,9 @@ async function verifyAdminOtp() {
     if(data.success) {
       sessionStorage.removeItem('snk_otp_fail_count');
       sessionStorage.removeItem('snk_otp_lock_until');
+      localStorage.setItem('snk_admin_trusted', '1');
       closeLoginModal();
-      document.getElementById('adminOverlay').classList.add('show');
-      loadProductsTab();
-      loadRecentOrders();
+      grantAdminAccess();
     } else {
       const fails = parseInt(sessionStorage.getItem('snk_otp_fail_count') || '0') + 1;
       sessionStorage.setItem('snk_otp_fail_count', fails.toString());
@@ -2433,10 +3187,9 @@ function useFallbackPasscode() {
   if(pass === ADMIN_PASSCODE){
     sessionStorage.removeItem('snk_admin_fail_count');
     sessionStorage.removeItem('snk_admin_lock_until');
+    localStorage.setItem('snk_admin_trusted', '1');
     closeLoginModal();
-    document.getElementById('adminOverlay').classList.add('show');
-    loadProductsTab();
-    loadRecentOrders();
+    grantAdminAccess();
   } else {
     const fails = parseInt(sessionStorage.getItem('snk_admin_fail_count') || '0') + 1;
     sessionStorage.setItem('snk_admin_fail_count', fails.toString());
@@ -2450,7 +3203,20 @@ function useFallbackPasscode() {
   }
 }
 
-function closeAdmin(){ document.getElementById('adminOverlay').classList.remove('show'); document.getElementById('exportBox').style.display='none'; }
+function startVisitorStatsPolling() {
+  clearInterval(visitorStatsPollTimer);
+  visitorStatsPollTimer = setInterval(() => {
+    if(document.getElementById('adminOverlay').classList.contains('show')) loadVisitorStats();
+  }, 20000);
+}
+
+function closeAdmin(){ adminOpenCatIndex = null; adminCatDirty = false; adminCatSnapshot = null; document.getElementById('adminOverlay').classList.remove('show'); document.getElementById('exportBox').style.display='none'; clearInterval(visitorStatsPollTimer); }
+
+function adminLogout(){
+  if(!confirm('Log out of admin panel? You will need email, password & OTP to log in again on this device.')) return;
+  localStorage.removeItem('snk_admin_trusted');
+  closeAdmin();
+}
 
 // Shared image pipeline: compress (WebP if supported, 900px) then upload to GitHub images/ folder.
 // Falls back to embedding base64 if no GitHub token is set.
@@ -2632,16 +3398,94 @@ function renderAdminSlidesHtml() {
   `).join('');
 }
 
+let adminActiveTab = 'products';
+
+function switchAdminTab(tabName) {
+  adminActiveTab = tabName;
+  document.querySelectorAll('.admin-tab-panel').forEach(el => {
+    el.style.display = (el.getAttribute('data-tab') === tabName) ? 'block' : 'none';
+  });
+  document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+    btn.classList.toggle('admin-tab-active', btn.getAttribute('data-tab') === tabName);
+  });
+  const body = document.getElementById('adminBody');
+  if(body) body.scrollTop = 0;
+}
+
+function computeOutOfStockReport() {
+  const report = [];
+  catalog.forEach(cat => {
+    (cat.items || []).forEach((item) => {
+      const stockMode = item[5];
+      const variants = parseVariants(item[1] || '', item[2] || '');
+      if(stockMode === 'perVariant' || stockMode === 'manualPerVariant') {
+        const oosVariants = variants.filter((v, vi) => isVariantOutOfStock(item, vi)).map(v => v.unit);
+        if(oosVariants.length > 0) {
+          report.push({
+            catName: cat.name, catId: cat.id, itemName: item[0] || '(unnamed)',
+            oosLabel: oosVariants.length === variants.length ? 'ALL sizes' : oosVariants.join(', ')
+          });
+        }
+      } else {
+        if(isItemOutOfStock(item[4], stockMode, item[6])) {
+          report.push({ catName: cat.name, catId: cat.id, itemName: item[0] || '(unnamed)', oosLabel: 'ALL sizes' });
+        }
+      }
+    });
+  });
+  return report;
+}
+
+function jumpToProductInAdmin(name) {
+  switchAdminTab('products');
+  const searchEl = document.getElementById('adminSearchBar');
+  if(searchEl) {
+    searchEl.value = name;
+    filterAdminProducts(name);
+    searchEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function renderOutOfStockReportHtml() {
+  const report = computeOutOfStockReport();
+  if(report.length === 0) {
+    return `<div class="empty-note" style="padding:10px 0;">🎉 Nothing out of stock right now!</div>`;
+  }
+  const byCategory = {};
+  report.forEach(r => { if(!byCategory[r.catName]) byCategory[r.catName] = []; byCategory[r.catName].push(r); });
+  return `<div style="font-size:11px; color:var(--text-light); margin-bottom:10px;">${report.length} item${report.length===1?'':'s'} need restocking. Tap any item to jump to it and toggle stock.</div>` +
+    Object.keys(byCategory).map(catName => `
+      <div style="margin-bottom:12px;">
+        <div style="font-weight:800; font-size:12px; color:#C0392B; margin-bottom:6px;">${escapeHtml(catName)} (${byCategory[catName].length})</div>
+        ${byCategory[catName].map(r => `
+          <div onclick="jumpToProductInAdmin('${(r.itemName||'').replace(/'/g,"\\'")}')" style="cursor:pointer; display:flex; justify-content:space-between; align-items:center; background:#FFF5F5; border:1px solid #FFD5D5; padding:8px 10px; border-radius:6px; margin-bottom:6px;">
+            <span style="font-size:12px; font-weight:600; color:var(--text-dark);">${escapeHtml(r.itemName)}</span>
+            <span style="font-size:11px; color:#C0392B; font-weight:700; flex-shrink:0; margin-left:8px;">${escapeHtml(r.oosLabel)}</span>
+          </div>
+        `).join('')}
+      </div>
+    `).join('');
+}
+
 function loadProductsTab(){
   const body = document.getElementById('adminBody');
   const existingSearchEl = document.getElementById('adminSearchBar');
   const adminSearchQuery = existingSearchEl ? existingSearchEl.value : '';
   const isSearchActive = adminSearchQuery.trim() !== '';
+  if(isSearchActive) adminActiveTab = 'products';
   adminLastRenderWasSearchMode = isSearchActive;
   const searchHadFocus = existingSearchEl && document.activeElement === existingSearchEl;
   const searchCursorPos = existingSearchEl ? existingSearchEl.selectionStart : null;
   
   let html = `
+    <div class="admin-tabnav">
+      <button class="admin-tab-btn ${adminActiveTab==='products'?'admin-tab-active':''}" data-tab="products" onclick="switchAdminTab('products')">📦 Products</button>
+      <button class="admin-tab-btn ${adminActiveTab==='orders'?'admin-tab-active':''}" data-tab="orders" onclick="switchAdminTab('orders')">📋 Orders & Activity</button>
+      <button class="admin-tab-btn ${adminActiveTab==='settings'?'admin-tab-active':''}" data-tab="settings" onclick="switchAdminTab('settings')">⚙️ Settings</button>
+      <button class="admin-tab-btn ${adminActiveTab==='homepage'?'admin-tab-active':''}" data-tab="homepage" onclick="switchAdminTab('homepage')">🎨 Homepage</button>
+    </div>
+
+    <div class="admin-tab-panel" data-tab="orders" style="display:${adminActiveTab==='orders'?'block':'none'};">
     <div class="print-box-tool">
       <h4 style="color:var(--primary);">🖨️ WhatsApp Order To A4 Invoice Parser</h4>
       <textarea id="adminPasteText" placeholder="Paste the complete WhatsApp order text here..."></textarea>
@@ -2660,11 +3504,45 @@ function loadProductsTab(){
       <div id="ordersList">${renderOrdersListHtml()}</div>
     </div>
 
+    <div class="admin-cat" style="border: 2px solid #C0392B; background: #FFF5F5;">
+      <div class="admin-cat-header">
+        <span style="font-size: 15px; font-weight: 800; color: #C0392B;">📦 Out of Stock — Restock List</span>
+      </div>
+      <p style="font-size:11px; color:var(--text-light); margin: 6px 0 10px;">Every product (or size) currently marked out of stock, across all categories — a quick shopping list for what to restock.</p>
+      <div id="outOfStockReportBox">${renderOutOfStockReportHtml()}</div>
+    </div>
+
+    <div class="admin-cat" style="border: 2px solid #4CAF50; background: #F1F8F0;">
+      <div class="admin-cat-header">
+        <span style="font-size: 15px; font-weight: 800; color: #2E7D32;">👥 Website Visitors</span>
+        <button onclick="flashButton(this); loadVisitorStats();" style="background:#4CAF50; color:#fff; border:none; padding:4px 10px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:700;">🔄 Refresh</button>
+      </div>
+      <p style="font-size:11px; color:var(--text-light); margin: 6px 0 10px;">Live count auto-refreshes every 20 seconds. Requires the Visitor Tracking Apps Script setup — see setup guide.</p>
+      <div id="visitorStatsBox">${renderVisitorStatsHtml()}</div>
+    </div>
+
+    <div class="admin-cat" style="border: 2px solid #6C63FF; background: #F5F4FF;">
+      <div class="admin-cat-header">
+        <span style="font-size: 15px; font-weight: 800; color: #4B3FCC;">🛒 Reached Billing But Didn't Order</span>
+        <button onclick="flashButton(this); loadAbandonedCheckouts();" style="background:#6C63FF; color:#fff; border:none; padding:4px 10px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:700;">🔄 Refresh</button>
+      </div>
+      <p style="font-size:11px; color:var(--text-light); margin: 6px 0 10px;">Customers who opened the basket/billing page with items but never completed the order. Requires the Visitor Tracking Apps Script setup.</p>
+      <div id="abandonedCheckoutList">${renderAbandonedCheckoutListHtml()}</div>
+    </div>
+
     <div class="admin-cat" style="border: 2px solid #FF6B6B; background: #FFF5F5;">
       <div class="admin-cat-header">
         <span style="font-size: 15px; font-weight: 800; color: #C0392B;">🔍 Customer Search Requests (products not found)</span>
       </div>
       <p style="font-size:11px; color:var(--text-light); margin: 6px 0 10px;">Shows product names customers searched for with zero results, recorded on <b>this device</b>. Since the site has no shared server, requests made from customer phones reach you instantly via WhatsApp instead (they get a "Request this product" button), and are also logged to your Google Sheet if connected.</p>
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+        <label style="font-size:11px; font-weight:700; color:var(--text-dark);">Sort by:</label>
+        <select id="missedSearchSort" onchange="missedSearchSortBy=this.value; refreshMissedSearchList();" style="padding:6px 10px; border-radius:6px; border:1px solid #CBD5E1; font-size:12px; font-weight:600;">
+          <option value="term" ${missedSearchSortBy==='term'?'selected':''}>Product Name (A-Z)</option>
+          <option value="count" ${missedSearchSortBy==='count'?'selected':''}>Times Searched (High-Low)</option>
+          <option value="recent" ${missedSearchSortBy==='recent'?'selected':''}>Last Searched (Recent first)</option>
+        </select>
+      </div>
       <div id="missedSearchList">${renderMissedSearchListHtml()}</div>
       <div class="admin-btn-row"><button onclick="clearMissedSearches()" style="background:var(--danger); color:#fff;">Clear List</button></div>
     </div>
@@ -2677,7 +3555,9 @@ function loadProductsTab(){
       <p style="font-size:11px; color:var(--text-light); margin: 6px 0 10px;">Messages customers send via "📩 Message Us" appear here (also sent to your WhatsApp). Requires the Messages Apps Script setup.</p>
       <div id="customerMessagesList">${renderMessagesListHtml()}</div>
     </div>
+    </div>
 
+    <div class="admin-tab-panel" data-tab="settings" style="display:${adminActiveTab==='settings'?'block':'none'};">
     <div class="admin-cat" style="border: 2px solid #007BFF; background: #F4F9FF;">
       <div class="admin-cat-header">
         <span style="font-size: 15px; font-weight: 800; color: #0056b3;">⚙️ Dynamic Loyalty Milestone & Announcement Settings</span>
@@ -2719,7 +3599,9 @@ function loadProductsTab(){
         <b>Note on User Tracking:</b> Because this application is server-less, user identities are securely mapped in individual phone storages to save maintenance costs. You instantly receive their <b>Membership Codes</b> and verified phone numbers embedded right within their WhatsApp messages when orders are submitted.
       </p>
     </div>
+    </div>
 
+    <div class="admin-tab-panel" data-tab="homepage" style="display:${adminActiveTab==='homepage'?'block':'none'};">
     <div class="admin-cat" style="border: 2px solid #9C27B0; background: #FBF4FF;">
       <div class="admin-cat-header">
         <span style="font-size: 15px; font-weight: 800; color: #6A1B9A;">🎠 Homepage Slides (3 recommended)</span>
@@ -2752,7 +3634,9 @@ function loadProductsTab(){
         <button onclick="offers.push({title:'New Offer Title', desc:'Offer details here...', code:'CODE10'}); loadProductsTab();" style="background:#25D366; color:white;">+ Add New Special Offer</button>
       </div>
     </div>
+    </div>
 
+    <div class="admin-tab-panel" data-tab="settings" style="display:${adminActiveTab==='settings'?'block':'none'};">
     <div class="admin-cat" style="border: 2px solid var(--accent);">
       <div class="admin-cat-header"><span style="font-size: 14px; font-weight: 700; color: var(--primary);">📍 Manage Delivery Locations & Fees</span></div>
       <div style="display: flex; flex-direction:column; gap: 8px; margin-top: 10px;">
@@ -2766,15 +3650,26 @@ function loadProductsTab(){
       </div>
       <div class="admin-btn-row" style="margin-top: 12px;"><button onclick="addLocationPrompt()" style="background: var(--accent); color: var(--primary);">+ Add New Location</button></div>
     </div>
+    </div>
   `;
+
+  html += `<div class="admin-tab-panel" data-tab="products" style="display:${adminActiveTab==='products'?'block':'none'};">`;
+
+  if(categoryLoadFailures.length > 0) {
+    html += `<div style="background:#FFF3CD; border:2px solid #E65100; border-radius:10px; padding:12px 16px; margin-bottom:14px;">
+      <div style="font-weight:800; color:#E65100; font-size:13px; margin-bottom:4px;">⚠️ Couldn't refresh: ${categoryLoadFailures.join(', ')}</div>
+      <div style="font-size:11px; color:#7A5A00;">Showing the last-known data for ${categoryLoadFailures.length > 1 ? 'these categories' : 'this category'} instead — nothing was deleted. Please close and reopen the admin panel to retry before making changes or hitting "Save & Prepare Files", so you don't accidentally publish stale/incomplete data.</div>
+    </div>`;
+  }
   
   html += `<div style="position:sticky; top:0; z-index:20; background:#fff; padding:10px 0; margin-bottom:5px;"><input type="text" id="adminSearchBar" value="${(adminSearchQuery || '').replace(/"/g, '&quot;')}" oninput="filterAdminProducts(this.value)" placeholder="🔍 Search products in admin (e.g. Onion, Rice)..." style="width:100%; padding:12px 16px; border:2px solid var(--primary); border-radius:10px; font-size:14px; font-weight:600;"></div>`;
-  html += `<div style="text-align:center; margin-bottom:15px; display:flex; flex-direction:column; gap:8px; align-items:center;">
+  const showGlobalTools = !isSearchActive && adminOpenCatIndex === null;
+  if(showGlobalTools) html += `<div style="text-align:center; margin-bottom:15px; display:flex; flex-direction:column; gap:8px; align-items:center;">
     <button onclick="bulkGenerateUniqueIcons()" style="background:var(--primary); color:#fff; border:none; padding:12px 22px; border-radius:8px; font-weight:700; font-size:13px; cursor:pointer;">🎨 Generate unique icon for every missing product image (recommended)</button>
     <button onclick="bulkFillAllMissingImages()" style="background:none; color:#FF9800; border:1px solid #FF9800; padding:8px 18px; border-radius:8px; font-weight:700; font-size:12px; cursor:pointer;">🖼️ Or: fill with category picture instead</button>
   </div>`;
 
-  html += catalog.map((cat, ci)=>`
+  const renderOneAdminCategory = (cat, ci) => `
     <div class="admin-cat" data-catindex="${ci}">
       <div class="admin-cat-header" style="flex-wrap:wrap; gap:10px;">
         <div style="display:flex; align-items:center; gap:8px; flex:1; min-width:200px;">
@@ -2784,7 +3679,7 @@ function loadProductsTab(){
           </label>
           <input value="${cat.name}" onchange="catalog[${ci}].name=this.value; catalog[${ci}].id=this.value.toLowerCase().replace(/[^a-z0-9]/g,'')" placeholder="Category Name" style="flex:1; min-width:100px; width:auto;">
         </div>
-        <button onclick="if(confirm('Delete entire category ${cat.name}?')){catalog.splice(${ci},1); loadProductsTab()}" style="background:var(--danger); color:#fff; border:none; padding:4px 10px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:700; flex-shrink:0;">Delete Category</button>
+        <button onclick="if(confirm('Delete entire category ${cat.name}?')){catalog.splice(${ci},1); adminOpenCatIndex=null; adminCatDirty=false; adminCatSnapshot=null; loadProductsTab()}" style="background:var(--danger); color:#fff; border:none; padding:4px 10px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:700; flex-shrink:0;">Delete Category</button>
       </div>
       <div style="margin:-4px 0 10px;">
         <input value="${(cat.icon && cat.icon.startsWith('data:')) ? '(uploaded image)' : (cat.icon || '')}" onchange="catalog[${ci}].icon=this.value; loadProductsTab();" placeholder="or paste category picture URL here" style="width:100%; padding:6px 8px; border:1px dashed #CBD5E1; border-radius:6px; font-size:12px;">
@@ -2793,6 +3688,21 @@ function loadProductsTab(){
             🖼️ Fill ${cat.items.filter(it => !it[3] || it[3].trim()==='').length} missing product images with category picture
           </button>
         ` : ''}
+        <div style="margin-top:8px; background:#FFF8E1; border:1px solid #FFD54F; border-radius:8px; padding:8px 10px;">
+          <div style="font-size:11px; font-weight:800; color:#7A5A00; margin-bottom:6px;">🚚 Delivery Restrictions (optional)</div>
+          <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:6px;">
+            ${locations.map((loc, li) => `
+              <label style="font-size:11px; font-weight:600; display:flex; align-items:center; gap:4px; cursor:pointer;">
+                <input type="checkbox" ${(Array.isArray(cat.allowedLocations) && cat.allowedLocations.includes(loc.name)) ? 'checked' : ''} onchange="toggleCatAllowedLocation(${ci}, '${loc.name.replace(/'/g,"\\'")}', this.checked)"> ${loc.name}
+              </label>
+            `).join('')}
+          </div>
+          <small style="color:#7A5A00; font-size:10px; display:block; margin-bottom:6px;">Tick locations this category can deliver to. Leave all unticked = delivers everywhere. Add more locations anytime in the Locations tab.</small>
+          <input value="${cat.deliveryNote || ''}" onchange="catalog[${ci}].deliveryNote=this.value;" placeholder="e.g. Delivery only on Saturday & Sunday" style="width:100%; padding:6px 8px; border:1px dashed #CBD5E1; border-radius:6px; font-size:12px;">
+          <label style="font-size:11px; font-weight:600; display:flex; align-items:center; gap:4px; cursor:pointer; margin-top:6px;">
+            <input type="checkbox" ${cat.dayRestricted ? 'checked' : ''} onchange="catalog[${ci}].dayRestricted=this.checked;"> Ask customer to pick delivery day (Saturday/Sunday) at checkout
+          </label>
+        </div>
       </div>
       <details class="admin-cat-details" ${adminOpenCategories.has(ci) ? 'open' : ''} ontoggle="if(this.open){adminOpenCategories.add(${ci});}else{adminOpenCategories.delete(${ci});}">
         <summary style="cursor:pointer; padding:10px 14px; background:var(--bg-light); border:1px solid #CBD5E1; border-radius:8px; font-weight:700; font-size:13px; color:var(--primary); user-select:none;">📦 ${cat.name} — ${cat.items.length} products (tap to open/close)</summary>
@@ -2805,7 +3715,7 @@ function loadProductsTab(){
           ${cat.items.map((item, ii) => `
             <div class="reorder-row" data-ci="${ci}" data-index="${ii}">
               <span class="reorder-handle" onpointerdown="startProductDrag(event, ${ci}, ${ii})">☰</span>
-              <span class="reorder-pos" id="reorderPos-${ci}-${ii}">#${ii + 1}</span>
+              <input type="number" class="reorder-pos-input" id="reorderPos-${ci}-${ii}" value="${ii + 1}" min="1" max="${cat.items.length}" onchange="moveProductToPosition(${ci}, ${ii}, this.value)" onclick="this.select()" style="width:52px; text-align:center; font-weight:800; font-size:13px; color:#fff; background:var(--primary); border:none; border-radius:14px; padding:6px 4px;">
               <span class="reorder-name">${item[0] || '(unnamed)'}</span>
             </div>
           `).join('')}
@@ -2832,10 +3742,10 @@ function loadProductsTab(){
             </div>
           </div>
           <div class="admin-item-row">
-            <input value="${item[0]}" onchange="catalog[${ci}].items[${ii}][0]=this.value" placeholder="Name">
-            <input value="${item[1]}" onchange="catalog[${ci}].items[${ii}][1]=this.value" placeholder="e.g. 1kg, 500g or 1 bunch, 2 bunch">
+            <input value="${item[0]}" oninput="catalog[${ci}].items[${ii}][0]=this.value" placeholder="Name">
+            <input value="${item[1]}" oninput="catalog[${ci}].items[${ii}][1]=this.value" placeholder="e.g. 1kg, 500g or 1 bunch, 2 bunch">
             <div style="display:flex; gap:4px; align-items:center;">
-              <input value="${item[2]}" onchange="catalog[${ci}].items[${ii}][2]=this.value" placeholder="Use . for decimals: 3.49, 1.75" style="flex:1; min-width:0;">
+              <input value="${item[2]}" oninput="catalog[${ci}].items[${ii}][2]=this.value" placeholder="Use . for decimals: 3.49, 1.75" style="flex:1; min-width:0;">
               <button type="button" onclick="flashButton(this); autoCalcVariantPrices(${ci}, ${ii})" title="Tap to auto-calculate the other sizes from whichever price you've filled in" style="background:var(--primary); color:#fff; border:none; width:32px; height:32px; border-radius:6px; font-size:14px; cursor:pointer; flex-shrink:0;">⚡</button>
             </div>
             <div style="display:flex; gap:4px; align-items:center;">
@@ -2911,12 +3821,44 @@ function loadProductsTab(){
         ` : '');
         })()}
       </div>
-      <div class="admin-btn-row"><button onclick="catalog[${ci}].items.push(['New Item','1kg, 500g, 250g','','',false,'manual',0,'pieces',[],0,[],[]]); loadProductsTab()">+ Add Product</button></div>
+      <div class="admin-btn-row"><button onclick="catalog[${ci}].items.push(['New Item','1kg, 500g, 250g','','',false,'manual',0,'pieces',[],0,[],[]]); adminCatDirty=true; loadProductsTab()">+ Add Product</button></div>
       </details>
     </div>
-  `).join('');
+  `;
 
-  html += `<div style="text-align:center; margin: 25px 0;"><button onclick="addNewCategoryPrompt()" style="background:#007BFF; color:#fff; border:none; padding:12px 24px; border-radius:8px; font-weight:700; cursor:pointer; font-size:14px;">➕ Add New Category</button></div>`;
+  const editWrapOpen = `<div id="adminProdEditArea" oninput="adminCatDirty=true" onchange="adminCatDirty=true">`;
+
+  if(isSearchActive){
+    // Searching: keep the old behaviour so results across every category stay visible
+    html += editWrapOpen + catalog.map((cat, ci) => renderOneAdminCategory(cat, ci)).join('') + `</div>`;
+  } else if(adminOpenCatIndex !== null && catalog[adminOpenCatIndex]){
+    // ONE category open — nothing else rendered
+    const openCat = catalog[adminOpenCatIndex];
+    html += `
+      <div style="position:sticky; top:56px; z-index:19; background:#fff; display:flex; gap:8px; align-items:center; padding:10px 0 12px; border-bottom:2px solid #E2E8F0; margin-bottom:14px;">
+        <button onclick="backToAdminGrid()" style="background:#F1F5F9; color:var(--primary); border:1px solid #CBD5E1; padding:10px 14px; border-radius:8px; font-weight:700; font-size:13px; cursor:pointer; white-space:nowrap;">← Back</button>
+        <button onclick="saveAdminCategory()" style="flex:1; background:var(--primary); color:#fff; border:none; padding:10px 14px; border-radius:8px; font-weight:800; font-size:13px; cursor:pointer;">💾 Save</button>
+        <button onclick="closeAdminFromCategory()" title="Close admin panel" style="background:var(--danger); color:#fff; border:none; width:42px; height:42px; border-radius:8px; font-weight:800; font-size:17px; cursor:pointer; flex-shrink:0;">✕</button>
+      </div>
+      <div style="font-size:12px; color:var(--text-light); margin:-6px 0 12px; line-height:1.5;">
+        Editing <strong style="color:var(--primary);">${openCat.name}</strong> — ${openCat.items.length} products.
+        💾 Save keeps your changes in the panel; they only reach the website when you tap <strong>Publish Live</strong>.
+      </div>
+    ` + editWrapOpen + renderOneAdminCategory(openCat, adminOpenCatIndex) + `</div>`;
+  } else {
+    // GRID of categories
+    html += `<div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(120px, 1fr)); gap:12px; margin-bottom:20px;">`;
+    html += catalog.map((cat, ci) => `
+      <button onclick="openAdminCategory(${ci})" style="background:#fff; border:2px solid #E2E8F0; border-radius:14px; padding:16px 10px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,.05); min-height:118px; text-align:center; -webkit-tap-highlight-color:transparent;">
+        <div style="width:52px; height:52px; border-radius:14px; background:#F1F5F9; border:1px solid #CBD5E1; display:flex; align-items:center; justify-content:center; font-size:26px; overflow:hidden; flex-shrink:0;">${getCategoryIconHtml(cat)}</div>
+        <div style="font-size:13px; font-weight:700; color:var(--primary); line-height:1.25; word-break:break-word;">${cat.name}</div>
+      </button>
+    `).join('');
+    html += `</div>`;
+  }
+
+  if(showGlobalTools) html += `<div style="text-align:center; margin: 25px 0;"><button onclick="addNewCategoryPrompt()" style="background:#007BFF; color:#fff; border:none; padding:12px 24px; border-radius:8px; font-weight:700; cursor:pointer; font-size:14px;">➕ Add New Category</button></div>`;
+  html += `</div>`;
   body.innerHTML = html;
 
   if(isSearchActive) {
@@ -3089,7 +4031,29 @@ async function publishLiveToGitHub() {
   }
 }
 
+function getBrandKey(name) {
+  if(!name) return '';
+  const parenMatch = name.match(/\(([^)]+)\)\s*$/);
+  if(parenMatch) return parenMatch[1].trim().toLowerCase();
+  if(name.startsWith('India Gate')) return 'india gate';
+  return name.split(' ')[0].toLowerCase();
+}
+
+function regroupCategoryByBrand(cat) {
+  const brandOrder = [];
+  const groups = {};
+  cat.items.forEach(item => {
+    const key = getBrandKey(item[0]);
+    if(!groups[key]) { groups[key] = []; brandOrder.push(key); }
+    groups[key].push(item);
+  });
+  const regrouped = [];
+  brandOrder.forEach(key => regrouped.push(...groups[key]));
+  cat.items = regrouped;
+}
+
 function saveCatalogAndExport(){
+  adminCatDirty = false; adminCatSnapshot = null;
   const announceField = document.getElementById('settingAnnouncementText');
   if(announceField) {
     storeDatabase.settings.announcementText = announceField.value;
@@ -3097,7 +4061,9 @@ function saveCatalogAndExport(){
   const contactInfoField = document.getElementById('settingContactInfo');
   if(contactInfoField) storeDatabase.settings.contactInfo = contactInfoField.value;
   document.getElementById('menuContactPhone').textContent = storeDatabase.settings.contactInfo;
-  
+
+  catalog.forEach(cat => regroupCategoryByBrand(cat));
+
   closeAdmin();
   renderCatalog();
   renderLocations();
@@ -3107,7 +4073,7 @@ function saveCatalogAndExport(){
   
   // ALL data now lives in settings.json (never in index.html), so future code updates
   // to index.html can never wipe admin changes like locations/settings/offers.
-  const slimCategories = catalog.map(cat => ({ id: cat.id, name: cat.name, icon: cat.icon || undefined }));
+  const slimCategories = catalog.map(cat => ({ id: cat.id, name: cat.name, icon: cat.icon || undefined, allowedLocations: (Array.isArray(cat.allowedLocations) && cat.allowedLocations.length > 0) ? cat.allowedLocations : undefined, deliveryNote: (cat.deliveryNote && cat.deliveryNote.trim() !== '') ? cat.deliveryNote : undefined, dayRestricted: cat.dayRestricted ? true : undefined }));
   const settingsJson = JSON.stringify({ 
     categories: slimCategories, 
     locations: locations, 
@@ -3153,8 +4119,11 @@ function renderDownloadFileList(files) {
 }
 
 
+let categoryLoadFailures = [];
+
 async function loadAllCategoryData() {
   const cacheBuster = Date.now();
+  categoryLoadFailures = [];
   const results = await Promise.allSettled(
     catalog.map(cat => fetch(cat.id + '.json?t=' + cacheBuster, { cache: 'no-store' }).then(r => {
       if(!r.ok) throw new Error('Failed to load ' + cat.id);
@@ -3162,14 +4131,19 @@ async function loadAllCategoryData() {
     }))
   );
   results.forEach((res, i) => {
-    if(res.status === 'fulfilled') {
+    if(res.status === 'fulfilled' && Array.isArray(res.value)) {
       catalog[i].items = res.value;
     } else {
-      catalog[i].items = [];
-      console.log('Could not load data for category:', catalog[i].id, res.reason);
+      // Fetch failed or returned bad data — DO NOT wipe existing items to [].
+      // Keep whatever was already loaded (or the embedded defaults) so a
+      // network hiccup can never silently empty out a category and get
+      // published as data loss.
+      categoryLoadFailures.push(catalog[i].name || catalog[i].id);
+      console.log('Could not load data for category (kept existing items):', catalog[i].id, res.reason);
     }
   });
 }
+
 
 let heroSlides = [];
 let currentSlide = 0;
@@ -3267,9 +4241,16 @@ async function initApp() {
   renderCarousel();
   const loadingEl = document.getElementById('loadingOverlay');
   if(loadingEl) loadingEl.style.display = 'none';
+  startVisitorTracking();
 }
 
 initApp();
+
+if(window.location.hash === '#admin') {
+  window.addEventListener('load', () => {
+    setTimeout(() => { adminLoginWithOtp(); }, 300);
+  });
+}
 </script>
 
 </body></html>
