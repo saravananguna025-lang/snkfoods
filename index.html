@@ -1921,9 +1921,10 @@ function renderLedger(){
   const deliveryWaived = freeDeliveryThreshold > 0 && subTotal >= freeDeliveryThreshold;
   if(deliveryWaived) deliveryFee = 0;
 
-  // BTW (9%) is added on top of the discounted subtotal, then delivery added.
-  let taxAmount = finalSub * 0.09;
-  let grandTotal = finalSub + taxAmount + deliveryFee;
+  // Dutch retail standard: shelf prices already INCLUDE 9% BTW.
+  // Total is simply goods + delivery; the BTW portion is then extracted for the receipt line.
+  let grandTotal = finalSub + deliveryFee;
+  let taxAmount = grandTotal * 9 / 109;
 
   html += `
     <div class="ltotal-box">
@@ -1938,7 +1939,7 @@ function renderLedger(){
           </div>` : ''}`
       }
       <div class="ltotal"><span>Totaal</span><span>€${grandTotal.toFixed(2)}</span></div>
-      <div class="subrow" style="font-size:11px; margin-top:4px;"><span>Waarvan BTW (9%)</span><span>€${taxAmount.toFixed(2)}</span></div>
+      <div class="subrow" style="font-size:11px; margin-top:4px; color:var(--text-light);"><span>Incl. BTW 9%</span><span>€${taxAmount.toFixed(2)}</span></div>
     </div>`;
     
   ledgerEl.innerHTML = html;
@@ -2349,8 +2350,8 @@ async function sendOrder(viaWhatsApp){
   const deliveryWaived = freeDeliveryThreshold > 0 && subTotal >= freeDeliveryThreshold;
   if(deliveryWaived) deliveryFee = 0;
 
-  let taxAmount = finalSub * 0.09;
-  let grandTotal = finalSub + taxAmount + deliveryFee;
+  let grandTotal = finalSub + deliveryFee;
+  let taxAmount = grandTotal * 9 / 109;
   
   const mCode = localStorage.getItem('snk_user_code') || "Non-Member";
   const orderId = 'ORD-' + Date.now();
@@ -2391,7 +2392,7 @@ async function sendOrder(viaWhatsApp){
   if(discountLabel) {
     msg += `Promo Applied: ${discountLabel} (-€${discountAmount.toFixed(2)})\n`;
   }
-  msg += `BTW (9%): €${taxAmount.toFixed(2)}\nDelivery Charge (${areaName}): €${deliveryFee.toFixed(2)}\nTotal Amount: €${grandTotal.toFixed(2)}\n\nDelivery to: ${areaName}${deliveryDay ? `\nPreferred Delivery Day: ${deliveryDay}` : ''}\nName: ${name}\nAddress: ${addr}, ${postcode}\nNotes: ${comments}`;
+  msg += `Delivery Charge (${areaName}): €${deliveryFee.toFixed(2)}\nTotal Amount: €${grandTotal.toFixed(2)}\n(Incl. BTW 9%: €${taxAmount.toFixed(2)})\n\nDelivery to: ${areaName}${deliveryDay ? `\nPreferred Delivery Day: ${deliveryDay}` : ''}\nName: ${name}\nAddress: ${addr}, ${postcode}\nNotes: ${comments}`;
   
   let currentCount = parseInt(localStorage.getItem('snk_order_count') || '0');
   if(activeCoupon === "LOYAL4") {
@@ -2503,8 +2504,8 @@ function triggerA4PrintHTML(name, addr, area, comments, tableRows, subTotal, del
     discountLabel = "First Order " + AUTO_FIRST_ORDER_DISCOUNT_PERCENT + "% Off";
   }
   let finalSub = Math.max(0, subTotal - discountAmount);
-  let taxAmount = finalSub * 0.09;
-  let grandTotal = finalSub + taxAmount + deliveryFee;
+  let grandTotal = finalSub + deliveryFee;
+  let taxAmount = grandTotal * 9 / 109;
   let today = new Date().toLocaleDateString('nl-NL');
 
   document.getElementById('a4InvoicePrintout').innerHTML = `
@@ -2538,7 +2539,8 @@ function triggerA4PrintHTML(name, addr, area, comments, tableRows, subTotal, del
       ${discountLabel ? `<div class="inv-sum-row" style="color:green; font-weight:bold;"><span>Discount (${discountLabel}):</span><span>-€${discountAmount.toFixed(2)}</span></div>` : ''}
       <div class="inv-sum-row"><span>Delivery Service Charge:</span><span>€${deliveryFee.toFixed(2)}</span></div>
       <div class="inv-total-row"><span>Total Payable:</span><span>€${grandTotal.toFixed(2)}</span></div>
-      <div class="inv-sum-row" style="font-size:12px; color:#666;"><span>(Waarvan BTW / of which VAT 9%):</span><span>€${taxAmount.toFixed(2)}</span></div>
+      <div class="inv-sum-row" style="font-size:12px; color:#666;"><span>Incl. BTW 9,00%:</span><span>€${taxAmount.toFixed(2)}</span></div>
+      <div class="inv-sum-row" style="font-size:12px; color:#666;"><span>Ex. BTW:</span><span>€${(grandTotal - taxAmount).toFixed(2)}</span></div>
     </div>
     <div class="inv-footer"><p>Thank you for shopping with SNK Foods!</p></div>
   `;
