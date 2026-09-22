@@ -93,6 +93,8 @@
   .logo-text h1 { font-family: 'Playfair Display', serif; font-size: 22px; color: #fff; line-height: 1; }
   .logo-text span { font-size: 11px; color: var(--accent); letter-spacing: 1px; text-transform: uppercase; font-weight: 600; }
   .wa-quick { background: #25D366; color: #fff; border: none; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 10px rgba(37,211,102,0.3); }
+  .wa-float { position: fixed; right: 16px; bottom: 90px; width: 58px; height: 58px; border-radius: 50%; background: #25D366; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 18px rgba(37,211,102,0.45); z-index: 1600; animation: waPulse 2s infinite; text-decoration: none; }
+  @keyframes waPulse { 0% { box-shadow: 0 0 0 0 rgba(37,211,102,0.5); } 70% { box-shadow: 0 0 0 14px rgba(37,211,102,0); } 100% { box-shadow: 0 0 0 0 rgba(37,211,102,0); } }
 
   .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 70px; background: #ffffff; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #E2E8F0; box-shadow: 0 -4px 15px rgba(0,0,0,0.06); z-index: 1500; }
   .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; background: none; border: none; color: var(--text-light); font-size: 11px; font-weight: 700; cursor: pointer; width: 20%; height: 100%; gap: 4px; text-decoration: none; transition: color 0.2s; }
@@ -391,6 +393,10 @@
   <a class="wa-quick" href="https://wa.me/31685259659" target="_blank">📲 WhatsApp</a>
 </header>
 
+<a class="wa-float" href="https://wa.me/31685259659?text=Hi!%20I%20want%20to%20order%20groceries%20from%20SNK%20Foods" target="_blank" rel="noopener" aria-label="Order on WhatsApp">
+  <span style="font-size:28px;">📲</span>
+</a>
+
 <div class="bottom-nav">
   <button class="nav-item active" id="btn-view-home" onclick="switchView('home')">
     <span class="icon">🏠</span><span>Home</span>
@@ -431,6 +437,12 @@
     <input type="text" id="searchBar" oninput="filterProducts()" onkeydown="if(event.key==='Enter'){ event.preventDefault(); filterProducts(); document.getElementById('searchBar').blur(); }" placeholder="Search products (e.g., Onion, Rice, Ghee)..." class="search-box" style="flex:1;">
     <button type="button" onclick="filterProducts()" aria-label="Search" style="flex-shrink:0; width:46px; height:46px; border-radius:50%; border:none; background:var(--primary); color:#fff; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center;">🔍</button>
   </div>
+
+  <section class="front-greet-section" id="deliveryCheckSection" style="padding-top:6px;">
+    <h4 style="margin:0 0 10px;">📍 Do we deliver to you?</h4>
+    <input type="text" id="deliveryCheckInput" oninput="checkDeliveryArea()" placeholder="Type your city (e.g. Den Haag, Delft)..." class="search-box" style="width:100%;">
+    <div id="deliveryCheckResult" style="margin-top:10px;"></div>
+  </section>
 
   <section class="front-greet-section" id="mixedFeedSection" style="display:none;">
     <div class="mixed-feed-head">
@@ -975,8 +987,22 @@ function renderLocations() {
     pillsEl.innerHTML = locations.map(loc => `<span class="pill">📍 ${loc.name} (€${loc.fee.toFixed(2)})</span>`).join('');
   }
   if(selectEl) {
-    selectEl.innerHTML = `<option value="" disabled selected>--- Choose Delivery Location ---</option>` + 
+    selectEl.innerHTML = `<option value="" disabled selected>--- Choose Delivery Location ---</option>` +
                          locations.map((loc, idx) => `<option value="${idx}">${loc.name} (+€${loc.fee.toFixed(2)})</option>`).join('');
+  }
+}
+
+function checkDeliveryArea() {
+  const inputEl = document.getElementById('deliveryCheckInput');
+  const resultEl = document.getElementById('deliveryCheckResult');
+  if(!inputEl || !resultEl) return;
+  const q = inputEl.value.trim().toLowerCase();
+  if(!q) { resultEl.innerHTML = ''; return; }
+  const match = locations.find(loc => loc.name.toLowerCase().includes(q) || q.includes(loc.name.toLowerCase()));
+  if(match) {
+    resultEl.innerHTML = `<div style="background:#EFFFF0; border:1px solid #16A34A; color:#166534; padding:12px 14px; border-radius:10px; font-size:14px; font-weight:700;">✅ Yes! We deliver to ${escapeHtml(match.name)} — delivery fee €${match.fee.toFixed(2)}.</div>`;
+  } else {
+    resultEl.innerHTML = `<div style="background:#FFF8E1; border:1px solid #F59E0B; color:#7A5A00; padding:12px 14px; border-radius:10px; font-size:14px; font-weight:600;">😕 We don't see "${escapeHtml(inputEl.value)}" in our delivery list yet. <a href="https://wa.me/${WA_NUMBER}?text=${encodeURIComponent('Hi, do you deliver to my area?')}" target="_blank" style="color:#25D366; font-weight:800;">Message us on WhatsApp</a> to check!</div>`;
   }
 }
 
